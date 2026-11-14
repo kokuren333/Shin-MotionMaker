@@ -3,7 +3,7 @@ import { test } from "node:test";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { checkLicenses, selectLicense } from "../tools/check-licenses.mjs";
+import { checkLicenses, selectLicense, supportsPlatform } from "../tools/check-licenses.mjs";
 
 test("DC-05 license policy rejects copyleft and unknown expressions and selects jszip MIT", () => {
   for (const license of [undefined, "GPL-3.0", "LGPL-2.1", "AGPL-3.0", "UNLICENSED", "(MIT OR GPL-3.0-or-later)"])
@@ -12,6 +12,11 @@ test("DC-05 license policy rejects copyleft and unknown expressions and selects 
   assert.equal(selectLicense("pako", "(MIT AND Zlib)"), "MIT AND Zlib");
   for (const license of ["MIT", "ISC", "BSD-2-Clause", "BSD-3-Clause", "Apache-2.0"])
     assert.equal(selectLicense("fixture", license), license);
+  const musl = { os: ["linux"], cpu: ["x64"], libc: ["musl"] };
+  assert.equal(supportsPlatform(musl, "linux", "x64", "glibc"), false);
+  assert.equal(supportsPlatform(musl, "linux", "x64", "musl"), true);
+  assert.equal(supportsPlatform(musl, "win32", "x64"), false);
+  assert.equal(supportsPlatform({ os: ["!win32"] }, "win32", "x64"), false);
 });
 
 test("DC-05 inventories nested GUI development dependencies and uninstalled platform packages", async (t) => {

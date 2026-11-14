@@ -8,6 +8,10 @@ const compare = (left, right) => left < right ? -1 : left > right ? 1 : 0;
 const supports = (values, current) => !values?.length || (!values.includes(`!${current}`) &&
   (!values.some((value) => !value.startsWith("!")) || values.includes(current) || values.includes("any")));
 
+export function supportsPlatform(entry, platform, arch, libc) {
+  return supports(entry.os, platform) && supports(entry.cpu, arch) && (platform !== "linux" || supports(entry.libc, libc));
+}
+
 export function selectLicense(name, expression) {
   if (name === "jszip" && expression === "(MIT OR GPL-3.0-or-later)") return "MIT";
   if (expression === "(MIT AND Zlib)") return "MIT AND Zlib";
@@ -17,6 +21,7 @@ export function selectLicense(name, expression) {
 
 export async function checkLicenses(root) {
   const lock = JSON.parse(await fs.readFile(path.join(root, "package-lock.json"), "utf8"));
+  const libc = process.platform === "linux" ? (process.report.getReport().header.glibcVersionRuntime ? "glibc" : "musl") : undefined;
   const packages = [];
   for (const [relative, entry] of Object.entries(lock.packages).sort(([a], [b]) => compare(a, b))) {
     if (!relative.includes("node_modules/") || entry.link) continue;
@@ -28,7 +33,7 @@ export async function checkLicenses(root) {
     let manifest;
     try { manifest = JSON.parse(await fs.readFile(path.join(directory, "package.json"), "utf8")); }
     catch (error) {
-      if (error.code !== "ENOENT" || !entry.optional || (supports(entry.os, process.platform) && supports(entry.cpu, process.arch))) throw error;
+      if (error.code !== "ENOENT" || !entry.optional || supportsPlatform(entry, process.platform, process.arch, libc)) throw error;
     }
     const files = [];
     let evidence = "platform-optional-lockfile";
