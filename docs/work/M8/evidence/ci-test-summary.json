@@ -1,0 +1,503 @@
+{
+  "note": "72461a6（PR #1 の最終 head）と 9d3314e（main のマージコミット）の CI ジョブのログから、テスト件数と POSIX・win32 分岐の対象テストの行を抜き出した。node_test_runs の配列は [本体, GUI 単体] の順。",
+  "jobs": [
+    {
+      "job_id": 132503796712,
+      "head_sha_short": "72461a6",
+      "event": "push",
+      "job": "test (ubuntu-latest, 24)",
+      "node_test_runs": {
+        "tests": [
+          219,
+          34
+        ],
+        "pass": [
+          217,
+          33
+        ],
+        "fail": [
+          0,
+          0
+        ],
+        "skipped": [
+          2,
+          1
+        ]
+      },
+      "e2e": "e2e: 42 件合格 / 42 件",
+      "tier_b": null,
+      "target_tests": [
+        "✔ CL-11 node executes a job below a path longer than 260 characters",
+        "✔ MC-02 MCP rejects in-job junctions symlinks hardlinks and hardlinked attachments",
+        "✔ MC-02 allow-dir permits only absolute request attachments and denies escaped realpaths",
+        "✔ MC-02 junction and symlink escapes denied for reads writes jobs reports and ledger",
+        "✔ MC-02 rejects lexical escapes and resolves missing output parents",
+        "✔ MC-02 root-relative and realpath boundaries reject traversal absolute paths and links",
+        "✔ P-2 POSIX generated filenames preserve browser bytes",
+        "✔ R-6 linux cancellation stops a detached grandchild",
+        "✔ TS-04 default SDK buffer receives a 6 MiB PNG once and survives an oversized rejection; CLI keeps 8 MiB",
+        "✔ TS-04 real explanation and MV jobs preserve QC verdicts without tool errors",
+        "✔ TS-04 tools list matches the complete tool schema snapshot and operation table",
+        "✔ TS-07 cancels the process tree then releases E_BUSY reservation",
+        "✔ TS-07 completes with advisory without changing verdict",
+        "✔ TS-07 detached run survives client exit and heartbeat updates",
+        "✔ TS-07 gate failure is completed and ok true",
+        "✔ TS-07 lost derivation is read only and stale lock recovery checks process existence",
+        "✔ TS-07 mismatched QC exit and report is failed",
+        "✔ TS-07 times out a worker and stops descendants before releasing the lock",
+        "✔ TS-07 unexpected exit is failed",
+        "﹣ MC-02 win32 rejects reserved names ADS and trailing dots and folds case (0.291388ms) # win32 固有の名前規則と大文字小文字の比較を Windows CI で確認するため",
+        "﹣ R-6 win32 cancellation stops a detached grandchild (0.206156ms) # win32 専用のプロセスツリー停止を対象 OS の CI で実行するため"
+      ]
+    },
+    {
+      "job_id": 132503796899,
+      "head_sha_short": "72461a6",
+      "event": "push",
+      "job": "tier-b",
+      "node_test_runs": {
+        "tests": [],
+        "pass": [],
+        "fail": [],
+        "skipped": []
+      },
+      "e2e": null,
+      "tier_b": {
+        "evidence": ".agent-work/m7-evidence/tier-b.json",
+        "sha256": "5dbd8c09259eb4ef1a71cf66f798a4a76aff596eea4f7e920b4436b035c969c0",
+        "success": true
+      },
+      "target_tests": []
+    },
+    {
+      "job_id": 132503796954,
+      "head_sha_short": "72461a6",
+      "event": "push",
+      "job": "test (ubuntu-latest, 22)",
+      "node_test_runs": {
+        "tests": [
+          219,
+          34
+        ],
+        "pass": [
+          217,
+          33
+        ],
+        "fail": [
+          0,
+          0
+        ],
+        "skipped": [
+          2,
+          1
+        ]
+      },
+      "e2e": "e2e: 42 件合格 / 42 件",
+      "tier_b": null,
+      "target_tests": [
+        "ok - CL-11 node executes a job below a path longer than 260 characters",
+        "ok - MC-02 MCP rejects in-job junctions symlinks hardlinks and hardlinked attachments",
+        "ok - MC-02 allow-dir permits only absolute request attachments and denies escaped realpaths",
+        "ok - MC-02 junction and symlink escapes denied for reads writes jobs reports and ledger",
+        "ok - MC-02 rejects lexical escapes and resolves missing output parents",
+        "ok - MC-02 root-relative and realpath boundaries reject traversal absolute paths and links",
+        "ok - MC-02 win32 rejects reserved names ADS and trailing dots and folds case # SKIP win32 固有の名前規則と大文字小文字の比較を Windows CI で確認するため",
+        "ok - P-2 POSIX generated filenames preserve browser bytes",
+        "ok - R-6 linux cancellation stops a detached grandchild",
+        "ok - R-6 win32 cancellation stops a detached grandchild # SKIP win32 専用のプロセスツリー停止を対象 OS の CI で実行するため",
+        "ok - TS-04 default SDK buffer receives a 6 MiB PNG once and survives an oversized rejection; CLI keeps 8 MiB",
+        "ok - TS-04 real explanation and MV jobs preserve QC verdicts without tool errors",
+        "ok - TS-04 tools list matches the complete tool schema snapshot and operation table",
+        "ok - TS-07 cancels the process tree then releases E_BUSY reservation",
+        "ok - TS-07 completes with advisory without changing verdict",
+        "ok - TS-07 detached run survives client exit and heartbeat updates",
+        "ok - TS-07 gate failure is completed and ok true",
+        "ok - TS-07 lost derivation is read only and stale lock recovery checks process existence",
+        "ok - TS-07 mismatched QC exit and report is failed",
+        "ok - TS-07 times out a worker and stops descendants before releasing the lock",
+        "ok - TS-07 unexpected exit is failed"
+      ]
+    },
+    {
+      "job_id": 132503796968,
+      "head_sha_short": "72461a6",
+      "event": "push",
+      "job": "test (windows-latest, 24)",
+      "node_test_runs": {
+        "tests": [
+          219,
+          34
+        ],
+        "pass": [
+          217,
+          34
+        ],
+        "fail": [
+          0,
+          0
+        ],
+        "skipped": [
+          2,
+          0
+        ]
+      },
+      "e2e": "e2e: 42 件合格 / 42 件\r",
+      "tier_b": null,
+      "target_tests": [
+        "✔ CL-11 node executes a job below a path longer than 260 characters",
+        "✔ MC-02 MCP rejects in-job junctions symlinks hardlinks and hardlinked attachments",
+        "✔ MC-02 allow-dir permits only absolute request attachments and denies escaped realpaths",
+        "✔ MC-02 junction and symlink escapes denied for reads writes jobs reports and ledger",
+        "✔ MC-02 rejects lexical escapes and resolves missing output parents",
+        "✔ MC-02 root-relative and realpath boundaries reject traversal absolute paths and links",
+        "✔ MC-02 win32 rejects reserved names ADS and trailing dots and folds case",
+        "✔ R-6 win32 cancellation stops a detached grandchild",
+        "✔ TS-04 default SDK buffer receives a 6 MiB PNG once and survives an oversized rejection; CLI keeps 8 MiB",
+        "✔ TS-04 real explanation and MV jobs preserve QC verdicts without tool errors",
+        "✔ TS-04 tools list matches the complete tool schema snapshot and operation table",
+        "✔ TS-07 cancels the process tree then releases E_BUSY reservation",
+        "✔ TS-07 completes with advisory without changing verdict",
+        "✔ TS-07 detached run survives client exit and heartbeat updates",
+        "✔ TS-07 gate failure is completed and ok true",
+        "✔ TS-07 lost derivation is read only and stale lock recovery checks process existence",
+        "✔ TS-07 mismatched QC exit and report is failed",
+        "✔ TS-07 times out a worker and stops descendants before releasing the lock",
+        "✔ TS-07 unexpected exit is failed",
+        "﹣ P-2 POSIX generated filenames preserve browser bytes (0.2139ms) # POSIX で有効な ?・末尾ドットを含むファイル名を ubuntu CI で確認するため",
+        "﹣ R-6 linux cancellation stops a detached grandchild (0.1967ms) # linux 専用のプロセスツリー停止を対象 OS の CI で実行するため"
+      ]
+    },
+    {
+      "job_id": 132503813172,
+      "head_sha_short": "72461a6",
+      "event": "pull_request",
+      "job": "test (ubuntu-latest, 24)",
+      "node_test_runs": {
+        "tests": [
+          219,
+          34
+        ],
+        "pass": [
+          217,
+          33
+        ],
+        "fail": [
+          0,
+          0
+        ],
+        "skipped": [
+          2,
+          1
+        ]
+      },
+      "e2e": "e2e: 42 件合格 / 42 件",
+      "tier_b": null,
+      "target_tests": [
+        "✔ CL-11 node executes a job below a path longer than 260 characters",
+        "✔ MC-02 MCP rejects in-job junctions symlinks hardlinks and hardlinked attachments",
+        "✔ MC-02 allow-dir permits only absolute request attachments and denies escaped realpaths",
+        "✔ MC-02 junction and symlink escapes denied for reads writes jobs reports and ledger",
+        "✔ MC-02 rejects lexical escapes and resolves missing output parents",
+        "✔ MC-02 root-relative and realpath boundaries reject traversal absolute paths and links",
+        "✔ P-2 POSIX generated filenames preserve browser bytes",
+        "✔ R-6 linux cancellation stops a detached grandchild",
+        "✔ TS-04 default SDK buffer receives a 6 MiB PNG once and survives an oversized rejection; CLI keeps 8 MiB",
+        "✔ TS-04 real explanation and MV jobs preserve QC verdicts without tool errors",
+        "✔ TS-04 tools list matches the complete tool schema snapshot and operation table",
+        "✔ TS-07 cancels the process tree then releases E_BUSY reservation",
+        "✔ TS-07 completes with advisory without changing verdict",
+        "✔ TS-07 detached run survives client exit and heartbeat updates",
+        "✔ TS-07 gate failure is completed and ok true",
+        "✔ TS-07 lost derivation is read only and stale lock recovery checks process existence",
+        "✔ TS-07 mismatched QC exit and report is failed",
+        "✔ TS-07 times out a worker and stops descendants before releasing the lock",
+        "✔ TS-07 unexpected exit is failed",
+        "﹣ MC-02 win32 rejects reserved names ADS and trailing dots and folds case (5.322558ms) # win32 固有の名前規則と大文字小文字の比較を Windows CI で確認するため",
+        "﹣ R-6 win32 cancellation stops a detached grandchild (0.209289ms) # win32 専用のプロセスツリー停止を対象 OS の CI で実行するため"
+      ]
+    },
+    {
+      "job_id": 132503813454,
+      "head_sha_short": "72461a6",
+      "event": "pull_request",
+      "job": "test (ubuntu-latest, 22)",
+      "node_test_runs": {
+        "tests": [
+          219,
+          34
+        ],
+        "pass": [
+          217,
+          33
+        ],
+        "fail": [
+          0,
+          0
+        ],
+        "skipped": [
+          2,
+          1
+        ]
+      },
+      "e2e": "e2e: 42 件合格 / 42 件",
+      "tier_b": null,
+      "target_tests": [
+        "ok - CL-11 node executes a job below a path longer than 260 characters",
+        "ok - MC-02 MCP rejects in-job junctions symlinks hardlinks and hardlinked attachments",
+        "ok - MC-02 allow-dir permits only absolute request attachments and denies escaped realpaths",
+        "ok - MC-02 junction and symlink escapes denied for reads writes jobs reports and ledger",
+        "ok - MC-02 rejects lexical escapes and resolves missing output parents",
+        "ok - MC-02 root-relative and realpath boundaries reject traversal absolute paths and links",
+        "ok - MC-02 win32 rejects reserved names ADS and trailing dots and folds case # SKIP win32 固有の名前規則と大文字小文字の比較を Windows CI で確認するため",
+        "ok - P-2 POSIX generated filenames preserve browser bytes",
+        "ok - R-6 linux cancellation stops a detached grandchild",
+        "ok - R-6 win32 cancellation stops a detached grandchild # SKIP win32 専用のプロセスツリー停止を対象 OS の CI で実行するため",
+        "ok - TS-04 default SDK buffer receives a 6 MiB PNG once and survives an oversized rejection; CLI keeps 8 MiB",
+        "ok - TS-04 real explanation and MV jobs preserve QC verdicts without tool errors",
+        "ok - TS-04 tools list matches the complete tool schema snapshot and operation table",
+        "ok - TS-07 cancels the process tree then releases E_BUSY reservation",
+        "ok - TS-07 completes with advisory without changing verdict",
+        "ok - TS-07 detached run survives client exit and heartbeat updates",
+        "ok - TS-07 gate failure is completed and ok true",
+        "ok - TS-07 lost derivation is read only and stale lock recovery checks process existence",
+        "ok - TS-07 mismatched QC exit and report is failed",
+        "ok - TS-07 times out a worker and stops descendants before releasing the lock",
+        "ok - TS-07 unexpected exit is failed"
+      ]
+    },
+    {
+      "job_id": 132503813472,
+      "head_sha_short": "72461a6",
+      "event": "pull_request",
+      "job": "tier-b",
+      "node_test_runs": {
+        "tests": [],
+        "pass": [],
+        "fail": [],
+        "skipped": []
+      },
+      "e2e": null,
+      "tier_b": {
+        "evidence": ".agent-work/m7-evidence/tier-b.json",
+        "sha256": "dc09ff2b904a4bc8c98ea6c470346f56addc885463606e5285f40e2f6aa0dd67",
+        "success": true
+      },
+      "target_tests": []
+    },
+    {
+      "job_id": 132503813503,
+      "head_sha_short": "72461a6",
+      "event": "pull_request",
+      "job": "test (windows-latest, 24)",
+      "node_test_runs": {
+        "tests": [
+          219,
+          34
+        ],
+        "pass": [
+          217,
+          34
+        ],
+        "fail": [
+          0,
+          0
+        ],
+        "skipped": [
+          2,
+          0
+        ]
+      },
+      "e2e": "e2e: 42 件合格 / 42 件\r",
+      "tier_b": null,
+      "target_tests": [
+        "✔ CL-11 node executes a job below a path longer than 260 characters",
+        "✔ MC-02 MCP rejects in-job junctions symlinks hardlinks and hardlinked attachments",
+        "✔ MC-02 allow-dir permits only absolute request attachments and denies escaped realpaths",
+        "✔ MC-02 junction and symlink escapes denied for reads writes jobs reports and ledger",
+        "✔ MC-02 rejects lexical escapes and resolves missing output parents",
+        "✔ MC-02 root-relative and realpath boundaries reject traversal absolute paths and links",
+        "✔ MC-02 win32 rejects reserved names ADS and trailing dots and folds case",
+        "✔ R-6 win32 cancellation stops a detached grandchild",
+        "✔ TS-04 default SDK buffer receives a 6 MiB PNG once and survives an oversized rejection; CLI keeps 8 MiB",
+        "✔ TS-04 real explanation and MV jobs preserve QC verdicts without tool errors",
+        "✔ TS-04 tools list matches the complete tool schema snapshot and operation table",
+        "✔ TS-07 cancels the process tree then releases E_BUSY reservation",
+        "✔ TS-07 completes with advisory without changing verdict",
+        "✔ TS-07 detached run survives client exit and heartbeat updates",
+        "✔ TS-07 gate failure is completed and ok true",
+        "✔ TS-07 lost derivation is read only and stale lock recovery checks process existence",
+        "✔ TS-07 mismatched QC exit and report is failed",
+        "✔ TS-07 times out a worker and stops descendants before releasing the lock",
+        "✔ TS-07 unexpected exit is failed",
+        "﹣ P-2 POSIX generated filenames preserve browser bytes (0.2255ms) # POSIX で有効な ?・末尾ドットを含むファイル名を ubuntu CI で確認するため",
+        "﹣ R-6 linux cancellation stops a detached grandchild (0.2029ms) # linux 専用のプロセスツリー停止を対象 OS の CI で実行するため"
+      ]
+    },
+    {
+      "job_id": 132505275952,
+      "head_sha_short": "9d3314e",
+      "event": "push",
+      "job": "test (windows-latest, 24)",
+      "node_test_runs": {
+        "tests": [
+          219,
+          34
+        ],
+        "pass": [
+          217,
+          34
+        ],
+        "fail": [
+          0,
+          0
+        ],
+        "skipped": [
+          2,
+          0
+        ]
+      },
+      "e2e": "e2e: 42 件合格 / 42 件\r",
+      "tier_b": null,
+      "target_tests": [
+        "✔ CL-11 node executes a job below a path longer than 260 characters",
+        "✔ MC-02 MCP rejects in-job junctions symlinks hardlinks and hardlinked attachments",
+        "✔ MC-02 allow-dir permits only absolute request attachments and denies escaped realpaths",
+        "✔ MC-02 junction and symlink escapes denied for reads writes jobs reports and ledger",
+        "✔ MC-02 rejects lexical escapes and resolves missing output parents",
+        "✔ MC-02 root-relative and realpath boundaries reject traversal absolute paths and links",
+        "✔ MC-02 win32 rejects reserved names ADS and trailing dots and folds case",
+        "✔ R-6 win32 cancellation stops a detached grandchild",
+        "✔ TS-04 default SDK buffer receives a 6 MiB PNG once and survives an oversized rejection; CLI keeps 8 MiB",
+        "✔ TS-04 real explanation and MV jobs preserve QC verdicts without tool errors",
+        "✔ TS-04 tools list matches the complete tool schema snapshot and operation table",
+        "✔ TS-07 cancels the process tree then releases E_BUSY reservation",
+        "✔ TS-07 completes with advisory without changing verdict",
+        "✔ TS-07 detached run survives client exit and heartbeat updates",
+        "✔ TS-07 gate failure is completed and ok true",
+        "✔ TS-07 lost derivation is read only and stale lock recovery checks process existence",
+        "✔ TS-07 mismatched QC exit and report is failed",
+        "✔ TS-07 times out a worker and stops descendants before releasing the lock",
+        "✔ TS-07 unexpected exit is failed",
+        "﹣ P-2 POSIX generated filenames preserve browser bytes (2.5364ms) # POSIX で有効な ?・末尾ドットを含むファイル名を ubuntu CI で確認するため",
+        "﹣ R-6 linux cancellation stops a detached grandchild (0.173ms) # linux 専用のプロセスツリー停止を対象 OS の CI で実行するため"
+      ]
+    },
+    {
+      "job_id": 132505276187,
+      "head_sha_short": "9d3314e",
+      "event": "push",
+      "job": "test (ubuntu-latest, 22)",
+      "node_test_runs": {
+        "tests": [
+          219,
+          34
+        ],
+        "pass": [
+          217,
+          33
+        ],
+        "fail": [
+          0,
+          0
+        ],
+        "skipped": [
+          2,
+          1
+        ]
+      },
+      "e2e": "e2e: 42 件合格 / 42 件",
+      "tier_b": null,
+      "target_tests": [
+        "ok - CL-11 node executes a job below a path longer than 260 characters",
+        "ok - MC-02 MCP rejects in-job junctions symlinks hardlinks and hardlinked attachments",
+        "ok - MC-02 allow-dir permits only absolute request attachments and denies escaped realpaths",
+        "ok - MC-02 junction and symlink escapes denied for reads writes jobs reports and ledger",
+        "ok - MC-02 rejects lexical escapes and resolves missing output parents",
+        "ok - MC-02 root-relative and realpath boundaries reject traversal absolute paths and links",
+        "ok - MC-02 win32 rejects reserved names ADS and trailing dots and folds case # SKIP win32 固有の名前規則と大文字小文字の比較を Windows CI で確認するため",
+        "ok - P-2 POSIX generated filenames preserve browser bytes",
+        "ok - R-6 linux cancellation stops a detached grandchild",
+        "ok - R-6 win32 cancellation stops a detached grandchild # SKIP win32 専用のプロセスツリー停止を対象 OS の CI で実行するため",
+        "ok - TS-04 default SDK buffer receives a 6 MiB PNG once and survives an oversized rejection; CLI keeps 8 MiB",
+        "ok - TS-04 real explanation and MV jobs preserve QC verdicts without tool errors",
+        "ok - TS-04 tools list matches the complete tool schema snapshot and operation table",
+        "ok - TS-07 cancels the process tree then releases E_BUSY reservation",
+        "ok - TS-07 completes with advisory without changing verdict",
+        "ok - TS-07 detached run survives client exit and heartbeat updates",
+        "ok - TS-07 gate failure is completed and ok true",
+        "ok - TS-07 lost derivation is read only and stale lock recovery checks process existence",
+        "ok - TS-07 mismatched QC exit and report is failed",
+        "ok - TS-07 times out a worker and stops descendants before releasing the lock",
+        "ok - TS-07 unexpected exit is failed"
+      ]
+    },
+    {
+      "job_id": 132505276267,
+      "head_sha_short": "9d3314e",
+      "event": "push",
+      "job": "test (ubuntu-latest, 24)",
+      "node_test_runs": {
+        "tests": [
+          219,
+          34
+        ],
+        "pass": [
+          217,
+          33
+        ],
+        "fail": [
+          0,
+          0
+        ],
+        "skipped": [
+          2,
+          1
+        ]
+      },
+      "e2e": "e2e: 42 件合格 / 42 件",
+      "tier_b": null,
+      "target_tests": [
+        "✔ CL-11 node executes a job below a path longer than 260 characters",
+        "✔ MC-02 MCP rejects in-job junctions symlinks hardlinks and hardlinked attachments",
+        "✔ MC-02 allow-dir permits only absolute request attachments and denies escaped realpaths",
+        "✔ MC-02 junction and symlink escapes denied for reads writes jobs reports and ledger",
+        "✔ MC-02 rejects lexical escapes and resolves missing output parents",
+        "✔ MC-02 root-relative and realpath boundaries reject traversal absolute paths and links",
+        "✔ P-2 POSIX generated filenames preserve browser bytes",
+        "✔ R-6 linux cancellation stops a detached grandchild",
+        "✔ TS-04 default SDK buffer receives a 6 MiB PNG once and survives an oversized rejection; CLI keeps 8 MiB",
+        "✔ TS-04 real explanation and MV jobs preserve QC verdicts without tool errors",
+        "✔ TS-04 tools list matches the complete tool schema snapshot and operation table",
+        "✔ TS-07 cancels the process tree then releases E_BUSY reservation",
+        "✔ TS-07 completes with advisory without changing verdict",
+        "✔ TS-07 detached run survives client exit and heartbeat updates",
+        "✔ TS-07 gate failure is completed and ok true",
+        "✔ TS-07 lost derivation is read only and stale lock recovery checks process existence",
+        "✔ TS-07 mismatched QC exit and report is failed",
+        "✔ TS-07 times out a worker and stops descendants before releasing the lock",
+        "✔ TS-07 unexpected exit is failed",
+        "﹣ MC-02 win32 rejects reserved names ADS and trailing dots and folds case (0.496285ms) # win32 固有の名前規則と大文字小文字の比較を Windows CI で確認するため",
+        "﹣ R-6 win32 cancellation stops a detached grandchild (0.179239ms) # win32 専用のプロセスツリー停止を対象 OS の CI で実行するため"
+      ]
+    },
+    {
+      "job_id": 132505276347,
+      "head_sha_short": "9d3314e",
+      "event": "push",
+      "job": "tier-b",
+      "node_test_runs": {
+        "tests": [],
+        "pass": [],
+        "fail": [],
+        "skipped": []
+      },
+      "e2e": null,
+      "tier_b": {
+        "evidence": ".agent-work/m7-evidence/tier-b.json",
+        "sha256": "674e5a41976ec4b69cbdb98830d76d4210cc99c7c551cd253cb809f79b80f373",
+        "success": true
+      },
+      "target_tests": []
+    }
+  ]
+}

@@ -271,3 +271,53 @@ Tier C 実測コミット **`c0d10ca798b2689a50e91f3556dc73c09cfa3391`** から�
 - 確認：`git log --all --format='%ae %ce'` は 113 行すべて noreply で、個人のメールアドレスは 0 件。全履歴の追跡ファイルの内容にも個人のメールアドレスは 0 件（`git grep` を全コミットに対して実行）。
 - 影響：Shin-MotionMaker 自身のコミットハッシュがすべて変わった（main は `d34de11` → `20f93e9`）。旧→新の対応は [COMMIT_MAP](docs/work/M8/COMMIT_MAP.md)（113 件、木・著者日時・件名・親で一意に対応）。既存の記録は当時の証拠として書き換えずに残す。原典 BiimMotion のハッシュ（`262c798` など）は影響を受けない。テストは git 履歴を読まない（CI-01）ので、書き換え後のコミットで深さ1の ci-local を実行して確かめた（下記）。
 - 書き換え後の ci-local：`node tools/ci-local.mjs`（書き換え後の main `20f93e9d3697d3da2967c4d7cd95412a17ef6c39` の深さ1複製）、2026-11-14T14:41:58Z〜14:47:26Z、終了0。npm ci・ライセンス照合・ビルド・本体219件（pass217 / fail0 / skip2）・GUI 単体34件（pass34 / fail0）・e2e 42/42・GUI ビルド。skip2 は書き換え前と同じ Linux 専用・POSIX 専用のテスト。生ログは追跡外、SHA-256 `da65e8ea5a688cd1ec4fd1bfc9b380ee0cf11f69350377544140f9a36922e18d`。
+
+### リモートの作成と main への取り込み（経路 (a)）
+
+- repo：`kokuren333/Shin-MotionMaker`（public）を 2026-11-14 に作成した（オーナー承認 Q-01）。npm には公開していない（Q-02 の既定）。
+- remote main はルートコミット `e53dd3a`（`docs/REQUIREMENTS.md` だけ、workflow なし）で作成し、残りの履歴をブランチ `m8-publish` から [PR #1](https://github.com/kokuren333/Shin-MotionMaker/pull/1) で入れた。PR の CI が全ジョブ成功した head `72461a6` を GitHub のマージ（マージコミット）で取り込み、main は **`9d3314e6d2d948cefc6934a21bad97136e81a558`**。マージコミットの木は検証済み head と同じ（`70f726e`）。ローカルでマージして push する経路と強制 push は使っていない。
+- 初めての GitHub Actions で、手元（Windows）では出なかった失敗が出た。原因を実測して直し、5回目で全ジョブが成功した。直した内容と原因は [M8 REPORT](docs/work/M8/REPORT.md#ci-で見つかった不具合と修正)。git 履歴を読むテストは混入していなかった（CI-01 の検出テストも全 OS で成功）。修正は別コンテキストの Opus が交差レビューし（approve with notes）、指摘のうち契約と矛盾する mtime の猶予は撤回した。
+- 実行の記録：[ci-runs.json](docs/work/M8/evidence/ci-runs.json)（全ラウンドの run・job・結論・URL）、[ci-test-summary.json](docs/work/M8/evidence/ci-test-summary.json)（最終 head とマージコミットの件数と対象テストの行）。
+
+| コミット | ワークフロー | 結果 | ジョブ |
+| --- | --- | --- | --- |
+| `72461a6`（PR head） | CI（pull_request）[run](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43613619394) | success | ubuntu/24・ubuntu/22・windows/24・tier-b すべて success |
+| `72461a6` | CI（push）[run](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43613613909) | success | 同上 |
+| `9d3314e`（main） | CI（push）[run](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43614102184) | success | 同上 |
+| `9d3314e` | Pages（workflow_dispatch）[run](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43615717685) | success | build・deploy・verify すべて success |
+| `9d3314e` | Runtime smoke（push）[run](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43614102329) | failure | 下記「残課題」。CI-10 により Pages とは独立 |
+
+- 件数（各 test ジョブ）：本体 219件（pass217 / fail0 / skip2）、GUI 単体 34件（ubuntu は pass33 / skip1、windows は pass34）、e2e 42/42。skip は OS 専用のテストで、理由付き（ubuntu：MC-02 win32・R-6 win32・PowerShell 引数、windows：P-2 POSIX・R-6 linux）。
+- **POSIX 分岐の初めての実行証拠（M2a・M3 の条件付き合格の解消）**：ubuntu の Node 22 と 24 で、TS-07 の8件（完了・不合格・異常終了・取り消し・時間切れ・lost・排他・detached）、TS-04 の3件、CL-11、MC-02 の5件、R-6 linux、P-2 POSIX が成功した。windows では MC-02 win32 と R-6 win32 が成功した。Tier B（ubuntu、CLI と MCP の generate → setup → validate）も成功した。
+
+### 公開コミットでの Tier C（Windows 実機）
+
+`c0d10ca`（M7 の Tier C）から公開コミットまでに `src/host/`（paths・processes・worker）の差分があるため、M7 の記録は引用せず取り直した（G4R2-R2）。公開コミット `9d3314e` を detached の worktree に置き、`npm ci`・`npm run build` のあと次を実行した（Windows 11、Node v24.15.0、2026-11-14 UTC）。
+
+```powershell
+node tools/runtime-smoke.mjs --entry cli --commit 9d3314e6d2d948cefc6934a21bad97136e81a558 --evidence <追跡外>/tier-c-cli.json
+node tools/runtime-smoke.mjs --entry mcp --commit 9d3314e6d2d948cefc6934a21bad97136e81a558 --evidence <追跡外>/tier-c-mcp.json
+```
+
+| 経路 | 実行（UTC） | 観測結果 |
+| --- | --- | --- |
+| CLI | 16:10:31〜16:19:30 | setup → sound → validate → preview → still → ghost preview → final → ghost final の 8 run がすべて completed。[tier-c-cli.json](docs/work/M8/evidence/tier-c-cli.json) |
+| MCP | 16:19:49〜16:26:48 | 同じ 8 run がすべて completed、protocol_errors 0。[tier-c-mcp.json](docs/work/M8/evidence/tier-c-mcp.json) |
+
+ジョブ名は `Runtime & ＆（全角）　・ 空白`、テンプレート 0.5.2。静止画（27051 bytes、`3d737258…`）・ghost の2つの JSON・final.mp4 は CLI と MCP で同じバイト。preview.mp4 は CLI と MCP でバイトが異なった（M7 では一致。同じ機械の同時刻に別セッションのレンダーが走っており、GPU エンコーダの割り当てでソフトウェア符号化に落ちたと推定。判定には使わない）。ghost の件数は助言のまま。
+
+### Pages の公開と公開後確認（CI-08）
+
+GitHub Pages を「GitHub Actions」から配信する設定で有効化し、main `9d3314e` に対して Pages を手動起動した（初回デプロイ）。
+
+1. **ワークフローの3ジョブ**：[run 43615717685](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43615717685) の build（16:27:45〜16:30:44）・deploy（〜16:30:57）・verify（〜16:31:20）がすべて `conclusion: success`。結論は API の `status: completed`・`conclusion` で確かめ、打ち切り・失敗と区別した。
+2. **手元からの公開後確認**：`node tools/verify-pages.mjs https://kokuren333.github.io/Shin-MotionMaker/ --expect-commit 9d3314e6d2d948cefc6934a21bad97136e81a558 --screenshot … --output …`、2026-11-14T16:31:40Z〜16:31:49Z、終了0、1回目で合格。HTTP 200、`<title>Shin-MotionMaker</title>`、`version.json` の commit が `9d3314e…` と一致（version 0.1.0、template_version 0.5.2、built_at 16:30:37Z）、JS・CSS が 200、ヘッドレスブラウザで見出し「動画ジョブを作成」・7区画・「ジョブのZIPを生成」ボタン、コンソールエラー 0。未ログインの経路（認証なしの fetch と新しいブラウザプロファイル）。出力は [verify-pages-9d3314e.json](docs/work/M8/evidence/verify-pages-9d3314e.json)。別に `curl` でも repo のページ（200）・`version.json`・`<title>` を認証なしで取得した。
+3. **公開前後のスクリーンショット**：公開 URL の画面 [pages-public-9d3314e.png](docs/work/M8/evidence/pages-public-9d3314e.png)（1440×900）を、公開前の基準 M7-gui の S1（`docs/work/M7-gui/screenshots/S1-explainer-initial-1440.png`）と比べた。SHA-256 はどちらも `3bfedde3aeda625194daeca2036212b397f4c48dbabed5c15bc5b0253bba5c0e` で、**同じバイト**（ffmpeg の SSIM 1.000000、PSNR inf）。目視でも差は無い。
+4. **記録**：この節。
+
+以上で、main `9d3314e` の公開は CI-08 の4条件を満たした。
+
+### 残課題（M8 時点）
+
+- **Runtime smoke の CI（windows runner）が失敗する。** 生成ジョブの `runtime/scripts/run.mjs` が `--hardware-acceleration if-possible` を渡し、GPU の無い runner でも Remotion が `h264_nvenc` を選んで `nvcuda.dll` を読めずに変換に失敗する（`Cannot load nvcuda.dll` → `Conversion failed!`）。原典 `262c798` から引き継いだ挙動で、NVIDIA GPU の無い Windows 機の利用者でも起こりうる。`job-template/` は R1〜R5 以外を変えられないので M8 では直していない。L1 の判断（要件 §6.2 の改訂）が要る。Windows 実機（NVIDIA GPU あり）の Tier C は上記のとおり成功している。
+- `readJobBytes` の再試行が「5回続けて実体が食い違えば拒否する」ことを直接確かめるテストは無い（レビューの参考指摘）。
