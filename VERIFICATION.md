@@ -6,7 +6,37 @@ M7-add では main `7741d9594e30305339b8736ee6e2c49591c89384` を `6789f2a` で�
 
 取り込み後のコミット `bc99306326622d9ff52cdb134b47bf22a0c2a423` は、深さ1複製の ci-local で終了0（本体215件/pass213/skip2/fail0、GUI33件/pass32/skip1/fail0、e2e42/42、ライセンス180項目、両ビルド）。[ci-add.json](docs/work/M7/evidence/ci-add.json) に日時・出力要約・ログハッシュを保存した。同じコミット・テンプレート0.5.2の [pages-add.json](docs/work/M7/evidence/pages-add.json) も正常経路・8不一致・再試行を確認し、verifier CLI は終了0。画面は既存 pages-local.png と同じ SHA-256 だった。実公開の確認ではなく、見た目の判定も行っていない。
 
+## M7-gui GUI のスクリーンショット（GU-17、G4-M1）
+
+G4 レビューの G4-M1（M7 で読み込みエラーの文言が変わったのに S12 が古い）を受けて、R-10 の反映後のコミットで全状態を撮り直した。現在の基準はこの表であり、下の M4 の表は履歴として残す（公開前後の比較（CI-08）の基準もこの表）。
+
+- 対象：Pages 用ビルド。コミット `94ed115ff66bea5f49277e113d68582949aea131`（R-10 の反映。ビルドに `--commit` で埋め込み）。撮影手順・配信・ブラウザは M4 と同じ
+- 環境：Windows 11、Node v24.15.0、2026-11-14
+- 実行：`npm run shots --workspace gui -- --commit=94ed115ff66bea5f49277e113d68582949aea131 --out=../docs/work/M7-gui/screenshots`
+- 結果：16枚。すべて横あふれ 0px、コンソールエラー 0 件（スクリプトの出力で確認）。M4（`9f08db5`）と同じバイトは 11枚、変わったのは S1・S2・S3・S6・S12。差の内訳は [M7-gui REPORT](docs/work/M7-gui/REPORT.md#見た目の差m4-との比較) に書いた
+
+| # | 状態 | 画面 | ファイル（`docs/work/M7-gui/screenshots/`） | SHA-256 | M4 との比較 |
+| --- | --- | --- | --- | --- | --- |
+| S1 | 解説モードの初期表示。01 の制作モード・タイトル・説明・視聴者・希望尺がスクロールなしで見える | 1440×900 | `S1-explainer-initial-1440.png` | `3bfedde3aeda625194daeca2036212b397f4c48dbabed5c15bc5b0253bba5c0e` | 変化 |
+| S1m | MV モードの初期表示（目次は 01〜03） | 1440×900 | `S1m-mv-initial-1440.png` | `339ec088c59fa9177b7108f5aa32678749e555a8a7046f19b05e0295ac8004a5` | 同じ |
+| S2 | 解説モードの入力済み。方向性のたたき台（どれも選ばれていない）と差別化メモ | 1440×900 | `S2-explainer-filled-direction-1440.png` | `e92394a1e9ff8c11065df0a1b1c3bb39dfedbaa3983330a411525aa3355044b0` | 変化 |
+| S3 | MV モードの入力済み（完成音源 30 秒、歌詞、たたき台、準備度） | 1440×900 | `S3-mv-filled-1440.png` | `58ea0bbe9e638907fcd1f85d8f43ef70b734d1d9bcc0670c1f9a02add9cd069c` | 変化 |
+| S4 | エラー：必須未入力で ZIP 生成を押した状態（字幕帯のエラーの要約にフォーカス） | 1440×900 | `S4-required-missing-error-1440.png` | `f8a60db965b99509fa1c56653a0010c1c99a6861f344d03d964e2f7f65d1bdec` | 同じ |
+| S5 | 検査結果の表示：QC 事前ゲート（不合格、`review_mode: self` の明示、免除、ゲートの表）。助言は別区画 | 1440×900 | `S5-inspection-results-1440.png` | `89800084bd829aee96b0f21f42676023f33c302d2945c137feef36b8282217c7` | 同じ |
+| S5b | 検査結果の表示：ゴースト検査（ゲートの区画なし、件数は助言の区画）と静止画 | 1440×900 | `S5b-inspection-ghost-stills-1440.png` | `8f342397c9cbf919680dd04cab94f56fa2545d196cfd0a1fab5aedc2033b2ea4` | 同じ |
+| S5c | 検査結果の表示：QC の run.json だけを開いた状態。実行の状態（完了）とゲートの判定（不合格）を分け、`review_mode: self`・免除 PRE-3・ゲートの表を直接の QC と同じ部品で出す（M4R R2） | 1440×900 | `S5c-inspection-run-qc-1440.png` | `8e0ee83c0870383706a849b9d4ed009c3e8cd99c01003a42631f2e9e618ec17d` | 同じ |
+| S6 | 情報ダイアログ（版・テンプレート版・コミット・ビルド日時、文書、表示） | 1440×900 | `S6-info-dialog-1440.png` | `22a1af8c4bcc0971bf1aa6186a851f0118a19408cbbaac837f75a2c23de3f206` | 変化 |
+| S7 | 幅 390px、解説モード | 390×844 | `S7-explainer-390.png` | `963204276e8fc827b6aed4f0fa0e6539ae57ca69b99d130a0848e56264181678` | 同じ |
+| S8 | 幅 390px、MV モード | 390×844 | `S8-mv-390.png` | `be320eabfdad51036e8429f6dcc92722386473c911a5033218dbdbb500e38c97` | 同じ |
+| S9 | CLI・MCP の区画（request.json の書き出し、generate のコマンド例の先頭） | 1440×900 | `S9-cli-mcp-request-1440.png` | `5e19a874fce53f9730081818c8a027cd883fedb4716c9564d10abb5bc3447ad7` | 同じ |
+| S9b | CLI のコマンド例をシェル別に2つ（PowerShell・POSIX シェル）。タイトル `虹の$(仕組み) it's` がそれぞれの単一引用符の規則で1引数になる（M4R R3） | 1440×900 | `S9b-cli-shell-examples-1440.png` | `2fb5e7cec422c9c36341db5e00b68ca1578f17bd45994437ef588bad1d29aea5` | 同じ |
+| S10 | request.json を読み込んだ状態（置き換えの通知と、選び直す添付ファイルの名前） | 1440×900 | `S10-request-imported-1440.png` | `3cb40794bb8f291a03950f3f43a21761807958ae4aaf22068ced847c011ec3bc` | 同じ |
+| S11 | 高コントラスト表示（正本の `data-contrast="high"` のトークン） | 1440×900 | `S11-high-contrast-1440.png` | `b5140931bdb0b0ea098d870baf1749d22dc5df73b3ad60fadd5bb06d998d9028` | 同じ |
+| S12 | サンプル入力の後に、様式が不正な値（`styleMode: "unknown"`）の request.json を読み込んだ状態。入力は残り、字幕帯に core の message、画面の項目名と pointer、core の `formChoices` の書ける値、直し方、「読み込み前の入力と添付はそのままです。」を出す（M4R R1、M7-gui R-10） | 1440×900 | `S12-request-invalid-choice-1440.png` | `f125766d9eb99b4064ccfd3e44ea17c9bb7768b511ddc91e8879c16e989c0d9c` | 変化 |
+
 ## M4 GUI のスクリーンショット（GU-17）
+
+（履歴。現在の基準は上の M7-gui の表。）
 
 - 対象：Pages 用ビルド（`gui/scripts/site.mjs`、`base: "./"`）。M4-fix（レビュー M4R の反映）後のコミット `9f08db52726416520362473c5b85cdbe1e1f3a80`（ビルドに `--commit` で埋め込み、情報ダイアログと `version.json` に出る）。M4R 前の記録（`28c7191`、13枚）はこの撮り直しで置き換えた
 - 配信：`gui/e2e/shots.mjs` がビルドを一時フォルダに作り、ローカルの静的サーバーで **`/Shin-MotionMaker/` の下だけ**に配信した（GitHub Pages のプロジェクトサイトと同じサブパス）
