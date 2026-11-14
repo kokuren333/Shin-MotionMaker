@@ -177,6 +177,8 @@ e2e の実行時間は手元で約 30 秒（ビルド込み）。
 | `npm run build --workspaces --if-present` | exit 0（型検査と Vite ビルド） |
 | `node tools/ci-local.mjs` | 下の記録 |
 
+ci-local（M4-fix）：複製したコミット `4ed39689146317ebf453f52bf6060d852599920f`（M4-fix のコード・テスト・文書をすべて含む。この記録を足すコミットは REPORT だけを変える）で exit 0。深さ1の複製 → `npm ci`（37パッケージ、監査は既知の low 1件）→ `npm run build` → `npm test`（tests 123 / pass 113 / fail 0 / skipped 0 / todo 10）→ `npm test --workspaces --if-present`（単体 33 / 33、skipped 0、e2e 42 / 42）→ `npm run build --workspaces --if-present`。最終行「CI と同じコマンドが完了しました: 4ed3968…」。
+
 ## 残課題
 
 - Linux と Node 22 では e2e を手元で実行していない（CI で初めて実行される）。Linux では `--no-sandbox` を付けて起動する。
