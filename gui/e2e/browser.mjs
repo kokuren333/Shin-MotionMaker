@@ -177,8 +177,8 @@ export async function openPage(cdp, url, { width = 1440, height = 900, downloads
     permissions: ["clipboardReadWrite", "clipboardSanitizedWrite"], browserContextId,
     origin: new URL(url).origin,
   }).catch(() => {});
-  if (reducedMotion)
-    await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "reduce" }] });
+  // Always emulate: hosts with OS animations disabled (CI runners) otherwise report "reduce".
+  await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: reducedMotion ? "reduce" : "no-preference" }] });
 
   const page = {
     send, sessionId, consoleErrors, failedRequests,
