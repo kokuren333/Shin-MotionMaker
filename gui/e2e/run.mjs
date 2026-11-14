@@ -433,7 +433,8 @@ test("GU-04 request.json の読み込みは core validateRequest で検査する
     [write("broken.request.json", "{ not json"), "JSON として読み取れません"],
   ]) {
     await page.setFiles(byAria("request.json を読み込む"), [file]);
-    await page.waitFor("document.querySelector('.errors')", "エラー");
+    // The previous file's error stays on screen until this file is read, so wait for this one's text.
+    await page.waitFor(`document.querySelector('.errors')?.textContent.includes(${JSON.stringify(expected)})`, "エラー");
     assert.ok((await text(page, ".errors")).includes(expected), expected);
     assert.equal(await page.evaluate("document.querySelector('#concept input[maxlength=\"200\"]').value"), "", "form untouched");
     await page.fill("#concept input[maxlength='200']", "");
