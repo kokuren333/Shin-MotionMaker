@@ -7,6 +7,7 @@
 | 継承元（以下「原典」） | BiimMotion（`kokuren333/BiimMotionWebUI`）コミット `262c798`。原典の repo には一切手を入れない |
 | 参照 | CyberSprite `a00433c`（テーマ正本 `gui/src/theme/tokens.css` は `20f787d`、アイコン原本 `assets/ui/icons/` は `93a433f`）、MankoMIX `_handoff/RENOVATION_PACKET_V2.md` |
 | 次の受け手 | L2 オーケストレーター（Opus 5.5 高）。§11 の分解は案であり、計画の確定は L2 が行う |
+| 改訂 | 改訂1（2026-11-15、PM）：CPU 環境対応。§1.2 N11、§6.2 R6、§6.4（JT-14〜19）、JT-11、CI-10・CI-11、TS-10、§9.3 Tier C、D-10・D-19。オーナー指示（2026-11-15）による |
 
 ## 0. 読み方と実査範囲
 
@@ -47,6 +48,7 @@
 | N8 | Remotion・React・Three.js など、ジョブのランタイム依存の更新 | 原典と同じ版で移す。更新は別件 |
 | N9 | Aivis・Codex・ffmpeg・ブラウザなど外部ツールの自動インストール | 原典:`job-template/AGENTS.md` L236・L364 |
 | N10 | Muse スペース版（MV-E2E）との連携の実装 | Q-05 |
+| N11 | NVENC 以外のハードウェアエンコーダ（Intel QSV、AMD AMF など）への対応。エンコーダや画質を選ぶ入力を GUI・CLI・MCP・`project.json` に足すこと | Remotion 4.0.532 が選ぶハードウェアエンコーダは NVENC（Windows・Linux）と VideoToolbox（macOS）だけで、Remotion は更新しない（N8）。エンコーダは制作する機械の性質であり、作品の設定ではない（§6.4） |
 
 ## 2. 継承する設計思想（交渉不可）
 
@@ -363,6 +365,7 @@ Shin-MotionMaker/
 | R3 | `NOTICE` の追加、ジョブの `README.md` への「CLI・MCP から使う」節の追記 | 追加だけ。ジョブ単体では `npm run` が正であることを書く |
 | R4 | `validate.mjs` が `reports/validate.json`（各検査の名前・状態・メッセージ、助言）も書く | 追加だけ。標準出力と終了コードは変えない |
 | R5 | 解説の `brief.md` にある特定モデル名（「Opusが記入する」）を「制作エージェント」に改める | 解説だけ。MV の生成物には無い |
+| R6 | レンダーのエンコーダ選択（§6.4）。ハードウェアエンコーダが実際に使えるかをレンダーの前に確かめ、使えなければ CPU（libx264）で符号化する。選択は環境変数で明示できる | `runtime/scripts/run.mjs`（`preview`・`build` の引数の組み立てと冒頭のコメント）、`runtime/scripts/ghost-check.mjs`（`renderSecondCopy` の引数の組み立てとそのコメント）、新しいファイル `runtime/scripts/encoder.mjs`、ジョブの `README.md` への節の追記（追加だけ）。`AGENTS.md`、`package.json`、`runtime/package.json`、依存の版、ゴーストの検出・分類・照合のロジックとしきい値は変えない |
 
 - **JT-01（MUST）** 上の差分は `tests/fixtures/` の許容差分表に機械可読で載せる。テキストの差分は置換の対として持ち、逆に置換した結果が原典のハッシュと一致することをテストで表明する（JT-11）。
 - **JT-02（MUST）** `job-template/` 配下に置いたファイルはすべてジョブに同梱される。開発用のメモ・ログ・下書きを置かない（原典:`AGENTS.md` §3 の規則5）。
@@ -391,10 +394,34 @@ Shin-MotionMaker/
   - `PROVENANCE.md`：採取元のコミット、採取コマンド、採取日。原典の基線テストが `955fa5c` との一致を表明していたことも記す。
 - **JT-11（MUST）基線照合テスト。** 次を表明する。
   1. `job-template/` と同梱フォントの各ファイルのハッシュが、許容差分を除いて基線と一致する。
-  2. 各ケースの出力が、許容差分（R1・R2・R5）を除いて基線とバイト一致する。**MV のケースで許す差分は R2 と、同梱文書の R1・R3 だけ**である。MV の `brief.md`・`plan/lyrics.txt`・依頼文はバイト一致する。
+  2. 各ケースの出力が、許容差分を除いて基線とバイト一致する。**MV のケースで許す差分は、R2、同梱文書の R1・R3、ランタイムのスクリプトの R4・R6 だけ**である。MV の `brief.md`・`plan/lyrics.txt`・依頼文はバイト一致する。
   3. `validateForm` が返すエラー文言の集合が基線と一致する。
 - **JT-12（SHOULD）** 原典が生成したジョブ（`schema_version` 0.4、`generator` なし）を、`status`・`validate`・`qc`・`ghost-check`・`render` で扱える。`reports/validate.json` が無い場合は、終了コードと標準出力から結果を組み立てる。
 - **JT-13（MUST）** 原典のテストのうち MV に関わるものは、表明の内容を変えずに移す。変えてよいのは §9.1 の台帳に載せた種別だけである。
+
+### 6.4 レンダーのエンコーダ選択（R6）
+
+原典の `run.mjs` は `--hardware-acceleration if-possible` を渡す。Remotion 4.0.532 は、Windows と Linux でこの指定を受けると `h264_nvenc` を選び、確かめるのは同梱の ffmpeg のエンコーダ一覧に名前があるかだけである。名前は NVIDIA の GPU が無い機械でも一覧に載っているので、そういう機械ではレンダーが失敗する（2026-11-15、GitHub の Windows runner で `Cannot load nvcuda.dll`）。ジョブは単体で完結する（N5、§4.5）ので、入口ではなくジョブ内スクリプトで直す。
+
+- **JT-14（MUST）選択の実装は1箇所。** エンコーダの選択と、それに応じて Remotion へ渡す引数は、`runtime/scripts/encoder.mjs` だけに置く。`run.mjs` の `preview`・`build` と、`ghost-check.mjs` の二重レンダー（`renderSecondCopy`）は、同じ関数を使う。`still` と `studio` は動画を符号化しないので対象にしない。core・host・CLI・MCP に選択のロジックを置かない（AR-02）。
+- **JT-15（MUST）選択の規則。** 環境変数 `MOTION_JOB_ENCODER` で決める。
+
+| 値 | 動作 |
+| --- | --- |
+| `auto`（既定。未設定と空文字を含む） | Windows と Linux では JT-16 の試行を行い、成功すれば GPU の引数、それ以外は CPU の引数を使う。macOS では試行せずに GPU の引数を使う（原典と同じ動作。本改訂では検証していない） |
+| `cpu` | 試行せずに CPU の引数を使う |
+| `gpu` | 試行せずに GPU の引数を使う。使えなければレンダーは失敗する |
+| それ以外 | レンダーを始めずに、使える値を示して終了コード1で終わる |
+
+  - GPU の引数は原典と同じにする：`--hardware-acceleration if-possible` と、`--video-bitrate 16M`（`build` と二重レンダー）または `--video-bitrate 8M`（`preview`）。
+  - CPU の引数：`--hardware-acceleration disable` を渡し、`--video-bitrate` を渡さない。Remotion の既定（libx264、CRF 18）になる。原典が NVENC のビットレートを合わせる基準にした設定である。
+  - それ以外の引数（コーデック、音声コーデック、画素形式、`preview` の縮小率、出力先）は変えない。
+- **JT-16（MUST）試行は実際の符号化で行う。** `auto` の判定は、レンダーの符号化に使われるのと同じ ffmpeg（Remotion が同梱するもの）で、`h264_nvenc` による1フレーム以上の符号化を実際に行い、終了コード0で終わるかで決める。エンコーダ一覧に名前があることを根拠にしない。試行は出力を捨て、ジョブのフォルダにファイルを残さない。ffmpeg が見つからない、0以外で終わる、20秒以内に終わらない、のどれでも「使えない」と扱い、CPU の引数でレンダーを続ける。試行の失敗を理由にレンダーを失敗にしない。
+- **JT-17（MUST）自動でやり直さない。** 選択のあとでレンダーが失敗しても、エンコーダを替えて再実行しない。終了コードは Remotion のものをそのまま返す（原典と同じ）。GPU の引数で失敗したときは、`MOTION_JOB_ENCODER=cpu` で CPU を明示できることを、標準エラーに1行で示す。失敗の原因（場面のコード、素材、エンコーダ）をスクリプトは区別できず、やり直すと本来のエラーが埋もれ、長いレンダーが2回走るためである。
+- **JT-18（MUST）選択を1行で記録する。** レンダーを始める前に、選んだ経路（`gpu`・`cpu`）、エンコーダ名、`MOTION_JOB_ENCODER` の値、理由（試行の成否など）を、`[encoder]` で始まる1行で標準エラーに出す。標準出力、終了コード、`reports/` のファイル、JSON Schema は変えない。CLI・MCP から実行した場合、この行は run の `stderr.log` に残る。
+- **JT-19（MUST）合否と設定に関わらせない。** エンコーダの経路を、`validate`・`qc`・`ghost-check` の判定に使わない。JT-18 の行の有無を検査しない。CPU で作った `preview.mp4`・`final.mp4` は、GPU で作ったものと同じ扱いの成果物である。GPU と CPU の出力のバイト・ビットレート・ファイルサイズの一致を、テストや検証の条件にしない。エンコーダの指定を `project.json`・`MotionForm`・`request`・CLI のオプション・MCP の入力に足さない。CLI・MCP は起動時の環境変数をそのままジョブ内スクリプトへ渡し、`MOTION_JOB_ENCODER` を解釈しない。
+
+R6 より前のテンプレートで生成したジョブ（原典が生成した `schema_version` 0.4 のジョブを含む）は、自分の中に古いスクリプトを持つので、この選択は働かない。GPU の無い機械で使うには、ジョブを生成し直すか、R6 の対象ファイルを更新する。
 
 ## 7. GUI 仕様
 
@@ -450,7 +477,8 @@ GUI はレンダーも検査も実行しない。ブラウザの中で完結し�
   3. 公開 URL のスクリーンショットを撮り、公開前の記録と見比べた。
   4. 実行の URL、コミット、確認の出力、スクリーンショットを `VERIFICATION.md` に記録した。
 - **CI-09（MUST）** 公開後確認に失敗したら、完了を宣言しない。原因を直すか、マージを打ち消す PR を出す（巻き戻しは新しいコミットで行う）。
-- **CI-10（SHOULD）** `runtime-smoke.yml`（§9.3 の Tier C）は Pages のデプロイと切り離す。レンダーの不安定さで公開が止まらないようにし、失敗は別に報告する。
+- **CI-10（SHOULD）** `runtime-smoke.yml`（§9.3 の Tier C）は Pages のデプロイと切り離す。レンダーの不安定さで公開が止まらないようにし、失敗は別に報告する。切り離すのは公開を止めないためであり、失敗を放置してよいという意味ではない（CI-11）。
+- **CI-11（MUST）GPU の無い runner で実レンダーが通る。** `runtime-smoke.yml` は、GPU の無い GitHub の Windows runner で、CLI と MCP の両方の経路が成功する。失敗したら、原因を直す PR か、取り消しの PR を出す。版のタグは、そのコミットで `ci.yml`・`pages.yml` に加えて `runtime-smoke.yml` も成功したものに付ける。runner 側の障害で失敗した場合は再実行してよく、実行の URL を `VERIFICATION.md` に記録する。
 
 ## 9. テスト方針
 
@@ -461,7 +489,7 @@ GUI はレンダーも検査も実行しない。ブラウザの中で完結し�
 | 種別 | 内容 |
 | --- | --- |
 | P1 | import のパスと、分割後のモジュール名 |
-| P2 | §6.2 の許容差分（R1〜R5）に対応する文言・値 |
+| P2 | §6.2 の許容差分（R1〜R6）に対応する文言・値 |
 | P3 | git 履歴に依存する基線の読み取りを、フィクスチャに替える |
 | P4 | 旧 CLI（`tools/generate-job.ts`）の起動方法・終了コード・出力を、§4 の規約に合わせる |
 
@@ -489,6 +517,14 @@ GUI はレンダーも検査も実行しない。ブラウザの中で完結し�
 - **TS-07（MUST）run の生存期間。** 偽のジョブスクリプト（Remotion を使わない）で、完了・不合格・異常終了・取り消し・時間切れ・`lost`・排他（`E_BUSY`）を、ubuntu と windows で確かめる。
 - **TS-08（MUST）GUI。** 単体テスト、トークンの写しが正本の値と一致すること（値は repo 内のフィクスチャと比べる）、色の直値が `tokens.css` の外に無いこと、コントラスト検査、e2e（GU-02 の機能一覧、`request.json` の往復、検査結果の表示、サブパス配信、幅 390px）。
 - **TS-09（MUST）アイコン。** 全アイコンが 16×16 の PNG で、`manifest.json` の SHA-256 と一致し、由来の記録が埋まっていること。
+- **TS-10（MUST）エンコーダの選択。** GPU も Remotion も使わずに、`runtime/scripts/encoder.mjs` を直接読み込んで次を表明する（Tier A）。
+  1. `MOTION_JOB_ENCODER` の解釈：未設定・空文字・`auto`・`cpu`・`gpu` と、それ以外の値がエラーになること。
+  2. GPU の経路で Remotion へ渡す引数の配列が、`preview`・`build`・二重レンダーのそれぞれで、原典の配列と完全に一致すること（期待値はテストに書く）。
+  3. CPU の経路の引数に `--video-bitrate` が無く、`--hardware-acceleration` の値が `disable` で、ほかの引数が原典と同じこと。
+  4. `auto` が、試行の結果（成功、0以外の終了、起動の失敗、時間切れ）を差し替えたときに、それぞれ GPU・CPU・CPU・CPU を選ぶこと。
+  5. `still` と `studio` の引数が原典と同じこと。
+  6. `run.mjs` と `ghost-check.mjs` に `--hardware-acceleration` の文字列が直接書かれておらず、どちらも `encoder.mjs` を使っていること。
+  7. CLI と MCP から起動したジョブ内スクリプトに、起動時の `MOTION_JOB_ENCODER` が届くこと（TS-07 と同じ偽のジョブスクリプトで確かめる）。
 
 ### 9.3 テストの段
 
@@ -496,7 +532,7 @@ GUI はレンダーも検査も実行しない。ブラウザの中で完結し�
 | --- | --- | --- |
 | Tier A | ジョブの依存を導入しないテスト（上のほぼすべて） | PR と push のたび。ubuntu と windows |
 | Tier B | 生成したジョブに依存を導入して、`validate` と MCP の generate → validate を通す | PR と push のたび。ubuntu。依存はキャッシュする |
-| Tier C | 実レンダー：動作確認用の場面（原典 `tools/prepare-runtime-smoke.mjs` の構成）で `sound` → `validate` → `preview` → `still` → `ghost-check --target=preview` → `build` → `ghost-check` を、CLI と MCP（run のポーリング）の両方から通す | M7 と公開の前に Windows の実機で必ず実行して `VERIFICATION.md` に記録する。CI では手動と main で実行する（CI-10） |
+| Tier C | 実レンダー：動作確認用の場面（原典 `tools/prepare-runtime-smoke.mjs` の構成）で `sound` → `validate` → `preview` → `still` → `ghost-check --target=preview` → `build` → `ghost-check` を、CLI と MCP（run のポーリング）の両方から通す。各レンダーの `[encoder]` の行（JT-18）を証拠に含める | M7 と公開の前に Windows の実機（GPU の経路）で必ず実行して `VERIFICATION.md` に記録する。CI では手動と main で実行し、GPU の無い runner で CPU の経路を通す（CI-10、CI-11） |
 
 ## 10. 文書とライセンス
 
@@ -563,7 +599,7 @@ M0 ──▶ M1 ──▶ M2a ──▶ M2b ──┐
 | D-07 | MCP は stdio。パスは `--root` の中だけ。任意コマンドの実行ツールは置かない | §5.1 |
 | D-08 | 長時間処理は run として切り離し、ジョブ内の `.smm/runs/` に記録する。待つのは `wait_ms` 付きの `run_get` | §5.3 |
 | D-09 | 入口は場面・演出を操作しない。場面の DSL と Op を作らない | §1.2、§2.4 |
-| D-10 | job-template は原典と同じ。差分は R1〜R5 だけ。`schema_version` は 0.5 | §6 |
+| D-10 | job-template は原典と同じ。差分は R1〜R6 だけ。`schema_version` は 0.5 | §6 |
 | D-11 | MV 非退行は基線フィクスチャで担保する。git 履歴を読むテストは禁止 | §6.3、§8.2 |
 | D-12 | GUI は静的・ブラウザ内完結。レンダーも検査も実行しない。`request.json` で CLI・MCP とつながる | §7 |
 | D-13 | テーマは CyberSprite の `--cs-*` を値のまま写す。固有アイコンは CyberSprite で描き、PNG をコミットする | §7.2 |
@@ -572,6 +608,7 @@ M0 ──▶ M1 ──▶ M2a ──▶ M2b ──┐
 | D-16 | エラーコードは英語、メッセージと MCP の説明文は日本語 | §4.4、§5.2 |
 | D-17 | 原典の既定値（Aivis の Style ID のプリセットを含む）はそのまま持つ | §3.3、Q-07 |
 | D-18 | 原典の今後の修正は自動では取り込まない。取り込むときは基線フィクスチャを採り直し、差分を台帳に記録する | §6.3 |
+| D-19 | レンダーのエンコーダはジョブ内スクリプトが選ぶ。NVENC を実際に試し、使えなければ CPU（libx264）にする。明示は環境変数 `MOTION_JOB_ENCODER` だけで、`project.json`・入力・操作定義表には足さない。自動の再レンダーはしない。合否には関わらせない | §6.4 |
 
 ## 13. オーナーへの質問
 
@@ -585,7 +622,7 @@ M0 ──▶ M1 ──▶ M2a ──▶ M2b ──┐
 | Q-04 | **GUI をローカルのジョブとつなぐモード**（`smm gui` がローカルサーバーを立て、GUI からジョブの状態や run を見る）を v0.1 に入れるか | 入れない。HTTP の待ち受けと認可が増え、初回の範囲が広がる。v0.1 は検査結果のファイルを開く方式（GU-05）で足りる | 入れない |
 | Q-05 | **Muse スペース版（MV-E2E）を Shin-MotionMaker の CLI・MCP に切り替えるか** | 本件の範囲外とする。入力の形を原典と同じにしてあるので、あとで切り替えられる | 範囲外 |
 | Q-06 | **公開後、原典（BiimMotion）の README に後継の案内を出すか、保守を止めるか** | v0.1.0 の公開と Fable レビューが済むまでは何もしない。その後にオーナーが決める | 原典に触れない |
-| Q-07 | **公開製品の既定値に、オーナー個人の Aivis Style ID のプリセットを持ち続けるか** | 持つ（D-17）。原典でも公開済みで、変えると解説の基線照合に許容差分が増える。変える場合は R6 として足す | 持つ |
+| Q-07 | **公開製品の既定値に、オーナー個人の Aivis Style ID のプリセットを持ち続けるか** | 持つ（D-17）。原典でも公開済みで、変えると解説の基線照合に許容差分が増える。変える場合は新しい許容差分として足す | 持つ |
 
 ## 14. リスク
 
@@ -596,5 +633,6 @@ M0 ──▶ M1 ──▶ M2a ──▶ M2b ──┐
 | ジョブの依存の導入が重い（原典の運用では1プロジェクト 1.5〜2 GB） | Tier B はキャッシュを使う。Tier C は Pages のデプロイと切り離す（CI-10） |
 | MCP の SDK とプロトコルの版の変化 | M0 で版を固定する。TS-04 は SDK のクライアントで往復させ、手書きのメッセージに依らない |
 | 原典とのずれが気づかれずに広がる | 許容差分は機械可読で、照合テストが落ちる（JT-11）。原典の更新は自動で取り込まない（D-18） |
+| GPU の無い機械では符号化が遅い。GPU と CPU で出力のバイトとビットレートが違う | 合否と検証の条件に、出力のバイト・ビットレートの一致を使わない（JT-19）。選んだ経路は `[encoder]` の行で残す（JT-18）。run の上限時間は変えず、足りない実測が出たら要件へ差し戻す |
 | 入口が増えたことで、将来「便利な」カタログや Op が足される | §2.3 の宣言文、§2.4 の規則、TS-03・TS-06 のテスト、Fable レビューでの必須確認（M9） |
 | Remotion の利用条件（企業での利用には別の条件がある） | `NOTICE` と README に原典と同じ注意を書く（DC-04）。Remotion は同梱しない |

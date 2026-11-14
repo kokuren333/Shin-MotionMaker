@@ -2,6 +2,7 @@
 
 | 版 | 日付 | 改訂内容 |
 | --- | --- | --- |
+| CPU | 2026-11-15 | 要件改訂1（CPU 環境対応）に合わせる：job-template の差分を R1〜R6 に、テンプレート 0.5.3、ジョブ内スクリプトへの環境変数は host が解釈せず渡す（L2 の確認を受ける） |
 | M7-fix | 2026-11-14 | M7-fix：G4 の R-2・R-6 を反映（L2 承認） |
 | M7 | 2026-11-14 | M7：formChoices と shape の列挙検査（M4-Q1、L2 承認） |
 | M3-fix | 2026-11-14 | M3-fix：MCP の画像は image ブロックだけで送る、MCP の PNG 上限 6 MiB（M3R M-1、L2 承認） |
@@ -58,7 +59,7 @@ type BuiltJob = {
 - `JobPath` はジョブ直下からの相対パス（ルート名を含めない）で `/` 区切り。絶対パス・空要素・`..`・バックスラッシュを拒否する。core のファイルマップ、report の path、artifacts、run.json 内のパスはこの型とする。host は実体パスも検査する。
 - `DisplayPath` は入口が返す job・archive 等の表示用パス。MCP は root 相対で `..` 禁止、CLI は `process.cwd()` 相対で `..` を許す。いずれも `/` 区切り。TS-05 は CLI の cwd を MCP の root に揃えて比較する。
 - `Project` は原典 `ReturnType<typeof createProject>` の形を維持し、`schema_version: "0.5"`、`generator: { name: "shin-motionmaker"; version: string; template_version: string }` の R2 だけを加える。原典0.4の読み取り型 `LegacyProject` では generator は存在しない。scenes は生成時に空。新しい設定 DB を作らない。
-- 版の唯一の出どころは `src/core/data/version.ts` の `PACKAGE_VERSION`・`TEMPLATE_VERSION`・`TEMPLATE_MANIFEST_SHA256`。PACKAGE_VERSION と package.json の version の一致、job-template の実際の目録とハッシュの一致をテストで表明する。TEMPLATE_VERSION は job-template の semver（初版 `"0.5.0"`）。テンプレート変更時は版とハッシュを更新し、版ごとの目録ハッシュの対応もテストで固定する。目録は job-template 全ファイルの `/` 区切り相対パスと本文 SHA-256 をパスのコード単位順で並べた `{path, sha256}[]` の JSON.stringify＋末尾 LF（UTF-8）とし、その SHA-256 を使う。
+- 版の唯一の出どころは `src/core/data/version.ts` の `PACKAGE_VERSION`・`TEMPLATE_VERSION`・`TEMPLATE_MANIFEST_SHA256`。PACKAGE_VERSION と package.json の version の一致、job-template の実際の目録とハッシュの一致をテストで表明する。TEMPLATE_VERSION は job-template の semver（初版 `"0.5.0"`）。テンプレート変更時は版とハッシュを更新し、版ごとの目録ハッシュの対応もテストで固定する。許容差分（要件 §6.2）の追加でも同じで、R6（エンコーダ選択）を入れた版は `0.5.3` である。目録は job-template 全ファイルの `/` 区切り相対パスと本文 SHA-256 をパスのコード単位順で並べた `{path, sha256}[]` の JSON.stringify＋末尾 LF（UTF-8）とし、その SHA-256 を使う。
 - generator は schema_version の直後に挿入し、内部キー順は name・version・template_version。値は `"shin-motionmaker"`・PACKAGE_VERSION・TEMPLATE_VERSION。allowed-diffs.json の R2 に位置を記録し、JT-11 は generator.version・generator.template_version の値を正規化して照合する。GUI の version.json も同じ版を使い、version・template_version を出力する（commit・built_at だけはビルド時に決める）。
 - JSON のハッシュは実ファイルの UTF-8 バイト（末尾 LF を含む）の SHA-256。object を再シリアライズしたハッシュで代用しない。ZIP の圧縮バイトや日時は一致条件に含めず、展開パスと各本文のバイトを一致させる。
 
@@ -212,7 +213,7 @@ function parseInspectionReport(kind: Inspection["kind"], text: string): Validati
 
 `validateRequest` の shape は未知キー・オブジェクト・型・有限数・assets のパス型と、原典 `validateForm` が検査する既存の列挙値を検査し、defaults と secondCharacter を合成する。列挙検査の条件も原典に合わせ、MV では styleMode・キャラクターの位置を検査せず、解説では1人目の位置と duo のときだけ2人目の位置を検査する。省略されたモード・人数には defaults を使う。入力スキーマも同じ条件を表す。未使用の項目でも型・未知キーは検査する。complete は同じ検査を通り、解決済み assets で原典の `validateForm` を呼ぶ。host は shape → パス検査と添付読取 → complete、GUI も同じ関数の complete を必ず通る。入力スキーマや検査を入口にコピーしない。構造・対象の列挙値の不正は `E_INPUT_INVALID`、原典 validateForm の文言は `E_FORM_INVALID` の details にそのまま入れる。パスの実体・ファイル有無は host の責務。MV の尺補完（CL-03）は host の complete 前に行う。
 
-buildJobFiles は validateForm とテンプレート必須ファイルの検査を維持し、原典 generateJob と同じ本文を組み立てる。例外は SmmError に揃え、フォーム不正は E_FORM_INVALID、テンプレート不足は E_INTERNAL とする。`createBrief` の返却文字列と ZIP に含む brief（原典 generateJob の追記を含む）を混同しない。UTF-8、project の2空白インデント＋末尾 LF、入力歌詞・outline の改行を含む原文を維持する。ZIP 名は `<safeName(title)>-motion-job.zip`、ルートは safeName(title)。R1〜R5 以外の本文変更は禁止。
+buildJobFiles は validateForm とテンプレート必須ファイルの検査を維持し、原典 generateJob と同じ本文を組み立てる。例外は SmmError に揃え、フォーム不正は E_FORM_INVALID、テンプレート不足は E_INTERNAL とする。`createBrief` の返却文字列と ZIP に含む brief（原典 generateJob の追記を含む）を混同しない。UTF-8、project の2空白インデント＋末尾 LF、入力歌詞・outline の改行を含む原文を維持する。ZIP 名は `<safeName(title)>-motion-job.zip`、ルートは safeName(title)。R1〜R6 以外の本文変更は禁止。
 
 mimeTypeFor は拡張子を小文字にして原典 CLI の表を引き、未知なら application/octet-stream。host と GUI は必ずこれで Attachment.type を決め、ブラウザの File.type は使わない。これは AR-06 を満たすための契約上の決定であり、要件の改訂ではない。job-template と基線生成物は原典 CLI と同じ値になる。JT-11 の explainer-attachments は .md・.csv・.pdf・.png を含む。AR-06 の音源尺一致テストでは musicDurationSec を request に明示する（host 計測とブラウザ計測の小数差を持ち込まない）。
 
@@ -286,6 +287,7 @@ function getReport(context: HostContext, job: string, relative: string): Promise
 - MCP のパスは実体（symlink・junction）と未作成の親を解決し root 内か検査する。allowDirs は添付の読取だけに適用し、出力・ジョブ・report の root 制限を緩めない。入口の文字列検査だけで済ませない。読取・書込直前にも実体を確認する。
 - out は出力先の親ディレクトリ。dir は `<out>/<rootName>/`、zip は `<out>/<filename>` を新規作成する。dry_run は書き込まず project・検査結果・依頼文を返す。対象が存在すれば `E_OUTPUT_EXISTS`、全パス検査前に本文を作成しない。親を作成後、目的のフォルダまたは ZIP を排他的に予約する。zip のための中間ジョブフォルダは不要。
 - ジョブ内スクリプトは `<job>/runtime` を cwd とし process.execPath＋配列引数＋shell:false で直接起動する。setup はジョブルートで npm の JavaScript entry を node から起動し、lock があれば ci、なければ install。npm.cmd を shell 経由で起動しない。依存を要求するのは validate・render・double_render 付き ghost_check だけ。hasRuntimeDependencies は `<job>/runtime` から @remotion/cli/package.json と typescript/bin/tsc の両方を resolve できるか判定し、事前検査・status・doctor が共有する。未導入なら実行前に E_DEPS_MISSING。render はブラウザの有無で事前拒否せず、doctor の報告だけに留める。
+- ジョブ内スクリプトの環境変数は、起動元（CLI のプロセス、MCP サーバーのプロセス）の環境をそのまま継承する（spawn に env を渡さない）。host は `MOTION_JOB_ENCODER`（要件 JT-15）を含むジョブ内スクリプト向けの環境変数を解釈・追加・削除しない。エンコーダの選択と `[encoder]` 行はジョブ内の `runtime/scripts/encoder.mjs` だけが扱い、操作定義表・入力スキーマ・run・封筒に項目を足さない（要件 JT-14・JT-19）。MCP サーバーの環境はクライアントの登録で決まる（docs/MCP.md）。
 - run の全種別・project_patch・CLI の studio は同じジョブ排他を取る。排他予約は原子的に行い `E_BUSY` に所有 run ID（studio・patch は所有操作）を入れる。read 系は設定の写しを持たない。依存不足・E_BUSY・E_DISABLED 等の事前検査失敗では run を作らず、台帳も残さない。
 - project_get は実バイトの SHA-256 を内容と返す。pointer は RFC 6901。patch は JSON Merge Patch（RFC 7396）。現在 hash の不一致は E_CONFLICT。結果が object、schema_version・mode・generator の不変だけを検査する。一時ファイル＋rename で置換する。場面の質や構造を検査しない。
 - report は reports/・plan/ 配下、brief.md・AGENTS.md・README.md、および output/ 直下の PNG だけ。テキストの拡張子は .md・.json・.txt・.csv、画像は .png（reports/ghost-stills/ も含む）。それ以外は E_PATH_DENIED。text は UTF-8 を256 KiBまで読んで文字境界で切り詰め truncated を返す。PNG は CLI では8 MiBまで、超過は E_INPUT_INVALID（hint 付き）。MCP（restrictToRoot）は6 MiBまで、超過は E_INPUT_INVALID と CLI の smm report または縮小を案内する hint を返し、接続を継続する。PNG は bytes と MIME を host 内で返し、MCP の画像ブロックと CLI の base64 に変換する。設定・認証情報の任意読取口を作らない。
