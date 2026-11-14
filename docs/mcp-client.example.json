@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "shin-motionmaker": {
+      "command": "node",
+      "args": [
+        "--experimental-strip-types",
+        "src/mcp/main.ts",
+        "--root",
+        ".",
+        "--read-only"
+      ]
+    }
+  }
+}
