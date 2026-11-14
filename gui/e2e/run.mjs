@@ -9,7 +9,7 @@ import os from "node:os";
 import path from "node:path";
 import JSZip from "jszip";
 import {
-  buildJobFiles, defaults, explainerQualityChecklist, mvQualityChecklist, validateRequest,
+  buildJobFiles, defaults, explainerQualityChecklist, formChoices, mvQualityChecklist, validateRequest,
   agentPromptFor, aivisStyleLabel, explainerStyles, mvDesign, switchStyleMode,
 } from "../../src/core/index.ts";
 import { loadAssets, loadTemplates } from "../../tests/helpers/templates.ts";
@@ -446,15 +446,17 @@ test("GU-04 不正な列挙値の request.json は入力エラーとして表示
   await page.waitFor("document.querySelectorAll('#sources .attachments li').length === 1", "添付");
   const before = (await exportRequest(page)).request;
   const write = (name, value) => { const file = path.join(work, name); fs.writeFileSync(file, JSON.stringify(value)); return file; };
-  for (const [name, form, pointer] of [
-    ["style.request.json", { title: "test", description: "test", audience: "test", styleMode: "unknown" }, "/form/styleMode"],
-    ["mode.request.json", { title: "test", videoMode: "film" }, "/form/videoMode"],
-    ["position.request.json", { secondCharacter: { position: "middle" } }, "/form/secondCharacter/position"],
+  for (const [name, form, pointer, label, values] of [
+    ["style.request.json", { title: "test", description: "test", audience: "test", styleMode: "unknown" }, "/form/styleMode", "様式モード", formChoices.styleMode.join("、")],
+    ["mode.request.json", { title: "test", videoMode: "film" }, "/form/videoMode", "制作モード", formChoices.videoMode.join("、")],
+    ["position.request.json", { secondCharacter: { position: "middle" } }, "/form/secondCharacter/position", "2人目のキャラの初期配置", formChoices.secondCharacter.position.join("、")],
   ]) {
     await page.setFiles(byAria("request.json を読み込む"), [write(name, { form })]);
     await page.waitFor(`document.querySelector('.errors')?.textContent.includes(${JSON.stringify(name)})`, "エラー");
     const errors = await text(page, ".errors");
-    assert.ok(errors.includes(pointer), errors);
+    assert.ok(errors.includes(`${label}（${pointer}）`), errors);
+    assert.ok(errors.includes(`request.json に書ける値：${values}`), errors);
+    assert.ok(errors.includes("読み込み前の入力と添付はそのままです。"), errors);
     assert.equal(await count(page, "form.studio"), 1, "the screen stays");
     assert.deepEqual(page.consoleErrors, []);
     assert.equal(await count(page, "#sources .attachments li"), 1, "attachments are kept");
