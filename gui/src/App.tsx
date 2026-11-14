@@ -172,7 +172,9 @@ export default function App() {
   function showErrors(lines: string[]) {
     setErrors(lines);
     requestAnimationFrame(() => {
-      errorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      // GU-16: an explicit smooth scroll is not cancelled by the reduced-motion CSS, so ask for it only when motion is allowed.
+      const behavior: ScrollBehavior = matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+      errorRef.current?.scrollIntoView({ behavior, block: "center" });
       errorRef.current?.focus();
     });
   }
@@ -261,7 +263,7 @@ export default function App() {
     if (!file) return;
     const parsed = parseRequestText(await file.text());
     if (!parsed.ok) {
-      setImported(null);
+      // Nothing is applied on failure: the current input, attachments and import note stay as they were.
       showErrors([`${file.name} を読み込めませんでした。`, ...errorLines(parsed.error)]);
       return;
     }
