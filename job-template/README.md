@@ -240,5 +240,9 @@ Aivis APIとBiim制作方針の参考: https://github.com/kokuren333/BiimSlideMa
 
 ## CLI・MCP から使う
 
-Shin-MotionMaker の CLI・MCP は、ジョブ生成とジョブ内スクリプトの実行を呼び出す入口です。生成後の設定の正本は project.json です。
-ジョブ単体では、この README にある npm run の手順が正です。CLI・MCP を導入しなくても制作できます。
+このジョブは、Shin-MotionMaker の CLI（`shin-motionmaker`、短縮名 `smm`）と MCP サーバーからも扱えます。CLI・MCP が受け持つのは、ジョブの生成と、このジョブの`runtime/scripts/`にあるスクリプトの起動です。検査・レンダー・音声合成・画像生成の実装はジョブ内のスクリプトだけなので、どの入口から実行しても判定は変わりません。
+
+ジョブ単体では、この README にある`npm run`の手順が正です。CLI・MCP を導入しなくても制作できます。
+
+- 生成後の設定の正本は project.json です。CLI・MCP は設定の写しを持ちません。
+- CLI・MCP から実行すると、実行の記録がジョブ内の`.smm/runs/`に残ります。これは実行の記録であり、設定ではありません。
