@@ -526,6 +526,36 @@ test("GU-16 prefers-reduced-motion（スクロールの動きを止める）", a
   } finally { await page.close(); }
 });
 
+for (const contrastMode of ["normal", "high"]) {
+  test(`GU-16 描画後の文字のコントラスト 4.5:1 以上（${contrastMode}、入力済み・検査結果あり）`, async ({ page }) => {
+    await page.clickText(".sample-button", "サンプル");
+    await page.click(".advanced-toggle");
+    await page.setFiles(byAria("検査結果のJSONと静止画を選択"), [reports.qcPre, reports.validate, reports.ghostPreview, reports.run]);
+    await page.waitFor("document.querySelector('[data-report=\"qc-pre\"]')", "検査結果");
+    if (contrastMode === "high") await page.evaluate("document.documentElement.dataset.contrast = 'high'");
+    await page.settle();
+    const failures = await page.evaluate(`(() => {
+      const parse = (value) => { const m = value.match(/rgba?[(]([^)]+)[)]/); if (!m) return null; const p = m[1].split(/[ ,/]+/).filter(Boolean).map(Number); return { rgb: p.slice(0, 3), a: p.length > 3 ? p[3] : 1 }; };
+      const lum = ([r, g, b]) => [r, g, b].map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }).reduce((t, v, i) => t + v * [0.2126, 0.7152, 0.0722][i], 0);
+      const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+      const background = (el) => { for (let node = el; node; node = node.parentElement) { const c = parse(getComputedStyle(node).backgroundColor); if (c && c.a > 0) return c.rgb; } return [255, 255, 255]; };
+      // Skipped: the Biim preview motif and caption strip (user subtitle colours), and hidden text.
+      const skip = ".band-caption, .subtitle-sample, .video-schematic, .sr-only, option, dialog:not([open])";
+      const out = [];
+      for (const el of document.querySelectorAll("body *")) {
+        if (el.closest(skip)) continue;
+        const own = [...el.childNodes].some((node) => node.nodeType === 3 && node.textContent.trim());
+        if (!own || el.getClientRects().length === 0 || getComputedStyle(el).visibility === "hidden") continue;
+        const fg = parse(getComputedStyle(el).color);
+        const r = ratio(fg.rgb, background(el));
+        if (!(r >= 4.5)) out.push(el.tagName + "." + el.className + " '" + el.textContent.trim().slice(0, 20) + "' " + r.toFixed(2));
+      }
+      return out;
+    })()`);
+    assert.deepEqual(failures, []);
+  });
+}
+
 test("GU-08 高コントラスト表示（正本の high-contrast トークンに切り替わる）", async ({ page }) => {
   await page.clickText(".about-button", "Shin-MotionMaker について");
   await page.waitFor("document.querySelector('dialog[open]')", "dialog");

@@ -250,8 +250,10 @@ img.ico {
 .toc a:hover {
   background: var(--ui-pad-hover);
 }
+/* filled items use the "on" text role: ink in the normal theme, white in high contrast */
 .toc a.active {
   font-weight: 700;
+  color: var(--ui-ph-text-on);
   background: var(--ui-ph-bg-on);
   border-color: var(--ui-ph-line-on);
 }
@@ -264,7 +266,8 @@ img.ico {
   border-bottom: 2px solid var(--ui-signal);
 }
 .toc a.active .toc-number {
-  border-bottom-color: var(--ui-text);
+  color: inherit;
+  border-bottom-color: currentColor;
 }
 .toc-mark {
   display: inline-block;
@@ -900,6 +903,7 @@ input[type="checkbox"] {
 }
 .preview-tabs button.selected {
   font-weight: 700;
+  color: var(--ui-ph-text-on);
   background: var(--ui-ph-bg-on);
   border-color: var(--ui-ph-line-on);
 }
