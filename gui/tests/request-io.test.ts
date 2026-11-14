@@ -82,8 +82,20 @@ test("parseRequestText rejects unknown values of fixed-choice keys with pointers
   } }));
   assert.deepEqual(!many.ok && (many.error.details as { pointer: string }[]).map((entry) => entry.pointer), [
     "/form/videoMode", "/form/characterMode", "/form/voiceEngine", "/form/characterPosition", "/form/tempo", "/form/energy",
-    "/form/motionAmount", "/form/biimUsage", "/form/characterUsage", "/form/evidencePolicy", "/form/secondCharacter/position",
+    "/form/motionAmount", "/form/biimUsage", "/form/characterUsage", "/form/evidencePolicy",
   ]);
+  const position = { position: "middle" };
+  const duo = parseRequestText(JSON.stringify({ form: { characterMode: "duo", secondCharacter: position } }));
+  assert.ok(!duo.ok && duo.error.code === "E_INPUT_INVALID");
+  assert.deepEqual(!duo.ok && (duo.error.details as { pointer: string }[]).map((entry) => entry.pointer), [
+    "/form/secondCharacter/position",
+  ]);
+  for (const form of [{ characterMode: "solo", secondCharacter: position }, { secondCharacter: position }]) {
+    const solo = parseRequestText(JSON.stringify({ form }));
+    assert.ok(solo.ok, "solo ignores the inactive second character position, as upstream does");
+    assert.equal(solo.value.form.characterMode, "solo");
+    assert.equal(solo.value.form.secondCharacter.position, "middle");
+  }
   // Unfinished or not yet valid input (empty title, out-of-range numbers, mixed + portrait) still imports.
   for (const form of [{}, { title: "" }, { durationSec: 1 }, { styleMode: "mixed", width: 1080, height: 1920 }, { videoMode: "mv" }])
     assert.ok(parseRequestText(JSON.stringify({ form })).ok, JSON.stringify(form));
@@ -98,7 +110,7 @@ test("imported fixed choices use the shared core shape result", () => {
 });
 
 test("importErrorLines keeps the core message and pointers, adds screen names, core choices and the kept note (R-10)", () => {
-  const bad = parseRequestText(JSON.stringify({ form: { styleMode: "unknown", secondCharacter: { position: "middle" }, colour: "red" } }));
+  const bad = parseRequestText(JSON.stringify({ form: { styleMode: "unknown", characterMode: "duo", secondCharacter: { position: "middle" }, colour: "red" } }));
   assert.ok(!bad.ok);
   const lines = !bad.ok ? importErrorLines(bad.error) : [];
   assert.equal(lines[0], !bad.ok && bad.error.message, "core message is shown unchanged");
