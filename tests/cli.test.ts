@@ -56,8 +56,9 @@ test("TS-02 detach survives the CLI and wait uses terminal exit while get logs l
     const result = await cli(["runs", command, job, id], context.root); assert.equal(result.code, 0); assert.equal(result.envelope.command, `runs ${command}`);
   }
   assert.equal((await cli(["runs", "list", job], context.root)).code, 0);
-  const crashed = await fakeJob(context, { scenario: "crash", delay: 500 });
+  const crashed = await fakeJob(context, { scenario: "crash" });
   const crash = await cli(["qc", crashed, "--stage", "pre", "--detach"], context.root);
+  assert.equal(crash.code, 0, crash.stdout); assert.ok(crash.envelope.ok);
   const waitCrash = await cli(["runs", "wait", crashed, crash.envelope.run!.id], context.root);
   assert.equal(waitCrash.code, 4); assert.ok(waitCrash.envelope.ok); assert.equal(waitCrash.envelope.run!.error?.code, "E_INTERNAL");
 });

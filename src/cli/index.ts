@@ -68,6 +68,11 @@ export async function runCli(argv: string[], cwd: string, output: Output): Promi
     envelope = await execute(context, invocation.definition.id, invocation.input as OperationInputs[typeof invocation.definition.id]);
     envelope = { ...envelope, command: invocation.command };
     observedRun = envelope.run;
+    if (invocation.definition.kind === "run" && invocation.detach && !envelope.ok && envelope.run) {
+      const { run, error } = envelope;
+      envelope = { schema: "smm.envelope/1", command: invocation.command, job: run.job, ok: true, result: null,
+        advisories: [], warnings: run.error ? [] : [{ code: error.code, message: error.message, hint: error.hint }], run };
+    }
     if (envelope.run && (invocation.definition.kind === "run" && !invocation.detach || invocation.command === "runs wait")) {
       envelope = await followRun(context, invocation, envelope, output.stderr);
       terminal = envelope.run;

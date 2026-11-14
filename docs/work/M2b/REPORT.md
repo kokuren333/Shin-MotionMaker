@@ -57,6 +57,7 @@
 - 操作名・オプション型は共通表を正本とし、位置引数とファイル入力への変換だけを CLI に持つ。新しい場面操作・創造項目・ゲートは追加しない。
 - request は host の readJsonInput で BOM を除去し、requestDirectory をファイル親にして共通 generate に渡す。添付を二重読込しない。
 - 前面待ちは100msの間隔で取得し、ログ本文の既読バイト位置を stream ごとに保持する。取得中に異常を返しても開始済み run を封筒に残す。
+- detach は開始済み run が返れば、開始応答前にスクリプトが異常終了しても開始成功の0を返す。元の失敗は run.error に保持する。開始後の観測だけが失敗した場合は warnings に入れる。即時異常終了の回帰テストを追加した。
 - version.commit は現段階では null。契約の許容型を使い、CLI の実行時に git は起動しない。
 - 旧 CLI の help に相当する入力定義の取得は、契約にある schema operation-inputs と E_USAGE.hint に移す（P4）。専用 help 操作・独自の成功封筒を増やさない。
 - コマンド例の採取は .agent-work/ の専用ジョブで行う。verify-cli.mjs は解決済みパスがその専用ディレクトリであることを検査して再作成する。Tier B は導入済みの専用ジョブを再利用できる。
@@ -67,6 +68,7 @@
 
 - 最終の引数処理・PNG 整形・取得エラー時の run 保持を含む npm run build は終了0。
 - node --experimental-strip-types --test --test-name-pattern 'UTF-8 log|reports usage|rejects invalid JSON' tests/cli.test.ts tests/generate-job.test.ts は3件成功 / 失敗0 / skip 0 / TODO 0、終了0。部分文字を含むログの差分転送、原典の全拒否入力、空 out・help 相当の入力定義取得を確認した。
+- node --experimental-strip-types --test --test-name-pattern 'detach survives' tests/cli.test.ts は1件成功 / 失敗0、終了0。遅延なしで異常終了する run の detach 開始0と wait の4を確認した。
 
 ## 契約・要件への質問
 
