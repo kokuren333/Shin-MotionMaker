@@ -1,0 +1,653 @@
+{
+  "format": "shin-motionmaker-icons",
+  "version": 1,
+  "palette": "assets/ui/icons/ui-icons.gpl",
+  "size_policy": {
+    "rule": "gui/public/icons/ 直下の PNG はすべて 16x16（scale 1）。16x16 以外の PNG は icons/ の外にだけ置き、files[].scale で倍率を明記する（寸法は 16 x scale の整数倍）。",
+    "exceptions": [
+      {
+        "path": "gui/public/favicon.png",
+        "icon": "app",
+        "scale": 2,
+        "reason": "favicon の大きい版（整数倍の書き出し）"
+      }
+    ]
+  },
+  "export": {
+    "command": "cybersprite -p <source> export image --out <png> --scale <n> --compression stored",
+    "note": "stored は決定論の PNG。同じ原本と同じ CyberSprite から同じバイトになる。"
+  },
+  "icons": [
+    {
+      "name": "add",
+      "origin": "cybersprite-reuse",
+      "source": "assets/ui/icons/add.csprite",
+      "source_sha256": "f29c86d57aa73e8eb86d7262b2173385490bba87bb2ea553562b6fef36d6cff1",
+      "author": "Claude Opus 5.5 (CyberSprite M8 / e2e test 02)",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/add.png",
+      "sha256": "cf741e80b6df45832f084bc39f2b11e0d619e4952e85747d95c4b967903b7645",
+      "files": [
+        {
+          "path": "gui/public/icons/add.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "cf741e80b6df45832f084bc39f2b11e0d619e4952e85747d95c4b967903b7645"
+        }
+      ],
+      "source_repo": "kokuren333/CyberSprite",
+      "source_commit": "a00433c",
+      "source_last_changed_commit": "77c0bd1",
+      "modified": false
+    },
+    {
+      "name": "advisory",
+      "origin": "shin-motionmaker-original",
+      "source": "assets/ui/icons/advisory.csprite",
+      "source_sha256": "1dd3c09f78ab876343b863cbfc7be263385e66bae529a96c82eff279df576d7c",
+      "author": "Claude Opus 5.5",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/advisory.png",
+      "sha256": "38d303d5aa50fd6425134efee7e16502f85753cd1f5a182e5bd315a732ebc35d",
+      "files": [
+        {
+          "path": "gui/public/icons/advisory.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "38d303d5aa50fd6425134efee7e16502f85753cd1f5a182e5bd315a732ebc35d"
+        }
+      ]
+    },
+    {
+      "name": "agent",
+      "origin": "cybersprite-reuse",
+      "source": "assets/ui/icons/agent.csprite",
+      "source_sha256": "16558a845e5c2d0c848275d6abf78b3baf189a3621ebaef4a3bc41b6a1fb61c1",
+      "author": "Claude Opus 5.5 (CyberSprite M8 / e2e test 02)",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/agent.png",
+      "sha256": "551b03e3df9951848366970438eccc359feafd7f85c7128f1531e9845a741486",
+      "files": [
+        {
+          "path": "gui/public/icons/agent.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "551b03e3df9951848366970438eccc359feafd7f85c7128f1531e9845a741486"
+        }
+      ],
+      "source_repo": "kokuren333/CyberSprite",
+      "source_commit": "a00433c",
+      "source_last_changed_commit": "77c0bd1",
+      "modified": false
+    },
+    {
+      "name": "app",
+      "origin": "shin-motionmaker-original",
+      "source": "assets/ui/icons/app.csprite",
+      "source_sha256": "1c9179350cb96d7b53132df093253bdef934dc2b636763f2a3bbdbb2dcc81a95",
+      "author": "Claude Opus 5.5",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/app.png",
+      "sha256": "14b7a30de1bf0d5fda28f1be2cabf6d094a5018bd07e14f7665dc097f2171e8b",
+      "files": [
+        {
+          "path": "gui/public/icons/app.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "14b7a30de1bf0d5fda28f1be2cabf6d094a5018bd07e14f7665dc097f2171e8b"
+        },
+        {
+          "path": "gui/public/favicon.png",
+          "scale": 2,
+          "width": 32,
+          "height": 32,
+          "sha256": "d178ef600613dd87ea21fcccbc303f043ecfd58436b921b623da8ea60e6a35d8"
+        }
+      ]
+    },
+    {
+      "name": "cli",
+      "origin": "shin-motionmaker-original",
+      "source": "assets/ui/icons/cli.csprite",
+      "source_sha256": "010b6898bb271b8fee23606959a21e46f60be3d1c7a0f7b9f733477c46f1f442",
+      "author": "Claude Opus 5.5",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/cli.png",
+      "sha256": "9a0b42e5ae55e4ee58d65f0aac4a226d04756b49d994b5514bc8713c69e0a5b1",
+      "files": [
+        {
+          "path": "gui/public/icons/cli.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "9a0b42e5ae55e4ee58d65f0aac4a226d04756b49d994b5514bc8713c69e0a5b1"
+        }
+      ]
+    },
+    {
+      "name": "error",
+      "origin": "cybersprite-reuse",
+      "source": "assets/ui/icons/error.csprite",
+      "source_sha256": "ec8d388a0f9d98da9f9a101858157af287b29a7ad20068a488ce1cce30dc87eb",
+      "author": "Claude Opus 5.5 (CyberSprite M8 / e2e test 02)",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/error.png",
+      "sha256": "82d5fb74b035c7d1c83ad0628d93dc7384489179eb15f907fc330f31eb04496c",
+      "files": [
+        {
+          "path": "gui/public/icons/error.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "82d5fb74b035c7d1c83ad0628d93dc7384489179eb15f907fc330f31eb04496c"
+        }
+      ],
+      "source_repo": "kokuren333/CyberSprite",
+      "source_commit": "a00433c",
+      "source_last_changed_commit": "77c0bd1",
+      "modified": false
+    },
+    {
+      "name": "eye",
+      "origin": "cybersprite-reuse",
+      "source": "assets/ui/icons/eye.csprite",
+      "source_sha256": "3ccc705d8d3067e7164a8fe0606e77ef933c0818794e1090f7830fa72b82d3fd",
+      "author": "Claude Opus 5.5 (CyberSprite M8 / e2e test 02)",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/eye.png",
+      "sha256": "f5640fc80f36cd3510738d953bf945c29093b2718a11a6bb2274f93ec0ca7b24",
+      "files": [
+        {
+          "path": "gui/public/icons/eye.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "f5640fc80f36cd3510738d953bf945c29093b2718a11a6bb2274f93ec0ca7b24"
+        }
+      ],
+      "source_repo": "kokuren333/CyberSprite",
+      "source_commit": "a00433c",
+      "source_last_changed_commit": "77c0bd1",
+      "modified": false
+    },
+    {
+      "name": "folder",
+      "origin": "cybersprite-reuse",
+      "source": "assets/ui/icons/folder.csprite",
+      "source_sha256": "b7e1971dafbb2d58b04bbeb89a292087a2f2ccea31160dd052f59af54c534efc",
+      "author": "Claude Opus 5.5 (CyberSprite M8 / e2e test 02)",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/folder.png",
+      "sha256": "54fc7a6aae0460c86ee603beb9b6c083ee17d0a5f5a4050b9a31579ee9923659",
+      "files": [
+        {
+          "path": "gui/public/icons/folder.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "54fc7a6aae0460c86ee603beb9b6c083ee17d0a5f5a4050b9a31579ee9923659"
+        }
+      ],
+      "source_repo": "kokuren333/CyberSprite",
+      "source_commit": "a00433c",
+      "source_last_changed_commit": "77c0bd1",
+      "modified": false
+    },
+    {
+      "name": "gate",
+      "origin": "shin-motionmaker-original",
+      "source": "assets/ui/icons/gate.csprite",
+      "source_sha256": "06f8fe58ac59ebd823fbd2b7609dedfd44b7551083fd9fd66674d799e5cb8ecb",
+      "author": "Claude Opus 5.5",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/gate.png",
+      "sha256": "91545d55093806d1916b09fc95d81fd38b36282e7b629da40f7eba2588f60379",
+      "files": [
+        {
+          "path": "gui/public/icons/gate.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "91545d55093806d1916b09fc95d81fd38b36282e7b629da40f7eba2588f60379"
+        }
+      ]
+    },
+    {
+      "name": "ghost-check",
+      "origin": "shin-motionmaker-original",
+      "source": "assets/ui/icons/ghost-check.csprite",
+      "source_sha256": "e928128bbac3e65398c4cd79ad7e02699992829288c790cb749444d15974abf2",
+      "author": "Claude Opus 5.5",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/ghost-check.png",
+      "sha256": "f19de4ffa6485ccad3bc1d36d57bd4cd09d6793298cb5da20e848bcb779c878e",
+      "files": [
+        {
+          "path": "gui/public/icons/ghost-check.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "f19de4ffa6485ccad3bc1d36d57bd4cd09d6793298cb5da20e848bcb779c878e"
+        }
+      ]
+    },
+    {
+      "name": "human",
+      "origin": "cybersprite-reuse",
+      "source": "assets/ui/icons/human.csprite",
+      "source_sha256": "8764b98602143c8d26aa39fd7709f11f77df022e0a935be89ac785fe36244a12",
+      "author": "Claude Opus 5.5 (CyberSprite M8 / e2e test 02)",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/human.png",
+      "sha256": "5fe9826508bd4fc99b8bb25d622c095d472e9f9a516643289ecbf63cade557d2",
+      "files": [
+        {
+          "path": "gui/public/icons/human.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "5fe9826508bd4fc99b8bb25d622c095d472e9f9a516643289ecbf63cade557d2"
+        }
+      ],
+      "source_repo": "kokuren333/CyberSprite",
+      "source_commit": "a00433c",
+      "source_last_changed_commit": "77c0bd1",
+      "modified": false
+    },
+    {
+      "name": "info",
+      "origin": "cybersprite-reuse",
+      "source": "assets/ui/icons/info.csprite",
+      "source_sha256": "cea2d28ed1541aa432022c2b73faa8111fe9a34e02d3c108be354091d01310dc",
+      "author": "Claude Opus 5.5 (CyberSprite M8 / e2e test 02)",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/info.png",
+      "sha256": "7903ef3febbea0be44738e95ad7052f502f82ea6c27cc8aef165d98f936e1515",
+      "files": [
+        {
+          "path": "gui/public/icons/info.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "7903ef3febbea0be44738e95ad7052f502f82ea6c27cc8aef165d98f936e1515"
+        }
+      ],
+      "source_repo": "kokuren333/CyberSprite",
+      "source_commit": "a00433c",
+      "source_last_changed_commit": "77c0bd1",
+      "modified": false
+    },
+    {
+      "name": "job-zip",
+      "origin": "shin-motionmaker-original",
+      "source": "assets/ui/icons/job-zip.csprite",
+      "source_sha256": "7a28a8ca3b509b0a86576594431e6405febd06d3e0510c99d40e590dfe9336de",
+      "author": "Claude Opus 5.5",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/job-zip.png",
+      "sha256": "906a5855f984dc1140e40783cbcfce3924317022a3536f7806ba558cd451ff22",
+      "files": [
+        {
+          "path": "gui/public/icons/job-zip.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "906a5855f984dc1140e40783cbcfce3924317022a3536f7806ba558cd451ff22"
+        }
+      ]
+    },
+    {
+      "name": "link",
+      "origin": "cybersprite-reuse",
+      "source": "assets/ui/icons/link.csprite",
+      "source_sha256": "5e1d0a45ec660ea0a3dcd4362643a732f1d44a4e4e39c7967fe41bc6ba12c0cc",
+      "author": "Claude Opus 5.5 (CyberSprite M8 / e2e test 02)",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/link.png",
+      "sha256": "05801aa4a2e88b7595b76d9f6b71c49abbf9f5e6bf1d00f75c528a57a7f5d396",
+      "files": [
+        {
+          "path": "gui/public/icons/link.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "05801aa4a2e88b7595b76d9f6b71c49abbf9f5e6bf1d00f75c528a57a7f5d396"
+        }
+      ],
+      "source_repo": "kokuren333/CyberSprite",
+      "source_commit": "a00433c",
+      "source_last_changed_commit": "77c0bd1",
+      "modified": false
+    },
+    {
+      "name": "mcp",
+      "origin": "shin-motionmaker-original",
+      "source": "assets/ui/icons/mcp.csprite",
+      "source_sha256": "ff631c8f4d300a49ca2bf121914bf3f04cd00c741fc37f18077e404d1270c9a8",
+      "author": "Claude Opus 5.5",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/mcp.png",
+      "sha256": "29f0e271d39e5e47cb7f9abe3bff34eb47b18ff135ca5123f100269d4559a430",
+      "files": [
+        {
+          "path": "gui/public/icons/mcp.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "29f0e271d39e5e47cb7f9abe3bff34eb47b18ff135ca5123f100269d4559a430"
+        }
+      ]
+    },
+    {
+      "name": "mode-explainer",
+      "origin": "shin-motionmaker-original",
+      "source": "assets/ui/icons/mode-explainer.csprite",
+      "source_sha256": "3a0c5d93380e46224d99f7e5e9e146145097320a0e3370d65a2224d7b58d686a",
+      "author": "Claude Opus 5.5",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/mode-explainer.png",
+      "sha256": "215796e10789c8ad1fcb5aa7a727a13757b3e981f25a6d9f781feb5b89967d79",
+      "files": [
+        {
+          "path": "gui/public/icons/mode-explainer.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "215796e10789c8ad1fcb5aa7a727a13757b3e981f25a6d9f781feb5b89967d79"
+        }
+      ]
+    },
+    {
+      "name": "mode-mv",
+      "origin": "shin-motionmaker-original",
+      "source": "assets/ui/icons/mode-mv.csprite",
+      "source_sha256": "f35311bf56578dfb60ba06cc3be899572db3f9964fcac6b3a8d816c1ca14cfce",
+      "author": "Claude Opus 5.5",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/mode-mv.png",
+      "sha256": "4d2e5e1971ad61988b6022e4aae34e268066b79c2a44897447ded0d5474d2a45",
+      "files": [
+        {
+          "path": "gui/public/icons/mode-mv.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "4d2e5e1971ad61988b6022e4aae34e268066b79c2a44897447ded0d5474d2a45"
+        }
+      ]
+    },
+    {
+      "name": "remove",
+      "origin": "cybersprite-reuse",
+      "source": "assets/ui/icons/remove.csprite",
+      "source_sha256": "796ace267e2db8783640f21320bd699bb7413eb66c1255d36d7d1f5ed839146d",
+      "author": "Claude Opus 5.5 (CyberSprite M8 / e2e test 02)",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/remove.png",
+      "sha256": "79bb91e510ecc1f8913531ca5f57fcea546782409a59a65ac5308818c6ce8a72",
+      "files": [
+        {
+          "path": "gui/public/icons/remove.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "79bb91e510ecc1f8913531ca5f57fcea546782409a59a65ac5308818c6ce8a72"
+        }
+      ],
+      "source_repo": "kokuren333/CyberSprite",
+      "source_commit": "a00433c",
+      "source_last_changed_commit": "77c0bd1",
+      "modified": false
+    },
+    {
+      "name": "settings",
+      "origin": "cybersprite-reuse",
+      "source": "assets/ui/icons/settings.csprite",
+      "source_sha256": "9ae7cfa479b292a7a9e1b15c0947229632c3e3d3d9091fe35179d1e9981f6c78",
+      "author": "Claude Opus 5.5 (CyberSprite M8 / e2e test 02)",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/settings.png",
+      "sha256": "f900f9b4ec7a3f91958c8738968dd954f7ca8a11e2420d28c1c7af513b71589f",
+      "files": [
+        {
+          "path": "gui/public/icons/settings.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "f900f9b4ec7a3f91958c8738968dd954f7ca8a11e2420d28c1c7af513b71589f"
+        }
+      ],
+      "source_repo": "kokuren333/CyberSprite",
+      "source_commit": "a00433c",
+      "source_last_changed_commit": "93a433f",
+      "modified": false
+    },
+    {
+      "name": "sources",
+      "origin": "cybersprite-reuse",
+      "source": "assets/ui/icons/sources.csprite",
+      "source_sha256": "fcb17e1a60593197ca852f88ab1781e493066ff8032d9042cd0db6700c69da0d",
+      "author": "Claude Opus 5.5 (CyberSprite M8 / e2e test 02)",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/sources.png",
+      "sha256": "8e936f80d7e39dfa6359c4b8f1e2ebeb487f3fe3fa0309f30589017ecf14da43",
+      "files": [
+        {
+          "path": "gui/public/icons/sources.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "8e936f80d7e39dfa6359c4b8f1e2ebeb487f3fe3fa0309f30589017ecf14da43"
+        }
+      ],
+      "source_repo": "kokuren333/CyberSprite",
+      "source_commit": "a00433c",
+      "source_last_changed_commit": "77c0bd1",
+      "modified": false
+    },
+    {
+      "name": "style-anime",
+      "origin": "shin-motionmaker-original",
+      "source": "assets/ui/icons/style-anime.csprite",
+      "source_sha256": "9922f2c2dc8fe2bb8d30fd39001659280184ee9d06dfd18d7791af51389cd259",
+      "author": "Claude Opus 5.5",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/style-anime.png",
+      "sha256": "95c806571d3462a327b6824a8d1388cbdeb02458f9d8e85b9fab0f4947d4c67d",
+      "files": [
+        {
+          "path": "gui/public/icons/style-anime.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "95c806571d3462a327b6824a8d1388cbdeb02458f9d8e85b9fab0f4947d4c67d"
+        }
+      ]
+    },
+    {
+      "name": "style-biim",
+      "origin": "shin-motionmaker-original",
+      "source": "assets/ui/icons/style-biim.csprite",
+      "source_sha256": "ca4f663224c2698fe0a395bf554548d80ee6da7c5616cab6d24434b9bb9a912f",
+      "author": "Claude Opus 5.5",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/style-biim.png",
+      "sha256": "3cc94adadb7fba5f70f9a05fda1b55a4a36bc1d5cf89b6a1462b2b1ad1621444",
+      "files": [
+        {
+          "path": "gui/public/icons/style-biim.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "3cc94adadb7fba5f70f9a05fda1b55a4a36bc1d5cf89b6a1462b2b1ad1621444"
+        }
+      ]
+    },
+    {
+      "name": "style-mixed",
+      "origin": "shin-motionmaker-original",
+      "source": "assets/ui/icons/style-mixed.csprite",
+      "source_sha256": "43660fba4d1f7ee8699dcb54bde6f72a0572379b1fa7d5ee805008f0430c8c47",
+      "author": "Claude Opus 5.5",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/style-mixed.png",
+      "sha256": "1250a9b538f0be46504f906b7f741dafef451f7d95be1ab5de8f0ad9254e7d2f",
+      "files": [
+        {
+          "path": "gui/public/icons/style-mixed.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "1250a9b538f0be46504f906b7f741dafef451f7d95be1ab5de8f0ad9254e7d2f"
+        }
+      ]
+    },
+    {
+      "name": "style-motion",
+      "origin": "shin-motionmaker-original",
+      "source": "assets/ui/icons/style-motion.csprite",
+      "source_sha256": "464a67c65b13a72d483275b082f2444f2d3d7fb6eaae3f42376b7045bab8555a",
+      "author": "Claude Opus 5.5",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/style-motion.png",
+      "sha256": "600d2180fc686d02ef76ba89ddae2946fc91c1b2431e49c1d48a59c6651611db",
+      "files": [
+        {
+          "path": "gui/public/icons/style-motion.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "600d2180fc686d02ef76ba89ddae2946fc91c1b2431e49c1d48a59c6651611db"
+        }
+      ]
+    },
+    {
+      "name": "validate-ok",
+      "origin": "cybersprite-reuse",
+      "source": "assets/ui/icons/validate-ok.csprite",
+      "source_sha256": "a3b39102e46b44e105f38ca69f8adff3423b7beab75930e8d8515cff31eee316",
+      "author": "Claude Opus 5.5 (CyberSprite M8 / e2e test 02)",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/validate-ok.png",
+      "sha256": "bf1afafe692dedb8ad75b745e6bdca7ef8140fa368e2a48737ce479cd25bebd6",
+      "files": [
+        {
+          "path": "gui/public/icons/validate-ok.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "bf1afafe692dedb8ad75b745e6bdca7ef8140fa368e2a48737ce479cd25bebd6"
+        }
+      ],
+      "source_repo": "kokuren333/CyberSprite",
+      "source_commit": "a00433c",
+      "source_last_changed_commit": "77c0bd1",
+      "modified": false
+    },
+    {
+      "name": "warning",
+      "origin": "cybersprite-reuse",
+      "source": "assets/ui/icons/warning.csprite",
+      "source_sha256": "493315d04317604af8f00f8c4040f560dd8a2c556901350194b8a87fd925a29f",
+      "author": "Claude Opus 5.5 (CyberSprite M8 / e2e test 02)",
+      "cybersprite": {
+        "version": "0.1.0",
+        "commit": "a00433c"
+      },
+      "png": "gui/public/icons/warning.png",
+      "sha256": "c34b436245cd9a91ff8b2c472f70effd0c9a05e8f2b9763ea929af8c7278d0ba",
+      "files": [
+        {
+          "path": "gui/public/icons/warning.png",
+          "scale": 1,
+          "width": 16,
+          "height": 16,
+          "sha256": "c34b436245cd9a91ff8b2c472f70effd0c9a05e8f2b9763ea929af8c7278d0ba"
+        }
+      ],
+      "source_repo": "kokuren333/CyberSprite",
+      "source_commit": "a00433c",
+      "source_last_changed_commit": "77c0bd1",
+      "modified": false
+    }
+  ]
+}
