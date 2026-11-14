@@ -52,8 +52,12 @@ export async function loadTemplateDirectory(directory: string): Promise<Template
   return result;
 }
 export async function readJsonInput(file: string, context: HostContext): Promise<unknown> {
-  try { return JSON.parse((await fs.readFile(await resolveAllowedPath(context, file, "read"), "utf8")).replace(/^\uFEFF/, "")); }
+  try { return JSON.parse(await readTextInput(file, context)); }
   catch (error) { if (error instanceof SyntaxError || isMissing(error)) throw hostError("E_INPUT_INVALID", "入力 JSON を読めません。", "ファイルの場所と JSON の構文を確認してください。"); throw error; }
+}
+export async function readTextInput(file: string, context: HostContext): Promise<string> {
+  try { return (await fs.readFile(await resolveAllowedPath(context, file, "read"), "utf8")).replace(/^\uFEFF/, ""); }
+  catch (error) { if (isMissing(error)) throw hostError("E_INPUT_INVALID", "入力ファイルが見つかりません。", "指定したパスを確認してください。"); throw error; }
 }
 export async function resolveRequest(input: unknown, context: HostContext) {
   const shape = validateRequest(input, { phase: "shape" });

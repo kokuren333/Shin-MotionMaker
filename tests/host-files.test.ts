@@ -4,7 +4,7 @@ import path from "node:path";
 import { test } from "node:test";
 import JSZip from "jszip";
 import { buildJobFiles, generateJob, validateRequest, type JsonValue, type Request } from "../src/core/index.ts";
-import { execute, resolveAllowedPath, readRequest, loadTemplates, writeJob, getProject, patchProject, deriveJobStatus, getReport, sha256, schemaIssues, schemas, schemaRegistry, exposedOperations, operations, doctor } from "../src/host/index.ts";
+import { execute, resolveAllowedPath, readRequest, readTextInput, loadTemplates, writeJob, getProject, patchProject, deriveJobStatus, getReport, sha256, schemaIssues, schemas, schemaRegistry, exposedOperations, operations, doctor } from "../src/host/index.ts";
 import { baseline, fileMap, loadAssets, loadTemplates as browserTemplates } from "./helpers/templates.ts";
 import { fakeJob, workspace } from "./helpers/host.ts";
 
@@ -96,6 +96,7 @@ test("CL-01 BOM request attachments resolve from the request parent and WAV dura
   await fs.copyFile(path.join(baseline, "assets/song.wav"), path.join(context.root, "input/song.WAV"));
   const file = path.join(context.root, "input/request.json");
   await fs.writeFile(file, "\uFEFF" + JSON.stringify({ form: { videoMode: "mv", title: "曲", description: "表現", audience: "視聴者", musicDurationSec: null }, assets: { music: "song.WAV" } }));
+  assert.ok((await readTextInput(file, context)).startsWith("{"));
   const result = await readRequest(file, context);
   assert.ok(result.request.form.musicDurationSec! > 0); assert.equal(result.assets.music?.type, "audio/wav"); assert.equal(result.assets.music?.name, "song.WAV");
   const invalid = Buffer.alloc(12); invalid.write("RIFF"); invalid.write("WAVE", 8); await fs.writeFile(path.join(context.root, "input/song.WAV"), invalid);
