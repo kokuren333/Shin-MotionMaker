@@ -4,6 +4,7 @@
 - PR：[#4](https://github.com/kokuren333/Shin-MotionMaker/pull/4)（ブランチ `cpu-encoder`）。**マージしていない。**
 - 結論：R6 は実装して、GPU のある実機と GPU の無い runner の両方で、エンコーダの選択が働いたことを確かめた。ただし runner の runtime-smoke は、レンダーのあとの `ghost-check` で別の原因によって失敗した。PM 判定の停止条件1に当たるので、[CPU-Q1](QUESTIONS.md) を出して止めた。C1（CI-11）は未達。
 - 自分の成果を合格とはしていない（絶対規則8）。判定は L2 と交差レビューが行う。
+- **更新（2026-11-15、継続実装）**：CPU-Q1 はオーナーが案A に決め、C1 を満たした。上の結論は当時の記録として残す。続きは末尾の「継続実装（案A）」。
 
 ## 実装したもの
 
@@ -123,3 +124,47 @@
 - CPU-Q1 の回答後：対応を入れた head で runtime-smoke を再実行し、C1・C2 を満たしたら PR をマージし、main の push で runtime-smoke・CI・Pages を確かめ（E3）、VERIFICATION の節を完了にする。README の CPU の記述（P2・P5）もそのとき再確認する。
 - v0.1.1 のタグを付けるなら、`package.json` と `PACKAGE_VERSION` を 0.1.1 に上げる PR が先に要る（現在は 0.1.0 のまま）。
 - 検証用 worktree `Shin-MotionMaker-wt/cputc` は検証後に削除した（IMPL_CPU_LOG に記録）。
+
+## 継続実装（案A）
+
+- 実装：Opus 5.5（high）、2026-11-15。Codex は使っていない。台帳は追跡外の `_handoff/IMPL_CPU2_LOG.md`。記録の正本は [VERIFICATION の新しい節](../../../VERIFICATION.md#cpu-環境対応--c1-の解決cpu-q1-案a)。
+
+### 変更
+
+| ファイル | 内容 |
+| --- | --- |
+| `.github/workflows/runtime-smoke.yml` | gyan.dev の ffmpeg 8.1（essentials）を、版と SHA-256 を固定して取得するステップ。照合に失敗したら失敗にする。`rawvideo` の有無も確かめる。`FFMPEG_PATH` と PATH に置き、取得は3回まで再試行する |
+| `docs/REQUIREMENTS.md` | §6.2 R6 の「対象」の文言を揃えた（CPU-Q2、改訂1a。L2 確認・L1 追認待ち） |
+| `docs/work/CPU/QUESTIONS.md` | CPU-Q1・Q2 の対応、CPU-Q3（要件書にも CI の ffmpeg を書くかの提案）、範囲外の参考指摘 |
+| `docs/CLI.md` | CI だけ固定版の ffmpeg を取得する旨の1文 |
+| `VERIFICATION.md`・`README.md` | 新しい節、CPU の記述の更新 |
+
+製品（`job-template/`・`src/`・`gui/`・スキーマ・操作表・依存）に差分は無い。
+
+### 受け入れ条件の更新
+
+| # | 状態 | 証拠 |
+| --- | --- | --- |
+| C1 | **済** | [run 43646343947](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43646343947)（`44a0dda`）：CLI・MCP とも8 run completed、protocol_errors 0 |
+| C2 | **済** | 同じ run の preview・final とも `route=cpu encoder=libx264 MOTION_JOB_ENCODER=auto (unset)`、`nvcuda` 0件。[runner-43646343947-cli.json](evidence/runner-43646343947-cli.json)、[runner-43646343947-mcp.json](evidence/runner-43646343947-mcp.json) |
+| C3 | 済（取り直し） | `ff26214` の実機 Tier C：CLI・MCP とも preview・final は `gpu`／`h264_nvenc`。[CLI](evidence/tier-c-ff26214-cli-auto.json)、[MCP](evidence/tier-c-ff26214-mcp-auto.json) |
+| C4 | 済（取り直し） | `ff26214`、`MOTION_JOB_ENCODER=cpu` の CLI Tier C：`cpu`／`libx264`。[証拠](evidence/tier-c-ff26214-cli-cpu.json) |
+| D6 | マージ後に完了 | M8 の残課題1は、main の push で runtime-smoke が成功した時点で解消とし、後続の PR で記録する |
+| E2 | 済 | 交差レビュー（別コンテキストの Opus）：approve with notes。下表 |
+
+### 交差レビュー（継続実装）
+
+| # | 指摘 | 対応 |
+| --- | --- | --- |
+| 1（中） | 要件書の変更は L1 の権限。実装担当が変えている | 発注書の作業2の指示によることを QUESTIONS と改訂表に明記し、L2 確認・L1 追認待ちとした。差し戻しなら改訂1a の2行を戻すだけ |
+| 2（中） | README・VERIFICATION・REPORT の状態の記述が古い。runtime-smoke を新しい head で実行していない | run 43646343947 の成功を確認してから、新しい節・この節・README を書いた。過去の節は書き換えていない |
+| 3（低） | CI の例外が要件書に無い | 要件書は変えず、CPU-Q3 として L1 に提案した |
+| 4（低） | QUESTIONS の当初の状態の行を上書きした | 当初の行を戻し、更新の行を別に足した |
+| 5（低） | 取得に再試行が無い | `-MaximumRetryCount 3 -RetryIntervalSec 5` と進捗表示の停止を足した |
+| 6（参考） | PATH に ffmpeg が無い利用者でも doctor が「ある」と報告し、ghost-check が失敗する（既存の挙動） | 範囲外。QUESTIONS の参考に記録し、L1 に回した |
+
+### 残課題
+
+- PR #4 のマージ後：main の push で CI・Pages（公開後確認を含む）・runtime-smoke が成功したことを、後続の PR で VERIFICATION に記録する。
+- CPU-Q2（改訂1a）の L1 の追認、CPU-Q3 の判断、範囲外の参考指摘（doctor の ffmpeg 判定）。
+- 版 0.1.1 の PR（`package.json` と `PACKAGE_VERSION`）。タグはオーナー承認の範囲で付ける。

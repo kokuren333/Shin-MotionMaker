@@ -360,3 +360,51 @@ GitHub Pages を「GitHub Actions」から配信する設定で有効化し、ma
 | C8 | 試行の所要時間 | 実機 327〜922ms（レンダーの前の6回）。runner 577ms・614ms | — |
 
 証拠：[tier-c-cli-auto.json](docs/work/CPU/evidence/tier-c-cli-auto.json)、[tier-c-mcp-auto.json](docs/work/CPU/evidence/tier-c-mcp-auto.json)、[tier-c-cli-cpu.json](docs/work/CPU/evidence/tier-c-cli-cpu.json)、[manual-c5-c7.json](docs/work/CPU/evidence/manual-c5-c7.json)、MCP の環境変数の実測 [mcp-env.json](docs/work/CPU/evidence/mcp-env.json)。
+
+## CPU 環境対応 — C1 の解決（CPU-Q1 案A）
+
+上の「CPU 環境対応（要件改訂1、作業中）」節の続き。その節は当時の記録として書き換えない。
+
+### 決定と変更
+
+- **決定**：2026-11-15 07:03、オーナーが [CPU-Q1](docs/work/CPU/QUESTIONS.md) の案A を選んだ。`runtime-smoke.yml` で、版と SHA-256 を固定した ffmpeg を取得して使う。「Tier C は既存のツールを使い、自動導入しない」（[CLI](docs/CLI.md)）の運用との整合は、**オーナーが案A を選んだことで承認済み**として扱う。製品（doctor・CLI・MCP・ジョブ）は今も ffmpeg を自動導入しない。
+- **変更**：`.github/workflows/runtime-smoke.yml` に1ステップを足しただけ。製品（`job-template/`・`src/`・`gui/`・スキーマ・操作表・依存）は変えていない。
+  - 取得元：gyan.dev の公式 GitHub ミラー `GyanD/codexffmpeg` の release `8.1` の `ffmpeg-8.1-essentials_build.zip`（108,771,139 バイト）。
+  - SHA-256：`8748283d821613d930b0e7be685aaa9df4ca6f0ad4d0c42fd02622b3623463c6`。GitHub の asset digest と手元での取得の両方で一致した。不一致ならステップが失敗する。
+  - 展開後に `-version` を表示し、`-muxers` に `rawvideo` があることを確かめる。そのうえで `FFMPEG_PATH` を設定し、bin のフォルダを PATH の先頭に足す。
+  - PATH にも足す理由：MCP の検証で使う SDK の stdio クライアントは、Windows では既定の12変数（PATH を含み、`FFMPEG_PATH` は含まない）だけを子へ渡す。ジョブの `findFfmpeg`（FFMPEG_PATH → PATH → Remotion 同梱）は変えていない。
+  - この build は GPLv3。CI の runner で一時的に使う外部ツールで、npm の依存・成果物・ZIP には入らないので、`NOTICE` は変えない。
+  - 交差レビューの指摘で、取得に再試行（3回）を付け、進捗表示を止めた。
+- **CPU-Q2**：要件 §6.2 R6 の「対象」の文言を、実装（選択・記録・import・終了時の案内）に合わせて揃えた（改訂1a）。継続実装の発注書の指示による。L2 の確認と L1 の追認を待つ。実装は変えていない。
+
+### GPU の無い GitHub Windows runner（C1・C2）
+
+- PR head `44a0dda0116efafb618ca6bdc1343c1d9fcbb21e` の手動実行 [run 43646343947](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43646343947)：**success**。Runner Image は 20261103.298.1。
+- 所要時間：ffmpeg の取得ステップが5秒（`ffmpeg version 8.1-essentials_build-www.gyan.dev`）。CLI は 22:07:28〜22:09:17、MCP は 22:09:17〜22:11:04（UTC）。
+- 結果：CLI・MCP とも、setup → sound → validate → preview → still → ghost preview → final → ghost の8 run がすべて completed。protocol_errors は 0、各 run のログの `nvcuda` は 0件。ghost の件数は 0（助言）。
+- preview と final の `[encoder]` の行（CLI・MCP とも同じ形）：`route=cpu encoder=libx264 MOTION_JOB_ENCODER=auto (unset) reason: h264_nvenc test encode failed: exit code 4294967295`。試行は CLI が 584ms・560ms、MCP が 584ms・562ms。
+- 証拠：artifact 14133907579（sha256 `83d8a932…`）から、[runner-43646343947-cli.json](docs/work/CPU/evidence/runner-43646343947-cli.json) と [runner-43646343947-mcp.json](docs/work/CPU/evidence/runner-43646343947-mcp.json)。
+
+これで **C1（CI-11）を満たした**。C2 も、preview と final の両方の行で満たした。
+
+### Windows 実機（GPU あり）の取り直し
+
+- 対象：`ff26214`（`44a0dda` に文書だけを足したコミット）。検証用の detached worktree で `npm ci`・`npm run build` のあと、クリーンな木で `tools/runtime-smoke.mjs` を実行した（Windows 11、RTX 3080、ドライバ 610.88、Node v24.15.0）。
+- 手元の PATH の ffmpeg は 9.0.2（gyan.dev、scoop）。
+- 以後の PR head との差分は、`runtime-smoke.yml`（取得の再試行）と文書だけ。実行経路（`src/`・`job-template/`・`tools/`・依存の lock）は同じ。
+
+| 経路 | 実行（UTC） | 結果 | `[encoder]` の行 |
+| --- | --- | --- | --- |
+| CLI、指定なし | 22:10:56〜22:16:19 | success、8 run completed（setup は新しい worktree の依存導入で 140秒） | preview・final とも `route=gpu encoder=h264_nvenc MOTION_JOB_ENCODER=auto (unset)`（試行 1361ms・539ms） |
+| MCP、指定なし | 22:16:35〜22:19:03 | success、8 run completed、protocol_errors 0 | preview・final とも `gpu`／`h264_nvenc`（試行 823ms・341ms） |
+| CLI、`MOTION_JOB_ENCODER=cpu` | 22:19:10〜22:21:19 | success、8 run completed | preview・final とも `route=cpu encoder=libx264 MOTION_JOB_ENCODER="cpu" reason: probe skipped (set explicitly)` |
+
+証拠：[tier-c-ff26214-cli-auto.json](docs/work/CPU/evidence/tier-c-ff26214-cli-auto.json)、[tier-c-ff26214-mcp-auto.json](docs/work/CPU/evidence/tier-c-ff26214-mcp-auto.json)、[tier-c-ff26214-cli-cpu.json](docs/work/CPU/evidence/tier-c-ff26214-cli-cpu.json)。
+
+### CI の不安定なテスト（参考）
+
+`44a0dda` の push の CI（[run 43646337055](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43646337055)）で、ubuntu/22 の TS-07「lost derivation is read only and stale lock recovery checks process existence」が1回失敗した（`'running' !== 'lost'`、`tests/host-run.test.ts:123`）。同じコミットの PR の CI（run 43646341698）では成功しており、このコミットの差分は workflow だけである。完了直後の worker の PID がまだ生きているか、再利用されると起きる、既存のテストの競合と推定した。失敗したジョブだけを再実行し、成功した（同じ run の attempt 2。ubuntu/22 は 22:13:14〜22:16:07 で success、run 全体が success）。テストは変えていない。
+
+### M8 の残課題1
+
+M8 の残課題1（「Runtime smoke の CI（windows runner）が失敗する」）は、PR #4 を main にマージし、main の push で `runtime-smoke.yml` が成功した時点で解消とする。マージ後の main の run は、後続の PR でこの節の続きとして記録する。

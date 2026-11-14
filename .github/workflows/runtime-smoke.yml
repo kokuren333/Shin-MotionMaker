@@ -29,7 +29,8 @@ jobs:
         run: |
           $zip = Join-Path $env:RUNNER_TEMP 'ffmpeg-8.1-essentials_build.zip'
           $dir = Join-Path $env:RUNNER_TEMP 'ffmpeg-8.1'
-          Invoke-WebRequest -Uri $env:FFMPEG_URL -OutFile $zip
+          $ProgressPreference = 'SilentlyContinue'
+          Invoke-WebRequest -Uri $env:FFMPEG_URL -OutFile $zip -MaximumRetryCount 3 -RetryIntervalSec 5
           $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath $zip).Hash.ToLowerInvariant()
           if ($actual -ne $env:FFMPEG_SHA256) { throw "ffmpeg SHA-256 mismatch: expected $env:FFMPEG_SHA256, got $actual" }
           Expand-Archive -LiteralPath $zip -DestinationPath $dir
