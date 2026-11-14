@@ -1,7 +1,7 @@
 // request.json for the GUI (GU-04): the same {form, assets} shape as CLI/MCP generate.
 // Shape checks and completion checks go through core validateRequest only (AR-04).
 import {
-  defaults, explainerStyles, mimeTypeFor, safeName, validateForm, validateRequest,
+  mimeTypeFor, safeName, validateRequest,
   type AssetPaths, type Attachment, type JobAssets, type MotionForm, type NormalizedRequest,
   type Request, type SmmError, type Validation,
 } from "../../../src/core/index.ts";
@@ -67,52 +67,7 @@ export function parseRequestText(text: string): Validation<NormalizedRequest> {
       details: [{ pointer: "", reason: error instanceof Error ? error.message : String(error) }],
     } };
   }
-  const shaped = validateRequest(value, { phase: "shape" });
-  if (!shaped.ok) return shaped;
-  const choices = choiceIssues(shaped.value.form);
-  if (choices.length) return { ok: false, error: {
-    code: "E_INPUT_INVALID", message: "選べる値の決まっている項目に、使えない値があります。",
-    hint: "details の pointer が指す項目を、画面で選べる値のどれかに直してください。読み込み前の入力と添付はそのままです。",
-    details: choices,
-  } };
-  return shaped;
-}
-
-// Keys whose value is one of a fixed set. The sets themselves are not repeated here: a value
-// is accepted only when core validateForm accepts it (and, for styleMode, when core
-// explainerStyles has an entry, because the screen and agentPromptFor index into it).
-// The shape check deliberately stops at types so that unfinished input can be imported;
-// these keys are different because the screen cannot be drawn with an unknown value.
-const choiceKeys = [
-  "videoMode", "styleMode", "characterMode", "voiceEngine", "characterPosition",
-  "tempo", "energy", "motionAmount", "biimUsage", "characterUsage", "evidencePolicy",
-] as const;
-/** A complete form (with a music file so that the MV probe is complete too) that core accepts. */
-export const choiceProbe: MotionForm = {
-  ...defaults, title: "probe", description: "probe", audience: "probe", characterMode: "duo", musicDurationSec: 1,
-};
-const probeAssets: JobAssets = { sources: [], music: { name: "probe.wav", data: new Uint8Array(1), size: 1, type: "audio/wav" } };
-const coreRejects = (form: MotionForm) => {
-  const base = new Set(validateForm(choiceProbe, probeAssets));
-  return validateForm(form, probeAssets).filter((line) => !base.has(line));
-};
-
-/** Values of fixed-choice keys that core does not accept, as {pointer, reason}. */
-export function choiceIssues(form: MotionForm): { pointer: string; reason: string }[] {
-  const issues: { pointer: string; reason: string }[] = [];
-  const report = (pointer: string, value: unknown, lines: string[]) =>
-    issues.push({ pointer, reason: `${JSON.stringify(value)} は選べる値ではありません。${lines.join(" ")}`.trim() });
-  for (const key of choiceKeys) {
-    const value = form[key];
-    const lines = coreRejects({ ...choiceProbe, [key]: value });
-    if (key === "styleMode" && !Object.hasOwn(explainerStyles, String(value)) && !lines.length)
-      lines.push("様式モードが不正です。");
-    if (lines.length) report(`/form/${key}`, value, lines);
-  }
-  const position = form.secondCharacter.position;
-  const lines = coreRejects({ ...choiceProbe, secondCharacter: { ...choiceProbe.secondCharacter, position } });
-  if (lines.length) report("/form/secondCharacter/position", position, lines);
-  return issues;
+  return validateRequest(value, { phase: "shape" });
 }
 
 /** File names to pick again after an import (request paths may contain folders). */
