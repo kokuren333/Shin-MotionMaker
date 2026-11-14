@@ -35,6 +35,9 @@
 | `npm test --workspaces --if-present`（main 取込前） | GUI 単体33件 / pass31 / fail1 / skip1。R-2 と異なる2人目配置の期待値で失敗。M7-fix-Q1 に記録し、gui/ を変更せず対応を確認 |
 | `npm run test:e2e --workspace gui` | 41/42、失敗1。solo の2人目の配置を拒否すると期待する既存フィクスチャ。M7-fix-Q1 へ追補 |
 | `npm run build --workspaces --if-present` | 終了0、GUI の型検査と Vite ビルド完了 |
+| `npm test`（最初の一式） | 終了0、219件 / pass217 / fail0 / skip2、366551.9502ms |
+| `node tools/ci-local.mjs`（`8d2369b`、最初の再実行） | 本体219件 / pass216 / fail1 / skip2、329975.7458ms。MC-05/MC-15 の既存テストが10秒の偽処理に10秒の待機枠を与え、まだ running の応答に verdict:pass を期待した。GUI 段へ進む前に停止 |
+| `node --experimental-strip-types --test --test-name-pattern 'MC-05 and MC-15' tests/mcp.test.ts` | 待機枠を契約内の50秒へ変更後、1件 / pass1 / fail0、46815.8929ms。完了・verdict・進捗通知と排他の表明は維持 |
 
 `git merge main` で main `0df32f3` を `c9fb606` に取り込み、衝突なし。G4-M2 の追跡済み発注・判定記録を採用した。`node tools/tier-b.mjs --commit HEAD~1` と runtime-smoke の同指定、および未追跡の一時プローブがある状態で両ツールの `--commit HEAD` を開発用スクリプトから実行した。4件すべて開始前に終了1で拒否し、プローブは finally で削除、作業ツリーはクリーンへ戻った。
 
@@ -48,6 +51,7 @@
 - R1 の出現数は表の順に `[2,1,1,1,1,1,1,1,1]`。R3 の追記を除去した後、各逆置換の直前に照合する。
 - Tier B/C の --commit 省略時も実 HEAD を採取する。指定時は Git が解決したコミットと照合し、証拠には常に完全な実 HEAD を記録する。
 - GUI に影響する core 変更は R-2 の入力検査条件だけ。見た目・hint の文面は変更しない。
+- ci-local で再現した MC-05/MC-15 の待機境界を修正した。偽スクリプトは10秒のまま、完了を期待する呼出の待機だけを50秒へ広げる。製品・ゲート条件を変更せず、最終の全体検証を再実行する。
 
 ## 質問・依存・残件
 
