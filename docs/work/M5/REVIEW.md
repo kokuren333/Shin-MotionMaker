@@ -19,7 +19,7 @@
 | 制作者の記録 | CyberSprite の `git log -1 77c0bd1`、`93a433f` | どちらにも `Co-Authored-By: Claude Opus 5.5` があり、D5 の記録と合う。`settings` の最終変更は `93a433f`、`info` は `77c0bd1` で、manifest の `source_last_changed_commit` と合う |
 | manifest | `gui/public/icons/manifest.json` を読んだ | 26 件で、各項目に名前・由来・原本・版（0.1.0 と `a00433c`）・制作者・SHA-256 がある。favicon（32×32）は `size_policy.exceptions` と `app` の `files[]` に記録されている。GU-12 を満たす |
 | NOTICE | 読んだ | 再利用 13 点と採取元のコミット、パレット、PNG の書き出し方法、固有 13 点を CyberSprite で描いたこと、manifest への参照がある。DC-04 のアイコン部分を満たす |
-| ローカルの絶対パス | `git grep -nIiE "[A-Z]:[\\/]\|/Users/\|/home/\|nekom\|@gmail"`（`tests/fixtures` は除外） | 該当は `LICENSE` と `package-lock.json` の URL だけだった。`.csprite` の中にもパスは無い。`.cybersprite/` は `.gitignore` に入っている |
+| ローカルの絶対パス | `git grep -nIiE "[A-Z]:[\\/]\|/Users/\|/home/\|<ユーザー名>\|@gmail"`（`tests/fixtures` は除外） | 該当は `LICENSE` と `package-lock.json` の URL だけだった。`.csprite` の中にもパスは無い。`.cybersprite/` は `.gitignore` に入っている |
 | テスト | `npm test` | `tests 9 / pass 9 / fail 0`（icons の 4 件を含む） |
 | 読み取り専用 | `git -C <CyberSprite> status --short` | 出力 0 行。HEAD は `a00433c` のまま |
 | 下地ごとの見え方 | 26 点を白・`--cs-board`・`--cs-trace`・`--cs-ink` の4つの下地に並べた | §3 の参考 S-1 |

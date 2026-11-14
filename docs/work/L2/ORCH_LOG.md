@@ -1,0 +1,69 @@
+<!-- L2 の発注・判定記録（_handoff からローカルのパスを除いて転記） -->
+# ORCH_LOG — Shin-MotionMaker 統括進行台帳
+
+形式：`日時 | 種別（計画／発注／完了報告／判定／差し戻し／調整／メモ） | 対象 | 内容`
+
+- 2026-11-14 16:05 | 計画 | 全体 | REQUIREMENTS.md 全文と PM_SUMMARY を読了。PLAN_ORCH.md で工程を確定（M0→M1∥M5→M2a∥M4→M2b∥M3→M6→M7→M8 は Q-01 待ちで停止）。L3 割り当て：工学＝Codex 6.1 sol 高、見た目・文面＝Opus 5.5 中。
+- 2026-11-14 16:05 | メモ | 環境 | Node 24.15.0、npm 11.12.1、git 2.54、codex-cli 0.160.0、uv あり、ffmpeg あり（scoop）、gh なし、WSL なし（ubuntu での実行はリモート作成後の CI に持ち越し）。空き 123 GB。原典 HEAD 262c798・作業ツリー clean を確認。
+- 2026-11-14 16:05 | メモ | Q-01 | 既定に従い、リモート repo は作らない。CI は tools/ci-local.mjs で代替。
+- 2026-11-14 15:58 | 発注 | M0 | Codex 6.1 sol 高（SMM_m0）。_handoff/M0/DIRECTION.md。
+- 2026-11-14 16:16 | 完了報告 | M0 | 4コミット（HEAD 35b3c20）。原典テスト 81件/81 pass を test-inventory に記録、golden 10ケース、CONTRACT 初版、質問3件（M0-Q1〜Q3）。
+- 2026-11-14 16:17 | 発注 | M0R | CONTRACT.md 交差レビュー：Opus 5.5 高（SMM_m0r）。
+- 2026-11-14 16:20 | 実測 | M0 | L2 が `node tools/ci-local.mjs` を実行 → 5/5 pass、RC=0（35b3c20）。_handoff 追跡0、絶対パス・メール grep 0、原典 status 空・HEAD 262c798。
+- 2026-11-14 16:22 | 発注 | M5 | Opus 5.5 中（SMM_m5）、worktree m5-icons。M0 のみに依存のため CONTRACT レビューを待たず着手。
+- 2026-11-14 16:35 | 完了報告 | M0R | Opus の CONTRACT 交差レビュー：条件付き承認。必須 M-1〜M-6（run の verdict 位置、パス基準、MIME の GUI/CLI 差、generator の出どころ、validate.json の形、runs wait の終了コード）、推奨 R-1〜R-14、参考 I-1〜I-11。docs/work/M0/REVIEW.md（6d92687）。
+- 2026-11-14 16:40 | 調整 | CONTRACT | L2 裁定：M-1〜M-6・R-1〜R-14 を採用、I は一部採用。M0-Q1〜Q3 に回答（条件付きで解釈どおり）。M-3 は AR-06 を満たす契約上の決定として core に mimeTypeFor を置く（要件改訂ではない）。
+- 2026-11-14 16:40 | 発注 | M0b | CONTRACT 改訂＋基線ケース explainer-attachments 追加：Codex 6.1 sol 高（SMM_m0b）。_handoff/M0/DIRECTION_M0b.md。
+- 2026-11-14 16:38 | 完了報告 | M0b | 3コミット（HEAD 6bb8c5b）。CONTRACT 改訂、QUESTIONS 回答記入、基線 11 ケース。
+- 2026-11-14 16:38 | 判定 | M0 | **合格**。ci-local 6/6 RC=0 を L2 が実測。_handoff/M0/ACCEPTANCE.md。
+- 2026-11-14 16:38 | 発注 | M1 | Codex 6.1 sol 高（SMM_m1）、worktree m1-core（main 6bb8c5b から）。
+- 2026-11-14 16:38 | 完了報告 | M5 | Opus 5.5 中。4コミット（m5-icons 885e039）。L2 の確認へ。
+- 2026-11-14 16:38 | 発注 | M5R | アイコン見た目・由来の確認：Opus 5.5 高（別コンテキスト、SMM_m5r）。L2 もコンタクトシートを目視（明るい下地で判読可、暗い下地で ink 線が消えるのは再利用アイコンも同じ）。
+- 2026-11-14 16:44 | 完了報告 | M5R | 条件付き承認。必須 M-1（様式4種の同格性 GU-07：motion が軽く、anime の4方向輝きが強調印に見える）、推奨 R-1（gate が旗に見える）・R-2（author 固定値照合）・R-3（前後シート）。由来・再利用13点の project.json 一致・PH-03（advisory）は問題なし。
+- 2026-11-14 16:44 | 実測 | M5 | L2：m5 で npm test 9/9 pass、CyberSprite validate を advisory/gate/app で再実行し ok:true・error 0、CyberSprite status 前後で同一（空）。
+- 2026-11-14 16:44 | 差し戻し | M5 | M-1・R-1〜R-3・S-1 の申し送りを指示（SMM_m5fix、Opus 5.5 中）。_handoff/M5/DIRECTION_FIX.md。
+- 2026-11-14 16:50 | 完了報告 | M5-fix | 3コミット（5ddb974）。様式4種・gate を描き直し、前後シート、author 固定値照合を撤去。L2 が前後シートを目視。再確認を別コンテキストへ（SMM_m5r2、Opus 5.5 中）。
+- 2026-11-14 16:53 | 判定 | M5 | **合格**。M5R2 承認。main へマージ、ci-local 合格（L2 実測）。_handoff/M5/ACCEPTANCE.md。
+- 2026-11-14 16:59 | 完了報告 | M1 | 2コミット（d2ec222）。109 pass／9 todo（M2b 移送）、JT-11 11ケース、TS-01 81件対応、質問なし。
+- 2026-11-14 16:59 | 発注 | M1R | 交差レビュー：Opus 5.5 高（SMM_m1r）。
+- 2026-11-14 17:14 | 実測 | M1 | L2：m1 で npm test 118件（109 pass／9 todo／0 fail）。job-template と原典の diff は AGENTS/README/NOTICE/validate.mjs（R1・R3・R4）のほか、原典作業ツリーの CRLF 残りだけ（基線ハッシュは git blob＝LF と一致を確認）。
+- 2026-11-14 17:14 | 完了報告 | M1R | 条件付き承認。必須 M-1（拒否テストのケース別表明の消失）、M-2（R4 の validate.json 書き込み失敗で exit 1 に反転）。推奨 R-1〜R-5、参考 I-1〜I-9。MV の brief・lyrics・依頼文は正規化なしでバイト一致、基線照合は変異 13 件中 11 件検出。
+- 2026-11-14 17:14 | 差し戻し | M1 | M-1・M-2・R-1〜R-5・I-4・I-6〜I-8 を指示（SMM_m1fix）。I-2・I-3 は L1 への質問として L2 が記録。
+- 2026-11-14 17:24 | 判定 | M1 | **合格**。M1-fix（3919845・0628273）を L2 が再実測、main へマージ、ci-local 113 pass／10 todo／0 fail RC=0。_handoff/M1/ACCEPTANCE.md。
+- 2026-11-14 17:24 | 発注 | M2a・M4 | 並行発注。M2a：Codex 6.1 sol 高（SMM_m2a、m2a-host）。M4：Opus 5.5 中（SMM_m4、m4-gui）。いずれも main 288b0ab から。M2a に M1 申し送り（独立テンプレート読み込み比較、validate.json の鮮度）、M4 に M5 申し送り（ink 面にアイコンを置かない）。
+- 2026-11-14 18:00 | 完了報告 | M2a | 3コミット（21787f8）。host・run 台帳・23操作・19スキーマ。Windows で 145 pass／0 fail／9 todo（M2b）。質問なし。
+- 2026-11-14 18:00 | 発注 | M2aR | 交差レビュー（パス・run・排他の安全）：Opus 5.5 高（SMM_m2ar）。
+- 2026-11-14 18:12 | 実測 | M2a | L2：m2a で npm test 154件（145 pass／9 todo／0 fail）。
+- 2026-11-14 18:12 | 完了報告 | M2aR | 条件付き承認。必須 M-1（UNC の添付が allow-dir 判定前に realpath され SMB 接続、E_INTERNAL）、M-2（PID 再利用で無関係のプロセスツリーを taskkill／恒久 E_BUSY）、M-3（ubuntu の証拠なし）。推奨 R-1〜R-7、参考 P-1〜P-9。
+- 2026-11-14 18:12 | 差し戻し | M2a | M-1・M-2・R-1〜R-7・P-1〜P-9 を指示（SMM_m2afix）。M-3 は L2 判断で持ち越し：WSL・リモートが無く ubuntu を実行できないため、リモート作成後の CI（ubuntu Node 24/22）で TS-07・MC-02・CL-11 の合格を確認するまで「条件付き」とし、M8 の前提条件に積む。
+- 2026-11-14 18:16 | 完了報告 | M4 | Opus 5.5 中。6コミット（494769a）。テーマ（20f787d を無改変で埋め込み）、core 経由の生成、request.json 往復、検査結果区画、CLI/MCP 区画、DESIGN.md、VERIFICATION.md（13枚）。判断依頼：e2e はブラウザ不在で失敗扱い、GUI の vite を 7.3.8（原典 7.3.1 の high 脆弱性回避。ジョブのランタイム依存ではないため N8 に抵触しないと L2 判断）、ルート tsconfig から gui を外した、no-git の除外に gui/scripts/build.mjs。
+- 2026-11-14 18:16 | 発注 | M4R | 実装者以外のレビュー：Codex 6.1 sol 高（SMM_m4r）。
+- 2026-11-14 18:26 | 完了報告 | M4R | 差し戻し。必須 R1（不正な styleMode の request 読み込みで画面消失）、R2（run.json 経由で免除が「なし」）、R3（PowerShell で $() が展開されるコマンド例）、R4（reduced-motion でも smooth スクロール）。推奨 T1、参考 I1（CLI とのバイト一致は未確認範囲）。GU-02 の突き合わせで機能群の欠落なし。ci-local exit 0（GUI 単体 27・e2e 37）。
+- 2026-11-14 18:26 | 差し戻し | M4 | R1〜R4・T1・I1 を指示（SMM_m4fix、Opus 5.5 中）。AR-06 の3入口の最終一致は M7 で L2 が確認する。
+- 2026-11-14 18:43 | 完了報告 | M2a-fix | 4コミット（b48092a）。177件（166 pass／2 skip／9 todo）。
+- 2026-11-14 18:43 | 判定 | M2a | **合格（条件付き）**。L2 が npm test と M2aR の probe を再実行して確認、main へマージ（0787aea）、ci-local RC=0。ubuntu の証拠は持ち越し（M8 前提）。_handoff/M2a/ACCEPTANCE.md。
+- 2026-11-14 18:43 | 発注 | M2b・M3 | 並行発注。M2b：Codex（SMM_m2b、m2b-cli）、M3：Codex（SMM_m3、m3-mcp）。いずれも main 0787aea から。M3 に M2a の残るリスクの文書化を申し送り。
+- 2026-11-14 19:00 | 完了報告 | M4-fix | 10コミット（f943fbf）。R1〜R4・T1・I1 対応、スクリーンショット16枚、質問 Q1。
+- 2026-11-14 19:00 | 判定 | M4 | **合格**。main へマージ（00065e3）、ci-local RC=0（ルート 166 pass、GUI 単体 33、e2e 42/42）を L2 実測。_handoff/M4/ACCEPTANCE.md。
+- 2026-11-14 19:00 | 調整 | CONTRACT | M4-Q1 の裁定：formChoices を core から公開、shape 段で既存列挙項目の値を検査（新しい列挙は足さない）。M2b・M3 並行中のため M7 冒頭で実装（_handoff/M7/DIRECTION.md §8）。
+- 2026-11-14 19:07 | 完了報告 | M3 | 4コミット（1c095a2）。SDK 1.32.2 固定、193件（182 pass／2 skip／9 todo）、Tier B（setup→validate pass）実行、host の Windows npm workspace 起動を最小修正。質問なし。
+- 2026-11-14 19:07 | 発注 | M3R | 安全検査の交差レビュー：Opus 5.5 高（SMM_m3r）。
+- 2026-11-14 19:25 | 判定 | M2b | **合格**。L2 が CLI を手動確認し main へマージ（91c939f）、ci-local RC=0（184 pass／0 todo、GUI 33、e2e 42）。_handoff/M2b/ACCEPTANCE.md。
+- 2026-11-14 19:26 | 完了報告 | M3R | 条件付き承認。必須 M-1（2.5 MiB 超の PNG を report_get で返すと SDK 既定クライアントの受信上限 10 MiB を超え接続断。base64 が3重）、M-2（Tier B が CI に無い、ubuntu/Node22 未実行、TS-05 の CLI 側未比較）。推奨 R-1（run_get に利用者名）・R-2（--root 不正で E_INTERNAL）・R-3（安全試験の拡充）。公開制御・パス境界・stdout 純度・isError は攻撃的入力でも破れず。
+- 2026-11-14 19:26 | 調整 | CONTRACT | M3R M-1 の裁定：MCP の画像は image ブロックだけで送り structuredContent/text の data は null、MCP の PNG 上限 6 MiB（超過は E_INPUT_INVALID で封筒拒否）。CLI は変えない。
+- 2026-11-14 19:26 | 差し戻し | M3 | M-1・M-2（Tier B を CI に、TS-05 の CLI 側、smm mcp serve の結線）・R-1（＋L2 所見：MCP に返す report 内の絶対パスも相対化）・R-2・R-3・P-1〜P-4。main（M2b・M4 入り）を先に取り込む（SMM_m3fix）。ubuntu/Node22 は持ち越し。
+- 2026-11-14 19:58 | 完了報告 | M3-fix | 5コミット（07a730b）。main 取り込み、画像の単一送信と 6 MiB、smm mcp serve 結線、TS-05 の CLI 側、Tier B の CI ジョブ、ホーム・ジョブの絶対パスの相対化、--root 検査。
+- 2026-11-14 19:58 | 判定 | M3 | **合格（条件付き：ubuntu/Node22 持ち越し）**。L2 が probe 再実行と ci-local RC=0 を確認、main へマージ（f40fb77）。_handoff/M3/ACCEPTANCE.md。
+- 2026-11-14 19:58 | 発注 | M6 | 文書：Opus 5.5 中（SMM_m6、m6-docs、main f40fb77 から）。
+- 2026-11-14 19:58 | 発注 | M7 | 統合・実機検証（formChoices、3入口一致、Tier B/C を CLI と MCP、JT-12、verify-pages、ci-local）：Codex 6.1 sol 高（SMM_m7、m7-integration、main f40fb77）。M6 と並行のため、M6 担当の文書は編集させず DOCS_FOLLOWUP.md に書かせる。
+- 2026-11-14 20:42 | 判定 | M6 | **合格**。L2 が README の CLI 例を再実行、main へマージ、ci-local（結果は次行）。持ち越し4件は M7 追補へ。
+- 2026-11-14 20:42 | 実測 | main | M6 マージ後 ci-local RC=0（7741d95：ルート 207 pass、GUI 33、e2e 42）。
+- 2026-11-14 20:42 | 完了報告 | M7 | 7コミット（47de25f）。formChoices と shape の列挙検査、3入口の生成一致、Windows の CLI/MCP Tier B・C（26 run）、JT-12、verify-pages ローカル、ci-local（210 pass／2 skip、GUI 32+1 skip、e2e 42）。質問0。
+- 2026-11-14 20:42 | 発注 | M7-add | main（M6 入り）の取り込み、verify-cli 修正、DC-05 ライセンス確認スクリプト＋CI、TS-06 見出しテスト、DOCS_FOLLOWUP の反映：Codex（SMM_m7add）。
+- 2026-11-14 21:04 | 完了報告 | M7-add | 6コミット（34a203e）。main(M6) 取り込み、verify-cli 修正、check-licenses（180項目）＋CI、TS-06 見出しテスト、DOCS_FOLLOWUP 反映。
+- 2026-11-14 21:04 | 実測 | M7 | main へマージ（e5b7c53）。L2：ci-local RC=0（ルート 213 pass／2 skip、GUI 33、e2e 42）、check-licenses verified:true、verify-cli 54記録 rc0（ただし追跡ファイル docs/work/M2b/CLI-EXAMPLES.json を書き換える＝残課題として G4 に委ねる。L2 は checkout で戻した）。Tier C 証拠（CLI 8 run・MCP 8 run・原典0.4 10 run、すべて completed）と preview.png を確認。
+- 2026-11-14 21:04 | 発注 | G4 | 統合レビュー：Opus 5.5 高（SMM_g4、main e5b7c53）。
+- 2026-11-14 21:19 | 完了報告 | G4 | **条件付き合格**（14c6f16）。思想違反なし、MUST の欠落なし、MV 非退行は担保、ci-local 再実行 RC=0。必須 G4-M1（M7 の文言変更後にスクリーンショット未更新）、G4-M2（受け渡しファイル・判定記録が追跡外の _handoff にしか無い）。推奨 R-1〜R-10、参考 S-1〜S-12。M8 前提：P-1（ローカルでマージした main をリモートへ出す経路が CI-05 と衝突）、Q-01、リモート CI の証拠、公開コミットでの Tier C 再実行、CI-08、author のメールアドレス公開の判断。
+- 2026-11-14 21:19 | 発注 | M7-gui・M7-fix | 並行。M7-gui：Opus 5.5 中（SMM_m7gui）＝R-10 文面＋G4-M1 撮り直し。M7-fix：Codex（SMM_m7fix）＝R-1〜R-9・S-1・S-7・S-10・verify-cli の追跡ファイル書き換え、最後に main 取り込み後の最終コミットで Tier B/C 再実行。
+- 2026-11-14 21:19 | 調整 | G4-M2 | L2 裁定：(a) を採用。発注書・受け入れ判定・計画・環境記録・L1 への質問・オーナー質問の状況を、ローカル情報を除いて docs/work/ に写す（L2 が台帳作業として実施）。
+- 2026-11-14 21:20 | 台帳 | G4-M2 | 発注書・受け入れ判定・計画・環境・質問の状況・最終判定一覧を docs/work/ に転記（ローカル情報を除去、node スクリプト _handoff/sync_records.mjs）。M5 REVIEW の grep パターン中のユーザー名を <ユーザー名> に伏せた。
