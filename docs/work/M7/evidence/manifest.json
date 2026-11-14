@@ -1,5 +1,10 @@
 [
   {
+    "path": "ci.json",
+    "bytes": 1528,
+    "sha256": "f3d59f284b52e9b1c9e59e8f654acf1f59fb36572fbaacf29fa06ac3a9f82002"
+  },
+  {
     "path": "cli-artifacts/ghost-check-preview.json",
     "bytes": 320,
     "sha256": "98aeb135ed51ab37ee3f779a4b9bc7914f762f6a799688417504955332c36fd3"

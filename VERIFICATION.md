@@ -138,7 +138,9 @@ node tools/ci-local.mjs
 
 ### ci-local とテスト
 
-ci-local はこの証拠を含むコミットで続けて実行し、結果を追記する。
+最終の深さ1複製で、本体212件 / pass210 / fail0 / skip2 / TODO0（249659.3611ms）、GUI 単体33件 / pass32 / fail0 / skip1 / TODO0（2420.4563ms）、ブラウザ e2e42/42。ビルド・GUI ビルドを含め、すべて終了0。
+
+`node tools/ci-local.mjs` はコミット `c055d99d819752d67022a1b1033d20f47ac7ded4` の深さ1複製で終了0。実行 2026-11-14T11:28:28.634Z〜2026-11-14T11:36:06.582Z。実行コマンドは npm ci → build → npm test → GUI test（e2e 含む）→ GUI build。出力ログは `.agent-work/m7-evidence/ci.log`、SHA-256 `bf7674444613902703b2d8c6351cb955a436c049aac12cd503755f01a770aa1d`。要約は [ci.json](docs/work/M7/evidence/ci.json)。
 
 初回の npm test は212件 / pass209 / fail1 / skip2 / TODO0（333294.2302ms）。既存 MC-13 再起動試験の旧 assert が false になったが応答詳細がなく、初回の原因は確定できなかった。単独再実行は1件成功。その後、固定6秒待ちを release ファイルでの同期へ変更し、再起動後の running 取得を追加、対象1件成功。追加の統合試験3件、core / 基線20件、GUI 単体33件（pass32 / skip1）、AR-06 のブラウザ2件もそれぞれ終了0。
 
@@ -150,6 +152,7 @@ ubuntu Node22/24、リモート CI、G4 レビュー、実公開・公開後検�
 
 | 記録 | bytes | SHA-256 |
 | --- | --- | --- |
+| [ci.json](docs/work/M7/evidence/ci.json) | 1528 | `f3d59f284b52e9b1c9e59e8f654acf1f59fb36572fbaacf29fa06ac3a9f82002` |
 | [legacy-origin.json](docs/work/M7/evidence/legacy-origin.json) | 483 | `fd06d2ab36f6eb1ebf4d048e4bfb9a36b8a1e71b1029b3d585e4c630660c01ee` |
 | [pages-local.json](docs/work/M7/evidence/pages-local.json) | 1997 | `11be06fec0671a5422dfb3ea80d36360884df063b63e0557b34f6d0f7e472f8c` |
 | [tier-b.json](docs/work/M7/evidence/tier-b.json) | 9006 | `1cfdfca2430c8862ad4f9f303dbc36fbba7a22c714802f5be4a074b54e8d140f` |
