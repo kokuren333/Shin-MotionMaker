@@ -2,6 +2,8 @@
 
 この文書は検証の証拠の記録である。記録はオーナーの目視を待つ関門ではない（REQUIREMENTS GU-17、原典 Amendment 01 AM-1）。公開（M8）の記録は CI-08 の4条件に従って後から足す。
 
+> **コミットハッシュの読み替え（M8）**：公開前に、オーナーの決定で全コミットの author・committer を noreply に書き換えた。M7 以前の節に書かれた Shin-MotionMaker 自身のコミットハッシュは書き換え前の値であり、公開 repo では [COMMIT_MAP](docs/work/M8/COMMIT_MAP.md) で新しいハッシュに読み替える（例：Tier C 実測の `c0d10ca` → `85a1c6e`）。ファイル内容は変わっていない。詳細は末尾の [M8 公開](#m8-公開) 節。
+
 最新の統合検証は末尾の [M7-final](#m7-final)。M7-fix-Q1 の L2 回答に従い GUI テストを整合させ、最終コードコミットの ci-local は終了0。Tier B/C の実測は [M7-fix](#m7-fix)（テンプレート0.5.2）に保持する。以下の既存節の結果・未達の記述は、それぞれの実行時点の履歴である。
 
 M7-add では main `7741d9594e30305339b8736ee6e2c49591c89384` を `6789f2a` で取り込み、現在のテンプレート版は **0.5.2**（目録 SHA-256 `9e01031edccf35664747a3c38528381b3a52469f74c64ed3164b00de4e30d70a`）になった。下記 Tier C の実測コミット `506a5a893cbb4da0aabfbfa82ecc1d75f6c00d3f` はテンプレート **0.5.1** を使用した記録であり、JSON 内の generator とハッシュをそのまま保持する。JT-12 の入力は原典262c798生成の schema_version 0.4・generator なしで、template_version は存在しない。今回のテンプレート差分は M6 の R3 README 追記の推敲だけであり、追補発注の指定どおり実レンダーは再実行していない。取り込み後の検証は [M7 REPORT の M7-add](docs/work/M7/REPORT.md#m7-add) に記録する。
@@ -258,3 +260,13 @@ CLI/MCP の出力5ファイルはハッシュが一致した。全3経路の静�
 `VERIFICATION.md` の M7-gui 節はマージ前 `e10f571`、M7-fix 節はマージ後 `f6b4153` と本文一致し、重複・食い違いは無かった。既存の16画像と M7-fix の21証拠ファイル（336917 bytes）のサイズ・SHA-256 もすべて一致。記録は変更せず、今回の結果を追記した。
 
 Tier C 実測コミット **`c0d10ca798b2689a50e91f3556dc73c09cfa3391`** から最終コードコミットへの `git diff --stat` は46ファイル・9120追加・15削除（[diff-stat.txt](docs/work/M7-final/evidence/diff-stat.txt)）。差分は `gui/`・`docs/` とルートの証拠文書 `VERIFICATION.md` のみ。`git diff --exit-code c0d10ca798b2689a50e91f3556dc73c09cfa3391 4cafdbe79cd2232361c8891f1485066d02d5b6ca -- src tools schemas job-template job-assets package.json package-lock.json` は出力なし・終了0で、core・host・CLI・MCP・テンプレート・実行ツール・依存のコードに差分は無い。証拠を保存する後続コミットも文書のみ。今回 Tier C は再実行していない。
+
+## M8 公開
+
+### 履歴の author・committer の書き換え（オーナー決定）
+
+- 決定：2026-11-14 23:38、オーナーが「push の前に、ローカル履歴の全コミットの author・committer を noreply に書き換える」と決定した。プロジェクトの「履歴を書き換えない」原則（AGENTS §4、CI-09）に対する、公開前の一度だけの例外である。リモートはまだ無く、書き換えた履歴を一度も公開していない状態で行った。
+- 書き換え先：`kokuren333 <50736503+kokuren333@users.noreply.github.com>`（CyberSprite と同じ）。repo の `user.name`・`user.email` も以後これに設定した。
+- 実施：`git filter-branch --env-filter …（author・committer の名前とメールを置き換え）-- --all`。対象は 113 コミット、13 ref（main と残っていた 12 ブランチ）。タグは無かった。木・著者日時・メッセージ・親子関係は変えていない。書き換え前の全 ref はバンドルで repo の外に退避した。
+- 確認：`git log --all --format='%ae %ce'` は 113 行すべて noreply で、個人のメールアドレスは 0 件。全履歴の追跡ファイルの内容にも個人のメールアドレスは 0 件（`git grep` を全コミットに対して実行）。
+- 影響：Shin-MotionMaker 自身のコミットハッシュがすべて変わった（main は `d34de11` → `20f93e9`）。旧→新の対応は [COMMIT_MAP](docs/work/M8/COMMIT_MAP.md)（113 件、木・著者日時・件名・親で一意に対応）。既存の記録は当時の証拠として書き換えずに残す。原典 BiimMotion のハッシュ（`262c798` など）は影響を受けない。テストは git 履歴を読まない（CI-01）ので、書き換え後のコミットで深さ1の ci-local を実行して確かめた（下記）。
