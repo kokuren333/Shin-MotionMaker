@@ -17,6 +17,7 @@ import { acquireJobLock } from "./locks.ts";
 import { inputSchemas } from "./input-schemas.ts";
 import { schemaRegistry, schemas } from "./output-schemas.ts";
 import { schemaIssues } from "./schema-validation.ts";
+import { displayHostOutput } from "./display.ts";
 
 const metadata: Record<OperationId, { cli: string[]; mcp: string | null; description: string; cliOnlyReason?: string }> = {
   generate: { cli: ["generate"], mcp: "job_generate", description: "同じ request と添付からジョブを生成します。" },
@@ -70,10 +71,13 @@ export async function execute<K extends OperationId>(context: HostContext, id: K
     }
     const issues = schemaIssues(definition.inputSchema, input, schemaRegistry);
     if (issues.length) throw hostError("E_INPUT_INVALID", "操作の入力が不正です。", "details の pointer が指す項目を確認してください。", issues);
-    return await definition.handle(context, input) as Envelope<OperationResults[K]>;
+    const envelope = await definition.handle(context, input) as Envelope<OperationResults[K]>;
+    if (definition.kind === "run" || ["report", "status", "run_get", "run_list", "run_cancel", "doctor"].includes(id))
+      return await displayHostOutput(context, envelope, envelope.job ? path.resolve(context.root, envelope.job) : undefined);
+    return envelope;
   } catch (error) {
     const run = error && typeof error === "object" && "run" in error ? error.run as import("./types.ts").Run : undefined;
-    return { schema: "smm.envelope/1", command, ok: false, error: normalizeError(error), ...(run ? { run, job: run.job } : {}) };
+    return displayHostOutput(context, { schema: "smm.envelope/1", command, ok: false, error: normalizeError(error), ...(run ? { run, job: run.job } : {}) }, run ? path.resolve(context.root, run.job) : undefined);
   }
 }
 async function dispatch<K extends OperationId>(context: HostContext, id: K, input: OperationInputs[K]): Promise<Envelope<OperationResults[K]>> {

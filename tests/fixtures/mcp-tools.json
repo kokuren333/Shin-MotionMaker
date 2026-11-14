@@ -4103,6 +4103,45 @@
                 "encoding"
               ],
               "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "mime_type": {
+                  "const": "image/png"
+                },
+                "truncated": {
+                  "const": false
+                },
+                "data": {
+                  "type": "null"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 6291456
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "delivered_as": {
+                  "const": "image"
+                }
+              },
+              "required": [
+                "path",
+                "mime_type",
+                "truncated",
+                "data",
+                "bytes",
+                "sha256",
+                "delivered_as"
+              ],
+              "additionalProperties": false
             }
           ]
         },

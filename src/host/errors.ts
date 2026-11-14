@@ -4,6 +4,7 @@ export function hostError(code: ErrorCode, message: string, hint = "入力とジ
   return Object.assign(new Error(message), { code, hint, ...(details === undefined ? {} : { details }) });
 }
 export function normalizeError(value: unknown): SmmError {
+  if (value instanceof RangeError) return { code: "E_INPUT_INVALID", message: "入力の大きさまたは入れ子の深さを処理できません。", hint: "入力を分割するか、入れ子を浅くしてください。", details: { reason: "RangeError" } };
   if (value && typeof value === "object" && "code" in value && "hint" in value && "message" in value) {
     const error = value as SmmError;
     return { code: error.code, message: error.message, hint: error.hint, ...(error.details === undefined ? {} : { details: error.details }) };

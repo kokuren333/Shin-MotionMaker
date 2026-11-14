@@ -29,6 +29,8 @@ export async function getReport(context: HostContext, relative: string, name: st
   try {
     const stat = await handle.stat();
     if (!stat.isFile()) throw hostError("E_PATH_DENIED", "通常ファイルだけを取得できます。");
+    if (png && context.restrictToRoot && stat.size > 6 * 1024 * 1024)
+      throw hostError("E_INPUT_INVALID", "MCP で取得する PNG は 6 MiB までです。", "CLI の smm report を使うか、画像を縮小してから取得してください。");
     if (png && stat.size > 8 * 1024 * 1024) throw hostError("E_PATH_DENIED", "PNG が 8 MiB を超えています。", "画像を縮小してから取得してください。");
     const limit = png ? stat.size : Math.min(stat.size, 256 * 1024);
     const bytes = Buffer.alloc(limit);

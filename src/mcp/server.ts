@@ -1,10 +1,11 @@
 import path from "node:path";
+import { createHash } from "node:crypto";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import type { CallToolResult, Tool, ServerNotification } from "@modelcontextprotocol/sdk/types.js";
 import { PACKAGE_VERSION } from "../core/index.ts";
-import { execute, exposedOperations, operations, hostError, normalizeError, resolveAllowedPath, validateAllowDirectories } from "../host/index.ts";
+import { execute, exposedOperations, operations, hostError, normalizeError, resolveAllowedPath, validateAllowDirectories, validateRootDirectory } from "../host/index.ts";
 import type { Envelope, HostContext, OperationDefinition, OperationInputs, OperationResults, OperationId, Run } from "../host/index.ts";
 import { envelopeSchema } from "./schema.ts";
 
@@ -15,6 +16,7 @@ export type ServeOptions = {
 
 export async function mcpContext(options: ServeOptions): Promise<HostContext> {
   const root = path.resolve(options.root);
+  await validateRootDirectory(root);
   const context: HostContext = { root, requestDirectory: root, restrictToRoot: true,
     allowDirs: [...options.allowDirs ?? []], allowEngineHosts: [...options.allowEngineHosts ?? []],
     readOnly: options.readOnly ?? false, enableGeneration: options.enableGeneration ?? false, startedBy: "mcp" };
@@ -35,7 +37,8 @@ export function toolResult(envelope: Envelope<OperationResults[OperationId]>): C
   if (envelope.ok && envelope.result && typeof envelope.result === "object" && "data" in envelope.result && envelope.result.data instanceof Uint8Array) {
     const result = envelope.result;
     const data = Buffer.from(result.data).toString("base64");
-    wire = { ...envelope, result: { ...result, data, encoding: "base64" } };
+    wire = { ...envelope, result: { ...result, data: null, bytes: result.data.byteLength,
+      sha256: createHash("sha256").update(result.data).digest("hex"), delivered_as: "image" } };
     content.push({ type: "image", mimeType: result.mime_type, data });
   }
   content.unshift({ type: "text", text: JSON.stringify(wire) });

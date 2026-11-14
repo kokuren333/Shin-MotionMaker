@@ -8,11 +8,10 @@ import type { Envelope, OperationId, OperationResults } from "../../src/host/ind
 import type { TestContext } from "node:test";
 import { workspace } from "./host.ts";
 
-export const mcpEntry = fileURLToPath(new URL("../../src/mcp/main.ts", import.meta.url));
-export async function connectMcp(root: string, flags: string[] = []) {
+export const mcpEntry = fileURLToPath(new URL("../../dist/mcp/main.js", import.meta.url));
+export async function connectMcp(root: string, flags: string[] = [], entry = [mcpEntry]) {
   const transport = new StdioClientTransport({ command: process.execPath,
-    args: ["--experimental-strip-types", mcpEntry, "--root", root, ...flags], stderr: "pipe",
-    maxBufferSize: 40 * 1024 * 1024 });
+    args: [...entry, "--root", root, ...flags], stderr: "pipe" });
   let stderr = "";
   transport.stderr!.on("data", (chunk) => { stderr += chunk.toString(); });
   const client = new Client({ name: "smm-mcp-verifier", version: "1.0.0" });

@@ -4,11 +4,13 @@ import path from "node:path";
 import { spawn } from "node:child_process";
 import { createServer } from "node:http";
 import { networkInterfaces } from "node:os";
+import { createHash } from "node:crypto";
 import { test } from "node:test";
 import { execute, operations, exposedOperations, listRuns } from "../src/host/index.ts";
 import { toolDefinitions } from "../src/mcp/index.ts";
 import { fakeJob, workspace } from "./helpers/host.ts";
 import { mcpWorkspace, envelope, connectMcp, mcpEntry } from "./helpers/mcp.ts";
+import { builtCliMain } from "./helpers/cli.ts";
 
 const fixture = new URL("./fixtures/mcp-tools.json", import.meta.url);
 const request = (title: string) => ({ form: { title, description: "往復試験", audience: "開発者", voiceEngine: "none" as const, generateAudio: false } });
@@ -124,26 +126,30 @@ test("MC-02 allow-dir permits only absolute request attachments and denies escap
 
 test("MC-01 invalid startup fails on stderr with no protocol stdout", async (t) => {
   const context = await workspace(t);
-  for (const [args, code] of [[[], "E_USAGE"], [["--root", context.root, "--unknown"], "E_USAGE"], [["--root", context.root, "--allow-dir", path.join(context.root, "absent")], "E_PATH_DENIED"]] as const) {
+  const file = path.join(context.root, "file.txt"); await fs.writeFile(file, "root fixture");
+  for (const [args, code] of [[[], "E_USAGE"], [["--root", context.root, "--unknown"], "E_USAGE"],
+    [["--root", path.join(context.root, "absent")], "E_PATH_DENIED"], [["--root", file], "E_PATH_DENIED"],
+    [["--root", context.root, "--allow-dir", path.join(context.root, "absent")], "E_PATH_DENIED"]] as const) {
     const output = await new Promise<{ code: number | null; stdout: string; stderr: string }>((resolve, reject) => {
-      const child = spawn(process.execPath, ["--experimental-strip-types", mcpEntry, ...args], { shell: false, windowsHide: true, stdio: ["ignore", "pipe", "pipe"] });
+      const child = spawn(process.execPath, [mcpEntry, ...args], { shell: false, windowsHide: true, stdio: ["ignore", "pipe", "pipe"] });
       let stdout = "", stderr = "";
       child.stdout.on("data", (data) => { stdout += data; }); child.stderr.on("data", (data) => { stderr += data; });
       child.once("error", reject); child.once("close", (code) => resolve({ code, stdout, stderr }));
     });
-    assert.equal(output.code, 2); assert.equal(output.stdout, ""); assert.equal(JSON.parse(output.stderr).code, code);
+    assert.equal(output.code, 2); assert.equal(output.stdout, ""); assert.equal(JSON.parse(output.stderr).code, code); assert.ok(JSON.parse(output.stderr).hint);
     assert.equal(output.stderr.includes(context.root), false);
   }
 });
 
-test("MC-06 report PNG uses identical base64 JSON plus a following image block", async (t) => {
+test("MC-06 report PNG sends metadata in JSON and bytes only in the image block", async (t) => {
   const { context, call } = await mcpWorkspace(t); const job = await fakeJob(context);
   const data = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aX1EAAAAASUVORK5CYII=", "base64");
   await fs.mkdir(path.join(job, "output")); await fs.writeFile(path.join(job, "output", "still.png"), data);
   const response = await call("report_get", { job: "job & 全角 空白", path: "output/still.png" });
   assert.equal(response.content.length, 2); assert.deepEqual(response.content[1], { type: "image", mimeType: "image/png", data: data.toString("base64") });
-  const result = (response.structuredContent as { result: { data: string; encoding: string } }).result;
-  assert.equal(result.data, data.toString("base64")); assert.equal(result.encoding, "base64");
+  const result = (response.structuredContent as { result: Record<string, unknown> }).result;
+  assert.equal(result.data, null); assert.equal(result.bytes, data.length); assert.equal(result.delivered_as, "image");
+  assert.equal(result.sha256, createHash("sha256").update(data).digest("hex")); assert.equal(result.encoding, undefined);
   for (const name of ["project.json", "runtime/package.json", "../secret.txt"]) { const denied = envelope(await call("report_get", { job: "job & 全角 空白", path: name })); assert.ok(!denied.ok); assert.equal(denied.error.code, "E_PATH_DENIED"); }
 });
 
@@ -198,7 +204,7 @@ test("MC-04 explicit engine host permission reaches only the local fixture engin
     const voice = envelope(await denied.call("job_voice", { job: "job & 全角 空白" })); assert.ok(!voice.ok); assert.equal(voice.error.code, "E_DISABLED");
     await denied.call("doctor", { job: "job & 全角 空白" }); assert.equal(requests, 0);
   } finally { await denied.close(); }
-  const permitted = await connectMcp(context.root, ["--allow-engine-host", address]);
+  const permitted = await connectMcp(context.root, ["--allow-engine-host", address], [builtCliMain, "mcp", "serve"]);
   try {
     const doctor = envelope<"doctor">(await permitted.call("doctor", { job: "job & 全角 空白" })); assert.ok(doctor.ok);
     assert.equal(doctor.result.checks.find((check) => check.id === "aivis")?.available, true); assert.equal(requests, 1);
