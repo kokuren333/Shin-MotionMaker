@@ -29,7 +29,7 @@ test("atomic ledger replacement remains readable during concurrent polling on Wi
 
 test("CL-11 node executes a job below a path longer than 260 characters", async (t) => {
   const context = await workspace(t);
-  const root = path.join(context.root, ...Array.from({ length: 8 }, (_, index) => `${index}-long & 全角 空白 directory`));
+  const root = path.join(context.root, ...Array.from({ length: 12 }, (_, index) => `${index}-long & 全角 空白 directory`));
   await fs.mkdir(root, { recursive: true }); const nested = { ...context, root, requestDirectory: root };
   const job = await fakeJob(nested); assert.ok(path.join(job, "runtime/scripts/qc.mjs").length > 260);
   const result = await execute(nested, "qc", { job: "job & 全角 空白", stage: "pre", wait_ms: 10000 });

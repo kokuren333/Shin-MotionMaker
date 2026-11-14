@@ -21,7 +21,8 @@ test("MC-02 win32 rejects reserved names ADS and trailing dots and folds case", 
   for (const name of ["a/.. ", "a./x", "a /x", "x:stream", "NUL", "con.txt", "a?b"])
     await assert.rejects(resolveAllowedPath(context, name, "write"), { code: "E_PATH_DENIED" }, name);
   await fs.mkdir(path.join(context.root, "Case"));
-  assert.equal((await fs.realpath(await resolveAllowedPath(context, "case", "read"))).toLowerCase(), path.join(context.root, "Case").toLowerCase());
+  // TEMP may be an 8.3 short path (CI runners), so compare physical paths on both sides.
+  assert.equal((await fs.realpath(await resolveAllowedPath(context, "case", "read"))).toLowerCase(), (await fs.realpath(path.join(context.root, "Case"))).toLowerCase());
 });
 
 test("MC-02 junction and symlink escapes denied for reads writes jobs reports and ledger", async (t) => {

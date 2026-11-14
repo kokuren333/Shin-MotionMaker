@@ -190,7 +190,8 @@ test("P-2 POSIX generated filenames preserve browser bytes", { skip: process.pla
   await fs.writeFile(path.join(context.root, "source?.txt"), "POSIX");
   const generated = await execute(context, "generate", { request: { form: { title: "添付", description: "説明", audience: "読者" }, assets: { sources: ["source?.txt"] } }, out: "out" });
   assert.ok(generated.ok);
-  assert.equal(await fs.readFile(path.join(context.root, generated.result.job!, "sources/source?.txt"), "utf8"), "POSIX");
+  // core.safeName maps "?" to "-" in both the browser ZIP and the host folder.
+  assert.equal(await fs.readFile(path.join(context.root, generated.result.job!, "sources/source-.txt"), "utf8"), "POSIX");
   const resolved = await resolveRequest({ form: { title: "添付", description: "説明", audience: "読者" }, assets: { sources: ["source?.txt"] } }, context);
   const zip = await JSZip.loadAsync((await generateJob(resolved.request.form, resolved.assets, await browserTemplates())).data);
   const actual = await fileMap(path.join(context.root, generated.result.job!));
