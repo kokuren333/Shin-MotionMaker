@@ -55,7 +55,7 @@ CLI のコマンドは、host の共通の操作定義表にある名前と入�
 - `--out` は親ディレクトリである。フォルダはその下の `safeName(title)` に、ZIP はその下の `safeName(title)-motion-job.zip` に作る。
 - 既存のファイル・フォルダは、空のフォルダでも上書きしない。
 - 未知のキー・型の誤り・`validateForm` のエラーは、本文を書き出す前に拒否する。
-- 既存の列挙値（fps、1人目・2人目の配置を含む）は core の `formChoices` を共有し、shape 検査から確認する。範囲外の値は `E_INPUT_INVALID` と JSON Pointer 付きの `details` で返す。GUI の request 読込と CLI/MCP の generate・台本統計に共通で適用する。未完成の自由記述は shape 検査で拒否せず、`validateForm` の文言・検査種別は原典のままである。
+- 既存の列挙値（fps、1人目・2人目の配置を含む）は core の `formChoices` を共有し、原典 `validateForm` と同じモード・人数条件で shape 検査から確認する。MV では様式・配置を見ず、解説の2人目の配置は duo のときだけ確認する。対象の範囲外の値は `E_INPUT_INVALID` と JSON Pointer 付きの `details` で返す。GUI の request 読込と CLI/MCP の generate・台本統計に共通で適用する。未完成の自由記述は shape 検査で拒否せず、`validateForm` の文言・検査種別は原典のままである。
 - `--dry-run` は生成内容を返すだけで、出力先の親フォルダも作らない。
 - MV で音源の尺を補えないときは、`musicDurationSec` を指定するよう案内する。
 
@@ -102,7 +102,7 @@ CLI のコマンドは、host の共通の操作定義表にある名前と入�
 
 ## ジョブ内スクリプトの終了コードとの対応
 
-判定の実装は host の1箇所にあり、CLI は以下を再実装しない。スクリプトの元の終了コードは `run.script_exit_code` に、正規化した値は `run.exit_code` に残る。M0-Q3 で求められた実測の記録は [CLI-EXAMPLES.json](work/M2b/CLI-EXAMPLES.json) と [TIER-B.json](work/M2b/TIER-B.json) にある。
+判定の実装は host の1箇所にあり、CLI は以下を再実装しない。スクリプトの元の終了コードは `run.script_exit_code` に、正規化した値は `run.exit_code` に残る。M0-Q3 で求められた実測の記録は [CLI-EXAMPLES.json](work/M2b/CLI-EXAMPLES.json) と [TIER-B.json](work/M2b/TIER-B.json) にある。現在の挙動の追補は [M7 cli-add.json](work/M7/evidence/cli-add.json) にあり、mcp serve の stdio EOF は終了0である。
 
 | スクリプト | 実測した元の終了と証拠 | 正規化 |
 | --- | --- | --- |

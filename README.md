@@ -23,7 +23,7 @@ Shin-MotionMaker は、モーショングラフィックス動画（MV・解説�
 
 | 用途 | 必要なもの |
 | --- | --- |
-| GUI・CLI・MCP（ジョブの生成） | Node.js 22 以上、npm |
+| GUI・CLI・MCP（ジョブの生成） | Node.js 22.12.0 以上、npm |
 | ジョブの制作（レンダー・検査） | ジョブの依存（ジョブのルートで `npm install`。Remotion など。初回はネットワーク接続が必要で、容量も大きい）、ffmpeg、Remotion のレンダー用ブラウザ |
 | 音声合成（使う場合） | AivisSpeech などの Aivis エンジン（別途起動） |
 | 画像生成（使う場合） | Codex CLI |

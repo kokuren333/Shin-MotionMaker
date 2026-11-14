@@ -77,7 +77,7 @@ node tools/ci-local.mjs
 | --- | --- | --- | --- |
 | CLI | 2026-11-14T11:15:42.760Z〜2026-11-14T11:26:55.323Z | 672.551秒 | 8 run、すべて completed。8件が終了0、0件が期待する終了1 |
 | MCP | 2026-11-14T11:15:03.010Z〜2026-11-14T11:25:00.555Z | 597.521秒 | 8 run、すべて completed。8件が終了0、0件が期待する終了1 |
-| CLI | 2026-11-14T11:15:13.722Z〜2026-11-14T11:26:00.922Z | 647.180秒 | 10 run、すべて completed。8件が終了0、2件が期待する終了1 |
+| CLI（原典 0.4 ジョブ） | 2026-11-14T11:15:13.722Z〜2026-11-14T11:26:00.922Z | 647.180秒 | 10 run、すべて completed。8件が終了0、2件が期待する終了1 |
 
 全経路で sound → validate → preview → still(frame 30) → ghost preview → final → ghost final を実行した。ジョブのフォルダ名は `Runtime & 全角 空白` または `Legacy & 全角 空白`。各 run の入力・開始終了時刻・stdout/stderr の SHA-256 と末尾・成果物 SHA-256 は経路別 JSON に保存した。MCP は開始 wait_ms:0、全 run で run_get wait_ms:50000 を繰り返し、プロトコルエラー0。
 
@@ -101,16 +101,16 @@ node tools/ci-local.mjs
 | MCP | ghost_check:preview | `r-20261114T112254Z-70514396` | completed | 0 / 0 | 10.999 | 1 |
 | MCP | render:final | `r-20261114T112304Z-a29a4afc` | completed | 0 / 0 | 107.856 | 1 |
 | MCP | ghost_check | `r-20261114T112452Z-4048f2b7` | completed | 0 / 0 | 8.068 | 1 |
-| CLI | setup | `r-20261114T111515Z-cd31c2e2` | completed | 0 / 0 | 221.341 | 0 |
-| CLI | sound | `r-20261114T111858Z-bf53a62e` | completed | 0 / 0 | 8.079 | 5 |
-| CLI | validate / pass | `r-20261114T111906Z-2075f7dc` | completed | 0 / 0 | 29.909 | 0 |
-| CLI | validate / fail | `r-20261114T111936Z-5e66abfc` | completed | 1 / 1 | 26.534 | 0 |
-| CLI | qc:pre / fail | `r-20261114T112003Z-dcab0419` | completed | 1 / 1 | 8.788 | 1 |
-| CLI | render:preview | `r-20261114T112011Z-6bbdc87c` | completed | 0 / 0 | 122.131 | 1 |
-| CLI | render:still | `r-20261114T112214Z-88e1561f` | completed | 0 / 0 | 68.536 | 1 |
-| CLI | ghost_check:preview | `r-20261114T112323Z-55a27bae` | completed | 0 / 0 | 17.762 | 1 |
-| CLI | render:final | `r-20261114T112340Z-334b6199` | completed | 0 / 0 | 121.181 | 1 |
-| CLI | ghost_check | `r-20261114T112543Z-2d3e5816` | completed | 0 / 0 | 20.541 | 1 |
+| CLI（原典 0.4 ジョブ） | setup | `r-20261114T111515Z-cd31c2e2` | completed | 0 / 0 | 221.341 | 0 |
+| CLI（原典 0.4 ジョブ） | sound | `r-20261114T111858Z-bf53a62e` | completed | 0 / 0 | 8.079 | 5 |
+| CLI（原典 0.4 ジョブ） | validate / pass | `r-20261114T111906Z-2075f7dc` | completed | 0 / 0 | 29.909 | 0 |
+| CLI（原典 0.4 ジョブ） | validate / fail | `r-20261114T111936Z-5e66abfc` | completed | 1 / 1 | 26.534 | 0 |
+| CLI（原典 0.4 ジョブ） | qc:pre / fail | `r-20261114T112003Z-dcab0419` | completed | 1 / 1 | 8.788 | 1 |
+| CLI（原典 0.4 ジョブ） | render:preview | `r-20261114T112011Z-6bbdc87c` | completed | 0 / 0 | 122.131 | 1 |
+| CLI（原典 0.4 ジョブ） | render:still | `r-20261114T112214Z-88e1561f` | completed | 0 / 0 | 68.536 | 1 |
+| CLI（原典 0.4 ジョブ） | ghost_check:preview | `r-20261114T112323Z-55a27bae` | completed | 0 / 0 | 17.762 | 1 |
+| CLI（原典 0.4 ジョブ） | render:final | `r-20261114T112340Z-334b6199` | completed | 0 / 0 | 121.181 | 1 |
+| CLI（原典 0.4 ジョブ） | ghost_check | `r-20261114T112543Z-2d3e5816` | completed | 0 / 0 | 20.541 | 1 |
 
 ### 成果物
 
@@ -128,11 +128,11 @@ node tools/ci-local.mjs
 | MCP | `output/preview.png` | 27051 | `3d737258719e5b789ca6abd0275ebd0fca89307135746e2a88420527a58fae04` |
 | MCP | `reports/ghost-check-preview.json` | 320 | `98aeb135ed51ab37ee3f779a4b9bc7914f762f6a799688417504955332c36fd3` |
 | MCP | `reports/ghost-check.json` | 318 | `186e2127c0441a4422106f28046525b215bd5a75f3016761d9cc8c7ce3bdb954` |
-| CLI | `output/final.mp4` | 643491 | `6858f6e28df197f966efcc0c14a48d575d15e9e696b39cb6d69de5dca7ad0b79` |
-| CLI | `output/preview.mp4` | 495584 | `7a70f6bf36c0ae6a0ca418cd41e7d8ead32b970b53c241cd9661ab0c821e2b60` |
-| CLI | `output/preview.png` | 27051 | `3d737258719e5b789ca6abd0275ebd0fca89307135746e2a88420527a58fae04` |
-| CLI | `reports/ghost-check-preview.json` | 320 | `98aeb135ed51ab37ee3f779a4b9bc7914f762f6a799688417504955332c36fd3` |
-| CLI | `reports/ghost-check.json` | 318 | `186e2127c0441a4422106f28046525b215bd5a75f3016761d9cc8c7ce3bdb954` |
+| CLI（原典 0.4 ジョブ） | `output/final.mp4` | 643491 | `6858f6e28df197f966efcc0c14a48d575d15e9e696b39cb6d69de5dca7ad0b79` |
+| CLI（原典 0.4 ジョブ） | `output/preview.mp4` | 495584 | `7a70f6bf36c0ae6a0ca418cd41e7d8ead32b970b53c241cd9661ab0c821e2b60` |
+| CLI（原典 0.4 ジョブ） | `output/preview.png` | 27051 | `3d737258719e5b789ca6abd0275ebd0fca89307135746e2a88420527a58fae04` |
+| CLI（原典 0.4 ジョブ） | `reports/ghost-check-preview.json` | 320 | `98aeb135ed51ab37ee3f779a4b9bc7914f762f6a799688417504955332c36fd3` |
+| CLI（原典 0.4 ジョブ） | `reports/ghost-check.json` | 318 | `186e2127c0441a4422106f28046525b215bd5a75f3016761d9cc8c7ce3bdb954` |
 
 ### Pages ローカル検査（CI-07）
 
