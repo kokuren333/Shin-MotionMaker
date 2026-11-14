@@ -32,7 +32,7 @@
 | CLI 文書例 | node tools/verify-cli.mjs は終了0。[CLI-EXAMPLES.json](CLI-EXAMPLES.json) に54件のコマンド・直接スクリプト実測を保存。標準出力は毎回 JSON.parse と1行検査を実行 |
 | ビルド済み JS | npm run build は終了0。node dist/cli/main.js version / generate / qc 等を上記54件で実行。型除去フラグ・グローバル導入なし |
 | Tier B | npm run test:tier-b は終了0。[TIER-B.json](TIER-B.json) に11件。実依存 setup、validate の pass / fail、原典0.4の report なし pass / fail、実 ffmpeg の ghost 走査を確認 |
-| ci-local | cfe8593 / 3fa5773 の両コミットで終了0。深さ1の npm ci・build・npm test（186件 / pass 184 / fail 0 / skip 2 / TODO 0）・workspace test / build を完了。最後の command 名整形を含むコミットでも再確認し、CI-LOCAL.json に確定する |
+| ci-local | cfe8593 / 3fa5773 の両コミットで終了0。深さ1の npm ci・build・npm test（186件 / pass 184 / fail 0 / skip 2 / TODO 0）・workspace test / build を完了。590bf2b は detach テストの時間依存で1件失敗し、修正後の結果を CI-LOCAL.json に確定する |
 
 ## 終了コードの実測
 
@@ -71,6 +71,7 @@
 - node --experimental-strip-types --test --test-name-pattern 'UTF-8 log|reports usage|rejects invalid JSON' tests/cli.test.ts tests/generate-job.test.ts は3件成功 / 失敗0 / skip 0 / TODO 0、終了0。部分文字を含むログの差分転送、原典の全拒否入力、空 out・help 相当の入力定義取得を確認した。
 - node --experimental-strip-types --test --test-name-pattern 'detach survives' tests/cli.test.ts は1件成功 / 失敗0、終了0。遅延なしで異常終了する run の detach 開始0と wait の4を確認した。
 - node --experimental-strip-types --test --test-name-pattern 'reports usage' tests/generate-job.test.ts は1件成功 / 失敗0、終了0。引数解析失敗時も canonical な command 名を返すことを追補した。
+- 590bf2b の ci-local は186件 / pass 183 / fail 1 / skip 2 / TODO 0、終了1。1.2秒の固定遅延が先に完了し running の表明が completed となった。子は解放ファイルを待ち、CLI 終了後にテスト側が作成する方式へ変更した。表明を弱めず、detach 後の生存を時間に依存しない形で確認する。変更後の detach 対象テストは1件成功 / 失敗0、終了0。
 
 ## 契約・要件への質問
 

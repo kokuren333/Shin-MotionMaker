@@ -46,10 +46,14 @@ test("TS-02 foreground streams child output only to stderr and preserves ok vers
 });
 
 test("TS-02 detach survives the CLI and wait uses terminal exit while get logs list and cancel return retrieval success", async (t) => {
-  const context = await workspace(t); const job = await fakeJob(context, { scenario: "fail", delay: 1200 });
+  const context = await workspace(t); const job = await fakeJob(context, { scenario: "fail" });
+  const script = path.join(job, "runtime/scripts/qc.mjs");
+  const body = await fs.readFile(script, "utf8");
+  await fs.writeFile(script, `while (!await import("node:fs/promises").then((fs) => fs.access(new URL("../../release", import.meta.url)).then(() => true, () => false))) await new Promise((resolve) => setTimeout(resolve, 50));\n` + body);
   const started = await cli(["qc", job, "--stage", "pre", "--detach"], context.root);
   assert.equal(started.code, 0); assert.equal(started.envelope.run?.status, "running");
   const id = started.envelope.run!.id; assert.match(id, /^r-\d{8}T\d{6}Z-[a-f0-9]{8}$/);
+  await fs.writeFile(path.join(job, "release"), "continue\n");
   const waited = await cli(["runs", "wait", job, id], context.root);
   assert.equal(waited.code, 1); assert.equal(waited.envelope.command, "runs wait"); assert.ok(waited.envelope.ok); assert.equal(waited.envelope.result.verdict, "fail");
   for (const command of ["get", "logs", "cancel"]) {
