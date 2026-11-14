@@ -25,30 +25,43 @@ test("R4 JSON preserves original stdout stderr and exit codes for pass fail SKIP
   const diffs = await readJson("allowed-diffs.json");
   const rule = diffs.rules.find((entry: { id: string }) => entry.id === "R4");
   let original = patched;
-  for (const append of rule.appends) original = original.slice(0, -append.text.length);
+  for (const append of rule.appends) {
+    assert.ok(original.endsWith(append.text));
+    original = original.slice(0, -append.text.length);
+  }
   for (const pair of [...rule.replacements].reverse()) original = original.replaceAll(pair.to, pair.from);
   await write("runtime/tsconfig.json", JSON.stringify({ compilerOptions: { types: [], skipLibCheck: true }, files: ["check.ts"] }));
   await write("runtime/check.ts", "export const value = 1;\n");
   const input = { ...defaults, title: "report fixture", description: "検査結果", audience: "開発者", voiceEngine: "none" as const };
-  const project = createProject(switchVideoMode(input, "mv"), { sources: [] });
-  project.audio.music = "assets/music.wav";
-  project.audio.music_duration_sec = 6;
-  Object.assign(project, { scenes: [{ id: "s1", duration_sec: 6 }] });
-  await write("project.json", JSON.stringify(project));
-  for (const font of Object.values(project.layout.fonts)) await write(font.path, "fixture font");
+  const mvProject = createProject(switchVideoMode(input, "mv"), { sources: [] });
+  mvProject.audio.music = "assets/music.wav";
+  mvProject.audio.music_duration_sec = 6;
+  Object.assign(mvProject, { scenes: [{ id: "s1", duration_sec: 6 }] });
+  const explanationProject = createProject(input, { sources: [] });
+  for (const font of Object.values(mvProject.layout.fonts)) await write(font.path, "fixture font");
+  await write(explanationProject.layout.frame!, "fixture frame");
   await write("assets/music.wav", new Uint8Array([1]));
   for (const name of ["plan/music-analysis.md", "plan/direction.md", "plan/storyboard.md", "plan/sources.md", "reports/visual-qa.md", "reports/delivery.md"])
     await write(name, "Completion record for a synthetic report fixture. ".repeat(3));
   const mp4 = Buffer.alloc(2048); mp4.write("ftyp", 4);
   for (const name of ["preview", "final"]) await write(`output/${name}.mp4`, mp4);
-  const cases = [
+  const cases: { args: string[]; ghost: object | null; fail: boolean; explanation?: boolean; blockedReports?: boolean }[] = [
     { args: [], ghost: { skipped: "fixture skipped" }, fail: false },
     { args: ["--final"], ghost: { skipped: "fixture skipped" }, fail: false },
     { args: ["--final"], ghost: { singleFrameEvents: [{ time: "0:01" }] }, fail: false },
     { args: ["--final", "--double-render"], ghost: { singleFrameEvents: [], classification: { isolatedCount: 0, clusteredEventCount: 0, clusteredRunCount: 0 }, doubleRender: { mismatches: [] } }, fail: false },
+    { args: [], ghost: { skipped: "fixture skipped" }, fail: false, explanation: true },
+    { args: [], ghost: { skipped: "fixture skipped" }, fail: false, blockedReports: true },
     { args: ["--final"], ghost: null, fail: true },
   ];
   for (const item of cases) {
+    await write("project.json", JSON.stringify(item.explanation ? explanationProject : mvProject));
+    if (item.blockedReports) {
+      const reports = path.join(directory, "reports");
+      assert.equal(path.dirname(path.resolve(reports)), path.resolve(directory));
+      await fs.rm(reports, { recursive: true });
+      await write("reports", "report directory blocked by a file");
+    }
     await write("runtime/scripts/ghost-check.mjs", item.ghost === null ?
       'export async function analyzeGhosts() { throw new Error("fixture scan error"); }\n' :
       `export async function analyzeGhosts() { return ${JSON.stringify(item.ghost)}; }\n`);
@@ -65,6 +78,18 @@ test("R4 JSON preserves original stdout stderr and exit codes for pass fail SKIP
     assert.equal(after.status, before.status);
     assert.equal(after.stdout, before.stdout);
     assert.equal(after.stderr, before.stderr);
+    t.diagnostic(JSON.stringify({ mode: item.explanation ? "explanation" : "mv", args: item.args,
+      blocked_reports: !!item.blockedReports, status: after.status, stdout_stderr_equal: true }));
+    if (item.blockedReports) {
+      assert.equal(after.stderr, "");
+      assert.equal(await fs.readFile(path.join(directory, "reports"), "utf8"), "report directory blocked by a file");
+      await assert.rejects(fs.stat(path.join(directory, "reports/validate.json")),
+        (error: NodeJS.ErrnoException) => ["ENOENT", "ENOTDIR"].includes(error.code ?? ""));
+      await fs.unlink(path.join(directory, "reports"));
+      for (const name of ["reports/visual-qa.md", "reports/delivery.md"])
+        await write(name, "Completion record for a synthetic report fixture. ".repeat(3));
+      continue;
+    }
     const text = await fs.readFile(path.join(directory, "reports/validate.json"), "utf8");
     const report = JSON.parse(text) as ValidateReport;
     assert.equal(report.schema, "smm.validate/1");

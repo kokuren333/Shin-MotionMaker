@@ -37,7 +37,9 @@ test("free text remains unrestricted and MIME types follow the upstream extensio
   for (const key of ["design", "instructions", "outline", "differentiation"] as const) assert.equal(result.value.form[key], form[key]);
   for (const [name, type] of [["document.MD", "text/markdown"], ["data.csv", "text/csv"], ["x.PDF", "application/pdf"],
     ["image.png", "image/png"], ["music.M4A", "audio/mp4"], ["no-extension", "application/octet-stream"],
-    ["unknown.zzz", "application/octet-stream"], ["folder.pdf/unknown", "application/octet-stream"]]) assert.equal(mimeTypeFor(name), type);
+    ["unknown.zzz", "application/octet-stream"], ["folder.pdf/unknown", "application/octet-stream"],
+    [".md", "application/octet-stream"], ["folder/.PDF", "application/octet-stream"],
+    ["..wav", "audio/wav"], [".notes.MD", "text/markdown"], ["trailing.", "application/octet-stream"]]) assert.equal(mimeTypeFor(name), type);
 });
 
 test("buildJobFiles shares exclusions and produces structured errors for invalid input or paths", async () => {

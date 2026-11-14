@@ -5,7 +5,7 @@ import { test } from "node:test";
 import JSZip from "jszip";
 import ts from "typescript";
 import {
-  agentPromptFor, buildJobFiles, createBrief, defaults, modeSettingsFor, switchVideoMode, validateForm,
+  agentPromptFor, buildJobFiles, createBrief, defaults, switchVideoMode, validateForm,
   validateRequest, zipJobFiles, PACKAGE_VERSION, TEMPLATE_VERSION, TEMPLATE_MANIFEST_SHA256,
   type Attachment, type JobAssets, type MotionForm,
 } from "../src/core/index.ts";
@@ -27,7 +27,7 @@ function reverseText(name: string, text: string): string {
   return text;
 }
 
-function normalizeGenerated(name: string, bytes: Uint8Array, mv: boolean): Uint8Array {
+function normalizeGenerated(name: string, bytes: Uint8Array, mv: boolean, styleMode: string): Uint8Array {
   let text: string;
   if (name === "project.json") {
     text = new TextDecoder().decode(bytes);
@@ -42,8 +42,11 @@ function normalizeGenerated(name: string, bytes: Uint8Array, mv: boolean): Uint8
   }
   if (name === "brief.md" && !mv) {
     text = new TextDecoder().decode(bytes);
-    for (const pair of diffs.rules.find((rule: { id: string }) => rule.id === "R5").replacements)
+    assert.doesNotMatch(text, /Opus/i);
+    for (const pair of diffs.rules.find((rule: { id: string }) => rule.id === "R5").replacements) {
+      if (["biim", "mixed"].includes(styleMode)) assert.ok(text.includes(pair.to), `missing R5 replacement: ${styleMode}`);
       text = text.replaceAll(pair.to, pair.from);
+    }
     return new TextEncoder().encode(text);
   }
   if (["AGENTS.md", "README.md", "runtime/scripts/validate.mjs"].includes(name))
@@ -102,13 +105,13 @@ for (const name of await fs.readdir(path.join(baseline, "golden"))) {
       const item = zip.files[entry.path];
       assert.equal(item.dir, entry.directory, entry.path);
       const relative = entry.path.slice(job.rootName.length + 1);
-      const bytes = entry.directory ? new Uint8Array() : normalizeGenerated(relative, await item.async("uint8array"), mv);
+      const bytes = entry.directory ? new Uint8Array() : normalizeGenerated(relative, await item.async("uint8array"), mv, form.styleMode);
       assert.equal(hash(bytes), entry.sha256, `${name}: ${relative}`);
       assert.equal(bytes.byteLength, entry.bytes, `${name}: ${relative}`);
       if (!entry.directory) assert.deepEqual(await item.async("uint8array"), job.files[relative]);
     }
     for (const file of ["brief.md", "project.json", ...(mv ? ["plan/lyrics.txt"] : form.outline.trim() ? ["plan/outline.txt"] : [])])
-      assert.deepEqual(Buffer.from(normalizeGenerated(file, job.files[file], mv)), await fs.readFile(path.join(baseline, prefix, file)), file);
+      assert.deepEqual(Buffer.from(normalizeGenerated(file, job.files[file], mv, form.styleMode)), await fs.readFile(path.join(baseline, prefix, file)), file);
     if (mv) {
       assert.deepEqual(Buffer.from(createBrief(form, assets)), await fs.readFile(path.join(baseline, prefix, "brief.md")));
       assert.equal(agentPromptFor("mv"), job.agentPrompt);
@@ -121,8 +124,17 @@ for (const name of await fs.readdir(path.join(baseline, "golden"))) {
 test("MV form settings, prompt, brief, project and lyrics match the captured baseline without history", async () => {
   const request = await readJson("golden/mv-landscape/request.json");
   const second = await readJson("golden/mv-portrait-options/request.json");
-  for (const expected of [request.form, second.form]) {
-    const actual = switchVideoMode({ ...expected, ...modeSettingsFor(defaults) }, "mv");
+  const form: MotionForm = {
+    ...defaults, title: "虹のしくみ", description: "光の分散を説明する", audience: "中高生",
+    takeaway: "太陽の反対側に虹が見える理由を言える", priorKnowledge: "光は直進する。雨粒の色が虹になるという誤解。",
+    outline: "## 問い\r\n\r\n虹はなぜ見える？\r\n雨粒の中で光が曲がる。\n42度の方向を確かめる。\n",
+    differentiation: "MV用のメモ", explainerDifferentiation: "前作のチャート中心から、光の経路を育てる図へ",
+  };
+  const settings = [{}, { width: 1080, height: 1920, design: "歌詞を巨大文字で見せる", instructions: "音に同期", videoGeneration: true }];
+  for (const [index, expected] of [request.form, second.form].entries()) {
+    const input = { ...form, ...settings[index], musicDurationSec: 30, musicLyrics: "[Verse]\r\n一行目\n二行目\n" };
+    assert.equal(input.videoMode, "explanation");
+    const actual = switchVideoMode(input, "mv");
     assert.deepEqual(actual, expected);
   }
 });

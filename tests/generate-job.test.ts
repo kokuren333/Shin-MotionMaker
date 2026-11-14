@@ -7,7 +7,7 @@ import JSZip from "jszip";
 import fontAssets from "../src/core/data/font-assets.json" with { type: "json" };
 import { defaults, generateJob, buildJobFiles, safeName, validateRequest,
   type CharacterForm, type JobAssets, type MotionForm, type TemplateFiles } from "../src/core/index.ts";
-import { repository, loadTemplates } from "./helpers/templates.ts";
+import { repository, loadAssets, loadTemplates } from "./helpers/templates.ts";
 type PartialForm = Omit<Partial<MotionForm>, "secondCharacter"> & { secondCharacter?: Partial<CharacterForm> };
 let webTemplates: TemplateFiles;
 before(async () => { webTemplates = await loadTemplates(); });
@@ -60,10 +60,12 @@ for (const mode of ["biim", "anime", "motion", "mixed", "mv"] as const) {
           secondCharacter: { name: "second.glb", data: unknown, size: unknown.byteLength, type: "model/gltf-binary" },
           bgm: { name: "audio.WAV", data: music, size: music.byteLength, type: "audio/wav" } }),
     };
-    const checked = validateRequest({ form: partial, assets: assetPaths }, { phase: "complete", assets });
+    const loadedAssets = await loadAssets(assetPaths, inputDirectory);
+    assert.deepEqual(loadedAssets, assets);
+    const checked = validateRequest({ form: partial, assets: assetPaths }, { phase: "complete", assets: loadedAssets });
     assert.ok(checked.ok);
     assert.deepEqual(checked.value.form, form);
-    const job = await buildJobFiles(checked.value.form, assets, webTemplates);
+    const job = await buildJobFiles(checked.value.form, loadedAssets, webTemplates);
     const actual = Object.fromEntries(Object.entries(job.files).map(([name, data]) => [job.rootName + "/" + name, data]));
     const webJob = await generateJob(form, assets, webTemplates);
     const webZip = await JSZip.loadAsync(webJob.data);
@@ -93,29 +95,42 @@ test("generate-job core accepts a minimal form and omitted assets using defaults
 });
 
 test("generate-job core rejects unknown keys, invalid types and validation errors", () => {
-  const cases: [unknown, "E_INPUT_INVALID" | "E_FORM_INVALID"][] = [
-    [null, "E_INPUT_INVALID"], [[], "E_INPUT_INVALID"], [{}, "E_INPUT_INVALID"],
-    [{ form: { ...minimal, style_mode: "anime" } }, "E_INPUT_INVALID"],
-    [{ form: { ...minimal, secondCharacter: { style_id: 123 } } }, "E_INPUT_INVALID"],
-    [JSON.parse('{"form":{"__proto__":{}}}'), "E_INPUT_INVALID"],
-    [{ form: { ...minimal, title: 42, secondCharacter: null } }, "E_INPUT_INVALID"],
-    [{ form: { ...minimal, musicDurationSec: "30" } }, "E_INPUT_INVALID"],
-    [{ form: { ...minimal, styleMode: "mixed", fullScreen: true } }, "E_FORM_INVALID"],
-    [{ form: {} }, "E_FORM_INVALID"], [{ form: { ...minimal, videoMode: "mv" } }, "E_FORM_INVALID"],
-    [{ form: minimal, assets: { sources: [null] } }, "E_INPUT_INVALID"],
-    [{ form: minimal, assets: { music: false } }, "E_INPUT_INVALID"],
-    [{ form: minimal, assets: { source: [] } }, "E_INPUT_INVALID"],
-    [{ form: minimal, extra: {} }, "E_INPUT_INVALID"],
+  const cases: [unknown, string[] | RegExp][] = [
+    [null, [""]], [[], [""]], [{}, ["/form"]],
+    [{ form: { ...minimal, style_mode: "anime" } }, ["/form/style_mode"]],
+    [{ form: { ...minimal, secondCharacter: { style_id: 123 } } }, ["/form/secondCharacter/style_id"]],
+    [JSON.parse('{"form":{"__proto__":{}}}'), ["/form/__proto__"]],
+    [{ form: { ...minimal, title: 42, secondCharacter: null } }, ["/form/title", "/form/secondCharacter"]],
+    [{ form: { ...minimal, musicDurationSec: "30" } }, ["/form/musicDurationSec"]],
+    [{ form: { ...minimal, styleMode: "mixed", fullScreen: true } }, /様式「混在」/],
+    [{ form: {} }, /動画タイトル[\s\S]*何を説明する動画[\s\S]*対象視聴者/],
+    [{ form: { ...minimal, videoMode: "mv" } }, /完成音源をアップロード/],
+    [{ form: minimal, assets: { sources: [null] } }, ["/assets/sources"]],
+    [{ form: minimal, assets: { music: false } }, ["/assets/music"]],
+    [{ form: minimal, assets: { source: [] } }, ["/assets/source"]],
+    [{ form: minimal, extra: {} }, ["/extra"]],
   ];
-  for (const [input, code] of cases) {
+  for (const [input, expected] of cases) {
     const result = validateRequest(input, { phase: "complete", assets: { sources: [] } });
     assert.equal(result.ok, false, JSON.stringify(input));
     if (result.ok) continue;
-    assert.equal(result.error.code, code);
+    assert.equal(result.error.code, Array.isArray(expected) ? "E_INPUT_INVALID" : "E_FORM_INVALID");
     assert.ok(result.error.message.length && result.error.hint.length);
     assert.ok(Array.isArray(result.error.details) && result.error.details.length);
+    if (Array.isArray(expected)) {
+      const pointers = result.error.details.map((detail) => {
+        assert.ok(detail !== null && typeof detail === "object" && !Array.isArray(detail));
+        return detail.pointer;
+      });
+      assert.deepEqual(pointers.sort(), [...expected].sort(), JSON.stringify(input));
+    } else {
+      assert.ok(result.error.details.every((detail) => typeof detail === "string"));
+      assert.match(result.error.details.join("\n"), expected);
+    }
   }
 });
+
+test.todo("M2a: generate-job compares independent host template loading with the browser template paths and bytes");
 
 test.todo("M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for biim; BOM, cwd, exclusive rerun");
 test.todo("M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for anime; cwd, exclusive rerun");

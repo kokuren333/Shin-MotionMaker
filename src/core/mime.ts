@@ -29,5 +29,5 @@ const mimeTypes: Record<string, string> = {
 export function mimeTypeFor(name: string): string {
   const leaf = name.split(/[\\/]/).pop() ?? "";
   const dot = leaf.lastIndexOf(".");
-  return mimeTypes[dot < 0 ? "" : leaf.slice(dot).toLowerCase()] ?? "application/octet-stream";
+  return mimeTypes[dot <= 0 ? "" : leaf.slice(dot).toLowerCase()] ?? "application/octet-stream";
 }

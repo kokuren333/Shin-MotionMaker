@@ -190,6 +190,11 @@
           "file": "tests/generate-job.test.ts",
           "name": "M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for biim; BOM, cwd, exclusive rerun",
           "status": "M2b"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2a: generate-job compares independent host template loading with the browser template paths and bytes",
+          "status": "M2a"
         }
       ],
       "changes": [
@@ -212,6 +217,11 @@
           "file": "tests/generate-job.test.ts",
           "name": "M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for anime; cwd, exclusive rerun",
           "status": "M2b"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2a: generate-job compares independent host template loading with the browser template paths and bytes",
+          "status": "M2a"
         }
       ],
       "changes": [
@@ -234,6 +244,11 @@
           "file": "tests/generate-job.test.ts",
           "name": "M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for motion; cwd, exclusive rerun",
           "status": "M2b"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2a: generate-job compares independent host template loading with the browser template paths and bytes",
+          "status": "M2a"
         }
       ],
       "changes": [
@@ -256,6 +271,11 @@
           "file": "tests/generate-job.test.ts",
           "name": "M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for mixed; cwd, exclusive rerun",
           "status": "M2b"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2a: generate-job compares independent host template loading with the browser template paths and bytes",
+          "status": "M2a"
         }
       ],
       "changes": [
@@ -278,6 +298,11 @@
           "file": "tests/generate-job.test.ts",
           "name": "M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for mv; cwd, exclusive rerun",
           "status": "M2b"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2a: generate-job compares independent host template loading with the browser template paths and bytes",
+          "status": "M2a"
         }
       ],
       "changes": [

@@ -6,7 +6,7 @@ import ts from "typescript";
 import * as core from "../src/core/index.ts";
 import { hash, readJson, repository } from "./helpers/templates.ts";
 
-type Target = { file: string; name: string; status: "active" | "M2b" };
+type Target = { file: string; name: string; status: "active" | "M2a" | "M2b" };
 type Mapping = { source: { file: string; name: string }; targets: Target[]; changes: string[] };
 
 function namedTests(file: string, source: string): Target[] {
@@ -15,7 +15,7 @@ function namedTests(file: string, source: string): Target[] {
   function visit(node: ts.Node) {
     if (ts.isCallExpression(node) && ["test", "test.todo"].includes(node.expression.getText(ast))) {
       const title = node.arguments[0];
-      const status = node.expression.getText(ast) === "test.todo" ? "M2b" : "active";
+      const status = node.expression.getText(ast) === "test.todo" ? (title.getText(ast).includes("M2a:") ? "M2a" : "M2b") : "active";
       if (ts.isStringLiteralLike(title)) found.push({ file, name: title.text, status });
       else if (ts.isTemplateExpression(title)) {
         assert.equal(title.templateSpans.length, 1, file);
@@ -32,35 +32,42 @@ function namedTests(file: string, source: string): Target[] {
   return found;
 }
 
-test("TS-01 ledger covers every baseline test and points to existing active tests or explicit M2b todos", async () => {
+test("TS-01 ledger covers every baseline test once and points to existing active tests or explicit M2a M2b todos", async () => {
   const inventory = await readJson("test-inventory.json");
   const ledger = JSON.parse(await fs.readFile(new URL("./fixtures/porting-ledger.json", import.meta.url), "utf8")) as { source_count: number; mappings: Mapping[] };
   const id = (item: { file: string; name: string }) => `${item.file}\0${item.name}`;
   assert.equal(ledger.source_count, inventory.count);
   assert.equal(ledger.mappings.length, inventory.count);
   assert.deepEqual(ledger.mappings.map((item) => id(item.source)).sort(), inventory.tests.map(id).sort());
+  assert.equal(new Set(ledger.mappings.map((item) => id(item.source))).size, inventory.count);
   const files = new Map<string, Target[]>();
   for (const filename of await fs.readdir(path.join(repository, "tests"))) if (filename.endsWith(".test.ts")) {
     const file = `tests/${filename}`;
     files.set(file, namedTests(file, await fs.readFile(path.join(repository, file), "utf8")));
   }
   const doc = await fs.readFile(path.join(repository, "docs/PORTING_LEDGER.md"), "utf8");
+  const rows = doc.split("\n").filter((line) => line.startsWith("| tests/")).map((line) => {
+    const [, file, name, targets, changes] = line.split("|").map((cell) => cell.trim());
+    return { source: { file, name }, targets, changes };
+  });
+  assert.deepEqual(rows.map((row) => id(row.source)).sort(), inventory.tests.map(id).sort());
   const active = new Set<string>();
   const todos = new Set<string>();
   let entirelyTransferred = 0;
   for (const mapping of ledger.mappings) {
-    assert.ok(doc.includes(mapping.source.name), mapping.source.name);
+    const row = rows.find((row) => id(row.source) === id(mapping.source))!;
+    assert.equal(row.targets, mapping.targets.map((target) => `${target.file}: ${target.name}`).join(" / "));
+    assert.equal(row.changes, mapping.changes.join("・") || "変更なし");
     assert.ok(mapping.targets.length);
     assert.ok(mapping.changes.every((kind) => ["P1", "P2", "P3", "P4"].includes(kind)));
     if (!mapping.targets.some((target) => target.status === "active")) entirelyTransferred++;
     for (const target of mapping.targets) {
-      assert.ok(files.get(target.file)?.some((existing) => id(existing) === id(target) && existing.status === target.status), target.name);
-      assert.ok(doc.includes(target.name), target.name);
+      assert.equal(files.get(target.file)?.filter((existing) => id(existing) === id(target) && existing.status === target.status).length, 1, target.name);
       (target.status === "active" ? active : todos).add(id(target));
     }
   }
   assert.equal(entirelyTransferred, 2);
-  assert.equal(todos.size, 9);
+  assert.equal(todos.size, 10);
   assert.ok(active.size >= inventory.count - entirelyTransferred);
   assert.ok([...files.values()].flat().filter((entry) => entry.status === "active").length >= inventory.count - entirelyTransferred);
 });

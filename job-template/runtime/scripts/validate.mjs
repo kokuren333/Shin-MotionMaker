@@ -307,12 +307,14 @@ if (errors.length) {
     "Structural checks passed. Visual and audio QA still requires watching and listening.",
   );
 
-await fs.mkdir(path.join(root, "reports"), { recursive: true });
-await fs.writeFile(path.join(root, "reports/validate.json"), JSON.stringify({
-  schema: "smm.validate/1",
-  final: process.argv.includes("--final"),
-  double_render: process.argv.includes("--double-render"),
-  verdict: errors.length ? "fail" : "pass",
-  checks: reportChecks,
-  advisories: reportAdvisories,
-}, null, 2) + "\n");
+try {
+  await fs.mkdir(path.join(root, "reports"), { recursive: true });
+  await fs.writeFile(path.join(root, "reports/validate.json"), JSON.stringify({
+    schema: "smm.validate/1",
+    final: process.argv.includes("--final"),
+    double_render: process.argv.includes("--double-render"),
+    verdict: errors.length ? "fail" : "pass",
+    checks: reportChecks,
+    advisories: reportAdvisories,
+  }, null, 2) + "\n");
+} catch {}
