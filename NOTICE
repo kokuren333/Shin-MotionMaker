@@ -9,7 +9,10 @@ M0 では基線の生成物・目録および開発ワークフローを収録�
 M1 では生成コア、入力支援、制作ハーネス、原典テストを移植した。
 
 CyberSprite（Apache-2.0、同一オーナー）由来のテーマトークン・アイコン:
-テーマトークン: M4 で記入。テーマ採取元のコミットを記録する。
+テーマトークン: CyberSprite のコミット 20f787d の gui/src/theme/tokens.css
+（ファミリーテーマ「Circuit White / Solder Mask」。a00433c でも同一）を値を変えずに
+gui/src/theme/tokens.css の第1部へ写した。同じバイトを
+tests/fixtures/cybersprite-tokens-20f787d.css に置き、テストで照合する。
 アイコン: CyberSprite のコミット a00433c から、16x16 の GUI アイコン 13 点
 （add、agent、error、eye、folder、human、info、link、remove、settings、sources、
 validate-ok、warning）の原本 .csprite とパレット ui-icons.gpl を無加工で写し、
@@ -47,6 +50,24 @@ M0 の開発用第三者依存（実物の LICENSE を確認済み）:
 - TypeScript 5.9.3: Apache-2.0。Copyright Microsoft Corporation.
 - @types/node 24.10.1: MIT。Copyright Microsoft Corporation.
 - undici-types 7.16.0（推移依存）: MIT。Copyright Matteo Collina and Undici contributors.
+M4 の GUI の第三者依存（実物のライセンス本文を確認済み）:
+- 実行時（Pages の静的サイトに同梱）: react 19.2.4、react-dom 19.2.4、
+  scheduler 0.27.0（推移依存）: いずれも MIT。Copyright Meta Platforms, Inc. and affiliates.
+  jszip とその推移依存は上記 M1 の記載のとおり。
+- 開発用（ビルドだけに使い、配布物に含めない）: vite 7.3.8（MIT、Copyright VoidZero Inc.
+  and Vite contributors）、esbuild 0.27.7（MIT、Copyright 2020 Evan Wallace）、
+  rollup 4.68.3（MIT、Copyright 2017 rollup contributors）、postcss 8.5.33（MIT、
+  Copyright 2013 Andrey Sitnik）、nanoid 3.3.20（MIT、Copyright 2017 Andrey Sitnik）、
+  picocolors 1.1.1（ISC、Copyright 2021-2024 Oleksii Raspopov, Kostiantyn Denysov,
+  Anton Verinov）、source-map-js 1.2.2（BSD-3-Clause、Copyright 2009-2011 Mozilla
+  Foundation and contributors）、tinyglobby 0.2.17（MIT、Copyright 2024 Madeline
+  Gurriarán）、fdir 6.5.0（MIT、Copyright 2023 Abdullah Atta）、picomatch 4.0.7（MIT、
+  Copyright 2017-present Jon Schlinkert）、@types/react 19.2.14・@types/react-dom 19.2.3・
+  @types/estree 1.0.10（MIT、Copyright Microsoft Corporation）、csstype 3.2.3（MIT、
+  Copyright 2017-2018 Fredrik Nicol）。esbuild・rollup のプラットフォーム別バイナリ
+  （@esbuild/*、@rollup/rollup-*）は package.json の MIT 表示だけを持ち、本体と同じ条件。
+- e2e とスクリーンショットは Node 組み込みの WebSocket で既存の Chrome / Edge を
+  DevTools Protocol で操作し、ブラウザ自動化の依存を追加しない。
 MCP SDK 採用版: @modelcontextprotocol/sdk 1.32.2（MIT、Copyright 2024 Anthropic, PBC）。
 M0 では未導入。M3 で依存を追加する。
 
