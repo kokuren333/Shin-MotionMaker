@@ -13,6 +13,13 @@
 | M2b | CLI | 合格 | 91c939f | L2 の手動確認 |
 | M3 | MCP | 合格（条件付き：ubuntu/Node22 未実行） | f40fb77 | M3R（Opus）→ M3-fix、probe 再実行 |
 | M6 | 文書 | 合格 | 7741d95 | L2 がコマンド例を再実行 |
-| M7 | 統合と実機検証 | G4 条件付き合格 → M7-gui・M7-fix で対応中 | e5b7c53 / G4 14c6f16 | G4（Opus） |
+| M7 | 統合と実機検証（M7・M7-add・M7-gui・M7-fix・M7-final・M7-detector） | 合格 | 17d8112 | G4（Opus）条件付き合格 → 必須解消 → G4R2 条件付き合格（工程記録のみ）→ L2 台帳で解消 |
 
 縮退と持ち越し：`docs/work/L2/ENVIRONMENT.md`。オーナーへの質問：`docs/work/L2/OWNER_QUESTIONS.md`。L1 への質問：`docs/work/L2/QUESTIONS.md`。
+
+## M8 以降
+
+| 作業 | 状態 |
+| --- | --- |
+| M8 公開 | **停止（オーナー判断待ち）**：Q-01、main をリモートへ出す経路、author のメールアドレス。`OWNER_QUESTIONS.md` |
+| M9 Fable レビュー | M8 完了後に別途起動（L2 は起動しない） |
