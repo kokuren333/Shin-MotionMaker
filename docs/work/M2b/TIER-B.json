@@ -1,0 +1,103 @@
+{
+  "node": "v24.15.0",
+  "platform": "win32",
+  "records": [
+    {
+      "command": "node dist/cli/main.js setup \".agent-work/cli-tier-b/jobs/Tier B & 全角 空白\"",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0,
+      "status": "completed",
+      "script_exit_code": 0
+    },
+    {
+      "script": "validate.mjs",
+      "args": [],
+      "scenario": "R4 の構造検査完了",
+      "script_exit_code": 0,
+      "completion_stdout": true,
+      "check_error": false
+    },
+    {
+      "command": "node dist/cli/main.js validate \".agent-work/cli-tier-b/jobs/Tier B & 全角 空白\"",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": "pass",
+      "advisories": 0,
+      "status": "completed",
+      "script_exit_code": 0
+    },
+    {
+      "script": "validate.mjs",
+      "args": [],
+      "scenario": "R4 の構造検査不合格",
+      "script_exit_code": 1,
+      "completion_stdout": false,
+      "check_error": true
+    },
+    {
+      "command": "node dist/cli/main.js validate \".agent-work/cli-tier-b/jobs/Tier B & 全角 空白\"",
+      "exit_code": 1,
+      "ok": true,
+      "verdict": "fail",
+      "advisories": 0,
+      "status": "completed",
+      "script_exit_code": 1
+    },
+    {
+      "script": "validate.mjs",
+      "args": [],
+      "scenario": "原典0.4の完了 stdout",
+      "script_exit_code": 0,
+      "completion_stdout": true,
+      "check_error": false
+    },
+    {
+      "command": "node dist/cli/main.js validate \".agent-work/cli-tier-b/jobs/Tier B & 全角 空白\"",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": "pass",
+      "advisories": 0,
+      "status": "completed",
+      "script_exit_code": 0
+    },
+    {
+      "script": "validate.mjs",
+      "args": [],
+      "scenario": "原典0.4の OK 行と検査エラー",
+      "script_exit_code": 1,
+      "completion_stdout": false,
+      "check_error": true
+    },
+    {
+      "command": "node dist/cli/main.js validate \".agent-work/cli-tier-b/jobs/Tier B & 全角 空白\"",
+      "exit_code": 1,
+      "ok": true,
+      "verdict": "fail",
+      "advisories": 0,
+      "status": "completed",
+      "script_exit_code": 1
+    },
+    {
+      "script": "ghost-check.mjs",
+      "args": [
+        "--target=preview",
+        "--no-stills"
+      ],
+      "scenario": "実 ffmpeg による走査完了",
+      "script_exit_code": 0,
+      "completion_stdout": false,
+      "check_error": false
+    },
+    {
+      "command": "node dist/cli/main.js ghost-check \".agent-work/cli-tier-b/jobs/Tier B & 全角 空白\" --target preview --no-stills",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 1,
+      "status": "completed",
+      "script_exit_code": 0
+    }
+  ]
+}

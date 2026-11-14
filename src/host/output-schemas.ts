@@ -49,6 +49,7 @@ const outputs: Record<string, JsonObject> = {
   doctor: obj({ checks: arr(obj({ id: str, available: bool, message: str, details: {} }, ["id", "available", "message"])) }, ["checks"]),
   "schema-list": { oneOf: [obj({ schemas: arr(obj({ name: str, file: str }, ["name", "file"])) }, ["schemas"]), obj({ name: str, schema: raw }, ["name", "schema"])] },
   "operation-inputs": { $defs: inputSchemas },
+  version: obj({ version: str, commit: nullable(str), template_version: str }, ["version", "commit", "template_version"]),
 };
 const checkFact = { type: "object", properties: { kind: { enum: ["validate", "qc-pre", "qc-post", "ghost-check", "ghost-check-preview"] }, available: bool, summary: raw, verdict, review_mode: str, has_waiver: bool, stale: bool }, required: ["kind", "available"], additionalProperties: false };
 outputs["job-status"] = obj({ job: obj({ title: str, mode: { enum: ["mv", "explanation"] }, style_mode: { enum: ["biim", "anime", "motion", "mixed", null] }, schema_version: str, generator: nullable(raw) }, ["title", "mode", "style_mode", "schema_version", "generator"]),
