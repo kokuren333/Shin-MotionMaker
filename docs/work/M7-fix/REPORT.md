@@ -33,6 +33,10 @@
 | `node tools/verify-cli.mjs` | 終了0、54記録。既定出力は追跡外、既存証拠の上書きなし |
 | `node tools/check-licenses.mjs --output .agent-work/m7fix-licenses.json` | 終了0、180項目、導入済130、許容集合外なし、verified:true |
 | `npm test --workspaces --if-present`（main 取込前） | GUI 単体33件 / pass31 / fail1 / skip1。R-2 と異なる2人目配置の期待値で失敗。M7-fix-Q1 に記録し、gui/ を変更せず対応を確認 |
+| `npm run test:e2e --workspace gui` | 41/42、失敗1。solo の2人目の配置を拒否すると期待する既存フィクスチャ。M7-fix-Q1 へ追補 |
+| `npm run build --workspaces --if-present` | 終了0、GUI の型検査と Vite ビルド完了 |
+
+`git merge main` で main `0df32f3` を `c9fb606` に取り込み、衝突なし。G4-M2 の追跡済み発注・判定記録を採用した。`node tools/tier-b.mjs --commit HEAD~1` と runtime-smoke の同指定、および未追跡の一時プローブがある状態で両ツールの `--commit HEAD` を開発用スクリプトから実行した。4件すべて開始前に終了1で拒否し、プローブは finally で削除、作業ツリーはクリーンへ戻った。
 
 最終コミットでの npm test・GUI・ci-local・Tier B/C は後続の証拠節へ記録する。
 
