@@ -2,9 +2,9 @@
 // core validateRequest only.
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { defaults, mimeTypeFor, validateForm, validateRequest, type MotionForm } from "../../src/core/index.ts";
+import { defaults, explainerStyles, mimeTypeFor, validateForm, validateRequest, type MotionForm } from "../../src/core/index.ts";
 import {
-  assetsFor, attachmentsToReselect, checkComplete, duplicateNames, errorLines, parseRequestText,
+  assetsFor, attachmentsToReselect, checkComplete, choiceIssues, choiceProbe, duplicateNames, errorLines, parseRequestText,
   requestFilename, requestFor, requestText,
 } from "../src/lib/request-io.ts";
 
@@ -69,4 +69,29 @@ test("file names: request file name follows the title; duplicate attachment name
   assert.equal(requestFilename({ ...explainer, title: " " }), "request.request.json");
   assert.equal(requestFilename({ ...explainer, title: "a/b:c" }), "b-c.request.json");
   assert.deepEqual(duplicateNames({ form: {}, assets: { sources: ["x.png", "x.png"], character: "c.glb", secondCharacter: "c.glb" } }), ["x.png", "c.glb"]);
+});
+
+test("parseRequestText rejects unknown values of fixed-choice keys with pointers, but keeps unfinished input importable (M4R R1)", () => {
+  const bad = parseRequestText(JSON.stringify({ form: { title: "test", description: "test", audience: "test", styleMode: "unknown" } }));
+  assert.ok(!bad.ok && bad.error.code === "E_INPUT_INVALID");
+  const lines = !bad.ok ? errorLines(bad.error) : [];
+  assert.ok(lines.some((line) => line.startsWith("/form/styleMode：\"unknown\"")), lines.join("\n"));
+  const many = parseRequestText(JSON.stringify({ form: {
+    videoMode: "film", characterMode: "trio", voiceEngine: "x", characterPosition: "top", tempo: "x", energy: "x",
+    motionAmount: "x", biimUsage: "x", characterUsage: "x", evidencePolicy: "x", secondCharacter: { position: "middle" },
+  } }));
+  assert.deepEqual(!many.ok && (many.error.details as { pointer: string }[]).map((entry) => entry.pointer), [
+    "/form/videoMode", "/form/characterMode", "/form/voiceEngine", "/form/characterPosition", "/form/tempo", "/form/energy",
+    "/form/motionAmount", "/form/biimUsage", "/form/characterUsage", "/form/evidencePolicy", "/form/secondCharacter/position",
+  ]);
+  // Unfinished or not yet valid input (empty title, out-of-range numbers, mixed + portrait) still imports.
+  for (const form of [{}, { title: "" }, { durationSec: 1 }, { styleMode: "mixed", width: 1080, height: 1920 }, { videoMode: "mv" }])
+    assert.ok(parseRequestText(JSON.stringify({ form })).ok, JSON.stringify(form));
+});
+
+test("choiceIssues takes the accepted values from core, not from a GUI list", () => {
+  assert.deepEqual(validateForm(choiceProbe, { sources: [], music: { name: "p.wav", data: new Uint8Array(1), size: 1, type: "audio/wav" } }), []);
+  for (const mode of Object.keys(explainerStyles)) assert.deepEqual(choiceIssues({ ...defaults, styleMode: mode as MotionForm["styleMode"] }), []);
+  for (const videoMode of ["explanation", "mv"] as const) assert.deepEqual(choiceIssues({ ...defaults, videoMode }), []);
+  assert.equal(choiceIssues({ ...defaults, styleMode: "toString" as MotionForm["styleMode"] }).length, 1);
 });
