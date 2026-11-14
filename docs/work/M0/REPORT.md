@@ -112,3 +112,74 @@ Linuxは手元に無く、リモートも未作成なのでubuntuのCIは未実�
 - 見た目の判断は行っていない。README・AGENTS・WORKFLOW等の文面仕上げはM6へ残した。GUI・アイコンは未作成。
 - 採取不能の指定成果物、固定不能の生成内容はない。実レンダー・外部音声／画像生成はM0範囲外。
 - リモートrepo作成・push・npm公開は行っていない。_handoffは編集していない。
+
+## M0b — M0R の反映と添付基線の追加
+
+### 起動時と変更点
+
+- 2026-11-14、L3 Codex 6.1 sol / high。main、基準コミット `6d9268774370eeda30f0b2312ff4762c6410ad35`、開始時の作業ツリーはクリーン。モデル切替・下請けなし（レベル1相当）、自己判定となるゲートなし。
+- REQUIREMENTS の指定節、ルート AGENTS、CONTRACT、WORKFLOW、M0 REVIEW 全文・QUESTIONS を確認。Windows、Node v24.15.0、npm 11.12.1、コマンド実行・依存取得可能。見た目・README の推敲は実施していない。
+- `docs/CONTRACT.md`：冒頭の改訂履歴と、L2 が採用した必須6件・推奨14件・参考9件を反映。M0 QUESTIONS の回答3件を記入。
+- `tools/capture-baseline.mjs`：原典 CLI の MIME 拡張子表を直接読み、合成 .md・.csv・.pdf・.png を持つ explainer-attachments を追加。PROVENANCE、R2 のキー位置・版正規化を含む allowed-diffs、基線11ケースを更新。
+- `tests/fixtures-baseline.test.ts`：11ケースの目録・保存本文を検査し、添付4形式の MIME と元ファイルのバイト一致を表明。
+- `.gitattributes`：PDF を binary に指定。xref 行の仕様上の行末空白と基線本文を保ち、差分検査のテキスト空白警告を避ける。
+
+### 受け入れ条件と証拠（判定は L2）
+
+| 条件 | 実施状況・証拠 |
+| --- | --- |
+| CONTRACT が裁定を反映し改訂履歴がある | M0b 履歴を追加。項目ごとの対応は次表。これは契約文書の改訂であり、後続 API の実装済み宣言ではない |
+| M0 QUESTIONS に回答 | M0-Q1〜Q3 の回答欄へ L2 裁定と決定日を記録。新規の契約・要件質問はなし |
+| 基線11ケース | `node --experimental-strip-types tools/capture-baseline.mjs --source <原典の複製>` を既存の M0 採取用スクラッチ（clone --no-hardlinks 済み、HEAD 262c798）で再実行。11ケース、ZIP内ファイル合計775件。原典テスト81件成功・失敗0 |
+| 原典 CLI と新ケースの一致 | 一時検証 `node .agent-work/m0b-verify.mjs` で原典複製の `tools/generate-job.ts <新ケースrequest> --out=<一時出力>` を shell:false で実行。出力72ファイルすべてのパス・サイズ・SHA-256が新基線と一致。PNG の全チャンク CRC と1×1画素の展開データも確認 |
+| 既存10ケースの再採取が不変 | 同検証で基準コミットの143追跡ファイルと再採取本文を Buffer 比較し全件一致。既存の template-manifest・test-inventory・validate-form-messages も差分なし |
+| npm test・型検査 | `npm test`：6件成功・失敗0、`npm run build`：終了0 |
+| 浅い複製で CI | `node tools/ci-local.mjs`：基線コミット `2579d78bc02534fdec1994814f7a2225d6946bd8` の深さ1の複製で npm ci・build・test・GUI任意test/build がすべて終了0。6件成功・失敗0。GUI は既存 placeholder のため任意スクリプト対象なし |
+| 差分・範囲 | `git diff --check <基準コミット>...HEAD`：PDF binary 属性追加後に出力なし。原典・CyberSprite・job-template・要件本文・_handoff は変更していない。push・repo作成・公開なし |
+
+### レビュー項目 → CONTRACT の節
+
+| 項目 | CONTRACT の節・反映内容 |
+| --- | --- |
+| M-1 | §5・§6：CheckResult を result 直下、開始中は null、run_get の結果は平坦化、run は封筒へ |
+| M-2 | §1・§3・§4・§5・§6：JobPath / DisplayPath、cwd・root・restrictToRoot、allow-dir の request.assets 絶対パス例外、永続 job の除外、TS-05 比較基準 |
+| M-3 | §2：共通 mimeTypeFor、File.type を使わない、AR-06 の契約上の決定と添付基線 |
+| M-4 | §1：version.ts、PACKAGE_VERSION 一致、TEMPLATE_VERSION 0.5.0、目録ハッシュ、generator キー位置・順序、R2 正規化、GUI version.json |
+| M-5 | §9 R4：schema:smm.validate/1、final・double_render・checks・advisories、errors のみから verdict、可変時刻なし |
+| M-6 | §4・§5：runs wait は終端 exit_code、get/list/logs と detach 開始成功は0 |
+| R-1 | §3：readRunLog の差分、UTF-8バイトoffset、CLI前面ログ。MCP log_offset は足さない |
+| R-2 | §8：report の更新時刻と started_at、QC・ghost の終了コード照合、不整合 E_INTERNAL |
+| R-3 | §2・§3・§8：SmmError、ジョブ・動画不足・JSON破損の分類、入力details、事前失敗でrunを作らない |
+| R-4 | §3・§8：依存要求3操作、runtime基準のresolve共通関数、ブラウザは事前拒否しない |
+| R-5 | §4 argv表：全操作の配列引数、ghost値の `=` を拒否 |
+| R-6 | §4：timeout×1000+300,000、win32のrefs・ジョブルート実パスの事前拒否、原典imagegen維持 |
+| R-7 | §1・§2：原典export全件、createBrief主名、StyleMode再export、caption-capacity参照例外と配布 |
+| R-8 | §2・§5：文脈の写像、MVの無視をnotesへ、axes、実seed、共通候補入口 |
+| R-9 | §2：script statsのshape、添付未読、空sourcesのproject、speedのGUI規則 |
+| R-10 | §7：records全パス、ghost-check-preview、ghostのsummary、style_mode、構造化hints |
+| R-11 | §2・§5：QC助言の写像、ghost-count、SKIPPED/SKIP/GHOST、封筒advisoriesの共有 |
+| R-12 | §3：MCP doctorの接続許可と未確認、CLI voice/doctorの明示呼出許可 |
+| R-13 | §3：全run・project_patch・studioの共通ジョブ排他 |
+| R-14 | §3：テキスト4形式・PNG、ghost-stills、8 MiB、それ以外E_PATH_DENIED |
+| I-1 | §1：CharacterForm L8〜20、MotionForm L22〜74、defaults L101〜166 |
+| I-4 | §3：exposedInReadOnlyへ改名 |
+| I-5 | §6：run IDの8桁hexとCLI.md例の方針 |
+| I-6 | §2：AR-06ではmusicDurationSecを明示 |
+| I-7 | §9：MCP outputSchemaとsnapshot |
+| I-8 | §6：pidはworker、script_pidも記録 |
+| I-9 | §6：進捗トークンがあるときRun.progressから通知 |
+| I-10 | §1：Sha256は小文字16進64桁 |
+| I-2・I-3・I-11 | §6・§8・§2：取消E_INTERNAL、E_RUN_NOT_FOUND/3、coreの乱数seed方針を維持 |
+
+### 決定・依存・残課題
+
+- 決定：MCP run_get に任意の log_offset は追加せず、CLI 内部の readRunLog で差分を取得する。
+- 決定：候補の実seedを保持する共通入口 candidatesFor を core に定義し、原典関数の export と結果は維持する。
+- 決定：run_cancel も run 情報を封筒に置き result:null、getRun は封筒を返す型とし、run_get の result を二重にしない。
+- 決定：imagegen の可変上限を操作表で表せるよう timeoutMs に入力から算出する関数を許す。
+- 決定：テンプレート目録は相対パスのコード単位順、{path,sha256}配列のJSON.stringify＋LFをハッシュ化し、版とハッシュの対応もテストで固定する。
+- 決定：追加添付は小さい合成データ。PNG は初回確認の CRC 不一致を修正して再採取済み。PDF は外部ライブラリなしで1ページとxrefを構築した。既存10ケースの本文は変更しない。
+- 契約・要件への新規質問なし。M0-Q1〜Q3 は今回の L2 裁定を記録済み。
+- 追加依存なし。LICENSE・NOTICE の変更なし。原典の依存は既存の採取複製だけで使用した。
+- 残課題：core・host・Schema・CLI・MCP・GUI の実装と契約の機械的表明は M1 以降。exit 1 の実測固定は M2b。今回の受け入れ判定は L2 に委ねる。
+- 見た目・文面の判断を要する新規 TODO はなし。M0 の既存 TODO は継続。下請けなし。
