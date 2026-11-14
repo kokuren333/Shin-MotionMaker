@@ -408,3 +408,42 @@ GitHub Pages を「GitHub Actions」から配信する設定で有効化し、ma
 ### M8 の残課題1
 
 M8 の残課題1（「Runtime smoke の CI（windows runner）が失敗する」）は、PR #4 を main にマージし、main の push で `runtime-smoke.yml` が成功した時点で解消とする。マージ後の main の run は、後続の PR でこの節の続きとして記録する。
+
+### PR #4 のマージと main の push
+
+- PR head `9bb143d1864b6e81dd6236b4d96d8bafa048a7e1` で、CI（[PR run 43647846207](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43647846207)・[push run 43647843379](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43647843379)）の全8ジョブと、Runtime smoke の手動実行 [run 43647851377](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43647851377) が success だった。runtime smoke では CLI・MCP とも8 run completed、preview・final は `cpu`／`libx264`（試行 588・559ms／568・550ms）。
+- 同じ head の ci-local（`node tools/ci-local.mjs`、深さ1の複製）も終了0だった。本体 227件（pass225 / fail0 / skip2）、GUI 単体 34件（pass34）、e2e 42/42、GUI ビルド。生ログは追跡外で、SHA-256 は `4c5a9dfe97dd40a4ec4c8b2289e1ac76d54a111f5e483065b76773b1a8e1e392`。
+- 交差レビューの判定：approve with notes。指摘への対応は [REPORT](docs/work/CPU/REPORT.md#交差レビュー継続実装)。
+- [PR #4](https://github.com/kokuren333/Shin-MotionMaker/pull/4) は GitHub のマージ（マージコミット）で取り込み、head の SHA を指定した。main は **`5b9558c576cc00ab28869b83ddd8a8b37902d6e2`** になった。マージコミットの木（`a3e74fd`）は検証済みの head と同じ。ローカルでのマージと強制 push は使っていない。
+
+main の push での実行（すべて `status: completed`、`conclusion: success`）：
+
+| ワークフロー | run | ジョブ |
+| --- | --- | --- |
+| CI | [43648499517](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43648499517) | ubuntu/24・ubuntu/22・windows/24・tier-b すべて success |
+| Pages | [43648499515](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43648499515) | build（22:31:07〜22:34:27）・deploy（〜22:34:46）・verify（〜22:35:25）すべて success |
+| Runtime smoke | [43648499601](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43648499601) | success。CLI（22:31:36〜22:33:02）・MCP（22:33:05〜22:34:51）とも8 run completed、protocol_errors 0、`nvcuda` 0件。preview・final は `route=cpu encoder=libx264 MOTION_JOB_ENCODER=auto (unset)`（試行 567・552ms／566・549ms）。[runner-43648499601-cli.json](docs/work/CPU/evidence/runner-43648499601-cli.json)、[runner-43648499601-mcp.json](docs/work/CPU/evidence/runner-43648499601-mcp.json) |
+
+- **手元からの公開後確認**：次のコマンドを 2026-11-14T22:36Z 頃に実行し、終了0、1回目で合格した。
+
+  ```
+  node tools/verify-pages.mjs https://kokuren333.github.io/Shin-MotionMaker/ --expect-commit 5b9558c576cc00ab28869b83ddd8a8b37902d6e2 --screenshot … --output …
+  ```
+
+  - `version.json` の commit は `5b9558c…` と一致した（version 0.1.0、template_version **0.5.3**、built_at 22:34:21Z）。
+  - JS・CSS が取得できた。見出し「動画ジョブを作成」・7区画・「ジョブのZIPを生成」ボタンがあり、コンソールエラーは 0。
+  - 出力は [verify-pages-5b9558c.json](docs/work/CPU/evidence/verify-pages-5b9558c.json)。
+- **公開前後のスクリーンショット**：公開 URL の画面（1440×900）の SHA-256 は `3bfedde3aeda625194daeca2036212b397f4c48dbabed5c15bc5b0253bba5c0e`。公開前の基準 M7-gui の S1 と**同じバイト**だった。
+
+**M8 の残課題1は、これで解消した。** GPU の無い GitHub Windows runner で、main の push の Runtime smoke が CLI・MCP の両経路とも成功した（CI-11）。M8 の残課題2（`readJobBytes` の再試行のテスト）は残っている。
+
+### 版 0.1.1 とタグの条件
+
+- この節を含む PR で、`package.json`・`package-lock.json`（ルート）・`src/core/data/version.ts` の `PACKAGE_VERSION` を **0.1.1** に上げる。版を表明するテスト `tests/cli.test.ts` も合わせる。
+  - テンプレートの版（0.5.3）とスキーマは変えない。
+  - `gui/package.json`（非公開の workspace、0.1.0）は変えない。画面の版の表示は core の `PACKAGE_VERSION` を使う。
+- **タグ `v0.1.1` は、この PR のマージコミットに付ける。** 付ける条件は、そのコミットの main の push で次がすべて成功し、手元からの `verify-pages` が合格していること（CI-11）。
+  - `ci.yml`（4ジョブ）
+  - `pages.yml`（3ジョブ。公開後確認 CI-08 を含む）
+  - `runtime-smoke.yml`
+- タグと push は、オーナーの承認の範囲で行う。実装担当はタグを付けていない。

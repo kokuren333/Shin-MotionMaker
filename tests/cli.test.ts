@@ -74,7 +74,7 @@ test("TS-02 advisory-only execution exits zero and CLI results match shared oper
   const candidates = await cli(["candidates", "--mode", "explanation", "--seed", "42", "--count", "2"], context.root);
   const shared = await execute(cliContext(context.root), "candidates", { mode: "explanation", seed: 42, count: 2 });
   assert.ok(shared.ok && candidates.envelope.ok); assert.deepEqual(candidates.envelope.result, shared.result);
-  const version = await cli(["version"], context.root, true); assert.equal(version.code, 0); assert.ok(version.envelope.ok); assert.equal(version.envelope.result.version, "0.1.0");
+  const version = await cli(["version"], context.root, true); assert.equal(version.code, 0); assert.ok(version.envelope.ok); assert.equal(version.envelope.result.version, "0.1.1");
 });
 
 test("M7-fix detach preserves worker launch failure as ok false and exit four", async (t) => {
