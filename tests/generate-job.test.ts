@@ -233,6 +233,7 @@ test("M2b: generate-job rejects existing empty directories and files without cha
 test("M2b: generate-job reports usage and exits 1 for missing, duplicate or unsupported arguments; use contract exit codes", async () => {
   for (const args of [[], ["generate"], ["generate", "x"], ["generate", "x", "--out="], ["generate", "x", "--out", "a", "--out", "b"], ["generate", "x", "--out", "a", "--unknown"], ["generate", "x", "extra", "--out", "a"]]) {
     const result = await cli(args, repository); assert.equal(result.code, 2); assert.ok(!result.envelope.ok); assert.equal(result.envelope.error.code, "E_USAGE");
+    assert.equal(result.envelope.command, args.length ? "generate" : "");
   }
   const help = await cli(["schema", "operation-inputs"], repository);
   assert.equal(help.code, 0); assert.ok(help.envelope.ok); assert.equal(help.envelope.result.name, "smm.operation-inputs/1");

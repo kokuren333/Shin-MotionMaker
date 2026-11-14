@@ -11,13 +11,14 @@ const positionalFields: Partial<Record<OperationId, readonly string[]>> = {
   run_list: ["job"], run_cancel: ["job", "run_id"], doctor: ["job"], schema: ["name"], studio: ["job"],
 };
 export const cliCommands = operations.flatMap((operation) => operation.cli.map((command) => ({ command, operation })));
+export const findCliCommand = (args: string[]) => cliCommands.find(({ command }) => command.split(" ").every((word, index) => args[index] === word));
 export type Invocation = { definition: OperationDefinition; command: string; input: Record<string, unknown>; human: boolean; detach: boolean };
 
 export function parseCommand(argv: string[]): Invocation {
   const args = [...argv];
   let humanPrefix = false;
   if (args[0] === "--human") { humanPrefix = true; args.shift(); }
-  const found = cliCommands.find(({ command }) => command.split(" ").every((word, index) => args[index] === word));
+  const found = findCliCommand(args);
   if (!found) throw hostError("E_USAGE", "コマンドを指定してください。", `利用できるコマンド: ${cliCommands.map((item) => item.command).join(", ")}`);
   const { operation: definition, command } = found;
   const positionals = positionalFields[definition.id] ?? [];

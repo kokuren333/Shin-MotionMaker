@@ -1,6 +1,6 @@
 import path from "node:path";
 import { execute, errorExitCode, hostError, normalizeError, readJsonInput, readTextInput, readRunLog, type Envelope, type HostContext, type OperationInputs, type Run } from "../host/index.ts";
-import { parseCommand, type Invocation } from "./commands.ts";
+import { findCliCommand, parseCommand, type Invocation } from "./commands.ts";
 
 type Output = { stdout: (text: string) => void; stderr: (text: string) => void };
 export function cliContext(cwd: string): HostContext {
@@ -79,7 +79,8 @@ export async function runCli(argv: string[], cwd: string, output: Output): Promi
     }
     envelope = encodeReport(envelope);
   } catch (error) {
-    envelope = { schema: "smm.envelope/1", command: invocation?.command ?? argv.slice(0, 2).join(" "), ok: false, error: normalizeError(error), ...(observedRun ? { run: observedRun, job: observedRun.job } : {}) };
+    const args = argv[0] === "--human" ? argv.slice(1) : argv;
+    envelope = { schema: "smm.envelope/1", command: invocation?.command ?? findCliCommand(args)?.command ?? args[0] ?? "", ok: false, error: normalizeError(error), ...(observedRun ? { run: observedRun, job: observedRun.job } : {}) };
   }
   output.stdout(invocation?.human || !invocation && argv.includes("--human") ? humanSummary(envelope) : serializeEnvelope(envelope) + "\n");
   if (!envelope.ok) return errorExitCode(envelope.error.code);

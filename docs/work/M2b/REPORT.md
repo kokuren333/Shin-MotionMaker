@@ -32,7 +32,7 @@
 | CLI 文書例 | node tools/verify-cli.mjs は終了0。[CLI-EXAMPLES.json](CLI-EXAMPLES.json) に54件のコマンド・直接スクリプト実測を保存。標準出力は毎回 JSON.parse と1行検査を実行 |
 | ビルド済み JS | npm run build は終了0。node dist/cli/main.js version / generate / qc 等を上記54件で実行。型除去フラグ・グローバル導入なし |
 | Tier B | npm run test:tier-b は終了0。[TIER-B.json](TIER-B.json) に11件。実依存 setup、validate の pass / fail、原典0.4の report なし pass / fail、実 ffmpeg の ghost 走査を確認 |
-| ci-local | コミット後の深さ1複製で実行し、結果を追記する |
+| ci-local | cfe8593 / 3fa5773 の両コミットで終了0。深さ1の npm ci・build・npm test（186件 / pass 184 / fail 0 / skip 2 / TODO 0）・workspace test / build を完了。最後の command 名整形を含むコミットでも再確認し、CI-LOCAL.json に確定する |
 
 ## 終了コードの実測
 
@@ -55,6 +55,7 @@
 ## 決定
 
 - 操作名・オプション型は共通表を正本とし、位置引数とファイル入力への変換だけを CLI に持つ。新しい場面操作・創造項目・ゲートは追加しない。
+- 引数解析が失敗した場合も、操作表から特定できた主コマンド名を command に返す。位置引数の request パスを command 名へ混ぜない。
 - request は host の readJsonInput で BOM を除去し、requestDirectory をファイル親にして共通 generate に渡す。添付を二重読込しない。
 - 前面待ちは100msの間隔で取得し、ログ本文の既読バイト位置を stream ごとに保持する。取得中に異常を返しても開始済み run を封筒に残す。
 - detach は開始済み run が返れば、開始応答前にスクリプトが異常終了しても開始成功の0を返す。元の失敗は run.error に保持する。開始後の観測だけが失敗した場合は warnings に入れる。即時異常終了の回帰テストを追加した。
@@ -69,6 +70,7 @@
 - 最終の引数処理・PNG 整形・取得エラー時の run 保持を含む npm run build は終了0。
 - node --experimental-strip-types --test --test-name-pattern 'UTF-8 log|reports usage|rejects invalid JSON' tests/cli.test.ts tests/generate-job.test.ts は3件成功 / 失敗0 / skip 0 / TODO 0、終了0。部分文字を含むログの差分転送、原典の全拒否入力、空 out・help 相当の入力定義取得を確認した。
 - node --experimental-strip-types --test --test-name-pattern 'detach survives' tests/cli.test.ts は1件成功 / 失敗0、終了0。遅延なしで異常終了する run の detach 開始0と wait の4を確認した。
+- node --experimental-strip-types --test --test-name-pattern 'reports usage' tests/generate-job.test.ts は1件成功 / 失敗0、終了0。引数解析失敗時も canonical な command 名を返すことを追補した。
 
 ## 契約・要件への質問
 
