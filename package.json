@@ -18,7 +18,9 @@
   "scripts": {
     "test": "node --experimental-strip-types --test \"tests/**/*.test.ts\"",
     "pretest": "npm run build",
-    "test:tier-b": "npm run build && node tools/test-cli-tier-b.mjs",
+    "test:tier-b": "npm run build && node tools/tier-b.mjs",
+    "test:runtime": "npm run build && node tools/runtime-smoke.mjs",
+    "verify:pages:local": "node tools/verify-pages-local.mjs",
     "build": "tsc --noEmit && tsc -p tsconfig.build.json",
     "ci:local": "node tools/ci-local.mjs"
   },

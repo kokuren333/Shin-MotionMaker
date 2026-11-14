@@ -40,4 +40,4 @@ jobs:
             job-template/runtime/package.json
       - run: npm ci
       - run: npm run build
-      - run: node --experimental-strip-types tools/smoke-mcp.ts
+      - run: node tools/tier-b.mjs --commit "${{ github.sha }}"
