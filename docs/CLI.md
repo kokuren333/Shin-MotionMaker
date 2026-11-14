@@ -55,6 +55,7 @@ CLI のコマンドは、host の共通の操作定義表にある名前と入�
 - `--out` は親ディレクトリである。フォルダはその下の `safeName(title)` に、ZIP はその下の `safeName(title)-motion-job.zip` に作る。
 - 既存のファイル・フォルダは、空のフォルダでも上書きしない。
 - 未知のキー・型の誤り・`validateForm` のエラーは、本文を書き出す前に拒否する。
+- 既存の列挙値（fps、1人目・2人目の配置を含む）は core の `formChoices` を共有し、shape 検査から確認する。範囲外の値は `E_INPUT_INVALID` と JSON Pointer 付きの `details` で返す。GUI の request 読込と CLI/MCP の generate・台本統計に共通で適用する。未完成の自由記述は shape 検査で拒否せず、`validateForm` の文言・検査種別は原典のままである。
 - `--dry-run` は生成内容を返すだけで、出力先の親フォルダも作らない。
 - MV で音源の尺を補えないときは、`musicDurationSec` を指定するよう案内する。
 
@@ -112,7 +113,7 @@ CLI のコマンドは、host の共通の操作定義表にある名前と入�
 | imagegen.mjs | Codex 不在の SKIPPED は0、strict は1、必要引数不在も1 | SKIPPED は助言 / 0、strict の記録済み SKIPPED だけ fail / 1。入力不正を起動前に2、未分類異常を4とする |
 | aivis.mjs | engine none は0、未対応 engine は1 | none は not_applicable / 0、明示的入力エラーは E_INPUT_INVALID / 2。必要時の疎通不足は E_ENGINE_UNREACHABLE / 3。未分類異常は4 |
 | sound-design.mjs | 生成無効は0、有効な cue の WAV 合成は0、空の cues は1 | 対象外 / 成功0、明示的 plan エラーは E_INPUT_INVALID / 2、未分類異常は4 |
-| run.mjs | 不正 mode は1、依存未導入の preview も1 | CLI は既知 target だけを渡す。依存不足を起動前3とする。成功は0、実行後に判明した道具不足は3、未分類非0は4。実レンダーは M7 |
+| run.mjs | 不正 mode は1、依存未導入の preview も1。M7 の CLI/MCP 実レンダーは元・正規化終了とも0 | CLI は既知 target だけを渡す。依存不足を起動前3とする。成功は0、実行後に判明した道具不足は3、未分類非0は4 |
 | setup（npm） | 実依存の install と、依存なし workspace の install / ci は0。Windows 拡張 cwd の npm URL エラーは1 | 成功0、npm 不在は3、導入失敗は4。拡張 cwd の不具合は host で修正 |
 
 - 使う report は、run の開始日時以降に書かれた最新のものだけである。
@@ -140,6 +141,19 @@ node dist/cli/main.js qc ".agent-work/cli-evidence/jobs/CLI & 全角 空白" --s
 - 最後の例は、生成直後の解説ジョブなので制作記録が無く、`ok: true`・`verdict: fail`・終了コード1になる。道具の故障ではなく、ゲートの不合格である。
 - 各例の結果は [M6 の command-log](work/M6/command-log.md) にある。M2b での実測（検証用の入力を変えた追加の実測を含む）は [CLI-EXAMPLES.json](work/M2b/CLI-EXAMPLES.json) に時系列で載っている。
 - M2b では、ブラウザでの Studio 操作・実レンダー・Aivis の実エンジンへの接続・有償の画像生成は実測していない。
+
+### 統合検証のコマンド
+
+次の構文で、`<SHA>` は検証対象のコミット、`<原典生成ジョブ>` は原典の複製で実際に生成した schema_version 0.4 のジョブを指定する。実行結果・実際の引数・対象コミットは [M7 REPORT](work/M7/REPORT.md) と [VERIFICATION](../VERIFICATION.md) にある。
+
+| コマンド | 内容 |
+| --- | --- |
+| `npm run test:tier-b -- --commit <SHA>` | CLI と MCP の生成→setup→validate。証拠は `.agent-work/m7-evidence/tier-b.json`。ハッシュ採取後に一時ジョブを削除する |
+| `node tools/runtime-smoke.mjs --entry cli --commit <SHA>` | ビルド後に CLI の実レンダーを確認する |
+| `node tools/runtime-smoke.mjs --entry mcp --commit <SHA>` | ビルド後に MCP の実レンダーと run のポーリングを確認する |
+| `node tools/runtime-smoke.mjs --entry cli --legacy-job <原典生成ジョブ> --commit <SHA>` | 原典0.4ジョブの status・report なしの validate pass/fail・QC・レンダー・ghost を確認する |
+
+Tier C は既存の Chrome/Edge を使い、自動導入しない。証拠 JSON・静止画・ghost report を保存し、成功時は一時ジョブの依存と動画を削除する。失敗時は調査用ジョブを保持する。動作確認用ジョブは voice none、音響はジョブ内の合成を使う。実 Aivis・有償画像生成はこの検証に含めない。
 
 ## MCP の起動
 

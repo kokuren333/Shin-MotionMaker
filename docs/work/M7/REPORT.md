@@ -97,3 +97,31 @@ ci-local の未加工出力は `.agent-work/m7-evidence/ci.log`（SHA-256 `bf767
 - 実公開 URL の L2 手元検査・3ジョブ成功・公開前後画像比較・実行 URL 記録は M8。手元 Pages のスクリーンショットは比較用証拠であり、見た目の判定ではない。
 - M2a/M3 が記録したパス照合とプロセス照合の競合、粗い mtime、進捗トークン対応の限界は継続。M7 で安全境界を変更していない。
 - 見た目・文面の判断事項は既存 M4/M5/M6 の担当へ残す。追加の主観的ゲート・表現制限は設けていない。
+
+## M7-add
+
+### 実装と取り込み
+
+- 開始時 HEAD は `47de25f`、`m7-integration` の追跡変更なし。`git merge main` により main `7741d9594e30305339b8736ee6e2c49591c89384` を `6789f2a` で取り込んだ。衝突なし。M6 の指定文書はそのまま採用し、その後、追補で許可された README・CLI・MCP の M7 技術変更だけを反映した。
+- テンプレートは0.5.2、目録 SHA-256 は `9e01031edccf35664747a3c38528381b3a52469f74c64ed3164b00de4e30d70a`。Tier C の既存実測はコミット `506a5a893cbb4da0aabfbfa82ecc1d75f6c00d3f`・テンプレート0.5.1、JT-12 の入力は原典262c798生成の0.4・generatorなし。既存 JSON の値・ハッシュを維持し、VERIFICATION に取り込み後の版との関係を明記した。発注どおり実レンダーの再実行はしていない。
+- `tools/verify-cli.mjs` は mcp serve の stdio EOF を正常終了0・stdout空として表明する。`--output` を追加し、M2b の既存実測記録を上書きせず追補の54記録を保存した。
+- `tools/check-licenses.mjs` と型宣言、`tests/licenses.test.ts` を追加した。ルートの workspace lockfile 全体からルート・GUI、実行時・開発時、入れ子依存・OS別 optional を一覧にし、明示的な許容集合と照合する。CI と ci-local の npm ci 後に実行する。既存の MCP 専用監査は保持した。
+- TS-06 は `tests/agents-declaration.test.ts` に冒頭保護文と「このファイルを編集する人・エージェントへ」の段落全文の表明を追加した。`tests/helpers/host.ts` の偽ジョブは PACKAGE_VERSION・TEMPLATE_VERSION を定数から取る。
+- `DOCS_FOLLOWUP.md` の反映先と実行証拠を [COMMANDS_ADD.md](COMMANDS_ADD.md) に記録した。
+
+### 受け入れ条件と証拠
+
+検証中。指定コマンドの結果・件数・対象コミットを、実行終了後に本節と evidence/ に追記する。実装者による G4・受け入れ判定は行わない。
+
+### 決定
+
+- 許容する単一ライセンスは MIT・ISC・BSD-2-Clause・BSD-3-Clause・Apache-2.0・Zlib。jszip の選択式は MIT を選び、既存 pako の MIT AND Zlib は両方を記録する。他の式・未記載は拒否する。
+- 導入済みの版・ライセンスを lockfile と照合し、LICENSE 本文の SHA-256 を保存する。isarray は README の MIT 本文を確認する。本文を本体に置く esbuild・rollup の OS 別バイナリはメタデータの証拠として区別する。
+- 現 OS・CPU・libc に非対応で未導入の optional 依存も lockfile の許諾表示を照合し、本文を読んだものと区別する。対応環境で必要な依存が未導入なら失敗する。Linux の glibc/musl も判別し、その選別をテストした。
+- Tier C・JT-12 の既存証拠は採取当時の版を保持する。README の R3 推敲だけを取り込んだ0.5.2での実レンダー済みという主張はしない。
+
+### 契約・要件への質問、依存、残件
+
+- 新しい契約・要件の質問なし。操作表・封筒・run・スキーマの変更なし。`_handoff/M7/DIRECTION.md` はこの作業ツリーには存在せず、M7 本体の既存 REPORT と会話内の追補発注に従った。
+- 依存追加・版更新なし。既存 NOTICE の jszip MIT 選択、pako MIT AND Zlib と GUI・MCP の許諾記録を維持した。追加依存の LICENSE 確認対象・NOTICE の追記なし。
+- L2 による受け入れ・G4 と、M8 の公開検証が残る。見た目・アイコン・文面の推敲判断は行っていない。モデル切替・サブエージェント利用・原典への書込・push・公開なし。

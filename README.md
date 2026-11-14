@@ -118,3 +118,9 @@ node tools/ci-local.mjs
 ```
 
 `npm test` はビルドしてから全テストを実行します。`tools/ci-local.mjs` は現在のコミットを深さ1で一時フォルダへ複製し、`npm ci` から CI と同じコマンドを実行します。
+
+統合検証では、CLI と MCP の生成→依存導入→構造検査を同じ Tier B の入口から確認します。Windows の実レンダー（Tier C）と原典0.4ジョブの互換確認も実行し、[VERIFICATION.md](VERIFICATION.md) にコミット・出力・画像を記録しています。コマンドの構文と証拠の保存先は [CLI の統合検証](docs/CLI.md#統合検証のコマンド) にあります。
+
+Pages のローカル確認には `npm run verify:pages:local -- --commit <SHA>`（構文）を使います。サブパス配信で正常経路・8種類の不一致・古いコミットからの再試行を確認します。公開後の構文は `node tools/verify-pages.mjs <末尾が / のURL> --expect-commit <SHA>` です。既存の Chrome/Edge が必要で、HTTP・title・コミット・JS/CSS・主要な表示・コンソールを確認し、既定12回・5秒間隔で再試行します。`--attempts`・`--retry-ms`・`--screenshot`・`--output` も指定できます。
+
+Pages は M8 まで手動起動だけです。実レンダーは独立した workflow で、手動と main push から動きます。実公開 URL の確認と公開前後のスクリーンショット比較は M8 で行います。

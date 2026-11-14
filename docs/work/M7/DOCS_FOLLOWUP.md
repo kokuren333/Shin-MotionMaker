@@ -1,5 +1,7 @@
 # M7 から M6・L2 への文書申し送り
 
+M7-add で M6 の main（7741d95）を取り込んだ後、以下の技術的変更を README・docs/CLI.md・docs/MCP.md の該当箇所へ反映した。実行コマンドの構文は既存の M7 実測を根拠とし、追補の実行結果は REPORT の「M7-add」と evidence/ の `*-add` 記録にまとめる。以下は申し送り時点の記録として残す。
+
 M7 は README・AGENTS・CLI・MCP・DESIGN・WORKFLOW とジョブ README を編集していない。以下の技術的変更を、文面担当が必要に応じて反映する。
 
 - `formChoices` は core の公開 API。原典が検査する既存集合のみ（fps・2人目の配置を含む）。shape 段から範囲外の列挙値を `E_INPUT_INVALID` と JSON Pointer 付き details で拒否する。GUI の request 読込にも、CLI/MCP の generate・script stats にも共通で適用される。未完成の自由記述は読み込める。`validateForm` の文言・種類は従来どおり。

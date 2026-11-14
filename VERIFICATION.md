@@ -2,6 +2,8 @@
 
 この文書は検証の証拠の記録である。記録はオーナーの目視を待つ関門ではない（REQUIREMENTS GU-17、原典 Amendment 01 AM-1）。公開（M8）の記録は CI-08 の4条件に従って後から足す。
 
+M7-add では main `7741d9594e30305339b8736ee6e2c49591c89384` を `6789f2a` で取り込み、現在のテンプレート版は **0.5.2**（目録 SHA-256 `9e01031edccf35664747a3c38528381b3a52469f74c64ed3164b00de4e30d70a`）になった。下記 Tier C の実測コミット `506a5a893cbb4da0aabfbfa82ecc1d75f6c00d3f` はテンプレート **0.5.1** を使用した記録であり、JSON 内の generator とハッシュをそのまま保持する。JT-12 の入力は原典262c798生成の schema_version 0.4・generator なしで、template_version は存在しない。今回のテンプレート差分は M6 の R3 README 追記の推敲だけであり、追補発注の指定どおり実レンダーは再実行していない。取り込み後の検証は [M7 REPORT の M7-add](docs/work/M7/REPORT.md#m7-add) に記録する。
+
 ## M4 GUI のスクリーンショット（GU-17）
 
 - 対象：Pages 用ビルド（`gui/scripts/site.mjs`、`base: "./"`）。M4-fix（レビュー M4R の反映）後のコミット `9f08db52726416520362473c5b85cdbe1e1f3a80`（ビルドに `--commit` で埋め込み、情報ダイアログと `version.json` に出る）。M4R 前の記録（`28c7191`、13枚）はこの撮り直しで置き換えた
