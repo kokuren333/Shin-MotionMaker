@@ -1,0 +1,39 @@
+{
+  "sdk": "1.32.2",
+  "platform": "win32",
+  "client_env_MOTION_JOB_ENCODER": "cpu",
+  "default_inherited": [
+    "APPDATA",
+    "HOMEDRIVE",
+    "HOMEPATH",
+    "LOCALAPPDATA",
+    "PATH",
+    "PROCESSOR_ARCHITECTURE",
+    "PROGRAMFILES",
+    "SYSTEMDRIVE",
+    "SYSTEMROOT",
+    "TEMP",
+    "USERNAME",
+    "USERPROFILE"
+  ],
+  "results": {
+    "registration without env": {
+      "tools": 19,
+      "script_saw": "[encoder-env] null"
+    },
+    "registration env MOTION_JOB_ENCODER=cpu": {
+      "tools": 19,
+      "script_saw": "[encoder-env] \"cpu\""
+    },
+    "read-only": {
+      "tools": 9,
+      "script_saw": null
+    },
+    "enable-generation": {
+      "tools": 20,
+      "script_saw": null
+    }
+  },
+  "measured_at": "2026-11-14T21:21:49.835Z",
+  "script": "MCP SDK の StdioClientTransport で mcp serve を起動し、偽のジョブの run.mjs が見た MOTION_JOB_ENCODER を stderr.log から読んだ。クライアント自身の環境には MOTION_JOB_ENCODER=cpu を設定した。"
+}
