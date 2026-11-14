@@ -22,3 +22,10 @@
 | C | 許容差分 R7 として、ジョブの `findFfmpeg` が同梱の ffmpeg を候補から外す、または能力で選ぶ | job-template の変更で要件の改訂が要る。ジョブ単体の利用者（PATH に ffmpeg が無い）にも効く |
 
 - 依存しない範囲は進めた：手元の GPU 機の Tier C（auto・cpu）、二重レンダー、ジョブ単体の `npm run preview`、不正値、試行時間、文書、TS-10、PR の CI。結果は REPORT.md。
+
+## CPU-Q2 R6 の範囲の文言と、二重レンダーの実装の字面が合わない（交差レビューの指摘、軽微）
+
+- 状態：未回答。実装は変えずに、文言の確認だけを求める。
+- 要件 §6.2 R6 の範囲は「`run.mjs`（`preview`・`build` の引数の組み立てと冒頭のコメント）、`ghost-check.mjs`（`renderSecondCopy` の引数の組み立てとそのコメント）」。一方、JT-14・JT-17・JT-18 は、二重レンダーでも選択・`[encoder]` 行・GPU 失敗時の案内を求めている。
+- 実装では、`ghost-check.mjs` に import 1か所、`renderSecondCopy` の中に選択と記録の2行、spawn の後に `noteRenderExit(encoder, code);` の1行がある。`run.mjs` では、`studio`・`still` の配列も `encoder.mjs` に移し（TS-10.5 で原典と同じことを表明）、mode の検査を `RUN_MODES.includes(mode)` にした。
+- 交差レビューの判断は「許容できる。要件の文言を『選択・記録・引数の組み立てと import』に直すことを勧める」。R6 の行の文言を直すかどうかは PM が決める。

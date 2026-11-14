@@ -16,7 +16,7 @@
 | `tests/fixtures/baseline-biimmotion-262c798/allowed-diffs.json` | R6（replacements 9対、appends 1、added_files `runtime/scripts/encoder.mjs`） |
 | `tests/baseline.test.ts` | JT-11：R6 も逆変換して照合。追加ファイルは R3 の `NOTICE` と R6 の `encoder.mjs` だけと表明 |
 | `tests/encoder.test.ts`（新規） | TS-10 の1〜7と、実物の `run.mjs` を偽の Remotion CLI で起動する検査 |
-| `src/core/data/version.ts`、`tests/fixtures/template-versions.json`、`tests/fixtures/template-manifest-0.5.3.json` | テンプレート 0.5.3（目録 SHA-256 `b449c261…`） |
+| `src/core/data/version.ts`、`tests/fixtures/template-versions.json`、`tests/fixtures/template-manifest-0.5.3.json` | テンプレート 0.5.3（目録 SHA-256 `6b5a207b…`） |
 | `tests/fixtures-baseline.test.ts`、`tests/mcp.test.ts` | 固定値の更新：allowed-diffs のハッシュと規則一覧に R6、生成ファイル数 68→69 |
 | `tools/runtime-smoke.mjs` | 各 run の `stderr.log` から `[encoder]` 行と `nvcuda` の件数を証拠に入れ、コンソールにも出す |
 | `docs/REQUIREMENTS.md` | 改訂1の (a)〜(l)。PM 判定のコードブロックを機械的に転記した（文面の変更なし） |
@@ -76,8 +76,8 @@
 
 | # | 状態 | 内容 |
 | --- | --- | --- |
-| E1 | 部分 | PR の CI は success。ci-local は下記。main へはまだ入れていない |
-| E2 | 下記 | 別コンテキストのレビュー |
+| E1 | 部分 | PR の CI は success（`681f42d`：[run 43644048172](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43644048172)）。`tools/ci-local.mjs` は `681f42d` で終了0（本体 227件 225 pass／2 skip／0 fail、GUI 34/34、e2e・両ビルドまで完了）。main へはまだ入れていない |
+| E2 | 済（approve with notes） | 下記「交差レビュー」 |
 | E3 | 未 | マージしていないので Pages の公開後確認は無い |
 | E4 | 対象外 | タグは付けない（発注書） |
 
@@ -97,9 +97,26 @@
 6. **`[encoder]` の形式**：`[encoder] route=<gpu|cpu> encoder=<名前> MOTION_JOB_ENCODER=<auto (unset)|"値"> reason: <理由（試行の成否と ms）>`。試行の所要時間を行に入れたので、C8 は runner のログからも読める。
 7. **テンプレート版は 0.5.3。** 互換を壊さない修正なので patch とした。PACKAGE_VERSION（0.1.0）は変えていない。
 
+## 交差レビュー（E2）
+
+別コンテキストの Opus（実装の結論を渡さず、差分と要件だけを渡した）が `34a7b47..681f42d` をレビューした。判定は **approve with notes**。
+
+| 指摘 | 重さ | 対応 |
+| --- | --- | --- |
+| MV 非退行、R6 の4ファイル、JT-19（新しいゲート・入力なし）、encoder.mjs の JT-15〜18 | 問題なし | — |
+| README の runner の記述が、全工程が通ったように読める | 中 | 直した（runner では preview・still まで、ghost-check で止まっていることと参照を明記） |
+| Linux で時間切れのとき SIGTERM だけでは止まらない可能性 | 軽微 | `killSignal: "SIGKILL"` を足した（Windows の経路は同じ） |
+| `ghost-check.mjs`・`run.mjs` の変更が R6 の行の文言より少し広い | 軽微 | 実装は変えず [CPU-Q2](QUESTIONS.md) で文言の確認を求めた |
+| 試行の前に ffmpeg へ実行権を付けない、node_modules が無いと `[encoder]` 行のあとに本来のエラー | 軽微 | どちらも安全な側。変えていない |
+| 失敗理由に ffmpeg の標準エラーを入れると調べやすい | 助言 | 入れていない。runner のログで「nvcuda の失敗が無い」を確かめる条件（C2）と紛れるため（決定4） |
+| ジョブ README が `validate --final --double-render` も同じ選択を通ると書いていない | 軽微 | 実行して確かめていない用法なので書いていない（D7） |
+
+- `killSignal` の追加で `encoder.mjs` が1行変わったため、最終の head は手元の Tier C を測った `a67b042` と、時間切れのときの停止シグナルだけが違う（Windows の経路は同じ）。CPU-Q1 の対応後に、最終の head で runner と実機の Tier C を取り直す。
+
 ## 質問
 
 - [CPU-Q1](QUESTIONS.md)：runner の ghost-check が、ffmpeg の不在と同梱 ffmpeg の機能不足で失敗する件。推奨は案 A（CI で版を固定した ffmpeg を用意）。
+- [CPU-Q2](QUESTIONS.md)：R6 の範囲の文言の確認（軽微）。
 
 ## 残課題
 

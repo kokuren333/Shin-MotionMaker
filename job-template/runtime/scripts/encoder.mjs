@@ -180,6 +180,7 @@ export function probeNvenc({
       input: testFrame(),
       stdio: ["pipe", "ignore", "pipe"],
       timeout: PROBE_TIMEOUT_MS,
+      killSignal: "SIGKILL",
       windowsHide: true,
     },
   );

@@ -39,7 +39,7 @@ NVIDIA の GPU は必須ではありません。テンプレート 0.5.3 以降�
 
 - CPU では符号化に時間がかかります。CPU と GPU で出力のビットレートとバイトは一致しませんが、検査の合否は変わりません。
 - 環境変数 `MOTION_JOB_ENCODER`（`auto`・`cpu`・`gpu`）で明示できます。レンダーの開始時に、どちらで符号化するかが `[encoder]` で始まる1行で出ます。
-- 実レンダーを確かめたのは Windows です（GPU のある実機と、GPU の無い GitHub の Windows runner）。Linux は同じ分岐を通りますが、実レンダーは確かめていません。macOS は BiimMotion と同じ動作のままで、確かめていません。NVENC 以外のハードウェアエンコーダ（QSV・AMF など）は使いません。
+- 実レンダーを確かめたのは Windows です。GPU のある実機では全工程を、GPU の無い GitHub の Windows runner では CPU での preview と still のレンダーを確かめました（runner ではその後のゴースト検査が ffmpeg の不足で止まっており、未解決です。[VERIFICATION](VERIFICATION.md#cpu-環境対応要件改訂1作業中)）。Linux は同じ分岐を通りますが、実レンダーは確かめていません。macOS は BiimMotion と同じ動作のままで、確かめていません。NVENC 以外のハードウェアエンコーダ（QSV・AMF など）は使いません。
 - それより前のテンプレートで生成したジョブ（BiimMotion が生成したものを含む）では働きません。生成し直すか、ジョブの `runtime/scripts/` の該当ファイルを更新します。
 
 ## GUI
@@ -170,4 +170,4 @@ node tools/ci-local.mjs
 
 Pages のローカル確認には `npm run verify:pages:local -- --commit <SHA>`（構文）を使います。サブパス配信で正常経路・8種類の不一致・古いコミットからの再試行を確認します。公開後の構文は `node tools/verify-pages.mjs <末尾が / のURL> --expect-commit <SHA>` です。既存の Chrome/Edge が必要で、HTTP・title・コミット・JS/CSS・主要な表示・コンソールを確認し、既定12回・5秒間隔で再試行します。`--attempts`・`--retry-ms`・`--screenshot`・`--output` も指定できます。
 
-Pages の workflow は main への push と手動で動き、ビルド・デプロイ・公開後確認の3ジョブがすべて成功したときだけ公開できたとみなします。実レンダーは独立した workflow で、GPU の無い GitHub の Windows runner で、手動と main push から動きます。M8 の実公開 URL の確認と公開前後のスクリーンショット比較は [VERIFICATION.md](VERIFICATION.md#m8-公開) にあります。
+Pages の workflow は main への push と手動で動き、ビルド・デプロイ・公開後確認の3ジョブがすべて成功したときだけ公開できたとみなします。実レンダーは独立した workflow で、GPU の無い GitHub の Windows runner で、手動と main push から動きます（現在はゴースト検査の段で失敗する。[CPU-Q1](docs/work/CPU/QUESTIONS.md)）。M8 の実公開 URL の確認と公開前後のスクリーンショット比較は [VERIFICATION.md](VERIFICATION.md#m8-公開) にあります。
