@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "smm.validate/1",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "const": "smm.validate/1"
+    },
+    "final": {
+      "type": "boolean"
+    },
+    "double_render": {
+      "type": "boolean"
+    },
+    "verdict": {
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "ok",
+              "error",
+              "skip"
+            ]
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "status",
+          "message"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "advisories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "source": {
+            "const": "validate"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "source",
+          "message"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema",
+    "final",
+    "double_render",
+    "verdict",
+    "checks",
+    "advisories"
+  ],
+  "additionalProperties": false
+}

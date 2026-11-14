@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "smm.job-status/1",
+  "type": "object",
+  "properties": {
+    "job": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "mv",
+            "explanation"
+          ]
+        },
+        "style_mode": {
+          "enum": [
+            "biim",
+            "anime",
+            "motion",
+            "mixed",
+            null
+          ]
+        },
+        "schema_version": {
+          "type": "string"
+        },
+        "generator": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "title",
+        "mode",
+        "style_mode",
+        "schema_version",
+        "generator"
+      ],
+      "additionalProperties": false
+    },
+    "deps": {
+      "type": "object",
+      "properties": {
+        "installed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "installed"
+      ],
+      "additionalProperties": false
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "exists": {
+            "type": "boolean"
+          },
+          "bytes": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "modified_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "path",
+          "exists",
+          "bytes",
+          "modified_at"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "scenes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "exists": {
+            "type": "boolean"
+          },
+          "bytes": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "modified_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "path",
+          "exists",
+          "bytes",
+          "modified_at"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "enum": [
+              "validate",
+              "qc-pre",
+              "qc-post",
+              "ghost-check",
+              "ghost-check-preview"
+            ]
+          },
+          "available": {
+            "type": "boolean"
+          },
+          "summary": {
+            "type": "object"
+          },
+          "verdict": {
+            "enum": [
+              "pass",
+              "fail",
+              "not_applicable"
+            ]
+          },
+          "review_mode": {
+            "type": "string"
+          },
+          "has_waiver": {
+            "type": "boolean"
+          },
+          "stale": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "kind",
+          "available"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "runs": {
+      "type": "array",
+      "items": {
+        "$ref": "run.schema.json#/$defs/display"
+      }
+    },
+    "hints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "enum": [
+              "generate",
+              "candidates",
+              "stats",
+              "status",
+              "project_get",
+              "project_patch",
+              "report",
+              "setup",
+              "validate",
+              "qc",
+              "ghost_check",
+              "render",
+              "voice",
+              "sound",
+              "imagegen",
+              "run_get",
+              "run_list",
+              "run_cancel",
+              "doctor",
+              "schema",
+              "studio",
+              "mcp_serve",
+              "version"
+            ]
+          },
+          "input": {
+            "type": "object"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "operation",
+          "input",
+          "note"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "job",
+    "deps",
+    "records",
+    "scenes",
+    "outputs",
+    "checks",
+    "runs",
+    "hints"
+  ],
+  "additionalProperties": false
+}

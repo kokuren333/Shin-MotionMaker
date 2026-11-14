@@ -1,0 +1,900 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "smm.run/1",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.run/1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^r-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{8}$"
+        },
+        "kind": {
+          "enum": [
+            "setup",
+            "validate",
+            "qc",
+            "ghost_check",
+            "render",
+            "voice",
+            "sound",
+            "imagegen"
+          ]
+        },
+        "args": {
+          "type": "object"
+        },
+        "status": {
+          "enum": [
+            "running",
+            "completed",
+            "failed",
+            "cancelled",
+            "timed_out",
+            "lost"
+          ]
+        },
+        "exit_code": {
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            null
+          ]
+        },
+        "pid": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "script_pid": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "started_at": {
+          "type": "string"
+        },
+        "heartbeat_at": {
+          "type": "string"
+        },
+        "ended_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "progress": {
+          "type": "object",
+          "properties": {
+            "ratio": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "ratio",
+            "text"
+          ],
+          "additionalProperties": false
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "started_by": {
+          "enum": [
+            "cli",
+            "mcp"
+          ]
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "enum": [
+                "pass",
+                "fail",
+                "not_applicable"
+              ]
+            },
+            "report": {
+              "anyOf": [
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "artifacts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "report",
+            "artifacts"
+          ],
+          "additionalProperties": false
+        },
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "enum": [
+                "E_USAGE",
+                "E_INPUT_INVALID",
+                "E_FORM_INVALID",
+                "E_PATH_DENIED",
+                "E_JOB_NOT_FOUND",
+                "E_NOT_A_JOB",
+                "E_OUTPUT_EXISTS",
+                "E_DEPS_MISSING",
+                "E_TOOL_MISSING",
+                "E_ENGINE_UNREACHABLE",
+                "E_BUSY",
+                "E_CONFLICT",
+                "E_RUN_NOT_FOUND",
+                "E_RUN_LOST",
+                "E_TIMEOUT",
+                "E_DISABLED",
+                "E_INTERNAL"
+              ]
+            },
+            "message": {
+              "type": "string"
+            },
+            "hint": {
+              "type": "string"
+            },
+            "details": {}
+          },
+          "required": [
+            "code",
+            "message",
+            "hint"
+          ],
+          "additionalProperties": false
+        },
+        "script_exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schema",
+        "id",
+        "kind",
+        "args",
+        "status",
+        "exit_code",
+        "pid",
+        "script_pid",
+        "started_at",
+        "heartbeat_at",
+        "ended_at",
+        "progress",
+        "artifacts",
+        "started_by"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.run/1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^r-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{8}$"
+        },
+        "kind": {
+          "enum": [
+            "setup",
+            "validate",
+            "qc",
+            "ghost_check",
+            "render",
+            "voice",
+            "sound",
+            "imagegen"
+          ]
+        },
+        "args": {
+          "type": "object"
+        },
+        "status": {
+          "enum": [
+            "running",
+            "completed",
+            "failed",
+            "cancelled",
+            "timed_out",
+            "lost"
+          ]
+        },
+        "exit_code": {
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            null
+          ]
+        },
+        "pid": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "script_pid": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "started_at": {
+          "type": "string"
+        },
+        "heartbeat_at": {
+          "type": "string"
+        },
+        "ended_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "progress": {
+          "type": "object",
+          "properties": {
+            "ratio": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "ratio",
+            "text"
+          ],
+          "additionalProperties": false
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "started_by": {
+          "enum": [
+            "cli",
+            "mcp"
+          ]
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "enum": [
+                "pass",
+                "fail",
+                "not_applicable"
+              ]
+            },
+            "report": {
+              "anyOf": [
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "artifacts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "report",
+            "artifacts"
+          ],
+          "additionalProperties": false
+        },
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "enum": [
+                "E_USAGE",
+                "E_INPUT_INVALID",
+                "E_FORM_INVALID",
+                "E_PATH_DENIED",
+                "E_JOB_NOT_FOUND",
+                "E_NOT_A_JOB",
+                "E_OUTPUT_EXISTS",
+                "E_DEPS_MISSING",
+                "E_TOOL_MISSING",
+                "E_ENGINE_UNREACHABLE",
+                "E_BUSY",
+                "E_CONFLICT",
+                "E_RUN_NOT_FOUND",
+                "E_RUN_LOST",
+                "E_TIMEOUT",
+                "E_DISABLED",
+                "E_INTERNAL"
+              ]
+            },
+            "message": {
+              "type": "string"
+            },
+            "hint": {
+              "type": "string"
+            },
+            "details": {}
+          },
+          "required": [
+            "code",
+            "message",
+            "hint"
+          ],
+          "additionalProperties": false
+        },
+        "script_exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "job": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema",
+        "id",
+        "kind",
+        "args",
+        "status",
+        "exit_code",
+        "pid",
+        "script_pid",
+        "started_at",
+        "heartbeat_at",
+        "ended_at",
+        "progress",
+        "artifacts",
+        "started_by",
+        "job"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "record": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.run/1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^r-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{8}$"
+        },
+        "kind": {
+          "enum": [
+            "setup",
+            "validate",
+            "qc",
+            "ghost_check",
+            "render",
+            "voice",
+            "sound",
+            "imagegen"
+          ]
+        },
+        "args": {
+          "type": "object"
+        },
+        "status": {
+          "enum": [
+            "running",
+            "completed",
+            "failed",
+            "cancelled",
+            "timed_out",
+            "lost"
+          ]
+        },
+        "exit_code": {
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            null
+          ]
+        },
+        "pid": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "script_pid": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "started_at": {
+          "type": "string"
+        },
+        "heartbeat_at": {
+          "type": "string"
+        },
+        "ended_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "progress": {
+          "type": "object",
+          "properties": {
+            "ratio": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "ratio",
+            "text"
+          ],
+          "additionalProperties": false
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "started_by": {
+          "enum": [
+            "cli",
+            "mcp"
+          ]
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "enum": [
+                "pass",
+                "fail",
+                "not_applicable"
+              ]
+            },
+            "report": {
+              "anyOf": [
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "artifacts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "report",
+            "artifacts"
+          ],
+          "additionalProperties": false
+        },
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "enum": [
+                "E_USAGE",
+                "E_INPUT_INVALID",
+                "E_FORM_INVALID",
+                "E_PATH_DENIED",
+                "E_JOB_NOT_FOUND",
+                "E_NOT_A_JOB",
+                "E_OUTPUT_EXISTS",
+                "E_DEPS_MISSING",
+                "E_TOOL_MISSING",
+                "E_ENGINE_UNREACHABLE",
+                "E_BUSY",
+                "E_CONFLICT",
+                "E_RUN_NOT_FOUND",
+                "E_RUN_LOST",
+                "E_TIMEOUT",
+                "E_DISABLED",
+                "E_INTERNAL"
+              ]
+            },
+            "message": {
+              "type": "string"
+            },
+            "hint": {
+              "type": "string"
+            },
+            "details": {}
+          },
+          "required": [
+            "code",
+            "message",
+            "hint"
+          ],
+          "additionalProperties": false
+        },
+        "script_exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schema",
+        "id",
+        "kind",
+        "args",
+        "status",
+        "exit_code",
+        "pid",
+        "script_pid",
+        "started_at",
+        "heartbeat_at",
+        "ended_at",
+        "progress",
+        "artifacts",
+        "started_by"
+      ],
+      "additionalProperties": false
+    },
+    "display": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.run/1"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^r-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{8}$"
+        },
+        "kind": {
+          "enum": [
+            "setup",
+            "validate",
+            "qc",
+            "ghost_check",
+            "render",
+            "voice",
+            "sound",
+            "imagegen"
+          ]
+        },
+        "args": {
+          "type": "object"
+        },
+        "status": {
+          "enum": [
+            "running",
+            "completed",
+            "failed",
+            "cancelled",
+            "timed_out",
+            "lost"
+          ]
+        },
+        "exit_code": {
+          "enum": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            null
+          ]
+        },
+        "pid": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "script_pid": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "started_at": {
+          "type": "string"
+        },
+        "heartbeat_at": {
+          "type": "string"
+        },
+        "ended_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "progress": {
+          "type": "object",
+          "properties": {
+            "ratio": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "ratio",
+            "text"
+          ],
+          "additionalProperties": false
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "started_by": {
+          "enum": [
+            "cli",
+            "mcp"
+          ]
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "enum": [
+                "pass",
+                "fail",
+                "not_applicable"
+              ]
+            },
+            "report": {
+              "anyOf": [
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "artifacts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "report",
+            "artifacts"
+          ],
+          "additionalProperties": false
+        },
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "enum": [
+                "E_USAGE",
+                "E_INPUT_INVALID",
+                "E_FORM_INVALID",
+                "E_PATH_DENIED",
+                "E_JOB_NOT_FOUND",
+                "E_NOT_A_JOB",
+                "E_OUTPUT_EXISTS",
+                "E_DEPS_MISSING",
+                "E_TOOL_MISSING",
+                "E_ENGINE_UNREACHABLE",
+                "E_BUSY",
+                "E_CONFLICT",
+                "E_RUN_NOT_FOUND",
+                "E_RUN_LOST",
+                "E_TIMEOUT",
+                "E_DISABLED",
+                "E_INTERNAL"
+              ]
+            },
+            "message": {
+              "type": "string"
+            },
+            "hint": {
+              "type": "string"
+            },
+            "details": {}
+          },
+          "required": [
+            "code",
+            "message",
+            "hint"
+          ],
+          "additionalProperties": false
+        },
+        "script_exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "job": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema",
+        "id",
+        "kind",
+        "args",
+        "status",
+        "exit_code",
+        "pid",
+        "script_pid",
+        "started_at",
+        "heartbeat_at",
+        "ended_at",
+        "progress",
+        "artifacts",
+        "started_by",
+        "job"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

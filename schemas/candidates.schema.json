@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "smm.candidates/1",
+  "type": "object",
+  "properties": {
+    "message": {
+      "type": "string"
+    },
+    "seed": {
+      "type": "integer"
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "axes": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "formatted": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "message",
+    "seed",
+    "notes",
+    "candidates",
+    "axes",
+    "formatted"
+  ],
+  "additionalProperties": false
+}

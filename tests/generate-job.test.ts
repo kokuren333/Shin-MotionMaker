@@ -8,6 +8,7 @@ import fontAssets from "../src/core/data/font-assets.json" with { type: "json" }
 import { defaults, generateJob, buildJobFiles, safeName, validateRequest,
   type CharacterForm, type JobAssets, type MotionForm, type TemplateFiles } from "../src/core/index.ts";
 import { repository, loadAssets, loadTemplates } from "./helpers/templates.ts";
+import { loadTemplates as hostTemplates } from "../src/host/index.ts";
 type PartialForm = Omit<Partial<MotionForm>, "secondCharacter"> & { secondCharacter?: Partial<CharacterForm> };
 let webTemplates: TemplateFiles;
 before(async () => { webTemplates = await loadTemplates(); });
@@ -130,7 +131,11 @@ test("generate-job core rejects unknown keys, invalid types and validation error
   }
 });
 
-test.todo("M2a: generate-job compares independent host template loading with the browser template paths and bytes");
+test("M2a: generate-job compares independent host template loading with the browser template paths and bytes", async () => {
+  const actual = await hostTemplates();
+  assert.deepEqual(Object.keys(actual).sort(), Object.keys(webTemplates).sort());
+  for (const [name, body] of Object.entries(webTemplates)) assert.deepEqual(actual[name], body, name);
+});
 
 test.todo("M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for biim; BOM, cwd, exclusive rerun");
 test.todo("M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for anime; cwd, exclusive rerun");

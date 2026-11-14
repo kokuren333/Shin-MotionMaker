@@ -67,7 +67,7 @@ test("TS-01 ledger covers every baseline test once and points to existing active
     }
   }
   assert.equal(entirelyTransferred, 2);
-  assert.equal(todos.size, 10);
+  assert.equal(todos.size, 9);
   assert.ok(active.size >= inventory.count - entirelyTransferred);
   assert.ok([...files.values()].flat().filter((entry) => entry.status === "active").length >= inventory.count - entirelyTransferred);
 });
