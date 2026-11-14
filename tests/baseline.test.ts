@@ -13,6 +13,12 @@ import { baseline, repository, readJson, hash, fileMap, loadAssets, loadTemplate
 
 const diffs = await readJson("allowed-diffs.json");
 const r1Occurrences = [2, 1, 1, 1, 1, 1, 1, 1, 1];
+// Files whose bytes reverse through enumerated replacements/appends (R1 R3 R4 R6).
+const reversible = ["AGENTS.md", "README.md", "runtime/scripts/validate.mjs", "runtime/scripts/run.mjs", "runtime/scripts/ghost-check.mjs"];
+// Files the template adds to the baseline: R3 NOTICE and R6 encoder.mjs only.
+const addedFiles = diffs.rules.filter((rule: { id: string }) => ["R3", "R6"].includes(rule.id)).flatMap((rule: { added_files: { path: string; sha256: string }[] }) => rule.added_files);
+assert.deepEqual(diffs.rules.find((rule: { id: string }) => rule.id === "R6").added_files.map((entry: { path: string }) => entry.path), ["runtime/scripts/encoder.mjs"]);
+assert.deepEqual(addedFiles.map((entry: { path: string }) => entry.path), ["NOTICE", "runtime/scripts/encoder.mjs"]);
 assert.equal(diffs.rules[0].replacements.length, r1Occurrences.length);
 function reverseText(name: string, text: string): string {
   for (const rule of [...diffs.rules].reverse()) {
@@ -55,22 +61,22 @@ function normalizeGenerated(name: string, bytes: Uint8Array, mv: boolean, styleM
     }
     return new TextEncoder().encode(text);
   }
-  if (["AGENTS.md", "README.md", "runtime/scripts/validate.mjs"].includes(name))
+  if (reversible.includes(name))
     return new TextEncoder().encode(reverseText(name, new TextDecoder().decode(bytes)));
   return bytes;
 }
 
-test("JT-11 template and font bytes reverse only the enumerated R1 R3 R4 differences", async () => {
+test("JT-11 template and font bytes reverse only the enumerated R1 R3 R4 R6 differences", async () => {
   const manifest = await readJson("template-manifest.json");
   const files = { ...Object.fromEntries(Object.entries(await fileMap(path.join(repository, "job-template"))).map(([name, bytes]) => [`job-template/${name}`, bytes])),
     ...Object.fromEntries(Object.entries(await fileMap(path.join(repository, "job-assets/fonts"))).map(([name, bytes]) => [`public/job-assets/fonts/${name}`, bytes])) };
-  const added = diffs.rules.find((rule: { id: string }) => rule.id === "R3").added_files;
+  const added = addedFiles;
   assert.deepEqual(Object.keys(files).sort(), [...manifest.files.map((entry: { path: string }) => entry.path),
     ...added.map((entry: { path: string }) => `job-template/${entry.path}`)].sort());
   for (const entry of manifest.files) {
     let data = files[entry.path];
     const name = entry.path.replace(/^job-template\//, "");
-    if (["AGENTS.md", "README.md", "runtime/scripts/validate.mjs"].includes(name))
+    if (reversible.includes(name))
       data = new TextEncoder().encode(reverseText(name, new TextDecoder().decode(data)));
     assert.equal(hash(data), entry.sha256, entry.path);
     assert.equal(data.byteLength, entry.bytes, entry.path);
@@ -104,7 +110,7 @@ for (const name of await fs.readdir(path.join(baseline, "golden"))) {
     assert.equal(job.rootName, expected.root);
     assert.equal(job.agentPrompt, await fs.readFile(path.join(baseline, prefix, "agent-prompt.txt"), "utf8"));
     const zip = await JSZip.loadAsync((await zipJobFiles(job)).data);
-    const extra = diffs.rules.find((rule: { id: string }) => rule.id === "R3").added_files;
+    const extra = addedFiles;
     assert.deepEqual(Object.keys(zip.files).sort(), [...expected.entries.map((entry: { path: string }) => entry.path),
       ...extra.map((entry: { path: string }) => `${job.rootName}/${entry.path}`)].sort());
     for (const entry of expected.entries) {

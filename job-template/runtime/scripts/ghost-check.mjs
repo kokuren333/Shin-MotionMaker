@@ -36,6 +36,12 @@ import { spawn, spawnSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
 import { prepare, readJSON, root, runtime } from "./lib.mjs";
 import {
+  encoderLine,
+  noteRenderExit,
+  remotionArgs,
+  selectEncoder,
+} from "./encoder.mjs";
+import {
   classifyFlashEvents,
   compareFrameSequences,
   detectSingleFrameEvents,
@@ -142,8 +148,13 @@ export async function decodeTileSignatures(ffmpeg, videoPath) {
   return signatures;
 }
 
-/** Render final a second time (same invocation as run.mjs build). */
+/**
+ * Render final a second time (same invocation as run.mjs build, including
+ * its encoder selection in encoder.mjs).
+ */
 async function renderSecondCopy(outputName) {
+  const encoder = selectEncoder();
+  console.error(encoderLine(encoder));
   await prepare();
   const cliPackage = require.resolve("@remotion/cli/package.json");
   const cliMeta = JSON.parse(await fs.readFile(cliPackage, "utf8"));
@@ -156,25 +167,16 @@ async function renderSecondCopy(outputName) {
       process.execPath,
       [
         executable,
-        "render",
-        "src/index.ts",
-        "MainVideo",
-        `../output/${outputName}`,
-        "--codec=h264",
-        "--audio-codec=aac",
-        "--pixel-format=yuv420p",
-        // Same GPU (NVENC) settings as run.mjs build; see run.mjs for why
-        // the explicit bitrate is required alongside hardware acceleration.
-        "--hardware-acceleration",
-        "if-possible",
-        "--video-bitrate",
-        "16M",
+        // Same arguments as run.mjs build for the chosen encoder (GPU or
+        // CPU); see encoder.mjs for the bitrate and fallback rules.
+        ...remotionArgs("double-render", encoder, `../output/${outputName}`),
       ],
       { cwd: runtime, stdio: "inherit" },
     );
     child.on("error", reject);
     child.on("exit", resolve);
   });
+  noteRenderExit(encoder, code);
   if (code !== 0) throw new Error("second render failed with code " + code);
 }
 

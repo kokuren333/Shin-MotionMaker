@@ -186,6 +186,88 @@
           "to": "制作エージェントが記入する"
         }
       ]
+    },
+    {
+      "id": "R6",
+      "scope": [
+        "runtime/scripts/run.mjs",
+        "runtime/scripts/ghost-check.mjs",
+        "runtime/scripts/encoder.mjs",
+        "README.md"
+      ],
+      "add_files": [
+        "runtime/scripts/encoder.mjs"
+      ],
+      "append_only": [
+        "README.md"
+      ],
+      "preserve": [
+        "gpu-arguments",
+        "exit_code",
+        "stdout",
+        "ghost-detection-logic",
+        "dependencies"
+      ],
+      "note": "レンダーのエンコーダ選択（要件 §6.4、JT-14〜19）。replacementsとappendsは逆変換用。GPUの引数は原典と同じ。CPUは --hardware-acceleration disable でビットレートを渡さない。",
+      "replacements": [
+        {
+          "path": "runtime/scripts/run.mjs",
+          "from": "import { prepare, root, runtime } from \"./lib.mjs\";\n",
+          "to": "import { prepare, root, runtime } from \"./lib.mjs\";\nimport {\n  ENCODED_RENDERS,\n  RUN_MODES,\n  encoderLine,\n  noteRenderExit,\n  remotionArgs,\n  selectEncoder,\n} from \"./encoder.mjs\";\n"
+        },
+        {
+          "path": "runtime/scripts/run.mjs",
+          "from": "// GPU encoding (NVENC): --hardware-acceleration if-possible makes Remotion\n// use h264_nvenc on Windows/Linux machines with an NVIDIA GPU and falls\n// back to libx264 where NVENC is unavailable. NVENC ignores CRF (Remotion's\n// libx264 default is CRF 18), and a bare NVENC encode defaults to ~2 Mbps,\n// so an explicit video bitrate is required to keep quality equivalent:\n// 16M for final (measured libx264 CRF18 finals: 8-14 Mbps at 1080p30) and\n// 8M for the half-scale preview. To revert to CPU encoding, remove the\n// --hardware-acceleration and --video-bitrate flags below (and the matching\n// pair in ghost-check.mjs renderSecondCopy).\nconst modes = {\n  studio: [\"studio\", \"src/index.ts\"],\n  preview: [\n    \"render\",\n    \"src/index.ts\",\n    \"MainVideo\",\n    \"../output/preview.mp4\",\n    \"--scale=0.5\",\n    \"--codec=h264\",\n    \"--audio-codec=aac\",\n    \"--pixel-format=yuv420p\",\n    \"--hardware-acceleration\",\n    \"if-possible\",\n    \"--video-bitrate\",\n    \"8M\",\n  ],\n  build: [\n    \"render\",\n    \"src/index.ts\",\n    \"MainVideo\",\n    \"../output/final.mp4\",\n    \"--codec=h264\",\n    \"--audio-codec=aac\",\n    \"--pixel-format=yuv420p\",\n    \"--hardware-acceleration\",\n    \"if-possible\",\n    \"--video-bitrate\",\n    \"16M\",\n  ],\n  still: [\"still\", \"src/index.ts\", \"MainVideo\", \"../output/preview.png\"],\n};\nif (!modes[mode]) {",
+          "to": "// The Remotion arguments of every mode come from encoder.mjs. preview and\n// build first choose the video encoder there: NVENC (GPU) only when a real\n// one-frame test encode with Remotion's bundled ffmpeg succeeds, otherwise\n// libx264 (CPU). MOTION_JOB_ENCODER=auto|cpu|gpu overrides the choice, and\n// the chosen path is printed as one \"[encoder]\" line on stderr. A failed\n// render is not retried with the other encoder.\nif (!RUN_MODES.includes(mode)) {"
+        },
+        {
+          "path": "runtime/scripts/run.mjs",
+          "from": "  try {\n    await prepare();\n",
+          "to": "  try {\n    const encoder = ENCODED_RENDERS.includes(mode) ? selectEncoder() : null;\n    if (encoder) console.error(encoderLine(encoder));\n    await prepare();\n"
+        },
+        {
+          "path": "runtime/scripts/run.mjs",
+          "from": "[executable, ...modes[mode], ...process.argv.slice(3)],",
+          "to": "[executable, ...remotionArgs(mode, encoder), ...process.argv.slice(3)],"
+        },
+        {
+          "path": "runtime/scripts/run.mjs",
+          "from": "      process.exitCode = code ?? 1;\n",
+          "to": "      process.exitCode = code ?? 1;\n      noteRenderExit(encoder, process.exitCode);\n"
+        },
+        {
+          "path": "runtime/scripts/ghost-check.mjs",
+          "from": "import { prepare, readJSON, root, runtime } from \"./lib.mjs\";\n",
+          "to": "import { prepare, readJSON, root, runtime } from \"./lib.mjs\";\nimport {\n  encoderLine,\n  noteRenderExit,\n  remotionArgs,\n  selectEncoder,\n} from \"./encoder.mjs\";\n"
+        },
+        {
+          "path": "runtime/scripts/ghost-check.mjs",
+          "from": "/** Render final a second time (same invocation as run.mjs build). */\nasync function renderSecondCopy(outputName) {\n  await prepare();\n",
+          "to": "/**\n * Render final a second time (same invocation as run.mjs build, including\n * its encoder selection in encoder.mjs).\n */\nasync function renderSecondCopy(outputName) {\n  const encoder = selectEncoder();\n  console.error(encoderLine(encoder));\n  await prepare();\n"
+        },
+        {
+          "path": "runtime/scripts/ghost-check.mjs",
+          "from": "      [\n        executable,\n        \"render\",\n        \"src/index.ts\",\n        \"MainVideo\",\n        `../output/${outputName}`,\n        \"--codec=h264\",\n        \"--audio-codec=aac\",\n        \"--pixel-format=yuv420p\",\n        // Same GPU (NVENC) settings as run.mjs build; see run.mjs for why\n        // the explicit bitrate is required alongside hardware acceleration.\n        \"--hardware-acceleration\",\n        \"if-possible\",\n        \"--video-bitrate\",\n        \"16M\",\n      ],\n",
+          "to": "      [\n        executable,\n        // Same arguments as run.mjs build for the chosen encoder (GPU or\n        // CPU); see encoder.mjs for the bitrate and fallback rules.\n        ...remotionArgs(\"double-render\", encoder, `../output/${outputName}`),\n      ],\n"
+        },
+        {
+          "path": "runtime/scripts/ghost-check.mjs",
+          "from": "  if (code !== 0) throw new Error(\"second render failed with code \" + code);\n",
+          "to": "  noteRenderExit(encoder, code);\n  if (code !== 0) throw new Error(\"second render failed with code \" + code);\n"
+        }
+      ],
+      "appends": [
+        {
+          "path": "README.md",
+          "text": "\n## レンダーのエンコーダ（GPU・CPU）\n\n`npm run preview`・`npm run build`と、`npm run ghost-check -- --double-render`の2本目のレンダーは、始める前にNVIDIAのGPUのハードウェアエンコーダ（NVENC）で1フレームを実際に符号化してみます。成功すればNVENCで、失敗すれば自動でCPU（libx264）で符号化します。NVIDIAのGPUが無いPCでもレンダーできますが、CPUでは符号化に時間がかかります。macOSでは試行せず、従来どおりの指定でレンダーします。\n\n環境変数`MOTION_JOB_ENCODER`で明示することもできます。\n\n| 値 | 動作 |\n| --- | --- |\n| `auto`（既定。未設定・空も同じ） | 上の試行で選ぶ |\n| `cpu` | 試行せずにCPU（libx264）で符号化する |\n| `gpu` | 試行せずにハードウェアエンコーダ（Windows・LinuxではNVENC）で符号化する。使えなければレンダーは失敗する |\n\n```sh\nMOTION_JOB_ENCODER=cpu npm run preview   # sh・Git Bash\n```\n\n```powershell\n$env:MOTION_JOB_ENCODER = \"cpu\"; npm run preview   # PowerShell（同じウィンドウの以降のコマンドにも効く）\n```\n\nレンダーの開始時に、標準エラーへ`[encoder]`で始まる1行が出ます。`route=gpu`ならハードウェアエンコーダ、`route=cpu`ならCPUで符号化しています。CLI・MCPから実行した場合は、この行がrunの`stderr.log`に残ります。CLI・MCPでは、CLIを起動する環境、またはMCPクライアントの登録の`env`に設定します。\n\n選んだエンコーダでレンダーが失敗しても、別のエンコーダでやり直しはしません。NVENCで失敗したときは`MOTION_JOB_ENCODER=cpu`を付けて実行し直してください。どちらのエンコーダで作った動画も同じ扱いで、検査の合否には影響しません。\n"
+        }
+      ],
+      "added_files": [
+        {
+          "path": "runtime/scripts/encoder.mjs",
+          "sha256": "3d64910ca9f03ba1f4bec4413b9c5afa74c9431b687451def5101162b9b1a1b0"
+        }
+      ]
     }
   ]
 }
