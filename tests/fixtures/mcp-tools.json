@@ -1,0 +1,5328 @@
+{
+  "outputSchema": {
+    "type": "object",
+    "oneOf": [
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "generate"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "$ref": "#/$defs/references/generate"
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "candidates"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "$ref": "#/$defs/references/candidates"
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "stats"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "$ref": "#/$defs/references/text-stats"
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "status"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "$ref": "#/$defs/references/job-status"
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "project get"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "$ref": "#/$defs/references/project-result"
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "project patch"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "$ref": "#/$defs/references/project-result"
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "report"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "$ref": "#/$defs/references/report"
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "doctor"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "$ref": "#/$defs/references/doctor"
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "schema"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "$ref": "#/$defs/references/schema-list"
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "runs get"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "verdict": {
+                "enum": [
+                  "pass",
+                  "fail",
+                  "not_applicable"
+                ]
+              },
+              "report": {
+                "anyOf": [
+                  {
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifacts": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "stdout_tail": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "stderr_tail": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "report",
+              "artifacts",
+              "stdout_tail",
+              "stderr_tail"
+            ],
+            "additionalProperties": false
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "runs list"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "runs": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/references/run/$defs/display"
+                }
+              }
+            },
+            "required": [
+              "runs"
+            ],
+            "additionalProperties": false
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "runs cancel"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "type": "null"
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "version"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "type": "string"
+              },
+              "commit": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "template_version": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "version",
+              "commit",
+              "template_version"
+            ],
+            "additionalProperties": false
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "studio"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "type": "null"
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "mcp serve"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "type": "null"
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "setup"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/references/check"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "validate"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/references/check"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "qc"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/references/check"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "ghost-check"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/references/check"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "render"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/references/check"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "voice"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/references/check"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "sound"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/references/check"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "imagegen"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/references/check"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "runs logs"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "verdict": {
+                "enum": [
+                  "pass",
+                  "fail",
+                  "not_applicable"
+                ]
+              },
+              "report": {
+                "anyOf": [
+                  {
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifacts": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "stdout_tail": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "stderr_tail": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "report",
+              "artifacts",
+              "stdout_tail",
+              "stderr_tail"
+            ],
+            "additionalProperties": false
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "const": "runs wait"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": true
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "verdict": {
+                "enum": [
+                  "pass",
+                  "fail",
+                  "not_applicable"
+                ]
+              },
+              "report": {
+                "anyOf": [
+                  {
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "artifacts": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "stdout_tail": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "stderr_tail": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "report",
+              "artifacts",
+              "stdout_tail",
+              "stderr_tail"
+            ],
+            "additionalProperties": false
+          },
+          "advisories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "details": {}
+              },
+              "required": [
+                "id",
+                "source",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "hint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "result",
+          "advisories",
+          "warnings"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "const": "smm.envelope/1"
+          },
+          "command": {
+            "type": "string"
+          },
+          "job": {
+            "type": "string"
+          },
+          "ok": {
+            "const": false
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "enum": [
+                  "E_USAGE",
+                  "E_INPUT_INVALID",
+                  "E_FORM_INVALID",
+                  "E_PATH_DENIED",
+                  "E_JOB_NOT_FOUND",
+                  "E_NOT_A_JOB",
+                  "E_OUTPUT_EXISTS",
+                  "E_DEPS_MISSING",
+                  "E_TOOL_MISSING",
+                  "E_ENGINE_UNREACHABLE",
+                  "E_BUSY",
+                  "E_CONFLICT",
+                  "E_RUN_NOT_FOUND",
+                  "E_RUN_LOST",
+                  "E_TIMEOUT",
+                  "E_DISABLED",
+                  "E_INTERNAL"
+                ]
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "code",
+              "message",
+              "hint"
+            ],
+            "additionalProperties": false
+          },
+          "run": {
+            "$ref": "#/$defs/references/run/$defs/display"
+          }
+        },
+        "required": [
+          "schema",
+          "command",
+          "ok",
+          "error"
+        ],
+        "additionalProperties": false
+      }
+    ],
+    "$defs": {
+      "results": {
+        "generate": {
+          "$ref": "#/$defs/references/generate"
+        },
+        "candidates": {
+          "$ref": "#/$defs/references/candidates"
+        },
+        "stats": {
+          "$ref": "#/$defs/references/text-stats"
+        },
+        "status": {
+          "$ref": "#/$defs/references/job-status"
+        },
+        "project get": {
+          "$ref": "#/$defs/references/project-result"
+        },
+        "project patch": {
+          "$ref": "#/$defs/references/project-result"
+        },
+        "report": {
+          "$ref": "#/$defs/references/report"
+        },
+        "doctor": {
+          "$ref": "#/$defs/references/doctor"
+        },
+        "schema": {
+          "$ref": "#/$defs/references/schema-list"
+        },
+        "runs get": {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "enum": [
+                "pass",
+                "fail",
+                "not_applicable"
+              ]
+            },
+            "report": {
+              "anyOf": [
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "artifacts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "stdout_tail": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "stderr_tail": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "report",
+            "artifacts",
+            "stdout_tail",
+            "stderr_tail"
+          ],
+          "additionalProperties": false
+        },
+        "runs list": {
+          "type": "object",
+          "properties": {
+            "runs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/references/run/$defs/display"
+              }
+            }
+          },
+          "required": [
+            "runs"
+          ],
+          "additionalProperties": false
+        },
+        "runs cancel": {
+          "type": "null"
+        },
+        "version": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "commit": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "template_version": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "version",
+            "commit",
+            "template_version"
+          ],
+          "additionalProperties": false
+        },
+        "studio": {
+          "type": "null"
+        },
+        "mcp serve": {
+          "type": "null"
+        },
+        "setup": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/references/check"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "validate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/references/check"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "qc": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/references/check"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ghost-check": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/references/check"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "render": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/references/check"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "voice": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/references/check"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sound": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/references/check"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "imagegen": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/references/check"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "runs logs": {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "enum": [
+                "pass",
+                "fail",
+                "not_applicable"
+              ]
+            },
+            "report": {
+              "anyOf": [
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "artifacts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "stdout_tail": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "stderr_tail": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "report",
+            "artifacts",
+            "stdout_tail",
+            "stderr_tail"
+          ],
+          "additionalProperties": false
+        },
+        "runs wait": {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "enum": [
+                "pass",
+                "fail",
+                "not_applicable"
+              ]
+            },
+            "report": {
+              "anyOf": [
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "artifacts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "stdout_tail": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "stderr_tail": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "report",
+            "artifacts",
+            "stdout_tail",
+            "stderr_tail"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "enum": [
+              "E_USAGE",
+              "E_INPUT_INVALID",
+              "E_FORM_INVALID",
+              "E_PATH_DENIED",
+              "E_JOB_NOT_FOUND",
+              "E_NOT_A_JOB",
+              "E_OUTPUT_EXISTS",
+              "E_DEPS_MISSING",
+              "E_TOOL_MISSING",
+              "E_ENGINE_UNREACHABLE",
+              "E_BUSY",
+              "E_CONFLICT",
+              "E_RUN_NOT_FOUND",
+              "E_RUN_LOST",
+              "E_TIMEOUT",
+              "E_DISABLED",
+              "E_INTERNAL"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "hint": {
+            "type": "string"
+          },
+          "details": {}
+        },
+        "required": [
+          "code",
+          "message",
+          "hint"
+        ],
+        "additionalProperties": false
+      },
+      "advisory": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "details": {}
+        },
+        "required": [
+          "id",
+          "source",
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "references": {
+        "generate": {
+          "type": "object",
+          "properties": {
+            "job": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "archive": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "dry_run": {
+              "type": "boolean"
+            },
+            "file_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "project": {
+              "$ref": "#/$defs/references/project"
+            },
+            "project_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "agent_prompt": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "job",
+            "archive",
+            "dry_run",
+            "file_count",
+            "project",
+            "project_sha256",
+            "agent_prompt"
+          ],
+          "additionalProperties": false
+        },
+        "project": {
+          "type": "object",
+          "properties": {
+            "schema_version": {
+              "enum": [
+                "0.4",
+                "0.5"
+              ]
+            },
+            "title": {
+              "type": "string"
+            },
+            "mode": {
+              "enum": [
+                "mv",
+                "explanation"
+              ]
+            },
+            "generator": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "const": "shin-motionmaker"
+                },
+                "version": {
+                  "type": "string"
+                },
+                "template_version": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "version",
+                "template_version"
+              ],
+              "additionalProperties": false
+            },
+            "scenes": {
+              "type": "array",
+              "items": {}
+            }
+          },
+          "required": [
+            "schema_version",
+            "title",
+            "mode",
+            "scenes"
+          ],
+          "additionalProperties": true,
+          "oneOf": [
+            {
+              "properties": {
+                "schema_version": {
+                  "const": "0.4"
+                }
+              }
+            },
+            {
+              "properties": {
+                "schema_version": {
+                  "const": "0.5"
+                }
+              },
+              "required": [
+                "generator"
+              ]
+            }
+          ]
+        },
+        "run": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "schema": {
+                  "const": "smm.run/1"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^r-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{8}$"
+                },
+                "kind": {
+                  "enum": [
+                    "setup",
+                    "validate",
+                    "qc",
+                    "ghost_check",
+                    "render",
+                    "voice",
+                    "sound",
+                    "imagegen"
+                  ]
+                },
+                "args": {
+                  "type": "object"
+                },
+                "status": {
+                  "enum": [
+                    "running",
+                    "completed",
+                    "failed",
+                    "cancelled",
+                    "timed_out",
+                    "lost"
+                  ]
+                },
+                "exit_code": {
+                  "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    null
+                  ]
+                },
+                "pid": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "script_pid": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "started_at": {
+                  "type": "string"
+                },
+                "heartbeat_at": {
+                  "type": "string"
+                },
+                "ended_at": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "progress": {
+                  "type": "object",
+                  "properties": {
+                    "ratio": {
+                      "anyOf": [
+                        {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "ratio",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                },
+                "artifacts": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "started_by": {
+                  "enum": [
+                    "cli",
+                    "mcp"
+                  ]
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "verdict": {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    "report": {
+                      "anyOf": [
+                        {
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "artifacts": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "report",
+                    "artifacts"
+                  ],
+                  "additionalProperties": false
+                },
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "E_USAGE",
+                        "E_INPUT_INVALID",
+                        "E_FORM_INVALID",
+                        "E_PATH_DENIED",
+                        "E_JOB_NOT_FOUND",
+                        "E_NOT_A_JOB",
+                        "E_OUTPUT_EXISTS",
+                        "E_DEPS_MISSING",
+                        "E_TOOL_MISSING",
+                        "E_ENGINE_UNREACHABLE",
+                        "E_BUSY",
+                        "E_CONFLICT",
+                        "E_RUN_NOT_FOUND",
+                        "E_RUN_LOST",
+                        "E_TIMEOUT",
+                        "E_DISABLED",
+                        "E_INTERNAL"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "hint": {
+                      "type": "string"
+                    },
+                    "details": {}
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "hint"
+                  ],
+                  "additionalProperties": false
+                },
+                "script_exit_code": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "schema",
+                "id",
+                "kind",
+                "args",
+                "status",
+                "exit_code",
+                "pid",
+                "script_pid",
+                "started_at",
+                "heartbeat_at",
+                "ended_at",
+                "progress",
+                "artifacts",
+                "started_by"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "schema": {
+                  "const": "smm.run/1"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^r-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{8}$"
+                },
+                "kind": {
+                  "enum": [
+                    "setup",
+                    "validate",
+                    "qc",
+                    "ghost_check",
+                    "render",
+                    "voice",
+                    "sound",
+                    "imagegen"
+                  ]
+                },
+                "args": {
+                  "type": "object"
+                },
+                "status": {
+                  "enum": [
+                    "running",
+                    "completed",
+                    "failed",
+                    "cancelled",
+                    "timed_out",
+                    "lost"
+                  ]
+                },
+                "exit_code": {
+                  "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    null
+                  ]
+                },
+                "pid": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "script_pid": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "started_at": {
+                  "type": "string"
+                },
+                "heartbeat_at": {
+                  "type": "string"
+                },
+                "ended_at": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "progress": {
+                  "type": "object",
+                  "properties": {
+                    "ratio": {
+                      "anyOf": [
+                        {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "ratio",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                },
+                "artifacts": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "started_by": {
+                  "enum": [
+                    "cli",
+                    "mcp"
+                  ]
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "verdict": {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    "report": {
+                      "anyOf": [
+                        {
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "artifacts": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "report",
+                    "artifacts"
+                  ],
+                  "additionalProperties": false
+                },
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "E_USAGE",
+                        "E_INPUT_INVALID",
+                        "E_FORM_INVALID",
+                        "E_PATH_DENIED",
+                        "E_JOB_NOT_FOUND",
+                        "E_NOT_A_JOB",
+                        "E_OUTPUT_EXISTS",
+                        "E_DEPS_MISSING",
+                        "E_TOOL_MISSING",
+                        "E_ENGINE_UNREACHABLE",
+                        "E_BUSY",
+                        "E_CONFLICT",
+                        "E_RUN_NOT_FOUND",
+                        "E_RUN_LOST",
+                        "E_TIMEOUT",
+                        "E_DISABLED",
+                        "E_INTERNAL"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "hint": {
+                      "type": "string"
+                    },
+                    "details": {}
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "hint"
+                  ],
+                  "additionalProperties": false
+                },
+                "script_exit_code": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "job": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "schema",
+                "id",
+                "kind",
+                "args",
+                "status",
+                "exit_code",
+                "pid",
+                "script_pid",
+                "started_at",
+                "heartbeat_at",
+                "ended_at",
+                "progress",
+                "artifacts",
+                "started_by",
+                "job"
+              ],
+              "additionalProperties": false
+            }
+          ],
+          "$defs": {
+            "record": {
+              "type": "object",
+              "properties": {
+                "schema": {
+                  "const": "smm.run/1"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^r-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{8}$"
+                },
+                "kind": {
+                  "enum": [
+                    "setup",
+                    "validate",
+                    "qc",
+                    "ghost_check",
+                    "render",
+                    "voice",
+                    "sound",
+                    "imagegen"
+                  ]
+                },
+                "args": {
+                  "type": "object"
+                },
+                "status": {
+                  "enum": [
+                    "running",
+                    "completed",
+                    "failed",
+                    "cancelled",
+                    "timed_out",
+                    "lost"
+                  ]
+                },
+                "exit_code": {
+                  "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    null
+                  ]
+                },
+                "pid": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "script_pid": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "started_at": {
+                  "type": "string"
+                },
+                "heartbeat_at": {
+                  "type": "string"
+                },
+                "ended_at": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "progress": {
+                  "type": "object",
+                  "properties": {
+                    "ratio": {
+                      "anyOf": [
+                        {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "ratio",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                },
+                "artifacts": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "started_by": {
+                  "enum": [
+                    "cli",
+                    "mcp"
+                  ]
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "verdict": {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    "report": {
+                      "anyOf": [
+                        {
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "artifacts": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "report",
+                    "artifacts"
+                  ],
+                  "additionalProperties": false
+                },
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "E_USAGE",
+                        "E_INPUT_INVALID",
+                        "E_FORM_INVALID",
+                        "E_PATH_DENIED",
+                        "E_JOB_NOT_FOUND",
+                        "E_NOT_A_JOB",
+                        "E_OUTPUT_EXISTS",
+                        "E_DEPS_MISSING",
+                        "E_TOOL_MISSING",
+                        "E_ENGINE_UNREACHABLE",
+                        "E_BUSY",
+                        "E_CONFLICT",
+                        "E_RUN_NOT_FOUND",
+                        "E_RUN_LOST",
+                        "E_TIMEOUT",
+                        "E_DISABLED",
+                        "E_INTERNAL"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "hint": {
+                      "type": "string"
+                    },
+                    "details": {}
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "hint"
+                  ],
+                  "additionalProperties": false
+                },
+                "script_exit_code": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "schema",
+                "id",
+                "kind",
+                "args",
+                "status",
+                "exit_code",
+                "pid",
+                "script_pid",
+                "started_at",
+                "heartbeat_at",
+                "ended_at",
+                "progress",
+                "artifacts",
+                "started_by"
+              ],
+              "additionalProperties": false
+            },
+            "display": {
+              "type": "object",
+              "properties": {
+                "schema": {
+                  "const": "smm.run/1"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^r-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{8}$"
+                },
+                "kind": {
+                  "enum": [
+                    "setup",
+                    "validate",
+                    "qc",
+                    "ghost_check",
+                    "render",
+                    "voice",
+                    "sound",
+                    "imagegen"
+                  ]
+                },
+                "args": {
+                  "type": "object"
+                },
+                "status": {
+                  "enum": [
+                    "running",
+                    "completed",
+                    "failed",
+                    "cancelled",
+                    "timed_out",
+                    "lost"
+                  ]
+                },
+                "exit_code": {
+                  "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    null
+                  ]
+                },
+                "pid": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "script_pid": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "started_at": {
+                  "type": "string"
+                },
+                "heartbeat_at": {
+                  "type": "string"
+                },
+                "ended_at": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "progress": {
+                  "type": "object",
+                  "properties": {
+                    "ratio": {
+                      "anyOf": [
+                        {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "ratio",
+                    "text"
+                  ],
+                  "additionalProperties": false
+                },
+                "artifacts": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "started_by": {
+                  "enum": [
+                    "cli",
+                    "mcp"
+                  ]
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "verdict": {
+                      "enum": [
+                        "pass",
+                        "fail",
+                        "not_applicable"
+                      ]
+                    },
+                    "report": {
+                      "anyOf": [
+                        {
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "artifacts": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "report",
+                    "artifacts"
+                  ],
+                  "additionalProperties": false
+                },
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "E_USAGE",
+                        "E_INPUT_INVALID",
+                        "E_FORM_INVALID",
+                        "E_PATH_DENIED",
+                        "E_JOB_NOT_FOUND",
+                        "E_NOT_A_JOB",
+                        "E_OUTPUT_EXISTS",
+                        "E_DEPS_MISSING",
+                        "E_TOOL_MISSING",
+                        "E_ENGINE_UNREACHABLE",
+                        "E_BUSY",
+                        "E_CONFLICT",
+                        "E_RUN_NOT_FOUND",
+                        "E_RUN_LOST",
+                        "E_TIMEOUT",
+                        "E_DISABLED",
+                        "E_INTERNAL"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "hint": {
+                      "type": "string"
+                    },
+                    "details": {}
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "hint"
+                  ],
+                  "additionalProperties": false
+                },
+                "script_exit_code": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "job": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "schema",
+                "id",
+                "kind",
+                "args",
+                "status",
+                "exit_code",
+                "pid",
+                "script_pid",
+                "started_at",
+                "heartbeat_at",
+                "ended_at",
+                "progress",
+                "artifacts",
+                "started_by",
+                "job"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "candidates": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "seed": {
+              "type": "integer"
+            },
+            "notes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "candidates": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "axes": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "formatted": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "message",
+            "seed",
+            "notes",
+            "candidates",
+            "axes",
+            "formatted"
+          ],
+          "additionalProperties": false
+        },
+        "text-stats": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "lines": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "sections": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "longest": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "longLines": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "blocks": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "lines",
+                "sections",
+                "longest",
+                "longLines",
+                "blocks"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "characters": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "estimatedSeconds": {
+                  "type": "number"
+                },
+                "headings": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "blocks": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "longestSentence": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "overCapacitySentences": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "numericLines": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "captionBoxes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              },
+              "required": [
+                "characters",
+                "estimatedSeconds",
+                "headings",
+                "blocks",
+                "longestSentence",
+                "overCapacitySentences",
+                "numericLines",
+                "captionBoxes"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "job-status": {
+          "type": "object",
+          "properties": {
+            "job": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "mode": {
+                  "enum": [
+                    "mv",
+                    "explanation"
+                  ]
+                },
+                "style_mode": {
+                  "enum": [
+                    "biim",
+                    "anime",
+                    "motion",
+                    "mixed",
+                    null
+                  ]
+                },
+                "schema_version": {
+                  "type": "string"
+                },
+                "generator": {
+                  "anyOf": [
+                    {
+                      "type": "object"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "title",
+                "mode",
+                "style_mode",
+                "schema_version",
+                "generator"
+              ],
+              "additionalProperties": false
+            },
+            "deps": {
+              "type": "object",
+              "properties": {
+                "installed": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "installed"
+              ],
+              "additionalProperties": false
+            },
+            "records": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "exists": {
+                    "type": "boolean"
+                  },
+                  "bytes": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "modified_at": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "path",
+                  "exists",
+                  "bytes",
+                  "modified_at"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "scenes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "outputs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "exists": {
+                    "type": "boolean"
+                  },
+                  "bytes": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "modified_at": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "path",
+                  "exists",
+                  "bytes",
+                  "modified_at"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "checks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "validate",
+                      "qc-pre",
+                      "qc-post",
+                      "ghost-check",
+                      "ghost-check-preview"
+                    ]
+                  },
+                  "available": {
+                    "type": "boolean"
+                  },
+                  "summary": {
+                    "type": "object"
+                  },
+                  "verdict": {
+                    "enum": [
+                      "pass",
+                      "fail",
+                      "not_applicable"
+                    ]
+                  },
+                  "review_mode": {
+                    "type": "string"
+                  },
+                  "has_waiver": {
+                    "type": "boolean"
+                  },
+                  "stale": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "available"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "runs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/references/run/$defs/display"
+              }
+            },
+            "hints": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "operation": {
+                    "enum": [
+                      "generate",
+                      "candidates",
+                      "stats",
+                      "status",
+                      "project_get",
+                      "project_patch",
+                      "report",
+                      "setup",
+                      "validate",
+                      "qc",
+                      "ghost_check",
+                      "render",
+                      "voice",
+                      "sound",
+                      "imagegen",
+                      "run_get",
+                      "run_list",
+                      "run_cancel",
+                      "doctor",
+                      "schema",
+                      "studio",
+                      "mcp_serve",
+                      "version"
+                    ]
+                  },
+                  "input": {
+                    "type": "object"
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "input",
+                  "note"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "job",
+            "deps",
+            "records",
+            "scenes",
+            "outputs",
+            "checks",
+            "runs",
+            "hints"
+          ],
+          "additionalProperties": false
+        },
+        "project-result": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "project": {},
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "pointer": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "project",
+                "sha256"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              },
+              "required": [
+                "sha256"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "report": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "mime_type": {
+                  "type": "string"
+                },
+                "truncated": {
+                  "type": "boolean"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "mime_type",
+                "truncated",
+                "text"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "mime_type": {
+                  "const": "image/png"
+                },
+                "truncated": {
+                  "type": "boolean"
+                },
+                "data": {
+                  "type": "string"
+                },
+                "encoding": {
+                  "const": "base64"
+                }
+              },
+              "required": [
+                "path",
+                "mime_type",
+                "truncated",
+                "data",
+                "encoding"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "doctor": {
+          "type": "object",
+          "properties": {
+            "checks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "available": {
+                    "type": "boolean"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "details": {}
+                },
+                "required": [
+                  "id",
+                  "available",
+                  "message"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "checks"
+          ],
+          "additionalProperties": false
+        },
+        "schema-list": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "schemas": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "file": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "file"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "schemas"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "name",
+                "schema"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "check": {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "enum": [
+                "pass",
+                "fail",
+                "not_applicable"
+              ]
+            },
+            "report": {
+              "anyOf": [
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "artifacts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "report",
+            "artifacts"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "$id": "smm.envelope/1"
+  },
+  "tools": [
+    {
+      "name": "job_generate",
+      "description": "同じ request と添付からジョブを生成します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "request": {
+            "type": "object",
+            "properties": {
+              "form": {
+                "type": "object",
+                "properties": {
+                  "videoMode": {
+                    "type": "string"
+                  },
+                  "styleMode": {
+                    "type": "string"
+                  },
+                  "takeaway": {
+                    "type": "string"
+                  },
+                  "priorKnowledge": {
+                    "type": "string"
+                  },
+                  "outline": {
+                    "type": "string"
+                  },
+                  "explainerDifferentiation": {
+                    "type": "string"
+                  },
+                  "musicMood": {
+                    "type": "string"
+                  },
+                  "musicLyrics": {
+                    "type": "string"
+                  },
+                  "musicDurationSec": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "differentiation": {
+                    "type": "string"
+                  },
+                  "imageGeneration": {
+                    "type": "boolean"
+                  },
+                  "videoGeneration": {
+                    "type": "boolean"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "audience": {
+                    "type": "string"
+                  },
+                  "durationSec": {
+                    "type": "number"
+                  },
+                  "urls": {
+                    "type": "string"
+                  },
+                  "instructions": {
+                    "type": "string"
+                  },
+                  "design": {
+                    "type": "string"
+                  },
+                  "characterNotes": {
+                    "type": "string"
+                  },
+                  "characterMode": {
+                    "type": "string"
+                  },
+                  "characterName": {
+                    "type": "string"
+                  },
+                  "characterReading": {
+                    "type": "string"
+                  },
+                  "characterPersonality": {
+                    "type": "string"
+                  },
+                  "characterSpeakingStyle": {
+                    "type": "string"
+                  },
+                  "characterRole": {
+                    "type": "string"
+                  },
+                  "characterPosition": {
+                    "type": "string"
+                  },
+                  "subtitleColor": {
+                    "type": "string"
+                  },
+                  "secondCharacter": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "reading": {
+                        "type": "string"
+                      },
+                      "personality": {
+                        "type": "string"
+                      },
+                      "speakingStyle": {
+                        "type": "string"
+                      },
+                      "role": {
+                        "type": "string"
+                      },
+                      "position": {
+                        "type": "string"
+                      },
+                      "notes": {
+                        "type": "string"
+                      },
+                      "subtitleColor": {
+                        "type": "string"
+                      },
+                      "styleId": {
+                        "type": "number"
+                      },
+                      "voiceSpeed": {
+                        "type": "number"
+                      },
+                      "voiceNotes": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  },
+                  "fullScreen": {
+                    "type": "boolean"
+                  },
+                  "voiceEngine": {
+                    "type": "string"
+                  },
+                  "engineUrl": {
+                    "type": "string"
+                  },
+                  "styleId": {
+                    "type": "number"
+                  },
+                  "voiceSpeed": {
+                    "type": "number"
+                  },
+                  "voiceNotes": {
+                    "type": "string"
+                  },
+                  "generateAudio": {
+                    "type": "boolean"
+                  },
+                  "audioNotes": {
+                    "type": "string"
+                  },
+                  "width": {
+                    "type": "number"
+                  },
+                  "height": {
+                    "type": "number"
+                  },
+                  "fps": {
+                    "type": "number"
+                  },
+                  "tempo": {
+                    "type": "string"
+                  },
+                  "energy": {
+                    "type": "string"
+                  },
+                  "motionAmount": {
+                    "type": "string"
+                  },
+                  "biimUsage": {
+                    "type": "string"
+                  },
+                  "characterUsage": {
+                    "type": "string"
+                  },
+                  "diagramPolicy": {
+                    "type": "string"
+                  },
+                  "allowWebResearch": {
+                    "type": "boolean"
+                  },
+                  "evidencePolicy": {
+                    "type": "string"
+                  }
+                },
+                "required": [],
+                "additionalProperties": false
+              },
+              "assets": {
+                "type": "object",
+                "properties": {
+                  "sources": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "character": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
+                  },
+                  "secondCharacter": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
+                  },
+                  "bgm": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
+                  },
+                  "music": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
+                  }
+                },
+                "required": [],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "form"
+            ],
+            "additionalProperties": false
+          },
+          "out": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "dir",
+              "zip"
+            ],
+            "default": "dir"
+          },
+          "dry_run": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "request",
+          "out"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "direction_candidates",
+      "description": "方向性のたたき台であり固定の正解ではない候補を返します。自動適用しません。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "mv",
+              "explanation"
+            ]
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20,
+            "default": 3
+          },
+          "characters": {
+            "type": "string",
+            "enum": [
+              "solo",
+              "duo",
+              "none"
+            ],
+            "default": "solo"
+          },
+          "orientation": {
+            "type": "string",
+            "enum": [
+              "landscape",
+              "portrait"
+            ],
+            "default": "landscape"
+          }
+        },
+        "required": [
+          "mode"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "text_stats",
+      "description": "歌詞または台本の統計を助言として返します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "lyrics",
+              "script"
+            ]
+          },
+          "text": {
+            "type": "string"
+          },
+          "request": {
+            "type": "object",
+            "properties": {
+              "form": {
+                "type": "object",
+                "properties": {
+                  "videoMode": {
+                    "type": "string"
+                  },
+                  "styleMode": {
+                    "type": "string"
+                  },
+                  "takeaway": {
+                    "type": "string"
+                  },
+                  "priorKnowledge": {
+                    "type": "string"
+                  },
+                  "outline": {
+                    "type": "string"
+                  },
+                  "explainerDifferentiation": {
+                    "type": "string"
+                  },
+                  "musicMood": {
+                    "type": "string"
+                  },
+                  "musicLyrics": {
+                    "type": "string"
+                  },
+                  "musicDurationSec": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "differentiation": {
+                    "type": "string"
+                  },
+                  "imageGeneration": {
+                    "type": "boolean"
+                  },
+                  "videoGeneration": {
+                    "type": "boolean"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "audience": {
+                    "type": "string"
+                  },
+                  "durationSec": {
+                    "type": "number"
+                  },
+                  "urls": {
+                    "type": "string"
+                  },
+                  "instructions": {
+                    "type": "string"
+                  },
+                  "design": {
+                    "type": "string"
+                  },
+                  "characterNotes": {
+                    "type": "string"
+                  },
+                  "characterMode": {
+                    "type": "string"
+                  },
+                  "characterName": {
+                    "type": "string"
+                  },
+                  "characterReading": {
+                    "type": "string"
+                  },
+                  "characterPersonality": {
+                    "type": "string"
+                  },
+                  "characterSpeakingStyle": {
+                    "type": "string"
+                  },
+                  "characterRole": {
+                    "type": "string"
+                  },
+                  "characterPosition": {
+                    "type": "string"
+                  },
+                  "subtitleColor": {
+                    "type": "string"
+                  },
+                  "secondCharacter": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "reading": {
+                        "type": "string"
+                      },
+                      "personality": {
+                        "type": "string"
+                      },
+                      "speakingStyle": {
+                        "type": "string"
+                      },
+                      "role": {
+                        "type": "string"
+                      },
+                      "position": {
+                        "type": "string"
+                      },
+                      "notes": {
+                        "type": "string"
+                      },
+                      "subtitleColor": {
+                        "type": "string"
+                      },
+                      "styleId": {
+                        "type": "number"
+                      },
+                      "voiceSpeed": {
+                        "type": "number"
+                      },
+                      "voiceNotes": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  },
+                  "fullScreen": {
+                    "type": "boolean"
+                  },
+                  "voiceEngine": {
+                    "type": "string"
+                  },
+                  "engineUrl": {
+                    "type": "string"
+                  },
+                  "styleId": {
+                    "type": "number"
+                  },
+                  "voiceSpeed": {
+                    "type": "number"
+                  },
+                  "voiceNotes": {
+                    "type": "string"
+                  },
+                  "generateAudio": {
+                    "type": "boolean"
+                  },
+                  "audioNotes": {
+                    "type": "string"
+                  },
+                  "width": {
+                    "type": "number"
+                  },
+                  "height": {
+                    "type": "number"
+                  },
+                  "fps": {
+                    "type": "number"
+                  },
+                  "tempo": {
+                    "type": "string"
+                  },
+                  "energy": {
+                    "type": "string"
+                  },
+                  "motionAmount": {
+                    "type": "string"
+                  },
+                  "biimUsage": {
+                    "type": "string"
+                  },
+                  "characterUsage": {
+                    "type": "string"
+                  },
+                  "diagramPolicy": {
+                    "type": "string"
+                  },
+                  "allowWebResearch": {
+                    "type": "boolean"
+                  },
+                  "evidencePolicy": {
+                    "type": "string"
+                  }
+                },
+                "required": [],
+                "additionalProperties": false
+              },
+              "assets": {
+                "type": "object",
+                "properties": {
+                  "sources": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "character": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
+                  },
+                  "secondCharacter": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
+                  },
+                  "bgm": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
+                  },
+                  "music": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1
+                  }
+                },
+                "required": [],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "form"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "kind",
+          "text"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "job_status",
+      "description": "ジョブのファイルから毎回状態を導出します。hints は助言です。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "job"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "project_get",
+      "description": "project.json の内容と実バイトの SHA-256 を返します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          },
+          "pointer": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "job"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "project_patch",
+      "description": "SHA-256 を照合して JSON Merge Patch を適用します。場面の内容は検査しません。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          },
+          "patch": {},
+          "expect_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "job",
+          "patch",
+          "expect_sha256"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "report_get",
+      "description": "許可された制作記録・検査結果・PNG を取得します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "job",
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "job_setup",
+      "description": "ジョブの依存導入を run として開始します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          },
+          "wait_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50000
+          }
+        },
+        "required": [
+          "job"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "job_validate",
+      "description": "ジョブ内の構造検査を実行します。助言は合否に影響しません。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          },
+          "wait_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50000
+          },
+          "final": {
+            "type": "boolean",
+            "default": false
+          },
+          "double_render": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "job"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "job_qc",
+      "description": "ジョブ内の QC を実行します。MV は対象外です。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          },
+          "wait_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50000
+          },
+          "stage": {
+            "type": "string",
+            "enum": [
+              "pre",
+              "post"
+            ]
+          }
+        },
+        "required": [
+          "job",
+          "stage"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "job_ghost_check",
+      "description": "ジョブ内のゴースト走査を実行します。検出件数は助言です。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          },
+          "wait_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50000
+          },
+          "target": {
+            "type": "string",
+            "enum": [
+              "preview",
+              "final"
+            ],
+            "default": "final"
+          },
+          "video": {
+            "type": "string"
+          },
+          "double_render": {
+            "type": "boolean"
+          },
+          "keep": {
+            "type": "boolean"
+          },
+          "no_stills": {
+            "type": "boolean"
+          },
+          "max_stills": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "tile_threshold": {
+            "type": "number",
+            "minimum": 0
+          },
+          "min_tiles": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "job"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "job_render",
+      "description": "ジョブ内のレンダースクリプトを実行します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          },
+          "wait_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50000
+          },
+          "target": {
+            "type": "string",
+            "enum": [
+              "preview",
+              "final",
+              "still"
+            ]
+          },
+          "frame": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "job",
+          "target"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "job_voice",
+      "description": "ジョブ内の音声合成を実行します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          },
+          "wait_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50000
+          }
+        },
+        "required": [
+          "job"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "job_sound",
+      "description": "ジョブ内の音響生成を実行します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          },
+          "wait_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50000
+          }
+        },
+        "required": [
+          "job"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "job_imagegen",
+      "description": "画像生成を実行します。未生成は通常は助言です。費用が発生する場合があります。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          },
+          "wait_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50000
+          },
+          "name": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "prompt_file": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "background",
+              "transparent",
+              "character-sheet",
+              "motion",
+              "texture",
+              "prop"
+            ]
+          },
+          "refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "style": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "timeout": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 1800,
+            "default": 900
+          },
+          "force": {
+            "type": "boolean"
+          },
+          "dry_run": {
+            "type": "boolean"
+          },
+          "strict": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "job",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "run_get",
+      "description": "run の状態とログ末尾を取得します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          },
+          "run_id": {
+            "type": "string"
+          },
+          "wait_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50000,
+            "default": 0
+          },
+          "log_tail": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2000,
+            "default": 100
+          }
+        },
+        "required": [
+          "job",
+          "run_id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "run_list",
+      "description": "ジョブの run 台帳を一覧表示します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "job"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "run_cancel",
+      "description": "run の子孫を含めて停止します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          },
+          "run_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "job",
+          "run_id"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "doctor",
+      "description": "実行環境を確認します。自動インストールはしません。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job": {
+            "type": "string"
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    },
+    {
+      "name": "schema_get",
+      "description": "JSON Schema の一覧または本文を取得します。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$ref": "#/outputSchema"
+      }
+    }
+  ]
+}
