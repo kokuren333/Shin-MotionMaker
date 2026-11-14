@@ -103,16 +103,26 @@ export async function jobFile(job: string, relative: string): Promise<string> {
     return target;
   } catch (error) { return pathError(error); }
 }
+// Records are replaced atomically by rename. On POSIX a reader can open the old inode just before
+// the rename, so an identity mismatch is re-verified a few times; a persistent mismatch is denied.
+const identityAttempts = 5;
 export async function openVerified(file: string, recheck: () => Promise<string>, rejectLinks = false): Promise<FileHandle> {
-  let handle: FileHandle | undefined;
-  try {
-    handle = await fs.open(file, "r");
-    const opened = await handle.stat();
-    const actual = await fs.stat(await fs.realpath(await recheck()));
-    if (!opened.isFile() || opened.dev !== actual.dev || opened.ino !== actual.ino || rejectLinks && opened.nlink > 1)
-      throw hostError("E_PATH_DENIED", "読取対象の実体が一致しないか、許可されないリンクです。");
-    return handle;
-  } catch (error) { await handle?.close(); return pathError(error); }
+  for (let attempt = 1; ; attempt++) {
+    let handle: FileHandle | undefined;
+    try {
+      handle = await fs.open(file, "r");
+      const opened = await handle.stat();
+      const actual = await fs.stat(await fs.realpath(await recheck()));
+      if (!opened.isFile() || rejectLinks && opened.nlink > 1)
+        throw hostError("E_PATH_DENIED", "読取対象の実体が一致しないか、許可されないリンクです。");
+      if (opened.dev !== actual.dev || opened.ino !== actual.ino) {
+        await handle.close(); handle = undefined;
+        if (attempt < identityAttempts) { await new Promise((resolve) => setTimeout(resolve, 10 * attempt)); continue; }
+        throw hostError("E_PATH_DENIED", "読取対象の実体が一致しないか、許可されないリンクです。");
+      }
+      return handle;
+    } catch (error) { await handle?.close(); return pathError(error); }
+  }
 }
 export async function readJobBytes(job: string, relative: string): Promise<Buffer> {
   const handle = await openVerified(await jobFile(job, relative), () => jobFile(job, relative));

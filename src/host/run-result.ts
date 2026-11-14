@@ -5,13 +5,17 @@ import type { CheckResult, RunRecord } from "./types.ts";
 import { hostError, isMissing } from "./errors.ts";
 import { assertRelative, jobFile, readProjectFile, openVerified } from "./paths.ts";
 
+// File timestamps come from a coarser clock than Date (one kernel tick on Linux, the system timer on
+// Windows), so a file written just after started_at can carry a slightly earlier mtime.
+const timestampSlackMs = 50;
+const writtenSince = (mtimeMs: number, started: string) => mtimeMs >= Date.parse(started) - timestampSlackMs;
 export async function freshJson(job: string, name: string, started: string): Promise<JsonObject | null> {
   try {
     const file = await jobFile(job, name);
     const handle = await openVerified(file, () => jobFile(job, name));
     let value: unknown;
     try {
-      if ((await handle.stat()).mtimeMs < Date.parse(started)) return null;
+      if (!writtenSince((await handle.stat()).mtimeMs, started)) return null;
       value = JSON.parse(await handle.readFile("utf8"));
     } finally { await handle.close(); }
     if (!value || typeof value !== "object" || Array.isArray(value)) throw Error();
@@ -40,7 +44,7 @@ export function resultAdvisories(run: RunRecord): Advisory[] {
 }
 async function freshArtifact(job: string, relative: string, started: string): Promise<boolean> {
   assertRelative(relative);
-  try { return (await fs.stat(await jobFile(job, relative))).mtimeMs >= Date.parse(started); }
+  try { return writtenSince((await fs.stat(await jobFile(job, relative))).mtimeMs, started); }
   catch (error) { if (isMissing(error)) return false; throw error; }
 }
 export async function collectRunResult(job: string, run: RunRecord, code: number | null, stdout: string, stderr: string): Promise<{ result: CheckResult; exit_code: 0 | 1 }> {
