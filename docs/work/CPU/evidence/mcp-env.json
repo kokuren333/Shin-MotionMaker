@@ -21,7 +21,7 @@
       "tools": 19,
       "script_saw": "[encoder-env] null"
     },
-    "registration env MOTION_JOB_ENCODER=cpu": {
+    "registration env {\"MOTION_JOB_ENCODER\":\"cpu\"}": {
       "tools": 19,
       "script_saw": "[encoder-env] \"cpu\""
     },
@@ -34,6 +34,6 @@
       "script_saw": null
     }
   },
-  "measured_at": "2026-11-14T21:21:49.835Z",
-  "script": "MCP SDK の StdioClientTransport で mcp serve を起動し、偽のジョブの run.mjs が見た MOTION_JOB_ENCODER を stderr.log から読んだ。クライアント自身の環境には MOTION_JOB_ENCODER=cpu を設定した。"
+  "measured_at": "2026-11-14T21:25:09.349Z",
+  "method": "MCP SDK 1.32.2 の StdioClientTransport に、登録と同じ形（command・args・env）を渡して mcp serve を起動した。クライアント自身の環境には MOTION_JOB_ENCODER=cpu を設定した。偽のジョブの run.mjs が見た値を run の stderr.log から読んだ。SDK は既定で引き継ぐ変数（default_inherited）に登録の env を重ねる。"
 }

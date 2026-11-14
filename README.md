@@ -35,6 +35,13 @@ Shin-MotionMaker は、モーショングラフィックス動画（MV・解説�
 
 どれも自動ではインストールしません。手元の状態は `doctor` で確かめられます（[CLI](#cli)）。
 
+NVIDIA の GPU は必須ではありません。テンプレート 0.5.3 以降で生成したジョブは、レンダーの前に NVIDIA の GPU のハードウェアエンコーダ（NVENC）で1フレームを実際に符号化してみて、使えれば NVENC（BiimMotion と同じ設定）、使えなければ自動で CPU（libx264）で符号化します。
+
+- CPU では符号化に時間がかかります。CPU と GPU で出力のビットレートとバイトは一致しませんが、検査の合否は変わりません。
+- 環境変数 `MOTION_JOB_ENCODER`（`auto`・`cpu`・`gpu`）で明示できます。レンダーの開始時に、どちらで符号化するかが `[encoder]` で始まる1行で出ます。
+- 実レンダーを確かめたのは Windows です（GPU のある実機と、GPU の無い GitHub の Windows runner）。Linux は同じ分岐を通りますが、実レンダーは確かめていません。macOS は BiimMotion と同じ動作のままで、確かめていません。NVENC 以外のハードウェアエンコーダ（QSV・AMF など）は使いません。
+- それより前のテンプレートで生成したジョブ（BiimMotion が生成したものを含む）では働きません。生成し直すか、ジョブの `runtime/scripts/` の該当ファイルを更新します。
+
 ## GUI
 
 ブラウザの中だけで動く静的サイトです。入力はどこにも送信・保存しません。フォームを埋めて「ジョブのZIPを生成」を押すと、ZIP がダウンロードされます。フォームの内容は `request.json` として書き出せ、CLI・MCP の `generate` にそのまま渡せます。
@@ -87,7 +94,7 @@ smm runs list "jobs/<タイトル>"
 
 ## MCP
 
-CLI の `mcp serve` が stdio の MCP サーバーを起動します。公開するツールは20個で、ジョブの生成から検査・レンダー・run の管理までを扱います。`--root` で指定したフォルダの中だけを読み書きします。クライアントへの登録例（読み取り専用）は次のとおりで、作業ディレクトリを repo のルートにして起動します。
+CLI の `mcp serve` が stdio の MCP サーバーを起動します。ツールは既定で19個（`--enable-generation` で画像生成が加わり20個、`--read-only` では9個）で、ジョブの生成から検査・レンダー・run の管理までを扱います。`--root` で指定したフォルダの中だけを読み書きします。クライアントへの登録例（読み取り専用）は次のとおりで、作業ディレクトリを repo のルートにして起動します。
 
 ```json
 {
@@ -103,6 +110,7 @@ CLI の `mcp serve` が stdio の MCP サーバーを起動します。公開す
 - ジョブの生成・検査・レンダーなどの書き込みを許すには `--read-only` を外します。画像生成のツールは `--enable-generation` を付けたときだけ公開されます（費用が発生する場合があります）。
 - 作業ディレクトリを指定できないクライアントでは、`args` の `dist/cli/main.js` と `--root` の値を、手元の実際のパスに置き換えます。
 - クライアント側の設定ファイルの場所や登録画面は、各クライアントの説明に従ってください。
+- ジョブ内スクリプトへ環境変数（`MOTION_JOB_ENCODER` など）を渡すには、登録の `env` に書きます。公式 SDK の stdio クライアントは、クライアント自身の環境をそのままは渡しません（[docs/MCP.md](docs/MCP.md#ジョブ内スクリプトへの環境変数)）。
 - **ジョブ内スクリプトの実行は `npm run` と同じ信頼の範囲で、sandbox ではありません。** 信頼できるジョブだけを扱ってください。
 
 ツールの一覧、長い処理（run）の待ち方、安全の境界は [docs/MCP.md](docs/MCP.md) にあります。
@@ -110,6 +118,35 @@ CLI の `mcp serve` が stdio の MCP サーバーを起動します。公開す
 ## 生成したジョブで制作する
 
 ジョブは単体で完結しています。CLI・MCP を入れなくても、ジョブの `README.md` にある `npm install` と `npm run` の手順で制作できます。制作エージェントには、ジョブのフォルダを開いて `AGENTS.md` を読ませ、制作を依頼します。CLI・MCP は同じジョブ内スクリプトを起動する別の入口で、判定の実装はジョブ側の1つだけです。
+
+## BiimMotion との違い
+
+Shin-MotionMaker は、BiimMotion（`kokuren333/BiimMotionWebUI`、コミット `262c798`）を継承した別の repo です。BiimMotion の repo には手を入れていません。
+
+### 同じもの
+
+- 制作ハーネスの思想・原則・工程・ゲートは BiimMotion と同じです。ジョブの `AGENTS.md` の文面の違いは、製品名の置き換え3対（4箇所）だけです。
+- 合否を決めるのは、客観的に判定できて視聴者に実害が出る検査だけで、主観的な質は助言です。MV には QC 規則がありません。入口を増やしても、ゲートは足していません。
+- 生成ジョブの中身（Remotion の構成、motion-kit、場面のひな形、スクリプトの名前、依存の版、同梱フォント）は、要件に列挙した許容差分（R1〜R6）のほかは BiimMotion とバイト単位で同じです。ZIP のファイル名とルートフォルダ名も同じです。
+- 入力の形（`{form, assets}`）、フォームの項目と既定値、入力エラーの文言は同じです。MV の生成物（`brief.md`、`plan/lyrics.txt`、制作エージェントへの依頼文）は、BiimMotion の出力とバイト単位で同じです。
+- ジョブは単体で完結し、CLI・MCP を入れなくても、ジョブの中の `npm install` と `npm run` で制作できます。生成後の設定の正本は、ジョブの `project.json` だけです。
+- GUI はブラウザの中だけで動く静的サイトで、入力を外部へ送りません。テーマは同じファミリーテーマ「Circuit White / Solder Mask」で、GUI の機能も引き継いでいます。
+- BiimMotion のテスト81件は、すべて Shin-MotionMaker のテストに対応づけてあります。ライセンス（Apache-2.0）とオーナーも同じです。
+
+### 違うもの
+
+- **入口。** BiimMotion の入口は WebUI と、request の JSON からジョブを書き出すスクリプト（`tools/generate-job.ts`）です。Shin-MotionMaker は GUI・CLI・MCP の3つを正式な入口にしました。CLI と MCP は、生成のほかに、ジョブの状態の確認、`project.json` の読み書き、ジョブ内スクリプト（検査・レンダー・音声・画像生成）の起動、実行記録の管理を扱います。GUI は人が入力を書くための入口、CLI と MCP はエージェントと自動化のための入口です。
+- **CLI の出力の規約。** 標準出力は JSON の封筒1個で、実行できたか（`ok`）とゲートの合否（`verdict`）を分けます。終了コードは 0〜4、エラーコードは CLI と MCP で共通です。これらは Shin-MotionMaker で定めました。
+- **MCP サーバー（stdio）を足しました。** ツールは既定で19個（`--enable-generation` で20個、`--read-only` では9個）です。`--root` の中だけを読み書きし、シンボリックリンクとジャンクションは実体を解決して外を拒否します。任意のコマンドを実行するツールはありません。
+- **長い処理（run）。** レンダーや検査は切り離した子プロセスで実行し、記録をジョブの中の `.smm/runs/` に置きます。CLI が始めた実行を MCP から、MCP が始めた実行を CLI から見られます。
+- **構造。** BiimMotion の生成コアの中心は `src/job.ts` の1ファイル（1,008行）です。Shin-MotionMaker は core（Node にも DOM にも依存しない）・host・cli・mcp・gui の層に分け、依存の向きをテストで検査しています。CLI と MCP は同じ操作定義表から作る薄い入口です。
+- **同じ入力から同じジョブ。** GUI の ZIP と CLI・MCP が書き出すフォルダは、同じ入力ならパスとバイトが一致します。BiimMotion が GUI と生成スクリプトの間で守っていた性質を、MCP まで広げました。
+- **生成ジョブの差分（許容差分 R1〜R6）。** `project.json` の `schema_version` が 0.4 から 0.5 になり、生成元を示す `generator` が加わりました。`validate` が `reports/validate.json` も書きます（標準出力と終了コードは同じ）。ジョブの文書の製品名を置き換え、`NOTICE` と、ジョブの README の「CLI・MCP から使う」節を足しました。解説の `brief.md` の「Opusが記入する」を「制作エージェントが記入する」に改めました。
+- **レンダーのエンコーダ。** BiimMotion と同じレンダースクリプト（Shin-MotionMaker v0.1.0 のジョブも同じ）は NVIDIA の GPU がある機械を前提にしており、GPU の無い Windows ではレンダーが失敗しました。テンプレート 0.5.3 からは、NVENC を実際に試し、使えなければ CPU（libx264）で符号化します（[必要な環境](#必要な環境)）。GPU が使える機械では、BiimMotion と同じ NVENC の設定でレンダーします。
+- **GUI に足したもの。** `request.json` の書き出しと読み込み（CLI・MCP の `generate` にそのまま渡せる）、検査結果の表示を `validate`・`qc`・`run.json` に広げてゲートと助言を別の区画に分けたこと、CLI・MCP の使い方を示す区画、`version.json` とコミット・テンプレートの版の表示、高コントラスト表示、固有アイコン13点（CyberSprite で制作）です。
+- **BiimMotion が生成したジョブ（0.4）も扱えます。** Windows の実機で、BiimMotion の生成スクリプトが作ったジョブに対して、CLI から `status`・`validate`・`qc`・`render`・`ghost-check` を通しました。
+- **テストが git の履歴に依存しません。** BiimMotion では、履歴を読むテストが CI でだけ落ち、push は成功したのに Pages が古いまま残りました。Shin-MotionMaker は基線を repo の中のフィクスチャに置き、テストが git を起動しないことをテストで検査しています。
+- **CI と公開後確認。** CI は ubuntu と windows の Node 24、ubuntu の Node 22 で同じコマンドを実行します。Pages のワークフローはビルド・デプロイ・公開後確認の3ジョブで、公開した URL の版が一致しなければ失敗にします。
 
 ## ライセンスと利用条件
 
@@ -129,8 +166,8 @@ node tools/ci-local.mjs
 
 `npm test` はビルドしてから全テストを実行します。`tools/ci-local.mjs` は現在のコミットを深さ1で一時フォルダへ複製し、`npm ci` から CI と同じコマンドを実行します。
 
-統合検証では、CLI と MCP の生成→依存導入→構造検査を同じ Tier B の入口から確認します。Windows の実レンダー（Tier C）と原典0.4ジョブの互換確認も実行し、[VERIFICATION.md](VERIFICATION.md) にコミット・出力・画像を記録しています。コマンドの構文と証拠の保存先は [CLI の統合検証](docs/CLI.md#統合検証のコマンド) にあります。
+統合検証では、CLI と MCP の生成→依存導入→構造検査を同じ Tier B の入口から確認します。Windows の実レンダー（Tier C）と、BiimMotion が生成したジョブ（`schema_version` 0.4）の互換確認も実行し、[VERIFICATION.md](VERIFICATION.md) にコミット・出力・画像を記録しています。コマンドの構文と証拠の保存先は [CLI の統合検証](docs/CLI.md#統合検証のコマンド) にあります。
 
 Pages のローカル確認には `npm run verify:pages:local -- --commit <SHA>`（構文）を使います。サブパス配信で正常経路・8種類の不一致・古いコミットからの再試行を確認します。公開後の構文は `node tools/verify-pages.mjs <末尾が / のURL> --expect-commit <SHA>` です。既存の Chrome/Edge が必要で、HTTP・title・コミット・JS/CSS・主要な表示・コンソールを確認し、既定12回・5秒間隔で再試行します。`--attempts`・`--retry-ms`・`--screenshot`・`--output` も指定できます。
 
-Pages の workflow は main への push と手動で動き、ビルド・デプロイ・公開後確認の3ジョブがすべて成功したときだけ公開できたとみなします。実レンダーは独立した workflow で、手動と main push から動きます。M8 の実公開 URL の確認と公開前後のスクリーンショット比較は [VERIFICATION.md](VERIFICATION.md#m8-公開) にあります。
+Pages の workflow は main への push と手動で動き、ビルド・デプロイ・公開後確認の3ジョブがすべて成功したときだけ公開できたとみなします。実レンダーは独立した workflow で、GPU の無い GitHub の Windows runner で、手動と main push から動きます。M8 の実公開 URL の確認と公開前後のスクリーンショット比較は [VERIFICATION.md](VERIFICATION.md#m8-公開) にあります。

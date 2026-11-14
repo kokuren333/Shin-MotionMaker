@@ -1,0 +1,1436 @@
+{
+  "tier": "C",
+  "entry": "mcp",
+  "legacy": false,
+  "commit": "a67b042a38daf75302a6b924b268d01f7a75d44c",
+  "template_version": "0.5.3",
+  "revision": {
+    "head": "a67b042a38daf75302a6b924b268d01f7a75d44c",
+    "clean": true,
+    "template_version": "0.5.3",
+    "build": "tsc -p tsconfig.build.json",
+    "checked_at": "2026-11-14T21:27:21.907Z"
+  },
+  "platform": "win32",
+  "node": "v24.15.0",
+  "started_at": "2026-11-14T21:27:21.908Z",
+  "records": [
+    {
+      "command": {
+        "name": "job_setup",
+        "arguments": {
+          "job": "jobs/Runtime & ＆（全角）　・ 空白",
+          "wait_ms": 0
+        }
+      },
+      "cli_exit_code": null,
+      "polling": {
+        "count": 1,
+        "wait_ms": 50000
+      },
+      "encoder_lines": [],
+      "nvcuda_mentions": 0,
+      "elapsed_ms": 33542,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T212723Z-56003f42",
+        "kind": "setup",
+        "args": {},
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 5604,
+        "script_pid": 33892,
+        "started_at": "2026-11-14T21:27:23.767Z",
+        "heartbeat_at": "2026-11-14T21:27:56.763Z",
+        "ended_at": "2026-11-14T21:27:56.763Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [],
+        "started_by": "mcp",
+        "script_exit_code": 0,
+        "result": {
+          "report": null,
+          "artifacts": []
+        },
+        "job": "jobs/Runtime & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": null,
+        "artifacts": [],
+        "stdout_tail": [
+          "",
+          "added 277 packages, and audited 279 packages in 32s",
+          "",
+          "52 packages are looking for funding",
+          "  run `npm fund` for details",
+          "",
+          "10 high severity vulnerabilities",
+          "",
+          "To address issues that do not require attention, run:",
+          "  npm audit fix",
+          "",
+          "To address all issues, run:",
+          "  npm audit fix --force",
+          "",
+          "Run `npm audit` for details."
+        ],
+        "stderr_tail": []
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T212723Z-56003f42/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tail": [
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T212723Z-56003f42/stdout.log",
+          "bytes": 307,
+          "sha256": "9f4c72d0e08cc0aa5a7d9ded08c7c5d6a6ac1f434c6e02d3acd6a0ff7ed5fa92",
+          "tail": [
+            "",
+            "added 277 packages, and audited 279 packages in 32s",
+            "",
+            "52 packages are looking for funding",
+            "  run `npm fund` for details",
+            "",
+            "10 high severity vulnerabilities",
+            "",
+            "To address issues that do not require attention, run:",
+            "  npm audit fix",
+            "",
+            "To address all issues, run:",
+            "  npm audit fix --force",
+            "",
+            "Run `npm audit` for details.",
+            ""
+          ]
+        }
+      ],
+      "artifacts": []
+    },
+    {
+      "command": {
+        "name": "job_sound",
+        "arguments": {
+          "job": "jobs/Runtime & ＆（全角）　・ 空白",
+          "wait_ms": 0
+        }
+      },
+      "cli_exit_code": null,
+      "polling": {
+        "count": 1,
+        "wait_ms": 50000
+      },
+      "encoder_lines": [],
+      "nvcuda_mentions": 0,
+      "elapsed_ms": 1368,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T212756Z-787598d8",
+        "kind": "sound",
+        "args": {},
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 16040,
+        "script_pid": 19288,
+        "started_at": "2026-11-14T21:27:56.950Z",
+        "heartbeat_at": "2026-11-14T21:27:58.210Z",
+        "ended_at": "2026-11-14T21:27:58.210Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "assets/audio/sound-design.json",
+          "assets/audio/sound-bed.wav",
+          "assets/audio/sound-reveal.wav",
+          "assets/audio/sound-sweep.wav",
+          "assets/audio/sound-slam.wav"
+        ],
+        "started_by": "mcp",
+        "script_exit_code": 0,
+        "result": {
+          "report": {
+            "clips": [
+              {
+                "id": "bed",
+                "kind": "bgm",
+                "path": "assets/audio/sound-bed.wav",
+                "start_sec": 0,
+                "duration_sec": 6,
+                "volume": 0.08,
+                "loop": false,
+                "play_duration_sec": 6
+              },
+              {
+                "id": "reveal",
+                "kind": "chime",
+                "path": "assets/audio/sound-reveal.wav",
+                "start_sec": 0.6,
+                "duration_sec": 0.7,
+                "volume": 0.15,
+                "loop": false,
+                "play_duration_sec": 0.7
+              },
+              {
+                "id": "sweep",
+                "kind": "whoosh",
+                "path": "assets/audio/sound-sweep.wav",
+                "start_sec": 2.5,
+                "duration_sec": 0.35,
+                "volume": 0.15,
+                "loop": false,
+                "play_duration_sec": 0.35
+              },
+              {
+                "id": "slam",
+                "kind": "impact",
+                "path": "assets/audio/sound-slam.wav",
+                "start_sec": 4,
+                "duration_sec": 0.3,
+                "volume": 0.1,
+                "loop": false,
+                "play_duration_sec": 0.3
+              }
+            ],
+            "method": "deterministic procedural synthesis / 48 kHz mono PCM16"
+          },
+          "artifacts": [
+            "assets/audio/sound-design.json",
+            "assets/audio/sound-bed.wav",
+            "assets/audio/sound-reveal.wav",
+            "assets/audio/sound-sweep.wav",
+            "assets/audio/sound-slam.wav"
+          ]
+        },
+        "job": "jobs/Runtime & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": {
+          "clips": [
+            {
+              "id": "bed",
+              "kind": "bgm",
+              "path": "assets/audio/sound-bed.wav",
+              "start_sec": 0,
+              "duration_sec": 6,
+              "volume": 0.08,
+              "loop": false,
+              "play_duration_sec": 6
+            },
+            {
+              "id": "reveal",
+              "kind": "chime",
+              "path": "assets/audio/sound-reveal.wav",
+              "start_sec": 0.6,
+              "duration_sec": 0.7,
+              "volume": 0.15,
+              "loop": false,
+              "play_duration_sec": 0.7
+            },
+            {
+              "id": "sweep",
+              "kind": "whoosh",
+              "path": "assets/audio/sound-sweep.wav",
+              "start_sec": 2.5,
+              "duration_sec": 0.35,
+              "volume": 0.15,
+              "loop": false,
+              "play_duration_sec": 0.35
+            },
+            {
+              "id": "slam",
+              "kind": "impact",
+              "path": "assets/audio/sound-slam.wav",
+              "start_sec": 4,
+              "duration_sec": 0.3,
+              "volume": 0.1,
+              "loop": false,
+              "play_duration_sec": 0.3
+            }
+          ],
+          "method": "deterministic procedural synthesis / 48 kHz mono PCM16"
+        },
+        "artifacts": [
+          "assets/audio/sound-design.json",
+          "assets/audio/sound-bed.wav",
+          "assets/audio/sound-reveal.wav",
+          "assets/audio/sound-sweep.wav",
+          "assets/audio/sound-slam.wav"
+        ],
+        "stdout_tail": [
+          "bed: bgm, 6 sec",
+          "reveal: chime, 0.7 sec",
+          "sweep: whoosh, 0.35 sec",
+          "slam: impact, 0.3 sec"
+        ],
+        "stderr_tail": []
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T212756Z-787598d8/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tail": [
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T212756Z-787598d8/stdout.log",
+          "bytes": 85,
+          "sha256": "f96bfeb2f7d2ef94fef3f380789366078e44ed0176e6c1241543f659c237da77",
+          "tail": [
+            "bed: bgm, 6 sec",
+            "reveal: chime, 0.7 sec",
+            "sweep: whoosh, 0.35 sec",
+            "slam: impact, 0.3 sec",
+            ""
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "assets/audio/sound-bed.wav",
+          "bytes": 576044,
+          "sha256": "8b46207a22d9cacd146acc8c492a5c11ccdef73d9b2ae6e40b6c02f081047f2d"
+        },
+        {
+          "path": "assets/audio/sound-design.json",
+          "bytes": 991,
+          "sha256": "b8523772bd371b2d8354a1e6278da57c4771c485db5e91b22fa42a0b0c53e999"
+        },
+        {
+          "path": "assets/audio/sound-reveal.wav",
+          "bytes": 67244,
+          "sha256": "eaad9e69ee15969536bcac46d9312adb2052b77bd4080a64d03d507e4534104e"
+        },
+        {
+          "path": "assets/audio/sound-slam.wav",
+          "bytes": 28844,
+          "sha256": "46c7fc0a76491b8c4afc03e5d664332586aa957accf0cfba4bfaf25111279feb"
+        },
+        {
+          "path": "assets/audio/sound-sweep.wav",
+          "bytes": 33644,
+          "sha256": "64a4f29d19605cd7ef7f2f9ef6645d72685bf96974f6b4e5c9e8f99272688430"
+        }
+      ]
+    },
+    {
+      "command": {
+        "name": "job_validate",
+        "arguments": {
+          "job": "jobs/Runtime & ＆（全角）　・ 空白",
+          "wait_ms": 0
+        }
+      },
+      "cli_exit_code": null,
+      "polling": {
+        "count": 1,
+        "wait_ms": 50000
+      },
+      "encoder_lines": [],
+      "nvcuda_mentions": 0,
+      "elapsed_ms": 5483,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T212758Z-e735322b",
+        "kind": "validate",
+        "args": {},
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 25780,
+        "script_pid": 37936,
+        "started_at": "2026-11-14T21:27:58.304Z",
+        "heartbeat_at": "2026-11-14T21:28:03.665Z",
+        "ended_at": "2026-11-14T21:28:03.665Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "reports/validate.json"
+        ],
+        "started_by": "mcp",
+        "script_exit_code": 0,
+        "result": {
+          "report": {
+            "schema": "smm.validate/1",
+            "final": false,
+            "double_render": false,
+            "verdict": "pass",
+            "checks": [
+              {
+                "name": "project.json",
+                "status": "ok",
+                "message": "OK project.json"
+              },
+              {
+                "name": "sources and assets",
+                "status": "ok",
+                "message": "OK sources and assets"
+              },
+              {
+                "name": "audio manifests",
+                "status": "ok",
+                "message": "OK audio manifests"
+              },
+              {
+                "name": "sync public assets",
+                "status": "ok",
+                "message": "OK sync public assets"
+              },
+              {
+                "name": "TypeScript",
+                "status": "ok",
+                "message": "OK TypeScript"
+              }
+            ],
+            "advisories": []
+          },
+          "artifacts": [
+            "reports/validate.json"
+          ],
+          "verdict": "pass"
+        },
+        "job": "jobs/Runtime & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": {
+          "schema": "smm.validate/1",
+          "final": false,
+          "double_render": false,
+          "verdict": "pass",
+          "checks": [
+            {
+              "name": "project.json",
+              "status": "ok",
+              "message": "OK project.json"
+            },
+            {
+              "name": "sources and assets",
+              "status": "ok",
+              "message": "OK sources and assets"
+            },
+            {
+              "name": "audio manifests",
+              "status": "ok",
+              "message": "OK audio manifests"
+            },
+            {
+              "name": "sync public assets",
+              "status": "ok",
+              "message": "OK sync public assets"
+            },
+            {
+              "name": "TypeScript",
+              "status": "ok",
+              "message": "OK TypeScript"
+            }
+          ],
+          "advisories": []
+        },
+        "artifacts": [
+          "reports/validate.json"
+        ],
+        "verdict": "pass",
+        "stdout_tail": [
+          "OK project.json",
+          "OK sources and assets",
+          "OK audio manifests",
+          "OK sync public assets",
+          "OK TypeScript",
+          "Structural checks passed. Visual and audio QA still requires watching and listening."
+        ],
+        "stderr_tail": []
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T212758Z-e735322b/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tail": [
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T212758Z-e735322b/stdout.log",
+          "bytes": 178,
+          "sha256": "b22bbd19e3b396d9851d033c96e1377afbadb08d207fa6fc58820a2e067525f9",
+          "tail": [
+            "OK project.json",
+            "OK sources and assets",
+            "OK audio manifests",
+            "OK sync public assets",
+            "OK TypeScript",
+            "Structural checks passed. Visual and audio QA still requires watching and listening.",
+            ""
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "reports/validate.json",
+          "bytes": 662,
+          "sha256": "a926b23ddcb71e40b8791854b971fc5bdfa3903284a2cdf9f3da827098f60508"
+        }
+      ]
+    },
+    {
+      "command": {
+        "name": "job_render",
+        "arguments": {
+          "job": "jobs/Runtime & ＆（全角）　・ 空白",
+          "target": "preview",
+          "wait_ms": 0
+        }
+      },
+      "cli_exit_code": null,
+      "polling": {
+        "count": 1,
+        "wait_ms": 50000
+      },
+      "encoder_lines": [
+        "[encoder] route=gpu encoder=h264_nvenc MOTION_JOB_ENCODER=auto (unset) reason: h264_nvenc test encode succeeded (829 ms)"
+      ],
+      "nvcuda_mentions": 0,
+      "elapsed_ms": 36192,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T212803Z-04165d96",
+        "kind": "render",
+        "args": {
+          "target": "preview"
+        },
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 6564,
+        "script_pid": 8332,
+        "started_at": "2026-11-14T21:28:03.807Z",
+        "heartbeat_at": "2026-11-14T21:28:39.904Z",
+        "ended_at": "2026-11-14T21:28:39.904Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "output/preview.mp4"
+        ],
+        "started_by": "mcp",
+        "script_exit_code": 0,
+        "result": {
+          "report": null,
+          "artifacts": [
+            "output/preview.mp4"
+          ]
+        },
+        "job": "jobs/Runtime & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": null,
+        "artifacts": [
+          "output/preview.mp4"
+        ],
+        "stdout_tail": [
+          "Rendered 166/180, time remaining: 1s",
+          "Rendered 167/180, time remaining: 1s",
+          "Rendered 168/180, time remaining: 0s",
+          "Rendered 169/180, time remaining: 0s",
+          "Rendered 170/180, time remaining: 0s",
+          "Rendered 171/180, time remaining: 0s",
+          "Rendered 171/180, time remaining: 0s",
+          "Rendered 172/180, time remaining: 0s",
+          "Rendered 173/180, time remaining: 0s",
+          "Rendered 174/180, time remaining: 0s",
+          "Rendered 175/180, time remaining: 0s",
+          "Rendered 176/180, time remaining: 0s",
+          "Rendered 177/180, time remaining: 0s",
+          "Rendered 178/180, time remaining: 0s",
+          "Rendered 179/180, time remaining: 0s",
+          "Rendered 179/180, time remaining: 0s",
+          "Encoded 131/180",
+          "Encoded 144/180",
+          "Encoded 180/180",
+          "\u001b[34m+                    ../output/preview.mp4\u001b[39m \u001b[90m495.6 kB\u001b[39m"
+        ],
+        "stderr_tail": [
+          "[encoder] route=gpu encoder=h264_nvenc MOTION_JOB_ENCODER=auto (unset) reason: h264_nvenc test encode succeeded (829 ms)",
+          "\u001b[40m Tab 0, ../node_modules/three/build/three.core.js:2022 \u001b[49m \u001b[33mTHREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\u001b[39m",
+          "\u001b[40m Tab 1, ../node_modules/three/build/three.core.js:2022 \u001b[49m \u001b[33mTHREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\u001b[39m"
+        ]
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T212803Z-04165d96/stderr.log",
+          "bytes": 429,
+          "sha256": "d4f591a76c085ab58439ae045f7f589c8a07f733c0a91162a2946ff76fa62eaf",
+          "tail": [
+            "[encoder] route=gpu encoder=h264_nvenc MOTION_JOB_ENCODER=auto (unset) reason: h264_nvenc test encode succeeded (829 ms)",
+            "\u001b[40m Tab 0, ../node_modules/three/build/three.core.js:2022 \u001b[49m \u001b[33mTHREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\u001b[39m",
+            "\u001b[40m Tab 1, ../node_modules/three/build/three.core.js:2022 \u001b[49m \u001b[33mTHREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\u001b[39m",
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T212803Z-04165d96/stdout.log",
+          "bytes": 7328,
+          "sha256": "5c31b25050d59e10d0d295a67cc39342f01cf7146a0cb5853c004740b9e612d7",
+          "tail": [
+            "Rendered 158/180, time remaining: 1s",
+            "Rendered 159/180, time remaining: 1s",
+            "Rendered 160/180, time remaining: 1s",
+            "Rendered 161/180, time remaining: 1s",
+            "Rendered 162/180, time remaining: 1s",
+            "Rendered 163/180, time remaining: 1s",
+            "Rendered 164/180, time remaining: 1s",
+            "Rendered 165/180, time remaining: 1s",
+            "Rendered 165/180, time remaining: 1s",
+            "Rendered 166/180, time remaining: 1s",
+            "Rendered 167/180, time remaining: 1s",
+            "Rendered 168/180, time remaining: 0s",
+            "Rendered 169/180, time remaining: 0s",
+            "Rendered 170/180, time remaining: 0s",
+            "Rendered 171/180, time remaining: 0s",
+            "Rendered 171/180, time remaining: 0s",
+            "Rendered 172/180, time remaining: 0s",
+            "Rendered 173/180, time remaining: 0s",
+            "Rendered 174/180, time remaining: 0s",
+            "Rendered 175/180, time remaining: 0s",
+            "Rendered 176/180, time remaining: 0s",
+            "Rendered 177/180, time remaining: 0s",
+            "Rendered 178/180, time remaining: 0s",
+            "Rendered 179/180, time remaining: 0s",
+            "Rendered 179/180, time remaining: 0s",
+            "Encoded 131/180",
+            "Encoded 144/180",
+            "Encoded 180/180",
+            "\u001b[34m+                    ../output/preview.mp4\u001b[39m \u001b[90m495.6 kB\u001b[39m",
+            ""
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "output/preview.mp4",
+          "bytes": 495584,
+          "sha256": "e067ad9ba5759dda8c47f6e43d5fab7b29fc5e396f35537b392204d5e5af036b"
+        }
+      ]
+    },
+    {
+      "command": {
+        "name": "job_render",
+        "arguments": {
+          "job": "jobs/Runtime & ＆（全角）　・ 空白",
+          "target": "still",
+          "frame": 30,
+          "wait_ms": 0
+        }
+      },
+      "cli_exit_code": null,
+      "polling": {
+        "count": 1,
+        "wait_ms": 50000
+      },
+      "encoder_lines": [],
+      "nvcuda_mentions": 0,
+      "elapsed_ms": 12658,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T212839Z-a271ca1d",
+        "kind": "render",
+        "args": {
+          "target": "still",
+          "frame": 30
+        },
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 32856,
+        "script_pid": 33784,
+        "started_at": "2026-11-14T21:28:39.981Z",
+        "heartbeat_at": "2026-11-14T21:28:52.556Z",
+        "ended_at": "2026-11-14T21:28:52.556Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "output/preview.png"
+        ],
+        "started_by": "mcp",
+        "script_exit_code": 0,
+        "result": {
+          "report": null,
+          "artifacts": [
+            "output/preview.png"
+          ]
+        },
+        "job": "jobs/Runtime & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": null,
+        "artifacts": [
+          "output/preview.png"
+        ],
+        "stdout_tail": [
+          "Bundling 23%",
+          "Bundling 60%",
+          "Bundling 65%",
+          "Bundling 71%",
+          "Bundling 76%",
+          "Bundling 81%",
+          "Bundling 87%",
+          "Bundling 92%",
+          "Bundling 98%",
+          "Bundling 100%",
+          "Copying public dir 13.9 MB",
+          "Getting composition",
+          "\u001b[90mComposition          MainVideo\u001b[39m",
+          "\u001b[90mFormat               png\u001b[39m",
+          "\u001b[90mOutput               ../output/preview.png\u001b[39m",
+          "Rendered 0/1",
+          "Rendered 0/1",
+          "Rendered 0/1",
+          "Rendered 1/1",
+          "\u001b[34m+                    ../output/preview.png\u001b[39m"
+        ],
+        "stderr_tail": []
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T212839Z-a271ca1d/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tail": [
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T212839Z-a271ca1d/stdout.log",
+          "bytes": 424,
+          "sha256": "d7be6ba8d8a356e8fcfa96ae0676d9963afdd41d9e6ba40f1aed84867f84de05",
+          "tail": [
+            "Bundling 6%",
+            "Bundling 23%",
+            "Bundling 60%",
+            "Bundling 65%",
+            "Bundling 71%",
+            "Bundling 76%",
+            "Bundling 81%",
+            "Bundling 87%",
+            "Bundling 92%",
+            "Bundling 98%",
+            "Bundling 100%",
+            "Copying public dir 13.9 MB",
+            "Getting composition",
+            "\u001b[90mComposition          MainVideo\u001b[39m",
+            "\u001b[90mFormat               png\u001b[39m",
+            "\u001b[90mOutput               ../output/preview.png\u001b[39m",
+            "Rendered 0/1",
+            "Rendered 0/1",
+            "Rendered 0/1",
+            "Rendered 1/1",
+            "\u001b[34m+                    ../output/preview.png\u001b[39m",
+            ""
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "output/preview.png",
+          "bytes": 27051,
+          "sha256": "3d737258719e5b789ca6abd0275ebd0fca89307135746e2a88420527a58fae04"
+        }
+      ]
+    },
+    {
+      "command": {
+        "name": "job_ghost_check",
+        "arguments": {
+          "job": "jobs/Runtime & ＆（全角）　・ 空白",
+          "target": "preview",
+          "wait_ms": 0
+        }
+      },
+      "cli_exit_code": null,
+      "polling": {
+        "count": 1,
+        "wait_ms": 50000
+      },
+      "encoder_lines": [],
+      "nvcuda_mentions": 0,
+      "elapsed_ms": 1883,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T212852Z-09f1db15",
+        "kind": "ghost_check",
+        "args": {
+          "target": "preview"
+        },
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 29432,
+        "script_pid": 26288,
+        "started_at": "2026-11-14T21:28:52.784Z",
+        "heartbeat_at": "2026-11-14T21:28:54.209Z",
+        "ended_at": "2026-11-14T21:28:54.209Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "reports/ghost-check-preview.json"
+        ],
+        "started_by": "mcp",
+        "script_exit_code": 0,
+        "result": {
+          "report": {
+            "kind": "biim-ghost-check",
+            "version": 1,
+            "video": "output/preview.mp4",
+            "fps": 30,
+            "frames": 180,
+            "duration": "0:06.00",
+            "counts": {
+              "singleFrameEvents": 0,
+              "isolated": 0,
+              "clusteredRuns": 0,
+              "clusteredEvents": 0
+            },
+            "isolated": [],
+            "clustered": [],
+            "worst": [],
+            "stills": []
+          },
+          "artifacts": [
+            "reports/ghost-check-preview.json"
+          ]
+        },
+        "job": "jobs/Runtime & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": {
+          "kind": "biim-ghost-check",
+          "version": 1,
+          "video": "output/preview.mp4",
+          "fps": 30,
+          "frames": 180,
+          "duration": "0:06.00",
+          "counts": {
+            "singleFrameEvents": 0,
+            "isolated": 0,
+            "clusteredRuns": 0,
+            "clusteredEvents": 0
+          },
+          "isolated": [],
+          "clustered": [],
+          "worst": [],
+          "stills": []
+        },
+        "artifacts": [
+          "reports/ghost-check-preview.json"
+        ],
+        "stdout_tail": [
+          "Scanned 180 frames of output/preview.mp4 at 0:06.00 total.",
+          "Single-frame events: 0 (isolated 0, clustered 0 in 0 runs)",
+          "Report written to reports/ghost-check-preview.md and reports/ghost-check-preview.json"
+        ],
+        "stderr_tail": []
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T212852Z-09f1db15/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tail": [
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T212852Z-09f1db15/stdout.log",
+          "bytes": 204,
+          "sha256": "b0807be78c9ffda898f269d7d58553e34dc7170b5edc4697b60ef895f4bd769a",
+          "tail": [
+            "Scanned 180 frames of output/preview.mp4 at 0:06.00 total.",
+            "Single-frame events: 0 (isolated 0, clustered 0 in 0 runs)",
+            "Report written to reports/ghost-check-preview.md and reports/ghost-check-preview.json",
+            ""
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "reports/ghost-check-preview.json",
+          "bytes": 320,
+          "sha256": "98aeb135ed51ab37ee3f779a4b9bc7914f762f6a799688417504955332c36fd3"
+        }
+      ]
+    },
+    {
+      "command": {
+        "name": "job_render",
+        "arguments": {
+          "job": "jobs/Runtime & ＆（全角）　・ 空白",
+          "target": "final",
+          "wait_ms": 0
+        }
+      },
+      "cli_exit_code": null,
+      "polling": {
+        "count": 1,
+        "wait_ms": 50000
+      },
+      "encoder_lines": [
+        "[encoder] route=gpu encoder=h264_nvenc MOTION_JOB_ENCODER=auto (unset) reason: h264_nvenc test encode succeeded (650 ms)"
+      ],
+      "nvcuda_mentions": 0,
+      "elapsed_ms": 25151,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T212854Z-7975257e",
+        "kind": "render",
+        "args": {
+          "target": "final"
+        },
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 14816,
+        "script_pid": 24348,
+        "started_at": "2026-11-14T21:28:54.574Z",
+        "heartbeat_at": "2026-11-14T21:29:19.529Z",
+        "ended_at": "2026-11-14T21:29:19.529Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "output/final.mp4"
+        ],
+        "started_by": "mcp",
+        "script_exit_code": 0,
+        "result": {
+          "report": null,
+          "artifacts": [
+            "output/final.mp4"
+          ]
+        },
+        "job": "jobs/Runtime & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": null,
+        "artifacts": [
+          "output/final.mp4"
+        ],
+        "stdout_tail": [
+          "Rendered 166/180, time remaining: 1s",
+          "Rendered 167/180, time remaining: 0s",
+          "Rendered 168/180, time remaining: 0s",
+          "Rendered 169/180, time remaining: 0s",
+          "Rendered 170/180, time remaining: 0s",
+          "Rendered 171/180, time remaining: 0s",
+          "Rendered 172/180, time remaining: 0s",
+          "Rendered 172/180, time remaining: 0s",
+          "Rendered 173/180, time remaining: 0s",
+          "Rendered 174/180, time remaining: 0s",
+          "Rendered 175/180, time remaining: 0s",
+          "Rendered 176/180, time remaining: 0s",
+          "Rendered 177/180, time remaining: 0s",
+          "Rendered 177/180, time remaining: 0s",
+          "Rendered 178/180, time remaining: 0s",
+          "Rendered 179/180, time remaining: 0s",
+          "Encoded 130/180",
+          "Encoded 144/180",
+          "Encoded 180/180",
+          "\u001b[34m+                    ../output/final.mp4\u001b[39m \u001b[90m643.5 kB\u001b[39m"
+        ],
+        "stderr_tail": [
+          "[encoder] route=gpu encoder=h264_nvenc MOTION_JOB_ENCODER=auto (unset) reason: h264_nvenc test encode succeeded (650 ms)",
+          "\u001b[40m Tab 0, ../node_modules/three/build/three.core.js:2022 \u001b[49m \u001b[33mTHREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\u001b[39m",
+          "\u001b[40m Tab 1, ../node_modules/three/build/three.core.js:2022 \u001b[49m \u001b[33mTHREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\u001b[39m"
+        ]
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T212854Z-7975257e/stderr.log",
+          "bytes": 429,
+          "sha256": "6faad9af23234f1328176019a5516ddc6731b3e2208903ac45bed3249ac57d42",
+          "tail": [
+            "[encoder] route=gpu encoder=h264_nvenc MOTION_JOB_ENCODER=auto (unset) reason: h264_nvenc test encode succeeded (650 ms)",
+            "\u001b[40m Tab 0, ../node_modules/three/build/three.core.js:2022 \u001b[49m \u001b[33mTHREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\u001b[39m",
+            "\u001b[40m Tab 1, ../node_modules/three/build/three.core.js:2022 \u001b[49m \u001b[33mTHREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\u001b[39m",
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T212854Z-7975257e/stdout.log",
+          "bytes": 7208,
+          "sha256": "b23a2cbdbb7c603413a3da69fe55756c346fe63e2cc9af5a7e42c0f7b9abdb6e",
+          "tail": [
+            "Rendered 158/180, time remaining: 1s",
+            "Rendered 159/180, time remaining: 1s",
+            "Rendered 160/180, time remaining: 1s",
+            "Rendered 161/180, time remaining: 1s",
+            "Rendered 162/180, time remaining: 1s",
+            "Rendered 163/180, time remaining: 1s",
+            "Rendered 164/180, time remaining: 1s",
+            "Rendered 164/180, time remaining: 1s",
+            "Rendered 165/180, time remaining: 1s",
+            "Rendered 166/180, time remaining: 1s",
+            "Rendered 167/180, time remaining: 0s",
+            "Rendered 168/180, time remaining: 0s",
+            "Rendered 169/180, time remaining: 0s",
+            "Rendered 170/180, time remaining: 0s",
+            "Rendered 171/180, time remaining: 0s",
+            "Rendered 172/180, time remaining: 0s",
+            "Rendered 172/180, time remaining: 0s",
+            "Rendered 173/180, time remaining: 0s",
+            "Rendered 174/180, time remaining: 0s",
+            "Rendered 175/180, time remaining: 0s",
+            "Rendered 176/180, time remaining: 0s",
+            "Rendered 177/180, time remaining: 0s",
+            "Rendered 177/180, time remaining: 0s",
+            "Rendered 178/180, time remaining: 0s",
+            "Rendered 179/180, time remaining: 0s",
+            "Encoded 130/180",
+            "Encoded 144/180",
+            "Encoded 180/180",
+            "\u001b[34m+                    ../output/final.mp4\u001b[39m \u001b[90m643.5 kB\u001b[39m",
+            ""
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "output/final.mp4",
+          "bytes": 643491,
+          "sha256": "e65be40d0c5c3adcd485e72d178c885a2eab878346479524e79742ba508a3229"
+        }
+      ]
+    },
+    {
+      "command": {
+        "name": "job_ghost_check",
+        "arguments": {
+          "job": "jobs/Runtime & ＆（全角）　・ 空白",
+          "wait_ms": 0
+        }
+      },
+      "cli_exit_code": null,
+      "polling": {
+        "count": 1,
+        "wait_ms": 50000
+      },
+      "encoder_lines": [],
+      "nvcuda_mentions": 0,
+      "elapsed_ms": 1443,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T212919Z-231d83b6",
+        "kind": "ghost_check",
+        "args": {},
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 34108,
+        "script_pid": 10676,
+        "started_at": "2026-11-14T21:29:19.751Z",
+        "heartbeat_at": "2026-11-14T21:29:20.980Z",
+        "ended_at": "2026-11-14T21:29:20.980Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "reports/ghost-check.json"
+        ],
+        "started_by": "mcp",
+        "script_exit_code": 0,
+        "result": {
+          "report": {
+            "kind": "biim-ghost-check",
+            "version": 1,
+            "video": "output/final.mp4",
+            "fps": 30,
+            "frames": 180,
+            "duration": "0:06.00",
+            "counts": {
+              "singleFrameEvents": 0,
+              "isolated": 0,
+              "clusteredRuns": 0,
+              "clusteredEvents": 0
+            },
+            "isolated": [],
+            "clustered": [],
+            "worst": [],
+            "stills": []
+          },
+          "artifacts": [
+            "reports/ghost-check.json"
+          ]
+        },
+        "job": "jobs/Runtime & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": {
+          "kind": "biim-ghost-check",
+          "version": 1,
+          "video": "output/final.mp4",
+          "fps": 30,
+          "frames": 180,
+          "duration": "0:06.00",
+          "counts": {
+            "singleFrameEvents": 0,
+            "isolated": 0,
+            "clusteredRuns": 0,
+            "clusteredEvents": 0
+          },
+          "isolated": [],
+          "clustered": [],
+          "worst": [],
+          "stills": []
+        },
+        "artifacts": [
+          "reports/ghost-check.json"
+        ],
+        "stdout_tail": [
+          "Scanned 180 frames of output/final.mp4 at 0:06.00 total.",
+          "Single-frame events: 0 (isolated 0, clustered 0 in 0 runs)",
+          "Report written to reports/ghost-check.md and reports/ghost-check.json"
+        ],
+        "stderr_tail": []
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T212919Z-231d83b6/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tail": [
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T212919Z-231d83b6/stdout.log",
+          "bytes": 186,
+          "sha256": "510d799a024eacbccee586b17b692ec5d727b4c248302e168b55117c0a9dbae5",
+          "tail": [
+            "Scanned 180 frames of output/final.mp4 at 0:06.00 total.",
+            "Single-frame events: 0 (isolated 0, clustered 0 in 0 runs)",
+            "Report written to reports/ghost-check.md and reports/ghost-check.json",
+            ""
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "reports/ghost-check.json",
+          "bytes": 318,
+          "sha256": "186e2127c0441a4422106f28046525b215bd5a75f3016761d9cc8c7ce3bdb954"
+        }
+      ]
+    }
+  ],
+  "success": true,
+  "generation": {
+    "job": "jobs/Runtime & ＆（全角）　・ 空白",
+    "archive": null,
+    "dry_run": false,
+    "file_count": 69,
+    "project": {
+      "schema_version": "0.5",
+      "generator": {
+        "name": "shin-motionmaker",
+        "version": "0.1.0",
+        "template_version": "0.5.3"
+      },
+      "mode": "explanation",
+      "title": "Runtime & ＆（全角）　・ 空白",
+      "video": {
+        "width": 640,
+        "height": 360,
+        "fps": 30,
+        "orientation": "landscape",
+        "target_duration_sec": 30
+      },
+      "layout": {
+        "preset": "biim-standard-v1",
+        "base_width": 1920,
+        "base_height": 1080,
+        "frame": "assets/biim-frame.svg",
+        "colors": {
+          "background": "#1e1e1e",
+          "border": "#cccccc",
+          "note": "#f4f4f4",
+          "subtitle": "#0000ff"
+        },
+        "regions": {
+          "main": [
+            16,
+            16,
+            1440,
+            810
+          ],
+          "note_top": [
+            1498,
+            34,
+            388,
+            182
+          ],
+          "note_bottom": [
+            1498,
+            274,
+            388,
+            532
+          ],
+          "character": [
+            0,
+            740,
+            330,
+            332
+          ],
+          "subtitle": [
+            350,
+            870,
+            1528,
+            178
+          ],
+          "character_second": [
+            1620,
+            840,
+            300,
+            232
+          ]
+        },
+        "fonts": {
+          "body": {
+            "family": "Noto Sans JP",
+            "path": "assets/fonts/NotoSansJP-Variable.ttf",
+            "weight": 600
+          },
+          "note_top": {
+            "family": "Noto Sans JP",
+            "path": "assets/fonts/NotoSansJP-Variable.ttf",
+            "weight": 800,
+            "size": 44
+          },
+          "note_bottom": {
+            "family": "Noto Sans JP",
+            "path": "assets/fonts/NotoSansJP-Variable.ttf",
+            "weight": 600,
+            "size": 34
+          },
+          "subtitle": {
+            "family": "M PLUS Rounded 1c",
+            "path": "assets/fonts/MPLUSRounded1c-ExtraBold.ttf",
+            "weight": 800,
+            "size": 64
+          }
+        },
+        "mode": "biim",
+        "fullscreen_regions": {
+          "main": [
+            0,
+            0,
+            1920,
+            1080
+          ],
+          "note_top": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "note_bottom": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "character": [
+            32,
+            700,
+            300,
+            240
+          ],
+          "character_second": [
+            1596,
+            700,
+            300,
+            240
+          ],
+          "subtitle": [
+            96,
+            950,
+            1728,
+            110
+          ]
+        },
+        "subtitle_frame": [
+          300,
+          846,
+          1612,
+          226
+        ]
+      },
+      "direction": {
+        "music_mood": "",
+        "music_lyrics": "",
+        "differentiation": "",
+        "audience": "開発者",
+        "description": "枠・字幕・3D・音響の動作確認",
+        "instructions": "",
+        "design": "Biim形式を軸に、タイポグラフィと図解の動きで理解を助ける。落ち着いた配色に、要所で大胆なアクセント。\nドパガキ向けに最後まで飽きずに見られるように、凝った演出やわかりやすいアニメーションを挿入するように努める。\nBiim枠での説明と、画面全体を使ったアニメーションはバランスよくどちらも取り入れる。各キャラクターの3Dモデルは必要に応じてサイズや位置を変更・移動できるようにする。",
+        "tempo": "fast",
+        "energy": "balanced",
+        "motion_amount": "rich",
+        "biim_usage": "sometimes",
+        "character_usage": "frequent",
+        "diagram_policy": "数式は段階的に導入。図解は関係や因果を動きで説明。チャートは実データと出典を示し、装飾のために数値を作らない。",
+        "style_mode": "biim",
+        "takeaway": "",
+        "prior_knowledge": "",
+        "outline": ""
+      },
+      "voice": {
+        "engine": "none",
+        "engine_url": "http://127.0.0.1:10101",
+        "style_id": 1069147200,
+        "speed": 1,
+        "notes": "自然な日本語。専門用語の読みと、図解を理解するための間を調整する。"
+      },
+      "character_mode": "solo",
+      "characters": [
+        {
+          "id": "character1",
+          "name": "",
+          "reading": "",
+          "personality": "落ち着いていて、説明が丁寧。",
+          "speaking_style": "わかりやすいです・ます調。",
+          "role": "解説役",
+          "notes": "解説を一緒に進める演者。視線・指差し・リアクションを内容に合わせ、字幕や図解を隠さない。",
+          "position": "left",
+          "model": null,
+          "original_name": null,
+          "subtitle_color": "#0000ff",
+          "subtitle_outline": "#ffffff",
+          "voice": {
+            "style_id": 1069147200,
+            "speed": 1,
+            "notes": "自然な日本語。専門用語の読みと、図解を理解するための間を調整する。"
+          }
+        }
+      ],
+      "character": {
+        "id": "character1",
+        "name": "",
+        "reading": "",
+        "personality": "落ち着いていて、説明が丁寧。",
+        "speaking_style": "わかりやすいです・ます調。",
+        "role": "解説役",
+        "notes": "解説を一緒に進める演者。視線・指差し・リアクションを内容に合わせ、字幕や図解を隠さない。",
+        "position": "left",
+        "model": null,
+        "original_name": null,
+        "subtitle_color": "#0000ff",
+        "subtitle_outline": "#ffffff",
+        "voice": {
+          "style_id": 1069147200,
+          "speed": 1,
+          "notes": "自然な日本語。専門用語の読みと、図解を理解するための間を調整する。"
+        }
+      },
+      "audio": {
+        "music": null,
+        "music_original_name": null,
+        "music_duration_sec": null,
+        "bgm": null,
+        "bgm_volume": 0.12,
+        "generate_bgm_se": true,
+        "instructions": "場面に合う簡単なBGMとSEを作成する。説明中は控えめなループ、登場や強調には短いチャイム・スウィッシュ・インパクト。ナレーションを優先し、音の密度に緩急をつける。"
+      },
+      "asset_generation": {
+        "image": "off",
+        "image_command": null,
+        "output_dir": "assets/generated",
+        "video_generation": false
+      },
+      "research": {
+        "allow_web_research": true,
+        "evidence_policy": "primary"
+      },
+      "sources": [],
+      "scenes": []
+    },
+    "project_sha256": "55c7293e042e9d98b5a14c01e49cd4fa8b819f5493010e39c65c89c98299e683",
+    "agent_prompt": "AGENTS.mdを読み、brief.mdとsourcesを基に動画を制作してください。様式モードはbiim（Biim 形式）。黒い枠の中に映像、右上と右下に要点と補足、下に字幕を置く従来の形式。理解先的設計で理解ゴール・前提と誤解・主張の依存順・山場を定め、plan/explanation-map.mdに記録してください。方向性を3案出して選び、スタイル定義をしてから台本と根拠台帳（plan/script.md・plan/evidence.json）とストーリーボード、project.scenesの下書きを作り、npm run qc -- --stage=preと別コンテキストのレビューで事前ゲートを通してください。合格後にRemotionシーン・Aivis音声・3Dキャラ同期を実装し、設定に応じて場面に合う簡単なBGM・SEも制作してください。previewを映像と音で確認して修正後、final.mp4を制作してください。previewが出たらruntimeでnpm run ghost-check -- --target=previewを実行し、孤立フラッシュ（ゴースト嫌疑）をreports/ghost-stills/の静止画で確認して、問題があれば直してからfinalへ進んでください。final後もnpm run ghost-checkで同じ検査を行ってください。preview・finalの孤立フラッシュ全件の照合を記録し、納品記録を書き、npm run qc -- --stage=postとレビューで事後ゲートに合格してから完成としてください。検出件数や演出の巧拙は助言であり、合否と分けて扱ってください。"
+  },
+  "job": "jobs/Runtime & ＆（全角）　・ 空白",
+  "fixture": [
+    {
+      "path": "assets/character.glb",
+      "bytes": 1316,
+      "sha256": "b3ca76cc7e54f8d26dd94d235808284d5727c2dca647ce14d5a8f5ee2d369578"
+    },
+    {
+      "path": "plan/sound-design.json",
+      "bytes": 328,
+      "sha256": "59b283241964ee7dc0130dcb9fe4bc519349c812e5e25cc39b42bf9c248f61ff"
+    },
+    {
+      "path": "project.json",
+      "bytes": 6404,
+      "sha256": "603626498f6ae79d0b074cdee0d713e475ce2a70d7b4778f3c69170f79226ee4"
+    },
+    {
+      "path": "runtime/remotion.config.ts",
+      "bytes": 266,
+      "sha256": "febb9b15b9cea7b203be09723fd86077b8a1ede9e519dbac00ac69ad6a8065b4"
+    },
+    {
+      "path": "runtime/scripts/validate.mjs",
+      "bytes": 12007,
+      "sha256": "79710e40597e0835400e4d5dfd1320c25276424ae9b15e98df2e79f074f7f601"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "output/final.mp4",
+      "bytes": 643491,
+      "sha256": "e65be40d0c5c3adcd485e72d178c885a2eab878346479524e79742ba508a3229"
+    },
+    {
+      "path": "output/preview.mp4",
+      "bytes": 495584,
+      "sha256": "e067ad9ba5759dda8c47f6e43d5fab7b29fc5e396f35537b392204d5e5af036b"
+    },
+    {
+      "path": "output/preview.png",
+      "bytes": 27051,
+      "sha256": "3d737258719e5b789ca6abd0275ebd0fca89307135746e2a88420527a58fae04"
+    },
+    {
+      "path": "reports/ghost-check-preview.json",
+      "bytes": 320,
+      "sha256": "98aeb135ed51ab37ee3f779a4b9bc7914f762f6a799688417504955332c36fd3"
+    },
+    {
+      "path": "reports/ghost-check.json",
+      "bytes": 318,
+      "sha256": "186e2127c0441a4422106f28046525b215bd5a75f3016761d9cc8c7ce3bdb954"
+    }
+  ],
+  "protocol_errors": 0,
+  "ended_at": "2026-11-14T21:29:21.135Z",
+  "elapsed_ms": 119223
+}

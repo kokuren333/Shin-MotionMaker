@@ -35,6 +35,27 @@ Shin-MotionMaker の MCP サーバーは、公式 TypeScript SDK 1.32.2 によ�
 - Node 22 以上で、作業ディレクトリをこの repo のルートにして起動する。公式 SDK の `StdioClientTransport` にこの `command`・`args` を渡し、初期化・ツール一覧・候補の取得まで実行して確かめた（`tests/mcp-docs.test.ts`）。
 - クライアント側の設定ファイルの場所や登録画面は、各クライアントに従う。作業ディレクトリを指定できないクライアントでは、エントリと root のパスを利用環境のものに置き換える。
 
+### ジョブ内スクリプトへの環境変数
+
+MCP サーバーが起動するジョブ内スクリプトは、MCP サーバーのプロセスの環境をそのまま受け継ぐ。host は環境変数を解釈・追加・削除しない。MCP サーバーの環境はクライアントが決める。公式 SDK 1.32.2 の stdio クライアント（`StdioClientTransport`）は、既定では限られた変数（Windows では PATH・APPDATA・TEMP など12個）だけを引き継ぎ、クライアント自身の環境にある変数を渡さない。ジョブ内スクリプトに渡す変数は、登録の `env` に書く。
+
+```json
+{
+  "mcpServers": {
+    "shin-motionmaker": {
+      "command": "node",
+      "args": ["dist/cli/main.js", "mcp", "serve", "--root", "."],
+      "env": { "MOTION_JOB_ENCODER": "cpu" }
+    }
+  }
+}
+```
+
+- 実測（[mcp-env.json](work/CPU/evidence/mcp-env.json)）：クライアント自身の環境に `MOTION_JOB_ENCODER=cpu` があっても、登録に `env` が無いとジョブ内スクリプトには届かなかった。`env` に書くと届いた。SDK は既定の変数に登録の `env` を重ねる。ほかのクライアントが引き継ぐ環境はクライアントごとに違うので、確実に渡すには `env` に書く。
+- `MOTION_JOB_ENCODER`（`auto`・`cpu`・`gpu`）は生成ジョブのレンダーのエンコーダを選ぶ（テンプレート 0.5.3 以降）。既定の `auto` は NVENC を実際に試し、使えなければ CPU（libx264）で符号化するので、通常は設定しなくてよい。値の意味は生成ジョブの README の「レンダーのエンコーダ（GPU・CPU）」節にある。
+- 選んだ経路は、run の `stderr.log` の `[encoder]` で始まる1行で確かめられる。
+- 不正な値では、ジョブ内のレンダーが始まらずに終わり、`run_get` は `ok: false`・`E_INTERNAL`・run は `failed`（`exit_code` 4、`script_exit_code` 1）を返す（CLI と同じ。[docs/CLI.md](CLI.md#ジョブ内スクリプトの終了コードとの対応)）。
+
 ## ツールと封筒
 
 ツールの名前・入力スキーマ・日本語の説明は、host の共通の操作定義表から取る。CLI 専用の `studio`・`mcp serve`・`version` は公開しない。版は初期化応答の `serverInfo.version` で返す。
