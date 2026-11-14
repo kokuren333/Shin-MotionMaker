@@ -1,14 +1,24 @@
 # MCP
 
-MCP は公式 TypeScript SDK 1.32.2 による stdio サーバーである。この PC の SDK クライアントとの初期化ではプロトコル `2025-11-25` を確認した。標準出力は JSON-RPC 専用で、起動失敗と通信ログは標準エラーに出す。
+Shin-MotionMaker の MCP サーバーは、公式 TypeScript SDK 1.32.2 による stdio サーバーである。開発機の SDK クライアントとの初期化では、プロトコル `2025-11-25` を確認した。標準出力は JSON-RPC 専用で、起動の失敗と通信のログは標準エラーに出す。
 
 ## 起動とクライアント登録
 
-正式な CLI 入口は `shin-motionmaker mcp serve`。ビルド後は `node dist/cli/main.js mcp serve --root <dir>` でも起動できる。上位の `src/main.ts` が CLI と `src/mcp/index.ts` の `serveMcp(options)` を結線する。
+正式な入口は CLI の `shin-motionmaker mcp serve` である。ビルド後は `node dist/cli/main.js mcp serve --root <dir>` でも起動できる。上位の `src/main.ts` が、CLI と `src/mcp/index.ts` の `serveMcp(options)` をつないでいる。
 
-`--root` は必須である。`--read-only`、`--enable-generation`、繰り返せる `--allow-dir` と `--allow-engine-host` を受け付ける。不明なオプション・必須値の欠落は `E_USAGE`、不在またはディレクトリでない root / allow-dir は接続開始前に `E_PATH_DENIED` と hint で終了する。どちらも終了コード2で、stdout には何も書かない。
+| オプション | 内容 |
+| --- | --- |
+| `--root <dir>` | 必須。MCP が読み書きできる範囲 |
+| `--read-only` | run・patch・取消・generate のツールを公開しない（詳細は「安全の境界」） |
+| `--enable-generation` | 画像生成のツールを公開する |
+| `--allow-dir <dir>` | 繰り返し指定できる。`request.assets` の絶対パスの添付を読める範囲 |
+| `--allow-engine-host <host>` | 繰り返し指定できる。ループバック以外の音声エンジンへの接続を許すホスト名 |
 
-[クライアント登録例](mcp-client.example.json) は次の設定である。Node 22 以上で、作業ディレクトリをこの repo のルートにして起動する。公式 SDK の `StdioClientTransport` へこの `command`・`args` を渡し、初期化・ツール一覧・候補取得まで実行した。クライアント側の設定ファイルの場所や登録 UI は各クライアントに従う。作業ディレクトリを指定できないクライアントでは、利用環境のエントリと root のパスへ置き換える。
+- 不明なオプションや必須値の欠落は `E_USAGE`。root・allow-dir が存在しないかディレクトリでないときは、接続を始める前に `E_PATH_DENIED` と hint を返して終わる。どちらも終了コード2で、標準出力には何も書かない。
+
+### 登録例
+
+[クライアント登録例](mcp-client.example.json) は次の設定である。
 
 ```json
 {
@@ -21,11 +31,13 @@ MCP は公式 TypeScript SDK 1.32.2 による stdio サーバーである。こ�
 }
 ```
 
-この例は読み取り専用登録である。先に `npm run build` を実行して、ビルド済み JavaScript を用意する。
+- 読み取り専用の登録である。先に `npm run build` を実行して、ビルド済みの JavaScript を用意しておく。
+- Node 22 以上で、作業ディレクトリをこの repo のルートにして起動する。公式 SDK の `StdioClientTransport` にこの `command`・`args` を渡し、初期化・ツール一覧・候補の取得まで実行して確かめた（`tests/mcp-docs.test.ts`）。
+- クライアント側の設定ファイルの場所や登録画面は、各クライアントに従う。作業ディレクトリを指定できないクライアントでは、エントリと root のパスを利用環境のものに置き換える。
 
 ## ツールと封筒
 
-名前・入力スキーマ・日本語説明は host の共通操作定義表から取得する。CLI 専用の `studio`・`mcp serve`・`version` は公開しない。版は初期化応答の `serverInfo.version` に返す。
+ツールの名前・入力スキーマ・日本語の説明は、host の共通の操作定義表から取る。CLI 専用の `studio`・`mcp serve`・`version` は公開しない。版は初期化応答の `serverInfo.version` で返す。
 
 | ツール | 主な入力 | 内容 |
 | --- | --- | --- |
@@ -48,23 +60,44 @@ MCP は公式 TypeScript SDK 1.32.2 による stdio サーバーである。こ�
 | `doctor` | job? | 環境を報告。自動導入しない |
 | `schema_get` | name? | スキーマ一覧または本文 |
 
-外側の入力は `additionalProperties:false`。自由記述と任意の patch 本文を候補一覧に制限しない。正確な型・範囲は `tools/list` と [CONTRACT](CONTRACT.md) に従う。ツールのスナップショットは `tests/fixtures/mcp-tools.json` にあり、共通 outputSchema を1回格納し、各ツールから参照している。
+- 外側の入力は `additionalProperties: false`。自由記述と任意の patch 本文を、候補の一覧に制限しない。正確な型と範囲は `tools/list` と [CONTRACT](CONTRACT.md) に従う。
+- ツールのスナップショットは `tests/fixtures/mcp-tools.json` にある。共通の outputSchema を1回だけ格納し、各ツールから参照している。
 
-各ツールは同じ封筒 JSON を `structuredContent` と先頭の text ブロックに返す。`isError` は `ok:false` のときだけ true。実行できた QC の fail は `ok:true`・`isError:false` であり、MV の QC は `verdict:not_applicable`。候補とジョブ状態全体には合否・スコア・順位を付けない。状態の checks は保存済み検査の verdict をそのまま示す。
+### 封筒と isError
 
-全ツールの outputSchema は host の封筒スキーマで、外部ファイル参照をローカル `$defs` にまとめる。report の PNG は JSON 内で `data:null`、`mime_type:"image/png"`、元画像の `bytes`・`sha256`、`delivered_as:"image"` を返す。本体の base64 は後続の image ブロックだけに1回入れる。MCP の上限は6 MiBで、符号化後は約8 MiBとなり SDK 既定の受信上限10 MiBに収まる。超過時は `E_INPUT_INVALID` と CLI の `smm report` または縮小を案内する hint を返し、接続を続ける。CLI は従来どおり8 MiBまで、JSON の data に base64 を返す。検証用 SDK クライアントも受信上限を変更しない。
+- 各ツールは、CLI と同じ封筒の JSON を `structuredContent` と先頭の text ブロックに返す。
+- `isError` が true になるのは `ok: false` のときだけである。実行できた QC の fail は `ok: true`・`isError: false` で、MV の QC は `verdict: not_applicable` になる。
+- 候補とジョブ状態の全体には、合否・スコア・順位を付けない。状態の `checks` は、保存済みの検査の verdict をそのまま示す。
+- 全ツールの outputSchema は host の封筒スキーマで、外部ファイルの参照はローカルの `$defs` にまとめてある。
+- 未知のツール名には、`isError: true` と `E_USAGE` の封筒を返す。
 
-SDK 既定の受信上限10 MiBを超える入力1行をクライアントから送ると、SDK の stdio transport が閉じ、サーバーは終了する。切り離した run は継続する。未知のツール名には `isError:true` と `E_USAGE` の封筒を返す。
+### PNG の受け渡しと上限
+
+- `report_get` で PNG を取得すると、JSON の中は `data: null`・`mime_type: "image/png"`・元画像の `bytes`・`sha256`・`delivered_as: "image"` になる。base64 の本体は、後に続く image ブロックに1回だけ入る。
+- MCP の上限は6 MiB で、符号化後は約8 MiB になり、SDK の既定の受信上限10 MiB に収まる。超えたときは `E_INPUT_INVALID` と、CLI の `smm report` か縮小を案内する hint を返し、接続は続ける。
+- CLI は従来どおり8 MiB まで扱い、JSON の `data` に base64 を入れて返す。検証用の SDK クライアントも受信上限を変えていない。
+- クライアントから SDK の既定の受信上限10 MiB を超える1行を送ると、SDK の stdio transport が閉じてサーバーは終了する。切り離した run は続く。
 
 ## run の待ち方
 
-run の `wait_ms` は整数0〜50,000。`job_validate` の final=false、`job_qc`、`job_sound` の既定は45,000。それ以外と `job_validate` の final=true は0。run_get の既定は0である。
+レンダーや検査などの長い処理は run として実行する。
 
-待ち時間内に終われば result に検査結果、走行中なら開始操作の result は null、封筒の run に ID と running を返す。run_get は走行中も report:null・artifacts:[] とログ末尾を返す。`log_tail` は0〜2,000、既定100行。`log_offset` は受け付けない。
+- run の `wait_ms` は0〜50,000の整数。既定は `job_validate`（`final=false`）・`job_qc`・`job_sound` が45,000、それ以外と `job_validate`（`final=true`）が0。`run_get` の既定は0である。
+- 待ち時間のうちに終われば、`result` に検査結果が入る。走行中なら、開始した操作の `result` は `null` で、封筒の `run` に ID と `running` が入る。
+- 走行中の `run_get` は、`report: null`・`artifacts: []` とログの末尾を返す。`log_tail` は0〜2,000で既定100行。`log_offset` は受け付けない。
 
-呼び出し側は同じ job と run_id で run_get を繰り返す。completed は処理が想定内に終了したことを表し、ゲートの合否は `result.verdict` で読む。run_get 自体が取得できれば、過去 run が failed でも `ok:true` で、run 内の error を保持する。台帳とログはジョブ内の `.smm/runs/` にあり、サーバーを終了しても worker は継続する。取り消す場合は run_cancel を明示して呼ぶ。
+呼び出し側は、同じ `job` と `run_id` で `run_get` を繰り返す。
 
-進捗トークンがある run 操作・run_get は、待機中に host の状態を約1秒間隔で観測し `notifications/progress` を返す。progress は通知の連番で、message に Run.progress.text と、存在すれば比率を表示する。操作開始時の通知は、その呼び出し開始以降に作られた同種の MCP run を観測できたときだけ送る。進捗は補助情報で、待機・結果・排他は host が所有する。トークンがない場合は追加の観測をしない。クライアントの要求キャンセルは run_cancel の代わりにならない。
+- `completed` は、処理が想定どおりに終わったことを表す。ゲートの合否は `result.verdict` で読む。
+- `run_get` 自体が取得できれば、過去の run が failed でも `ok: true` で、run の中の `error` を保つ。
+- 台帳とログはジョブ内の `.smm/runs/` にある。サーバーを終了しても worker は続く。止めるときは `run_cancel` を明示して呼ぶ。クライアントの要求キャンセルは `run_cancel` の代わりにならない。
+
+### 進捗の通知
+
+- 進捗トークンがある run 操作と `run_get` は、待っている間に host の状態を約1秒おきに観測し、`notifications/progress` を返す。トークンが無ければ追加の観測はしない。
+- `progress` は通知の連番で、`message` には `Run.progress.text` と、あれば比率を表示する。
+- 操作の開始時の通知は、その呼び出しの開始以降に作られた同じ種類の MCP の run を観測できたときだけ送る。
+- 進捗は補助の情報である。待機・結果・排他は host が持つ。
 
 ## 安全の境界
 
@@ -85,7 +118,7 @@ run の `wait_ms` は整数0〜50,000。`job_validate` の final=false、`job_qc
 
 ## 実行した検証
 
-この PC の Windows / Node 24 で以下を実行した。Tier B は実際に生成したジョブに依存を導入する。Tier A の通常テストには含めない。
+開発機の Windows・Node 24 で、repo のルートから次を実行した。
 
 ```powershell
 node --experimental-strip-types --test tests/mcp.test.ts tests/mcp-fix.test.ts tests/mcp-setup.test.ts
@@ -94,4 +127,9 @@ node --experimental-strip-types tools/smoke-mcp.ts
 node tools/audit-mcp-licenses.mjs
 ```
 
-Tier B は68ファイルの生成、setup の completed / exit 0、validate の completed / pass / exit 0、依存導入済み、プロトコルエラー0を確認した。同じコマンドを ubuntu の CI ジョブに置き、ジョブ依存の npm キャッシュを設定する。Windows の symlink 作成はこの PC では EPERM で、junction の外向き拒否を実測した。Linux / Node 22 の実測は L2 がリモート作成後の CI へ持ち越す。証拠と残課題は [M3 REPORT](work/M3/REPORT.md) に記録する。文面の推敲は M6 担当へ渡す。
+- 1行目は MCP のプロトコル往復・安全・setup のテスト、2行目は上の登録例での起動の確認である。
+- `tools/smoke-mcp.ts` は Tier B で、実際に生成したジョブに依存を導入する。通常のテスト（Tier A）には含めない。68ファイルの生成、setup の `completed`・終了0、validate の `completed`・`pass`・終了0、依存の導入済み、プロトコルエラー0を確認した。同じコマンドを ubuntu の CI ジョブに置き、ジョブの依存の npm キャッシュを設定している。
+- `tools/audit-mcp-licenses.mjs` は、MCP SDK とその推移依存の LICENSE を `docs/work/M3/dependency-licenses.json` の記録と照合する。
+- この開発機の Windows では symlink の作成が EPERM になるため、junction の外向きの拒否を実測した。Linux・Node 22 での実測は、リモートの作成後の CI へ持ち越している。
+
+各回の結果は [M3 の REPORT](work/M3/REPORT.md) と [M6 の command-log](work/M6/command-log.md) にある。

@@ -1,8 +1,12 @@
 # CLI
 
-Node.js 22 以上で使用する。実行ファイル名は `shin-motionmaker` と `smm`。配布する入口はビルド済みの `dist/cli/main.js` である。CLI は共通の host 操作定義表にある名前・入力スキーマからコマンドを登録する。
+Shin-MotionMaker の CLI は Node.js 22 以上で動く。実行ファイル名は `shin-motionmaker`、短縮名は `smm` で、実体はビルド済みの `dist/cli/main.js` である。導入は [README](../README.md#cli) を参照する。
 
-以下の表は構文であり、山括弧は利用者が指定する値を示す。実行済みの例と結果は後述の記録を参照する。
+CLI のコマンドは、host の共通の操作定義表にある名前と入力スキーマから登録している。MCP のツールも同じ表から作るので、両者の入力と結果は一致する。
+
+## コマンド
+
+次の表は構文で、山括弧は利用者が指定する値を表す。実際に実行した例と結果は、末尾の「実行済みの例」にある。
 
 | 構文 | 内容 |
 | --- | --- |
@@ -29,28 +33,44 @@ Node.js 22 以上で使用する。実行ファイル名は `shin-motionmaker` �
 | `mcp serve --root <dir> [--allow-dir <dir>] [--read-only] [--enable-generation] [--allow-engine-host <host>]` | MCP stdio サーバーを起動する。allow-dir / allow-engine-host は繰返し指定可 |
 | `version` | パッケージ版・コミット・テンプレート版。現在 commit は null |
 
-`--human` は通常の封筒を人向けの要約へ切り替える。`mcp serve` の標準出力は指定の有無によらず JSON-RPC 専用である。run の開始コマンドには `--detach` と `--wait-ms` もある。CLI は通常完了まで前面で待つため、開始時の wait-ms にかかわらず短い取得を繰り返す。detach では待たない。runs wait も終端まで取得を繰り返す。runs logs は即時取得、runs get だけは wait-ms の指定時間（最大50,000ms）まで取得を待てる。log-tail は0〜2,000行で既定100行。
+### 共通のオプション
 
-imagegen の kind は原典の background / transparent / character-sheet / motion / texture / prop。refs は assets/・sources/、prompt-file と style は plan/・sources/ に限る。任意の子プロセス引数を通す口はない。
+- `--human` は、標準出力を JSON の封筒から人向けの要約に切り替える。`mcp serve` の標準出力は、指定の有無によらず JSON-RPC 専用である。
+- run を開始するコマンドには `--detach` と `--wait-ms` もある。
+  - 既定では完了まで前面で待つ。開始時の `--wait-ms` の値にかかわらず、短い取得を繰り返して終端まで待つ。
+  - `--detach` では待たずに run ID を返して終わる。
+- `runs wait` は終端まで取得を繰り返す。`runs logs` はすぐに取得する。`runs get` だけは、`--wait-ms` で指定した時間（最大50,000ms）まで待って取得できる。
+- `--log-tail` は0〜2,000行で、既定は100行。
+
+### imagegen の制限
+
+- `--kind` は原典と同じ `background`・`transparent`・`character-sheet`・`motion`・`texture`・`prop`。
+- `--ref` は `assets/`・`sources/` の中、`--prompt-file` と `--style` は `plan/`・`sources/` の中に限る。
+- 任意の子プロセス引数を渡す口は無い。
 
 ## 入力と出力先
 
-request は `{ "form": {...}, "assets": {...} }`。省略したフォーム値は原典の既定値になる。創造に関わる方向性・指示・理解ゴール等は自由記述の文字列である。assets の sources はパス配列、character / secondCharacter / bgm / music はパスまたは null。添付は request ファイルの親から解決する。UTF-8 BOM を受け付ける。
-
-out は親ディレクトリであり、フォルダはその下の safeName(title)、ZIP はその下の safeName(title)-motion-job.zip に作成する。既存のファイル・空フォルダも上書きしない。未知キー・型・validateForm のエラーは本文の書出し前に拒否する。dry-run は生成内容を返し、出力親も作らない。MV の音源尺を補完できなければ、musicDurationSec の指定を案内する。
+- request は `{ "form": {...}, "assets": {...} }` の形である。省いたフォームの値は原典の既定値になる。創造に関わる方向性・指示・理解ゴールなどは自由記述の文字列である。
+- `assets` の `sources` はパスの配列、`character`・`secondCharacter`・`bgm`・`music` はパスまたは `null`。添付のパスは request ファイルがあるフォルダから解決する。UTF-8 の BOM を受け付ける。
+- `--out` は親ディレクトリである。フォルダはその下の `safeName(title)` に、ZIP はその下の `safeName(title)-motion-job.zip` に作る。
+- 既存のファイル・フォルダは、空のフォルダでも上書きしない。
+- 未知のキー・型の誤り・`validateForm` のエラーは、本文を書き出す前に拒否する。
+- `--dry-run` は生成内容を返すだけで、出力先の親フォルダも作らない。
+- MV で音源の尺を補えないときは、`musicDurationSec` を指定するよう案内する。
 
 ## 封筒
 
-通常の標準出力は `smm.envelope/1` の JSON 1個と末尾 LF だけである。子プロセスの stdout / stderr は差分を読んで CLI の標準エラーへ流す。標準出力が1個かどうかは、本文中の改行文字ではなく JSON 全体を parse して判断できる。PNG は data が base64 文字列、encoding が base64 となる。
+通常の標準出力は、`smm.envelope/1` の JSON 1個と末尾の LF だけである。子プロセスの標準出力・標準エラーは、差分を読んで CLI の標準エラーへ流す。出力が JSON 1個であることは、本文中の改行の数ではなく、全体を JSON として parse できるかで判断できる。
 
-- 成功: schema / command / ok:true / result / advisories / warnings。run 操作では run と job も返す。
-- 失敗: schema / command / ok:false / error:{code,message,hint,details?}。開始済みなら run も返す。
-- ok は操作結果を得たこと、result.verdict は検査の pass / fail / not_applicable。QC fail でも ok:true。
-- 助言は advisories。件数・主観・SKIPPED は通常の ok・verdict・終了コードを変えない。imagegen の strict だけは記録済み SKIPPED を fail とする。
-- run_get 相当の runs get / wait / logs は台帳の取得に成功すれば ok:true。元の失敗は run.error に保持する。
-- human は標準出力を日本語の要約へ切り替える。JSON 封筒を必要とする呼出側では指定しない。
+- **成功**：`schema`・`command`・`ok: true`・`result`・`advisories`・`warnings`。run の操作では `run` と `job` も返す。
+- **失敗**：`schema`・`command`・`ok: false`・`error: {code, message, hint, details?}`。run を開始済みなら `run` も返す。
+- **`ok` と `verdict` は別物である。** `ok` は操作の結果を得たこと、`result.verdict` は検査の `pass`・`fail`・`not_applicable` を表す。QC が fail でも `ok: true` である。
+- **助言は `advisories` に入れる。** 件数・主観的な指摘・SKIPPED は、`ok`・`verdict`・終了コードを変えない。例外は `imagegen --strict` だけで、記録された SKIPPED を fail とする。
+- `runs get`・`runs wait`・`runs logs`（MCP の `run_get` にあたる）は、台帳を取得できれば `ok: true` である。元の run の失敗は `run.error` に残る。
+- `report` で PNG を取得すると、`data` に base64 の文字列が入り、`encoding` は `base64` になる。
+- `--human` は標準出力を日本語の要約に切り替える。JSON の封筒を読む呼び出し側では付けない。
 
-封筒・run・結果の定義は schemas/ にある。version の結果も smm.version/1 を持つ。
+封筒・run・各結果の定義は `schemas/` にあり、`schema` コマンドで取得できる。`version` の結果にも `smm.version/1` のスキーマがある。
 
 ## 終了コード
 
@@ -62,7 +82,11 @@ out は親ディレクトリであり、フォルダはその下の safeName(tit
 | 3 | 環境・前提の不足 |
 | 4 | 内部エラー・異常終了・取消・時間切れ・lost |
 
-前面 run と runs wait は終端 run.exit_code を使う。runs wait は元の run が失敗しても台帳取得の ok は true のままで、終了コードだけは元の run と同じになる。runs get / list / logs / cancel は取得・取消操作が成功すれば0。detach は開始に成功すれば0で、以後の結果は台帳から得る。
+- 前面で待つ run と `runs wait` は、終端の `run.exit_code` で終わる。`runs wait` は、元の run が失敗しても台帳の取得としては `ok: true` のままで、終了コードだけが元の run と同じになる。
+- `runs get`・`runs list`・`runs logs`・`runs cancel` は、取得・取消の操作が成功すれば0で終わる。
+- `--detach` は開始に成功すれば0で終わる。その後の結果は台帳から得る。
+
+### エラーコード
 
 | 値 | エラーコード |
 | --- | --- |
@@ -70,11 +94,14 @@ out は親ディレクトリであり、フォルダはその下の safeName(tit
 | 3 | E_JOB_NOT_FOUND, E_NOT_A_JOB, E_DEPS_MISSING, E_TOOL_MISSING, E_ENGINE_UNREACHABLE, E_BUSY, E_CONFLICT, E_RUN_NOT_FOUND, E_DISABLED |
 | 4 | E_RUN_LOST, E_TIMEOUT, E_INTERNAL |
 
-message と hint は日本語。引数不足・重複・非対応オプションは E_USAGE。引数を解釈できてもスキーマに合わない値は E_INPUT_INVALID。validateForm の文言は原典のまま details に入る。依存不足・排他・無効操作の事前拒否では run を作らない。
+- `message` と `hint` は日本語である。
+- 引数の不足・重複・対応しないオプションは `E_USAGE`。引数を解釈できても、値がスキーマに合わなければ `E_INPUT_INVALID`。
+- `validateForm` の文言は原典のまま `details` に入る。
+- 依存の不足・排他・無効な操作として事前に拒否したときは、run を作らない。
 
-## ジョブ内スクリプトからの対応
+## ジョブ内スクリプトの終了コードとの対応
 
-M0-Q3 の実測は [CLI-EXAMPLES.json](work/M2b/CLI-EXAMPLES.json) と [TIER-B.json](work/M2b/TIER-B.json)。判定の実装は host の1箇所であり、CLI は以下を再実装しない。元の値は run.script_exit_code、正規化値は run.exit_code に残る。
+判定の実装は host の1箇所にあり、CLI は以下を再実装しない。スクリプトの元の終了コードは `run.script_exit_code` に、正規化した値は `run.exit_code` に残る。M0-Q3 で求められた実測の記録は [CLI-EXAMPLES.json](work/M2b/CLI-EXAMPLES.json) と [TIER-B.json](work/M2b/TIER-B.json) にある。
 
 | スクリプト | 実測した元の終了と証拠 | 正規化 |
 | --- | --- | --- |
@@ -88,11 +115,17 @@ M0-Q3 の実測は [CLI-EXAMPLES.json](work/M2b/CLI-EXAMPLES.json) と [TIER-B.j
 | run.mjs | 不正 mode は1、依存未導入の preview も1 | CLI は既知 target だけを渡す。依存不足を起動前3とする。成功は0、実行後に判明した道具不足は3、未分類非0は4。実レンダーは M7 |
 | setup（npm） | 実依存の install と、依存なし workspace の install / ci は0。Windows 拡張 cwd の npm URL エラーは1 | 成功0、npm 不在は3、導入失敗は4。拡張 cwd の不具合は host で修正 |
 
-最新 report は開始日時以降のものだけを使う。元の1だけで不合格とは判定せず、完了の証拠と終了値の一致を要求する。FAT・一部ネットワーク FS の粗い mtime では新しい report も拒否される場合がある。
+- 使う report は、run の開始日時以降に書かれた最新のものだけである。
+- 元の終了コードが1というだけでは不合格と判定しない。完了の証拠と、終了コードとの一致を求める。
+- FAT や一部のネットワークファイルシステムでは更新日時の粒度が粗く、新しい report でも採用されないことがある。
 
 ## 実行済みの例
 
-以下は repo ルートから実行した。入力と生成先は検証専用の .agent-work/cli-evidence/ に置いた。入力の作成を含む再現手順は tools/verify-cli.mjs、各例の結果は [CLI-EXAMPLES.json](work/M2b/CLI-EXAMPLES.json) にある。
+以下は、repo のルートでビルドしたあとに実行した。入力と生成先は、検証専用の `.agent-work/cli-evidence/`（追跡しない）に置いた。入力の `request.json` は、BOM 付き UTF-8 の次の内容である。
+
+```json
+{"form":{"title":"CLI & 全角 空白","description":"CLI の実動確認","audience":"開発者","voiceEngine":"none","generateAudio":false}}
+```
 
 ```powershell
 node dist/cli/main.js version
@@ -103,14 +136,17 @@ node dist/cli/main.js generate .agent-work/cli-evidence/request.json --out .agen
 node dist/cli/main.js qc ".agent-work/cli-evidence/jobs/CLI & 全角 空白" --stage pre
 ```
 
-最後の例は生成直後の解説では ok:true / verdict:fail / 終了1となる。検証用の入力を変更した追加実測も同じ記録に時系列で載せている。
+- 最初の5つは `ok: true`・終了コード0で終わる。
+- 最後の例は、生成直後の解説ジョブなので制作記録が無く、`ok: true`・`verdict: fail`・終了コード1になる。道具の故障ではなく、ゲートの不合格である。
+- 各例の結果は [M6 の command-log](work/M6/command-log.md) にある。M2b での実測（検証用の入力を変えた追加の実測を含む）は [CLI-EXAMPLES.json](work/M2b/CLI-EXAMPLES.json) に時系列で載っている。
+- M2b では、ブラウザでの Studio 操作・実レンダー・Aivis の実エンジンへの接続・有償の画像生成は実測していない。
 
-M2b ではブラウザの Studio 操作・実レンダー・Aivis 実エンジン接続・有償の画像生成は未実測。
+## MCP の起動
 
-MCP の登録例はビルド後、repo ルートを作業ディレクトリとして次の入口を使う。SDK クライアントから初期化・一覧・ツール呼出まで確認した。
+MCP サーバーは、ビルド後に repo のルートを作業ディレクトリにして、次の入口で起動する。公式 SDK のクライアントから、初期化・ツール一覧・ツール呼び出しまで確認した。
 
 ```json
 {"command":"node","args":["dist/cli/main.js","mcp","serve","--root",".","--read-only"]}
 ```
 
-`mcp serve` の標準出力は JSON-RPC 専用で、起動エラーは hint 付きの JSON を標準エラーへ出す。root が不在・ファイルの場合は E_PATH_DENIED / 終了2。詳細は [MCP](MCP.md) と [M3 REPORT](work/M3/REPORT.md) を参照する。
+`mcp serve` の標準出力は JSON-RPC 専用で、起動時のエラーは hint 付きの JSON を標準エラーに出す。root が存在しないかファイルのときは `E_PATH_DENIED`・終了コード2になる。詳しくは [MCP](MCP.md) と [M3 の REPORT](work/M3/REPORT.md) を参照する。
