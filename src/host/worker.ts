@@ -33,6 +33,9 @@ export async function stopProcessTree(pid: number | null, identity?: ProcessIden
     for (const owner of [...descendants, identity!]) await signal(owner, "SIGTERM");
     await new Promise((resolve) => setTimeout(resolve, 750));
     for (const owner of [...descendants, identity!]) await signal(owner, "SIGKILL");
+    // SIGKILL is delivered asynchronously; give the kernel time to finish each exit.
+    const remaining = async () => { for (const owner of descendants) if (await processState(owner.pid, owner) !== "absent") return true; return false; };
+    for (let attempt = 0; attempt < 100 && await remaining(); attempt++) await new Promise((resolve) => setTimeout(resolve, 50));
     for (const owner of descendants) if (await processState(owner.pid, owner) !== "absent")
       throw hostError("E_INTERNAL", "子孫の停止を確認できませんでした。", undefined, { reason: "stop_failed" });
   }
