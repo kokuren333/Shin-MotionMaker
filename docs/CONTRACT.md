@@ -2,6 +2,7 @@
 
 | 版 | 日付 | 改訂内容 |
 | --- | --- | --- |
+| M3-fix | 2026-11-14 | M3-fix：MCP の画像は image ブロックだけで送る、MCP の PNG 上限 6 MiB（M3R M-1、L2 承認） |
 | M0b | 2026-11-14 | M0R の M-1〜M-6、R-1〜R-14、I-1・I-4〜I-10 を L2 の裁定に従い反映 |
 | M0 | 2026-11-14 | 初版 |
 
@@ -285,7 +286,7 @@ function getReport(context: HostContext, job: string, relative: string): Promise
 - ジョブ内スクリプトは `<job>/runtime` を cwd とし process.execPath＋配列引数＋shell:false で直接起動する。setup はジョブルートで npm の JavaScript entry を node から起動し、lock があれば ci、なければ install。npm.cmd を shell 経由で起動しない。依存を要求するのは validate・render・double_render 付き ghost_check だけ。hasRuntimeDependencies は `<job>/runtime` から @remotion/cli/package.json と typescript/bin/tsc の両方を resolve できるか判定し、事前検査・status・doctor が共有する。未導入なら実行前に E_DEPS_MISSING。render はブラウザの有無で事前拒否せず、doctor の報告だけに留める。
 - run の全種別・project_patch・CLI の studio は同じジョブ排他を取る。排他予約は原子的に行い `E_BUSY` に所有 run ID（studio・patch は所有操作）を入れる。read 系は設定の写しを持たない。依存不足・E_BUSY・E_DISABLED 等の事前検査失敗では run を作らず、台帳も残さない。
 - project_get は実バイトの SHA-256 を内容と返す。pointer は RFC 6901。patch は JSON Merge Patch（RFC 7396）。現在 hash の不一致は E_CONFLICT。結果が object、schema_version・mode・generator の不変だけを検査する。一時ファイル＋rename で置換する。場面の質や構造を検査しない。
-- report は reports/・plan/ 配下、brief.md・AGENTS.md・README.md、および output/ 直下の PNG だけ。テキストの拡張子は .md・.json・.txt・.csv、画像は .png（reports/ghost-stills/ も含む）。それ以外は E_PATH_DENIED。text は UTF-8 を256 KiBまで読んで文字境界で切り詰め truncated を返す。PNG は8 MiBまで、超過は E_PATH_DENIED（hint 付き）。PNG は bytes と MIME を host 内で返し、MCP の画像ブロックと CLI の base64 に変換する。設定・認証情報の任意読取口を作らない。
+- report は reports/・plan/ 配下、brief.md・AGENTS.md・README.md、および output/ 直下の PNG だけ。テキストの拡張子は .md・.json・.txt・.csv、画像は .png（reports/ghost-stills/ も含む）。それ以外は E_PATH_DENIED。text は UTF-8 を256 KiBまで読んで文字境界で切り詰め truncated を返す。PNG は CLI では8 MiBまで、超過は E_PATH_DENIED（hint 付き）。MCP（restrictToRoot）は6 MiBまで、超過は E_INPUT_INVALID と CLI の smm report または縮小を案内する hint を返し、接続を継続する。PNG は bytes と MIME を host 内で返し、MCP の画像ブロックと CLI の base64 に変換する。設定・認証情報の任意読取口を作らない。
 - doctor は Node・npm・依存・ffmpeg（FFMPEG_PATH→PATH→Remotion compositor）・ブラウザ・必要な Aivis 接続と Style ID・必要な Codex・空き容量を報告するだけ。自動導入しない。MCP の voice は非 loopback 接続を allowEngineHosts で明示許可された host に限る。MCP の doctor の Aivis 疎通も同じ許可に従い、未許可のホストへ接続せず「未確認」と報告する。CLI の voice・doctor は明示呼び出しを接続の許可とみなす。
 - readRunLog の offset・next_offset は UTF-8 ログのバイト位置（0開始）。不完全な末尾文字は次回へ残し、text と next_offset が対応するように読む。CLI の前面待ちはこれで stdout/stderr の差分を標準エラーへ欠落・重複なく流す。MCP の run_get は log_tail のままとし、log_offset は追加しない。
 
@@ -385,7 +386,7 @@ type CheckResult = {
 | stats | 原典 LyricStats または ScriptStats（各フィールドを変更しない） |
 | status | JobStatus |
 | project_get / project_patch | ProjectGetResult / `{sha256}` |
-| report | ReportResult。CLI の data は base64 文字列にし encoding:base64 を加える |
+| report | ReportResult。CLI の data は base64 文字列にし encoding:base64 を加える。MCP の画像は下記のメタデータ表現にする |
 | run 系の開始 | 終了後は CheckResult そのもの、走行中は null。run 情報は封筒の run だけに置く |
 | run_get | RunGetResult。CheckResult のフィールドを平らに置き、ログ末尾も付ける。run 情報は封筒の run だけに置く |
 | run_list | `{runs:Run[]}` |
@@ -394,7 +395,7 @@ type CheckResult = {
 | schema | `{name:string, schema:JsonObject}` または `{schemas:{name:string,file:string}[]}` |
 | version | `{version:string, commit:string|null, template_version:string}` |
 
-封筒の advisory/warning/message/hint は日本語。主観的助言は ok・verdict・終了コード・MCP isError を変えない。QC fail は ok:true。MCP は同じ封筒を structuredContent と先頭 text ブロックへ入れ、report の画像は後続 image ブロックへ入れる。MCP の JSON 表現に Uint8Array を出さず、report の binary 部分は CLI と同じ base64 表現にする。isError は ok:false と同値で、fail のみでは true にしない。CLI 標準出力は封筒1個（--human 時だけ人向け要約）。進捗・子の stdout/stderr は CLI 標準エラーまたは run ログへ流す。
+封筒の advisory/warning/message/hint は日本語。主観的助言は ok・verdict・終了コード・MCP isError を変えない。QC fail は ok:true。MCP は同じ封筒を structuredContent と先頭 text ブロックへ入れる。report の PNG は、その両方の result を `{path, mime_type:"image/png", truncated:false, data:null, bytes, sha256, delivered_as:"image"}` とする。bytes は元画像のバイト数、sha256 は元画像の小文字16進64桁。encoding は付けず、画像本体の base64 は後続 image ブロックだけに1回入れる。MCP の JSON 表現に Uint8Array を出さない。isError は ok:false と同値で、fail のみでは true にしない。CLI 標準出力は封筒1個（--human 時だけ人向け要約）。進捗・子の stdout/stderr は CLI 標準エラーまたは run ログへ流す。
 
 run の開始要求は予約・起動できれば running の ok:true、result:null。wait_ms 内で終了し completed なら result に CheckResult を直接付けて ok:true（fail でも同じ）。どの操作でも合否は envelope.result.verdict で読める。終了まで待った開始操作が failed/cancelled/timed_out/lost を観測した場合は run と error を付けた ok:false。run_get/list/cancel 自体は台帳の取得・取り消しを実行できれば ok:true であり、過去 run の error は run の中に保持する。CLI の前面待ちと runs wait は終端 run.exit_code（CL-07）をプロセスの終了コードに使う。runs get/list/logs は取得成功なら0、--detach の開始成功も0。これにより非同期の状態取得と元操作の成否を混同しない。
 

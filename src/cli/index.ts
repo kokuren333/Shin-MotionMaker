@@ -53,7 +53,8 @@ function humanSummary(envelope: Envelope<unknown>): string {
   const verdict = envelope.result && typeof envelope.result === "object" && "verdict" in envelope.result ? ` / ${envelope.result.verdict}` : "";
   return `${envelope.command}: 実行結果を取得しました${verdict}\n${envelope.run ? `run: ${envelope.run.id} (${envelope.run.status})\n` : ""}${JSON.stringify(envelope.result, null, 2)}\n`;
 }
-export async function runCli(argv: string[], cwd: string, output: Output): Promise<number> {
+export async function runCli(argv: string[], cwd: string, output: Output,
+  startMcp?: (input: OperationInputs["mcp_serve"]) => Promise<void>): Promise<number> {
   let invocation: Invocation | undefined;
   let envelope: Envelope<unknown>;
   let terminal: Run | undefined;
@@ -61,7 +62,11 @@ export async function runCli(argv: string[], cwd: string, output: Output): Promi
   try {
     invocation = parseCommand(argv);
     const context = cliContext(cwd);
-    if (invocation.definition.id === "mcp_serve") throw hostError("E_DISABLED", "MCP サーバーの入口は未接続です。", "M3 のサーバーを統合した版で実行してください。");
+    if (invocation.definition.id === "mcp_serve") {
+      if (!startMcp) throw hostError("E_INTERNAL", "MCP の起動処理がありません。", "正式な CLI エントリから起動してください。");
+      await startMcp(invocation.input as OperationInputs["mcp_serve"]);
+      return 0;
+    }
     await convertFiles(invocation, context);
     if (invocation.definition.kind === "run") invocation.input.wait_ms = 0;
     if (invocation.command === "runs wait" || invocation.command === "runs logs") invocation.input.wait_ms = 0;
@@ -82,7 +87,8 @@ export async function runCli(argv: string[], cwd: string, output: Output): Promi
     const args = argv[0] === "--human" ? argv.slice(1) : argv;
     envelope = { schema: "smm.envelope/1", command: invocation?.command ?? findCliCommand(args)?.command ?? args[0] ?? "", ok: false, error: normalizeError(error), ...(observedRun ? { run: observedRun, job: observedRun.job } : {}) };
   }
-  output.stdout(invocation?.human || !invocation && argv.includes("--human") ? humanSummary(envelope) : serializeEnvelope(envelope) + "\n");
+  if (envelope.command === "mcp serve" && !envelope.ok) output.stderr(JSON.stringify(envelope.error) + "\n");
+  else output.stdout(invocation?.human || !invocation && argv.includes("--human") ? humanSummary(envelope) : serializeEnvelope(envelope) + "\n");
   if (!envelope.ok) return errorExitCode(envelope.error.code);
   return terminal?.exit_code ?? 0;
 }

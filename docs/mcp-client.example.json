@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "shin-motionmaker": {
+      "command": "node",
+      "args": [
+        "dist/cli/main.js",
+        "mcp",
+        "serve",
+        "--root",
+        ".",
+        "--read-only"
+      ]
+    }
+  }
+}

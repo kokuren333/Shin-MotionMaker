@@ -48,6 +48,11 @@ async function rootAnchor(root: string): Promise<string> {
   return real;
 }
 // Also called by the MCP startup path; invalid configuration is never an absent attachment.
+export async function validateRootDirectory(root: string): Promise<void> {
+  try {
+    if (!(await fs.stat(await fs.realpath(root))).isDirectory()) throw Error();
+  } catch { throw hostError("E_PATH_DENIED", "root のフォルダを確認できません。", "--root に存在するディレクトリを指定してください。"); }
+}
 export async function validateAllowDirectories(context: HostContext): Promise<string[]> {
   const result: string[] = [];
   for (const directory of context.allowDirs) {

@@ -78,7 +78,7 @@ export async function runWorker(job: string, id: string, limit?: number): Promis
     if ((JSON.parse(await fs.readFile(recordFile, "utf8")) as RunRecord).status !== "running") return;
     run.pid = process.pid; run.heartbeat_at = new Date().toISOString();
     const command = await runCommand(job, run.kind, { ...run.args, job: "." } as OperationInputs[typeof run.kind]);
-    // npm workspace file URLs reject the extended Windows path prefix.
+    // npm workspace URLs reject the Windows namespace prefix; other scripts retain long cwd support.
     const cwd = process.platform === "win32" && run.kind !== "setup" ? path.toNamespacedPath(command.cwd) : command.cwd;
     const child = spawn(process.execPath, command.args, { cwd, detached: process.platform !== "win32", shell: false, windowsHide: true, stdio: ["ignore", output.fd, errors.fd] });
     run.script_pid = child.pid ?? null;

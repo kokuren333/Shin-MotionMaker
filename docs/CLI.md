@@ -26,10 +26,10 @@ Node.js 22 以上で使用する。実行ファイル名は `shin-motionmaker` �
 | `doctor [<job>]` | 環境の報告。自動導入しない |
 | `schema [<名前>]` | スキーマ一覧または本文。request / smm.request/1 の両形を受け付ける |
 | `studio <job>` | 排他を取得して Remotion Studio を前面起動 |
-| `mcp serve --root <dir> [--allow-dir <dir>] [--read-only] [--enable-generation] [--allow-engine-host <host>]` | M2b では未接続を E_DISABLED / 3 で返す。allow-dir / allow-engine-host は繰返し指定可 |
+| `mcp serve --root <dir> [--allow-dir <dir>] [--read-only] [--enable-generation] [--allow-engine-host <host>]` | MCP stdio サーバーを起動する。allow-dir / allow-engine-host は繰返し指定可 |
 | `version` | パッケージ版・コミット・テンプレート版。現在 commit は null |
 
-すべてのコマンドで `--human` を指定できる。run の開始コマンドには `--detach` と `--wait-ms` もある。CLI は通常完了まで前面で待つため、開始時の wait-ms にかかわらず短い取得を繰り返す。detach では待たない。runs wait も終端まで取得を繰り返す。runs logs は即時取得、runs get だけは wait-ms の指定時間（最大50,000ms）まで取得を待てる。log-tail は0〜2,000行で既定100行。
+`--human` は通常の封筒を人向けの要約へ切り替える。`mcp serve` の標準出力は指定の有無によらず JSON-RPC 専用である。run の開始コマンドには `--detach` と `--wait-ms` もある。CLI は通常完了まで前面で待つため、開始時の wait-ms にかかわらず短い取得を繰り返す。detach では待たない。runs wait も終端まで取得を繰り返す。runs logs は即時取得、runs get だけは wait-ms の指定時間（最大50,000ms）まで取得を待てる。log-tail は0〜2,000行で既定100行。
 
 imagegen の kind は原典の background / transparent / character-sheet / motion / texture / prop。refs は assets/・sources/、prompt-file と style は plan/・sources/ に限る。任意の子プロセス引数を通す口はない。
 
@@ -105,4 +105,12 @@ node dist/cli/main.js qc ".agent-work/cli-evidence/jobs/CLI & 全角 空白" --s
 
 最後の例は生成直後の解説では ok:true / verdict:fail / 終了1となる。検証用の入力を変更した追加実測も同じ記録に時系列で載せている。
 
-M2b ではブラウザの Studio 操作・実レンダー・Aivis 実エンジン接続・有償の画像生成は未実測。mcp serve の接続は M3 統合時に L2 が行う。
+M2b ではブラウザの Studio 操作・実レンダー・Aivis 実エンジン接続・有償の画像生成は未実測。
+
+MCP の登録例はビルド後、repo ルートを作業ディレクトリとして次の入口を使う。SDK クライアントから初期化・一覧・ツール呼出まで確認した。
+
+```json
+{"command":"node","args":["dist/cli/main.js","mcp","serve","--root",".","--read-only"]}
+```
+
+`mcp serve` の標準出力は JSON-RPC 専用で、起動エラーは hint 付きの JSON を標準エラーへ出す。root が不在・ファイルの場合は E_PATH_DENIED / 終了2。詳細は [MCP](MCP.md) と [M3 REPORT](work/M3/REPORT.md) を参照する。

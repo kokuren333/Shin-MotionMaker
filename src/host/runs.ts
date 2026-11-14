@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { randomBytes } from "node:crypto";
 import type { JsonObject } from "../core/index.ts";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import type { Envelope, HostContext, OperationInputs, Run, RunGetResult, RunKind, RunRecord } from "./types.ts";
 import { hostError, isMissing, normalizeError } from "./errors.ts";
@@ -14,6 +14,7 @@ import { resultAdvisories } from "./run-result.ts";
 import { stopProcessTree } from "./worker.ts";
 import { utf8Prefix } from "./report.ts";
 import { identifyProcess, processState, readProcessOwners, type ProcessIdentity } from "./processes.ts";
+import { displayHostOutput } from "./display.ts";
 
 export const runIdPattern = /^r-\d{8}T\d{6}Z-[a-f0-9]{8}$/;
 function assertRunId(id: string) { if (!runIdPattern.test(id)) throw hostError("E_INPUT_INVALID", "run ID の形式が不正です。"); }
@@ -135,21 +136,9 @@ export async function getRun(context: HostContext, input: OperationInputs["run_g
     record = await readRecord(job, input.run_id);
   }
   const run = { ...record, job: displayPath(context, job) };
-  const replacements: [string, string][] = [];
-  if (context.restrictToRoot) for (const [root, replacement] of [[job, run.job], [context.root, "."], [fileURLToPath(new URL("../../", import.meta.url)), "."]]) {
-    for (const form of new Set([root, await fs.realpath(root)])) {
-      for (const value of [form, form.split(path.sep).join("/"), path.toNamespacedPath(form), form.replaceAll("\\", "\\\\"), pathToFileURL(form).href])
-        replacements.push([value.replace(/[\\/]$/, ""), replacement]);
-    }
-  }
-  replacements.sort((a, b) => b[0].length - a[0].length);
-  const displayLog = (rows: string[]) => context.restrictToRoot ? rows.map((row) => {
-    for (const [value, replacement] of replacements) row = row.replaceAll(value, replacement);
-    return row;
-  }) : rows;
-  return { schema: "smm.envelope/1", command: "runs get", job: run.job, ok: true,
-    result: { ...(run.result ?? { report: null, artifacts: [] }), stdout_tail: displayLog(await tail(job, run.id, "stdout", lines)), stderr_tail: displayLog(await tail(job, run.id, "stderr", lines)) },
-    advisories: resultAdvisories(run), warnings: [], run };
+  return displayHostOutput(context, { schema: "smm.envelope/1", command: "runs get", job: run.job, ok: true,
+    result: { ...(run.result ?? { report: null, artifacts: [] }), stdout_tail: await tail(job, run.id, "stdout", lines), stderr_tail: await tail(job, run.id, "stderr", lines) },
+    advisories: resultAdvisories(run), warnings: [], run }, job);
 }
 export async function cancelRun(context: HostContext, relative: string, id: string): Promise<Run> {
   if (context.readOnly) throw hostError("E_DISABLED", "読み取り専用では取り消せません。");

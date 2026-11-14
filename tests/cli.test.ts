@@ -75,7 +75,6 @@ test("TS-02 advisory-only execution exits zero and CLI results match shared oper
   const shared = await execute(cliContext(context.root), "candidates", { mode: "explanation", seed: 42, count: 2 });
   assert.ok(shared.ok && candidates.envelope.ok); assert.deepEqual(candidates.envelope.result, shared.result);
   const version = await cli(["version"], context.root, true); assert.equal(version.code, 0); assert.ok(version.envelope.ok); assert.equal(version.envelope.result.version, "0.1.0");
-  const disabled = await cli(["mcp", "serve", "--root", context.root], context.root); assert.equal(disabled.code, 3); assert.ok(!disabled.envelope.ok); assert.equal(disabled.envelope.error.code, "E_DISABLED");
 });
 
 test("CLI reads BOM text patch and request files returns PNG base64 and offers a human summary", async (t) => {
