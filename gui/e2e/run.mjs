@@ -10,12 +10,12 @@ import path from "node:path";
 import JSZip from "jszip";
 import {
   buildJobFiles, defaults, explainerQualityChecklist, mvQualityChecklist, validateRequest,
-  agentPromptFor, aivisStyleLabel, mvDesign,
+  agentPromptFor, aivisStyleLabel, explainerStyles, mvDesign, switchStyleMode,
 } from "../../src/core/index.ts";
 import { loadAssets, loadTemplates } from "../../tests/helpers/templates.ts";
 import { buildSite } from "../scripts/site.mjs";
 import { launchBrowser, openPage, serve, sleep } from "./browser.mjs";
-import { MV_INPUT, asset, baselineAssets, writeReportFixtures } from "./fixtures.mjs";
+import { MV_INPUT, asset, baselineAssets, qcPre, writeReportFixtures } from "./fixtures.mjs";
 import {
   byAria, byLabel, byPlaceholder, chooseMode, count, exportRequest, fillByLabel, fillByPlaceholder,
   fillConcept, fillMv, horizontalOverflow, tag, text,
@@ -77,6 +77,13 @@ test("GU-02 制作モードの切り替えとモード別の指示・デザイ�
   assert.equal(await page.evaluate(`document.querySelector('${await byPlaceholder(page, "配色、タイポグラフィ")}').value`), "解説のデザイン");
   await chooseMode(page, "mv");
   assert.equal(await page.evaluate(`document.querySelector('${await byPlaceholder(page, "必ず扱いたい内容")}').value`), "MVの指示");
+  // M4R T1: an edited MV design survives a round trip through the explanation mode too.
+  await page.fill(await byPlaceholder(page, "配色、タイポグラフィ"), "MVのデザイン（編集）");
+  await chooseMode(page, "explanation");
+  assert.equal(await page.evaluate(`document.querySelector('${await byPlaceholder(page, "配色、タイポグラフィ")}').value`), "解説のデザイン");
+  await chooseMode(page, "mv");
+  assert.equal(await page.evaluate(`document.querySelector('${await byPlaceholder(page, "配色、タイポグラフィ")}').value`), "MVのデザイン（編集）");
+  assert.equal((await exportRequest(page)).request.form.design, "MVのデザイン（編集）");
 });
 
 test("GU-02 様式モードの選択（4様式を同格のラジオで並べ、縦向きでは混在を選べない）", async ({ page }) => {
@@ -111,6 +118,10 @@ test("GU-02 全入力欄（解説モードの全キーを画面から入力し r
   expected.design = (await page.evaluate(`document.querySelector('${await byPlaceholder(page, "配色、タイポグラフィ")}').value`));
   await set(await byPlaceholder(page, "配色、タイポグラフィ"), "design", "デザイン");
   await set(await byPlaceholder(page, "前作と変えたい説明"), "explainerDifferentiation", "差別化");
+  // M4R T1: the full-screen switch is a key of its own (it also resets biimUsage, which is set again below).
+  await page.click(".layout-switch input");
+  expected.fullScreen = !defaults.fullScreen;
+  expected.biimUsage = "never";
   await page.clickText(".asset-options label", "画像素材");
   await page.clickText(".asset-options label", "動画生成AI");
   expected.imageGeneration = !defaults.imageGeneration;
@@ -153,6 +164,33 @@ test("GU-02 全入力欄（解説モードの全キーを画面から入力し r
   const { request } = await exportRequest(page);
   assert.deepEqual(request.form, expected);
   // The MV-only keys are covered by "GU-02 MV の全入力欄".
+});
+
+test("GU-02 全入力欄（4様式の反映と全画面の切り替えが request.json・project.json・表示に入る）", async ({ page }) => {
+  let previous = defaults;
+  for (const mode of Object.keys(explainerStyles)) {
+    await page.click(`input[name="styleMode"][value="${mode}"]`);
+    await page.waitFor(`document.querySelector('input[name="styleMode"][value="${mode}"]').checked`, mode);
+    previous = switchStyleMode(previous, mode);
+    const { request } = await exportRequest(page);
+    assert.equal(request.form.styleMode, mode);
+    assert.equal(request.form.design, previous.design, "the default design follows the style (core switchStyleMode)");
+    assert.ok((await text(page, ".job-specs")).includes(explainerStyles[mode].label), mode);
+    await page.click("#tab-json");
+    assert.equal(JSON.parse(await text(page, ".json-preview")).direction.style_mode, mode);
+    const nonBiim = mode === "anime" || mode === "motion";
+    assert.equal(await page.evaluate("document.querySelector('.layout-switch input').disabled"), nonBiim, `full-screen switch for ${mode}`);
+  }
+  await page.click('input[name="styleMode"][value="biim"]');
+  await page.waitFor("!document.querySelector('.layout-switch input').disabled", "biim");
+  await page.click(".layout-switch input");
+  let { request } = await exportRequest(page);
+  assert.equal(request.form.fullScreen, true);
+  assert.equal(request.form.biimUsage, "never");
+  await page.click(".layout-switch input");
+  ({ request } = await exportRequest(page));
+  assert.equal(request.form.fullScreen, false);
+  assert.equal(request.form.biimUsage, "sometimes");
 });
 
 test("GU-02 全入力欄（MV の追加キー：曲の雰囲気・歌詞・差別化メモ・音源尺）", async ({ page }) => {
@@ -401,6 +439,33 @@ test("GU-04 request.json の読み込みは core validateRequest で検査する
   }
 });
 
+test("GU-04 不正な列挙値の request.json は入力エラーとして表示し、画面と既存の入力・添付を残す（M4R R1）", async ({ page }) => {
+  await page.clickText(".sample-button", "サンプル");
+  await page.setFiles(byAria("参考資料を選択"), [asset("reference.md")]);
+  await page.waitFor("document.querySelectorAll('#sources .attachments li').length === 1", "添付");
+  const before = (await exportRequest(page)).request;
+  const write = (name, value) => { const file = path.join(work, name); fs.writeFileSync(file, JSON.stringify(value)); return file; };
+  for (const [name, form, pointer] of [
+    ["style.request.json", { title: "test", description: "test", audience: "test", styleMode: "unknown" }, "/form/styleMode"],
+    ["mode.request.json", { title: "test", videoMode: "film" }, "/form/videoMode"],
+    ["position.request.json", { secondCharacter: { position: "middle" } }, "/form/secondCharacter/position"],
+  ]) {
+    await page.setFiles(byAria("request.json を読み込む"), [write(name, { form })]);
+    await page.waitFor(`document.querySelector('.errors')?.textContent.includes(${JSON.stringify(name)})`, "エラー");
+    const errors = await text(page, ".errors");
+    assert.ok(errors.includes(pointer), errors);
+    assert.equal(await count(page, "form.studio"), 1, "the screen stays");
+    assert.deepEqual(page.consoleErrors, []);
+    assert.equal(await count(page, "#sources .attachments li"), 1, "attachments are kept");
+    assert.deepEqual((await exportRequest(page)).request, before, "input is kept");
+  }
+  // The screen keeps working: a valid request imports afterwards.
+  await page.setFiles(byAria("request.json を読み込む"), [write("ok.request.json", { form: { title: "読み込み後", styleMode: "anime" } })]);
+  await page.waitFor("document.querySelector('.import-note')", "読み込み");
+  assert.equal((await exportRequest(page)).request.form.styleMode, "anime");
+  assert.deepEqual(page.consoleErrors, []);
+});
+
 // ---------------------------------------------------------------- GU-05 inspection results
 test("GU-05 検査結果の表示（ゲートと助言を別区画、助言は不合格の色・記号を使わない、self と免除を明示）", async ({ page }) => {
   await page.setFiles(byAria("検査結果のJSONと静止画を選択"), [reports.qcPre, reports.validate, reports.run, reports.broken]);
@@ -434,11 +499,36 @@ test("GU-05 検査結果の表示（ゲートと助言を別区画、助言は�
   assert.ok((await text(page, ".inspection-viewer .inline-error")).includes("not-a-report.json"));
 });
 
+test("GU-05 run.json 経由でも QC の免除・review_mode・ゲート行を直接開いた場合と同じ部品で表示する（M4R R2）", async ({ page }) => {
+  await page.setFiles(byAria("検査結果のJSONと静止画を選択"), [reports.run]);
+  const run = "[data-report^='run-']";
+  await page.waitFor(`document.querySelector("${run}")`, "run");
+  const waivers = await text(page, `${run} .waivers`);
+  assert.ok(waivers.includes("PRE-3") && waivers.includes(qcPre.waivers[0].reason), waivers);
+  assert.ok(!waivers.includes("免除：なし"));
+  assert.equal(await page.evaluate(`document.querySelector("${run} .review-mode").dataset.reviewMode`), "self");
+  await page.setFiles(byAria("検査結果のJSONと静止画を選択"), [reports.qcPre]);
+  await page.waitFor(`document.querySelector("[data-report='qc-pre']")`, "qc-pre");
+  for (const part of [".waivers", ".review-mode", ".gate-table", ".advice-block ul"])
+    assert.equal(await text(page, `${run} ${part}`), await text(page, `[data-report='qc-pre'] ${part}`), part);
+  assert.equal(await page.evaluate(`document.querySelector("${run} .run-status").dataset.runStatus`), "completed", "run status stays separate");
+});
+
 // ---------------------------------------------------------------- GU-06 / GU-07
 test("GU-06 CLI・MCP の区画（現在の入力の generate コマンド例、MCP の登録例、文書へのリンク）", async ({ page }) => {
   await page.fill("#concept input[maxlength='200']", "空白 と&記号");
-  const command = await text(page, ".agent-entrances [aria-label='generate のコマンド例']");
-  assert.equal(command, 'smm generate "空白 と&記号.request.json" --out jobs');
+  const commands = () => page.evaluate("[...document.querySelectorAll('.agent-entrances .command-example')].map((el) => [el.dataset.shell, el.querySelector('.command-shell').textContent, el.querySelector('pre').textContent])");
+  let shown = await commands();
+  assert.deepEqual(shown.map(([shell]) => shell), ["powershell", "posix"]);
+  assert.ok(shown[0][1].includes("PowerShell") && shown[1][1].includes("POSIX"), "each example names its shell");
+  assert.deepEqual(shown.map(([, , command]) => command), ["smm generate '空白 と&記号.request.json' --out jobs", "smm generate '空白 と&記号.request.json' --out jobs"]);
+  // M4R R3: PowerShell and POSIX quoting differ for ' and both keep $() literal.
+  await page.fill("#concept input[maxlength='200']", "$(1+1) it's");
+  shown = await commands();
+  assert.deepEqual(shown.map(([, , command]) => command), [
+    "smm generate '$(1+1) it''s.request.json' --out jobs",
+    "smm generate '$(1+1) it'\\''s.request.json' --out jobs",
+  ]);
   const registration = JSON.parse(await text(page, ".agent-entrances [aria-label='MCP の登録例']"));
   assert.deepEqual(registration.mcpServers["shin-motionmaker"].args.slice(0, 3), ["mcp", "serve", "--root"]);
   const links = await page.evaluate("[...document.querySelectorAll('.agent-entrances .doc-links a')].map((a) => a.href)");
@@ -479,30 +569,35 @@ test("GU-16 1440×900 で最初の入力欄（制作モード・タイトル・�
   for (const bottom of bottoms) assert.ok(bottom < band, `${bottom} < ${band}`);
 });
 
-test("GU-16 キーボードで全操作に届き、フォーカスが見える", async ({ page }) => {
-  await page.clickText(".sample-button", "サンプル");
-  await page.click(".advanced-toggle");
-  await page.evaluate("document.activeElement.blur(); window.scrollTo(0, 0)");
+/**
+ * Tab through the page and check that every visible control (inside `within`, or outside any
+ * dialog when `within` is null) receives focus with a visible ring. Radio groups count once.
+ */
+async function assertKeyboardReach(page, label, within = null) {
+  await page.evaluate("document.activeElement?.blur?.(); window.scrollTo(0, 0); document.querySelectorAll('[data-kb]').forEach((el) => delete el.dataset.kb)");
   const targets = await page.evaluate(`(() => {
-    const all = [...document.querySelectorAll("a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex='-1'])")]
-      .filter((el) => !el.disabled && !el.closest("dialog") && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== "hidden");
-    // radio groups expose one tab stop per group
+    const within = ${JSON.stringify(within)};
+    const scope = within ? document.querySelector(within) : document;
+    const all = [...scope.querySelectorAll("a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex='-1'])")]
+      .filter((el) => !el.disabled && (within || !el.closest("dialog")) && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== "hidden");
     const seen = new Set();
     return all.filter((el) => {
       if (el.type === "radio") { if (seen.has(el.name)) return false; seen.add(el.name); }
       return true;
     }).map((el, i) => { el.dataset.kb = String(i); return String(i); });
   })()`);
+  assert.ok(targets.length > 0, `${label}: no controls`);
   const reached = new Set();
   const outlines = [];
   for (let i = 0; i < targets.length + 40 && reached.size < targets.length; i++) {
     await page.key("Tab");
     const info = await page.evaluate(`(() => {
       const el = document.activeElement;
+      if (!el || el === document.body) return { kb: null };
       const style = getComputedStyle(el);
       const ring = el.closest(".file-button, .choice, .style-card") ?? el;
       const ringStyle = getComputedStyle(ring);
-      return { kb: el.dataset.kb ?? (el.type === "radio" ? document.querySelector('input[name="' + el.name + '"][data-kb]')?.dataset.kb : null),
+      return { kb: el.dataset.kb ?? (el.type === "radio" ? document.querySelector('input[name="' + el.name + '"][data-kb]')?.dataset.kb ?? null : null),
         visible: el.matches(":focus-visible"), outline: Math.max(parseFloat(style.outlineWidth) || 0, parseFloat(ringStyle.outlineWidth) || 0),
         outlineStyle: style.outlineStyle !== "none" ? style.outlineStyle : ringStyle.outlineStyle };
     })()`);
@@ -511,9 +606,44 @@ test("GU-16 キーボードで全操作に届き、フォーカスが見える",
   }
   const missing = targets.filter((id) => !reached.has(id));
   const names = await page.evaluate(`${JSON.stringify(missing)}.map((id) => { const el = document.querySelector('[data-kb="' + id + '"]'); return el.outerHTML.slice(0, 120); })`);
-  assert.deepEqual(names, [], "every control is reachable by Tab");
+  assert.deepEqual(names, [], `${label}: every control is reachable by Tab`);
   const unseen = outlines.filter((info) => info.kb !== null && (!info.visible || info.outline < 2 || info.outlineStyle === "none"));
-  assert.deepEqual(unseen, [], "focus ring is visible");
+  assert.deepEqual(unseen, [], `${label}: focus ring is visible`);
+  return targets.length;
+}
+
+test("GU-16 キーボードで全操作に届き、フォーカスが見える（解説・サンプル＋詳細）", async ({ page }) => {
+  await page.clickText(".sample-button", "サンプル");
+  await page.click(".advanced-toggle");
+  await assertKeyboardReach(page, "explanation");
+});
+
+test("GU-16 キーボード到達（M4R T1：MV と音源・duo と添付の削除・読み込み通知・検査結果・エラー表示・ダイアログ）", async ({ page }) => {
+  // MV with a music file attached (MV-only fields, attachment remove buttons).
+  await fillMv(page);
+  await page.setFiles(byAria("参考資料を選択"), [asset("reference.txt")]);
+  await page.waitFor("document.querySelectorAll('#sources .attachments li').length === 1", "MV の添付");
+  await assertKeyboardReach(page, "mv");
+  // Explanation duo with models and BGM, an import note, inspection results and the error summary.
+  await chooseMode(page, "explanation");
+  const file = path.join(work, "keyboard.request.json");
+  fs.writeFileSync(file, JSON.stringify({ form: { characterMode: "duo" }, assets: { sources: ["a.pdf"], character: "c.glb" } }));
+  await page.setFiles(byAria("request.json を読み込む"), [file]);
+  await page.waitFor("document.querySelector('.import-note')", "読み込み通知");
+  await page.waitFor("document.querySelectorAll('.character-card').length === 2", "duo");
+  await page.setFiles(byAria("1人目の3Dモデルを選択"), [asset("character.glb")]);
+  await page.setFiles(byAria("2人目の3Dモデルを選択"), [asset("character.glb")]);
+  await page.setFiles(byAria("BGMを選択"), [asset("song.wav")]);
+  await page.setFiles(byAria("検査結果のJSONと静止画を選択"), [reports.qcPre, reports.run, reports.ghostPreview, ...reports.stills, reports.broken]);
+  await page.waitFor("document.querySelector('[data-report=\"qc-pre\"]') && document.querySelector('.inspection-viewer .inline-error')", "検査結果");
+  await page.click(".download-button");
+  await page.waitFor("document.querySelector('.errors')", "エラー表示");
+  await page.click(".advanced-toggle");
+  await assertKeyboardReach(page, "duo + import note + inspection + errors");
+  // The information dialog: focus stays inside the modal and reaches every control there.
+  await page.clickText(".about-button", "Shin-MotionMaker について");
+  await page.waitFor("document.querySelector('dialog[open]')", "dialog");
+  await assertKeyboardReach(page, "dialog", "dialog[open]");
 });
 
 test("GU-16 prefers-reduced-motion（スクロールの動きを止める）", async ({ browser, site }) => {
@@ -524,6 +654,27 @@ test("GU-16 prefers-reduced-motion（スクロールの動きを止める）", a
     const animated = await page.evaluate("[...document.querySelectorAll('*')].filter((el) => { const s = getComputedStyle(el); return parseFloat(s.transitionDuration) > 0 || s.animationName !== 'none'; }).length");
     assert.equal(animated, 0);
   } finally { await page.close(); }
+});
+
+test("GU-16 prefers-reduced-motion では生成エラー・読み込みエラーのスクロールに smooth を渡さない（M4R R4）", async ({ browser, site }) => {
+  const broken = path.join(work, "reduce-broken.request.json");
+  fs.writeFileSync(broken, JSON.stringify({ form: { styleMode: "unknown" } }));
+  const record = `(() => { window.__scrolls = []; const original = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = function (options) { window.__scrolls.push(options ?? null); return original.call(this, options); }; })()`;
+  for (const reducedMotion of [true, false]) {
+    const page = await openPage(browser.cdp, site.url, { reducedMotion });
+    try {
+      await page.evaluate(record);
+      await page.click(".download-button");
+      await page.waitFor("window.__scrolls.length === 1", "生成エラーのスクロール");
+      await page.setFiles(byAria("request.json を読み込む"), [broken]);
+      await page.waitFor("window.__scrolls.length === 2", "読み込みエラーのスクロール");
+      const calls = await page.evaluate("window.__scrolls");
+      if (reducedMotion) assert.ok(calls.every((call) => call?.behavior !== "smooth"), JSON.stringify(calls));
+      else assert.ok(calls.every((call) => call?.behavior === "smooth"), `without reduce the scroll stays smooth: ${JSON.stringify(calls)}`);
+      assert.deepEqual(page.consoleErrors, []);
+    } finally { await page.close(); }
+  }
 });
 
 for (const contrastMode of ["normal", "high"]) {
@@ -569,8 +720,25 @@ const defaultsVersion = await (await import("../scripts/site.mjs")).coreVersions
 
 async function compareZip(page, explanation) {
   const exported = await exportRequest(page);
+  // M4R T1: record every state of the ZIP button while it generates (disabled + progress, then the end state).
+  await page.evaluate(`(() => {
+    window.__progress = [];
+    const take = () => { const button = document.querySelector(".download-button"); const bar = document.querySelector(".band-actions progress");
+      window.__progress.push({ disabled: button.disabled, label: button.textContent, bar: bar ? bar.value : null }); };
+    window.__progressObserver = new MutationObserver(take);
+    window.__progressObserver.observe(document.querySelector(".band-actions"), { subtree: true, childList: true, attributes: true, characterData: true });
+  })()`);
   const zipFile = await page.download(() => page.click(".download-button"), 120000);
   await page.waitFor("document.querySelector('.band-caption .success')", "生成完了の表示");
+  const states = await page.evaluate("window.__progressObserver.disconnect(), window.__progress");
+  const busy = states.filter((state) => state.disabled);
+  assert.ok(busy.length > 0, "the button is disabled while generating");
+  assert.ok(busy.every((state) => state.bar !== null && /ZIPを生成中… \d+%/.test(state.label)), JSON.stringify(busy.slice(0, 3)));
+  const values = busy.map((state) => state.bar);
+  assert.ok(values.every((value, i) => i === 0 || value >= values[i - 1]), `progress never goes back: ${values}`);
+  assert.equal(await page.evaluate("document.querySelector('.download-button').disabled"), false, "enabled again at the end");
+  assert.equal(await count(page, ".band-actions progress"), 0, "the progress bar is gone at the end");
+  assert.equal((await text(page, ".download-button")).trim(), "ジョブのZIPを生成");
   const request = exported.request;
   const assets = await loadAssets(request.assets, baselineAssets);
   const normalized = validateRequest(request, { phase: "complete", assets });
