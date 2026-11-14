@@ -30,8 +30,8 @@ test("test code and helpers never launch the version-control executable", async 
   assert.deepEqual(violations, []);
 });
 
-test("the process-launch guard detects positive fixture strings without executing them", async () => {
+test("the process-launch guard detects every legacy and regression positive fixture without executing it", async () => {
   const samples = JSON.parse(await fs.readFile(new URL("./fixtures/git-detector-samples.json", import.meta.url), "utf8")) as { positive: string[]; negative: string[] };
-  for (const source of samples.positive) assert.ok(gitLaunches(source).length > 0, source);
+  for (const source of samples.positive) assert.equal(gitLaunches(source).length, 1, source);
   for (const source of samples.negative) assert.deepEqual(gitLaunches(source), [], source);
 });
