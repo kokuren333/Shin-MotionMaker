@@ -67,7 +67,7 @@
 | TS-08 色の直値が tokens.css の外に無い | 実行して合格 | `theme.test.ts` の「no colour literal outside tokens.css」と、検出器自体の陽性テスト。例外は `index.html` の theme-color（= `--cs-board`）だけ |
 | TS-08 コントラスト | 実行して合格 | `gui/tests/contrast.test.ts`：通常・高コントラストの各13組と Biim 枠3組が 4.5:1 以上。e2e `GU-16 描画後の文字のコントラスト 4.5:1 以上（normal／high、…）`：入力済み・検査結果ありの画面で、表示中の全文字（Biim 枠のプレビューと利用者の字幕色を除く）が 4.5:1 以上 |
 | TS-08 e2e（GU-02 全項目、request.json の往復、検査結果、サブパス、390px） | 実行して合格 | `npm run test:e2e --workspace gui`：37 件合格 / 37 件 |
-| AR-06・GU-03 GUI の ZIP と CLI 経路のバイト一致 | 実行して合格 | 上の ZIP 生成2件。GUI が書き出した request.json を Node 側で `validateRequest` → `tests/helpers/templates.ts` の `loadAssets`・`loadTemplates`（ファイルシステム読み）→ `buildJobFiles` に通し、ブラウザでダウンロードした ZIP を展開して、パスの集合と各ファイルのバイトを全件比較。添付は .md・.csv・.pdf・.png・.glb×2・BGM（解説）と .txt・完成音源（MV） |
+| AR-06・GU-03 ブラウザの ZIP と core＋Node のファイルシステム読みのバイト一致（M4-fix で記述を訂正。実 CLI・MCP との比較ではない） | 実行して合格（証拠の範囲はブラウザ対ファイルシステム読み＋core の2ケース。host・CLI・MCP は起動していない。3入口の最終の同一性は M7 の統合で L2 が確かめる） | 上の ZIP 生成2件。GUI が書き出した request.json を Node 側で `validateRequest` → `tests/helpers/templates.ts` の `loadAssets`・`loadTemplates`（ファイルシステム読み）→ `buildJobFiles` に通し、ブラウザでダウンロードした ZIP を展開して、パスの集合と各ファイルのバイトを全件比較。添付は .md・.csv・.pdf・.png・.glb×2・BGM（解説）と .txt・完成音源（MV） |
 | テストで git を起動しない | 実行して合格 | ルートの `tests/no-git.test.ts`（`gui/` 全体を走査）。e2e はビルドに固定の commit を渡す。例外に足したのは開発用の `gui/scripts/build.mjs` だけ |
 | ルート `npm test` | 実行して合格 | tests 123 / pass 113 / fail 0 / todo 10（todo は M1 からの既存分） |
 | `npm test --workspaces --if-present`・`npm run build --workspaces --if-present` | 実行して合格 | 下の ci-local の記録 |
@@ -137,10 +137,45 @@ e2e の実行時間は手元で約 30 秒（ビルド込み）。
 
 ## 質問
 
-契約（CONTRACT・操作定義表・封筒スキーマ）と要件を変える必要は生じなかった。`QUESTIONS.md` は作っていない。L2 に確認してほしい点を次に挙げる（作業は止めていない）。
+契約（CONTRACT・操作定義表・封筒スキーマ）と要件を変える必要は生じなかった。M4-fix で core に関わる質問を1件 `QUESTIONS.md` に書いた（下の M4-fix 節）。L2 に確認してほしい点を次に挙げる（作業は止めていない）。
 
 1. GU-06 のコマンド例は REQUIREMENTS §4.1 と CONTRACT §3（`out` は出力先の親ディレクトリ）に合わせて `smm generate <file>.request.json --out jobs` とした。M2b の実装と食い違えば L2 の調整に従う。
 2. M1 の REPORT が M2a に移送した「独立したホスト・ブラウザのテンプレート比較」のうち、ブラウザ側（Vite の glob とファイルシステム読みの差）は M4 の e2e（AR-06 の2件）で実測した。M2a の host 側の比較とは別物として扱ってよいか。
+
+## M4-fix（レビュー M4R の反映）
+
+入力：`docs/work/M4/REVIEW.md`（Codex、`494769a` 対象）と L2 の裁定。指摘ごとの対応とテスト名を示す。e2e はすべて `gui/e2e/run.mjs`、単体は `gui/tests/`。
+
+| 指摘 | 対応 | テスト名 |
+| --- | --- | --- |
+| **R1** 不正な列挙値の request で画面が消える | `parseRequestText` が core `validateRequest`（shape）の後に `choiceIssues` を通す。列挙の集合は GUI に書かない：core が受け付ける完成済みの入力 `choiceProbe` の1キーだけを読み込んだ値に替えて core `validateForm` に通し、増えた誤りを `/form/<key>` の pointer つきで返す。`styleMode` はさらに core `explainerStyles` に項目があることを確かめる。対象は `videoMode`・`styleMode`・`characterMode`・`voiceEngine`・`characterPosition`・`secondCharacter.position`・`tempo`・`energy`・`motionAmount`・`biimUsage`・`characterUsage`・`evidencePolicy`。読み込みに失敗したときは何も反映しない（入力・添付・前回の読み込み通知を残す。以前は失敗時に読み込み通知を消していた）。未完成の入力（空、範囲外の数値、縦向き＋混在、MV で音源なし）はこれまでどおり読み込める。core を変えるべきかは `QUESTIONS.md` Q1 | 単体 `parseRequestText rejects unknown values of fixed-choice keys with pointers, but keeps unfinished input importable (M4R R1)`、`choiceIssues takes the accepted values from core, not from a GUI list`。e2e `GU-04 不正な列挙値の request.json は入力エラーとして表示し、画面と既存の入力・添付を残す（M4R R1）`（styleMode・videoMode・secondCharacter.position の3件で、エラーの pointer、`form.studio` が残ること、コンソールエラー0、添付1件が残ること、書き出した request が読み込み前と同じこと、その後に正しい request を読み込めること） |
+| **R2** run.json 経由で「免除：なし」 | `runView` が内包レポートを直接開いた場合と同じ `classifyReport` で読み、そのゲート（行・`review_mode`・免除）と助言を使う。判定は run に記録された `result.verdict` のまま。表示は同じ `ReportCard` 部品。実行の状態とゲートの判定は別の行のまま | 単体 `run.json: run status and gate verdict are separate facts`（免除・行・助言が直接の QC と一致、independent・免除なしの run も確認）。e2e `GU-05 run.json 経由でも QC の免除・review_mode・ゲート行を直接開いた場合と同じ部品で表示する（M4R R2）`（run だけを開いて PRE-3 と理由を表示、その後 QC を開いて `.waivers`・`.review-mode`・`.gate-table`・助言の文字列が run と同じ） |
+| **R3** CLI 例のクォート | `shellArgument(value, shell)` と `generateCommand(file, shell)`。PowerShell は単一引用符で、内部の `'` と、PowerShell が引用符として扱う U+2018〜U+201B を二重にする。POSIX シェルは単一引用符で、内部の `'` を `'\''` にする。英数字と `._/-` だけ（先頭が `-` でない）の引数は引用しない。画面にはシェル名を見出しにした2つの例（「PowerShell（Windows）」「bash・zsh などの POSIX シェル（macOS・Linux・WSL）」）とそれぞれのコピーを出す。cmd 用の例は出さない（以前のコメントの「bash・PowerShell・cmd 共通」は誤りだったので削除）。タイトルの自由記述は狭めていない（ファイル名は従来どおり core `safeName` だけ。`"` は `safeName` が `-` にするので、ファイル名に `"` は現れない） | 単体 `generate command: … one example per shell`、`PowerShell quoting: …`、`POSIX quoting: …`（`'\''` の規則と復号の一致を全ケースで）、`titles stay free text: …`、`PowerShell receives each quoted name as one unchanged argument (powershell.exe -NoProfile -Command)`（`spawnSync('powershell.exe', ['-NoProfile','-NonInteractive','-Command', script], {shell:false})` で、引数を JSON にして返す関数 `smm` に24件を渡し、すべて1引数で元の値。Windows 以外では skip）、`a POSIX sh receives each quoted name as one unchanged argument (when sh is on PATH)`（`sh -c` で `printf '%s\0'`。手元では Git for Windows の sh で実行。sh が無ければ skip）。値は `$(1+1)`、`` a`b ``、`it's`、`say "hi"`、`a&b`、空白、全角、`‘曲’と’`、`$env:PATH`、`-dash`、`a;b|c>d`、全角空白と、それぞれの `requestFilename` の結果。e2e `GU-06 CLI・MCP の区画（…）`（2例のシェル名と、`$(1+1) it's` の PowerShell・POSIX の文字列） |
+| **R4** reduced-motion でも smooth | エラー要約へのスクロールは `matchMedia("(prefers-reduced-motion: reduce)")` が真なら `behavior: "auto"`、偽なら従来どおり `smooth` | e2e `GU-16 prefers-reduced-motion では生成エラー・読み込みエラーのスクロールに smooth を渡さない（M4R R4）`（`scrollIntoView` を記録用に包み、ZIP 生成の必須エラーと不正な request の読み込みエラーの2経路。reduce では smooth なし、reduce なしでは smooth であることも確かめて記録が働いていることを示す） |
+| **T1** テスト対象を広げる | 全入力欄テストに全画面の切り替えを追加。4様式それぞれで request.json の `styleMode` と既定デザインの切り替え（core `switchStyleMode` と一致）、要点の表示、project.json の `direction.style_mode`、全画面スイッチの有効・無効を確認し、全画面のオン・オフの往復も確認。編集した MV デザインが解説モードを経由して戻ること。キーボード到達は判定部分を `assertKeyboardReach` にまとめ、状態ごとに実行。ZIP 生成中のボタン・`<progress>` の状態を MutationObserver で全件記録 | e2e `GU-02 全入力欄（解説モードの全キー…）`（`fullScreen` を変更して比較）、`GU-02 全入力欄（4様式の反映と全画面の切り替えが request.json・project.json・表示に入る）`、`GU-02 制作モードの切り替えとモード別の指示・デザイン文の保持`（MV デザインの往復と書き出し）、`GU-16 キーボードで全操作に届き、フォーカスが見える（解説・サンプル＋詳細）`、`GU-16 キーボード到達（M4R T1：MV と音源・duo と添付の削除・読み込み通知・検査結果・エラー表示・ダイアログ）`（MV＋音源＋添付、duo＋2モデル＋BGM＋読み込み通知＋検査結果4件と読めないファイルのエラー＋必須エラー＋詳細、情報ダイアログの中）、ZIP 生成2件（生成中は毎回 disabled かつ `<progress>` があり文言が「ZIPを生成中… n%」、値は減らない、終了後は enabled・`<progress>` なし・元の文言） |
+| **I1** REPORT の記述 | 受け入れ条件の表の AR-06 行を「ブラウザの ZIP と core＋Node のファイルシステム読みのバイト一致」に訂正し、実 CLI・MCP との比較ではないこと、3入口の同一性は M7 の統合で L2 が確かめることを書いた | — |
+| スクリーンショット | CLI 区画（R3）と run の表示（R2）が変わったので、全枚数を同じコミット `9f08db5` で撮り直した。S5c（run.json の QC）、S9b（シェル別の2例）、S12（不正な列挙値の読み込みエラー）を足して16枚。`VERIFICATION.md` と `docs/DESIGN.md`（CLI 区画の説明）を更新 | `npm run shots --workspace gui -- --commit=9f08db52726416520362473c5b85cdbe1e1f3a80`：16枚、すべて横あふれ 0・コンソールエラー 0 |
+
+### 修正前のコードで新しいテストが失敗することの確認
+
+`gui/src/App.tsx`・`gui/src/lib/request-io.ts`・`gui/src/lib/inspection.ts` だけを修正前に戻し（差分を一時保存して戻し、確認後に再適用）、`node --experimental-strip-types e2e/run.mjs --only=M4R` を実行した：R1・R2・R4 の3件が FAIL、キーボード（T1）は合格（キーボードの到達は元から満たしていた）。R3 は関数の引数が変わったため同じ方法では戻せないので、修正前の規則で作った文字列 `smm generate "$(1+1) it's.request.json" --out jobs` を同じ方法で powershell.exe に渡し、`["generate","2 it's.request.json","--out","jobs"]`（展開されて別のファイル名）になること、修正後の `smm generate '$(1+1) it''s.request.json' --out jobs` では `["generate","$(1+1) it's.request.json","--out","jobs"]` になることを確かめた。
+
+### M4-fix の決定
+
+- **F1 列挙の集合は core の `validateForm` を通して探る。** GUI に集合を書くと core と二重になり（GUI 独自のスキーマ）、裁定に反する。core の集合は公開されていないため、完成済みの入力の1キーを差し替えて core に判定させる方法を取った。基準の入力が core で誤り0件であることを単体テストで固定している。
+- **F2 シェルは PowerShell と POSIX の2つ。** Windows の既定の端末は PowerShell で、macOS・Linux・WSL は POSIX 系。cmd は `%` の展開を引用符で止められず、正しい例を作れないため出さない。
+- **F3 PowerShell の例は関数・スクリプト（npm の `.ps1` シム）への引数として1引数になることを確かめた。** PowerShell 5.1 が外部の実行ファイルへ渡す際に `"` を含む引数を崩す既知の挙動があるが、ファイル名には core `safeName` によって `"` が現れないので、この例では起きない。
+- **F4 読み込みの失敗で前回の読み込み通知も消さない。** 通知は現在の入力に対応したままなので、失敗時に何も変えない方が「成功したときだけ反映」に沿う。
+
+### M4-fix のテストのコマンドと結果（手元、Windows 11・Node v24.15.0）
+
+| コマンド | 結果 |
+| --- | --- |
+| `npm run build` | exit 0 |
+| `npm test` | tests 123 / pass 113 / fail 0 / todo 10 |
+| `npm test --workspaces --if-present` | 単体 33 / 33、e2e 42 / 42 |
+| `npm run build --workspaces --if-present` | exit 0（型検査と Vite ビルド） |
+| `node tools/ci-local.mjs` | 下の記録 |
 
 ## 残課題
 
