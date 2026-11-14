@@ -1,0 +1,22 @@
+{
+  "command": [
+    "npm",
+    "test"
+  ],
+  "commit": "94e1ab6093a4433e9b7581a6a47d4b26866f4766",
+  "node": "v24.15.0",
+  "platform": "win32",
+  "started_at": "2026-11-14T11:47:00.977Z",
+  "ended_at": "2026-11-14T11:49:55.480Z",
+  "exit_code": 0,
+  "log_sha256": "29f5049b152c3682c320cceda0cab21051e4a3040906ac41bb8af957ec6ae00a",
+  "summary": [
+    "ℹ tests 215",
+    "ℹ pass 213",
+    "ℹ fail 0",
+    "ℹ cancelled 0",
+    "ℹ skipped 2",
+    "ℹ todo 0",
+    "ℹ duration_ms 164952.6644"
+  ]
+}

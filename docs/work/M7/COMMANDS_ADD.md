@@ -4,8 +4,8 @@
 
 | 文書に反映した構文・内容 | 実行証拠 |
 | --- | --- |
-| `npm run test:tier-b -- --commit <SHA>` | M7 本体の `506a5a893cbb4da0aabfbfa82ecc1d75f6c00d3f`、[tier-b.json](evidence/tier-b.json)。CLI/MCP とも生成68ファイル・setup/validate 終了0 |
-| `node tools/runtime-smoke.mjs --entry cli --commit <SHA>` | 同じ M7 本体コミット、[tier-c-cli.json](evidence/tier-c-cli.json)。8 run、すべて completed・終了0、実測テンプレート0.5.1 |
+| `npm run test:tier-b -- --commit <SHA>` | M7 本体の `f98dc051fff88ca4c7eefba4db60e9819913e349`、[tier-b.json](evidence/tier-b.json)。CLI/MCP とも生成68ファイル・setup/validate 終了0 |
+| `node tools/runtime-smoke.mjs --entry cli --commit <SHA>` | M7 本体の `506a5a893cbb4da0aabfbfa82ecc1d75f6c00d3f`、[tier-c-cli.json](evidence/tier-c-cli.json)。8 run、すべて completed・終了0、実測テンプレート0.5.1 |
 | `node tools/runtime-smoke.mjs --entry mcp --commit <SHA>` | 同じ M7 本体コミット、[tier-c-mcp.json](evidence/tier-c-mcp.json)。8 run、すべて completed・終了0。開始 wait_ms:0、run_get wait_ms:50000、実測テンプレート0.5.1 |
 | `node tools/runtime-smoke.mjs --entry cli --legacy-job <原典生成ジョブ> --commit <SHA>` | 同じ M7 本体コミット、[tier-c-legacy.json](evidence/tier-c-legacy.json)、[legacy-origin.json](evidence/legacy-origin.json)。原典262c798の実生成0.4ジョブ。10 run、report なしの validate pass/0・fail/1、QC fail/1、レンダー・ghost 終了0 |
 | `npm run verify:pages:local -- --commit <SHA>` | M7 本体の [pages-local.json](evidence/pages-local.json)。追補でも取り込み後のコミットで再実行し、結果を REPORT に追記する |
