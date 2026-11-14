@@ -12,7 +12,9 @@ test("test code and helpers never launch the version-control executable", async 
     for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
       if (entry.name === "node_modules") continue;
       const file = path.join(directory, entry.name);
-      if (["tools/ci-local.mjs", "tools/capture-baseline.mjs"].some((name) => file === path.join(root, name))) continue;
+      // Development tools, not tests. gui/scripts/build.mjs may ask for HEAD only when no commit is
+      // given; the e2e suite builds through gui/scripts/site.mjs with an explicit commit.
+      if (["tools/ci-local.mjs", "tools/capture-baseline.mjs", "gui/scripts/build.mjs"].some((name) => file === path.join(root, name))) continue;
       if (entry.isDirectory()) await scan(file);
       else if (/\.(?:[cm]?[jt]sx?)$/.test(file)) {
         for (const match of gitLaunches(await fs.readFile(file, "utf8"))) violations.push(`${path.relative(root, file)}: ${match}`);
