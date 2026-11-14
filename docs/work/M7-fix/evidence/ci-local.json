@@ -1,0 +1,30 @@
+{
+  "command": [
+    "node",
+    "tools/ci-local.mjs"
+  ],
+  "commit": "8d2369bdbf52714238b489dae9886162177fd20b",
+  "tree_clean": true,
+  "started_at": "2026-11-14T12:34:07.150Z",
+  "ended_at": "2026-11-14T12:40:09.793Z",
+  "elapsed_ms": 362642,
+  "exit_code": 1,
+  "success": false,
+  "summaries": [
+    "✔ baseline metadata is complete and inventory counts match its named tests (27.0698ms)",
+    "✔ TS-07 unexpected exit is failed (8507.2502ms)",
+    "✔ TS-07 mismatched QC exit and report is failed (7582.8905ms)",
+    "✔ JT-12 legacy validate reconstructs pass and fail from completed stdout and exit (18543.8019ms)",
+    "✔ TS-01 ledger covers every baseline test once and points to existing active tests or explicit M2a M2b todos (993.2272ms)",
+    "✔ QC CLI exits 1 on a failed gate, 2 on usage errors, and MV exits 0 without reports (4102.5335ms)",
+    "✔ R4 JSON preserves original stdout stderr and exit codes for pass fail SKIP and GHOST (37766.5488ms)",
+    "ℹ tests 219",
+    "ℹ pass 216",
+    "ℹ fail 1",
+    "ℹ skipped 2",
+    "ℹ todo 0",
+    "ℹ duration_ms 329975.7458",
+    "      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {"
+  ],
+  "log_sha256": "e15bc7e1e01b5817c0f9f322788b33041d0253a1033750f27aba7d8b0c38bd21"
+}

@@ -1,0 +1,2610 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "smm.envelope/1",
+  "type": "object",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "generate"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "$ref": "generate.schema.json"
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "candidates"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "$ref": "candidates.schema.json"
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "stats"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "$ref": "text-stats.schema.json"
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "status"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "$ref": "job-status.schema.json"
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "project get"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "$ref": "project-result.schema.json"
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "project patch"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "$ref": "project-result.schema.json"
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "report"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "$ref": "report.schema.json"
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "doctor"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "$ref": "doctor.schema.json"
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "schema"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "$ref": "schema-list.schema.json"
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "runs get"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "enum": [
+                "pass",
+                "fail",
+                "not_applicable"
+              ]
+            },
+            "report": {
+              "anyOf": [
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "artifacts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "stdout_tail": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "stderr_tail": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "report",
+            "artifacts",
+            "stdout_tail",
+            "stderr_tail"
+          ],
+          "additionalProperties": false
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "runs list"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "runs": {
+              "type": "array",
+              "items": {
+                "$ref": "run.schema.json#/$defs/display"
+              }
+            }
+          },
+          "required": [
+            "runs"
+          ],
+          "additionalProperties": false
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "runs cancel"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "type": "null"
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "version"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "commit": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "template_version": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "version",
+            "commit",
+            "template_version"
+          ],
+          "additionalProperties": false
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "studio"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "type": "null"
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "mcp serve"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "type": "null"
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "setup"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "check.schema.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "validate"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "check.schema.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "qc"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "check.schema.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "ghost-check"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "check.schema.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "render"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "check.schema.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "voice"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "check.schema.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "sound"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "check.schema.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "imagegen"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "check.schema.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "runs logs"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "enum": [
+                "pass",
+                "fail",
+                "not_applicable"
+              ]
+            },
+            "report": {
+              "anyOf": [
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "artifacts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "stdout_tail": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "stderr_tail": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "report",
+            "artifacts",
+            "stdout_tail",
+            "stderr_tail"
+          ],
+          "additionalProperties": false
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "const": "runs wait"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "verdict": {
+              "enum": [
+                "pass",
+                "fail",
+                "not_applicable"
+              ]
+            },
+            "report": {
+              "anyOf": [
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "artifacts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "stdout_tail": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "stderr_tail": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "report",
+            "artifacts",
+            "stdout_tail",
+            "stderr_tail"
+          ],
+          "additionalProperties": false
+        },
+        "advisories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "required": [
+              "id",
+              "source",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "hint": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "result",
+        "advisories",
+        "warnings"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "smm.envelope/1"
+        },
+        "command": {
+          "type": "string"
+        },
+        "job": {
+          "type": "string"
+        },
+        "ok": {
+          "const": false
+        },
+        "error": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "enum": [
+                "E_USAGE",
+                "E_INPUT_INVALID",
+                "E_FORM_INVALID",
+                "E_PATH_DENIED",
+                "E_JOB_NOT_FOUND",
+                "E_NOT_A_JOB",
+                "E_OUTPUT_EXISTS",
+                "E_DEPS_MISSING",
+                "E_TOOL_MISSING",
+                "E_ENGINE_UNREACHABLE",
+                "E_BUSY",
+                "E_CONFLICT",
+                "E_RUN_NOT_FOUND",
+                "E_RUN_LOST",
+                "E_TIMEOUT",
+                "E_DISABLED",
+                "E_INTERNAL"
+              ]
+            },
+            "message": {
+              "type": "string"
+            },
+            "hint": {
+              "type": "string"
+            },
+            "details": {}
+          },
+          "required": [
+            "code",
+            "message",
+            "hint"
+          ],
+          "additionalProperties": false
+        },
+        "run": {
+          "$ref": "run.schema.json#/$defs/display"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "ok",
+        "error"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "results": {
+      "generate": {
+        "$ref": "generate.schema.json"
+      },
+      "candidates": {
+        "$ref": "candidates.schema.json"
+      },
+      "stats": {
+        "$ref": "text-stats.schema.json"
+      },
+      "status": {
+        "$ref": "job-status.schema.json"
+      },
+      "project get": {
+        "$ref": "project-result.schema.json"
+      },
+      "project patch": {
+        "$ref": "project-result.schema.json"
+      },
+      "report": {
+        "$ref": "report.schema.json"
+      },
+      "doctor": {
+        "$ref": "doctor.schema.json"
+      },
+      "schema": {
+        "$ref": "schema-list.schema.json"
+      },
+      "runs get": {
+        "type": "object",
+        "properties": {
+          "verdict": {
+            "enum": [
+              "pass",
+              "fail",
+              "not_applicable"
+            ]
+          },
+          "report": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "stdout_tail": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "stderr_tail": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "report",
+          "artifacts",
+          "stdout_tail",
+          "stderr_tail"
+        ],
+        "additionalProperties": false
+      },
+      "runs list": {
+        "type": "object",
+        "properties": {
+          "runs": {
+            "type": "array",
+            "items": {
+              "$ref": "run.schema.json#/$defs/display"
+            }
+          }
+        },
+        "required": [
+          "runs"
+        ],
+        "additionalProperties": false
+      },
+      "runs cancel": {
+        "type": "null"
+      },
+      "version": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "commit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "template_version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "commit",
+          "template_version"
+        ],
+        "additionalProperties": false
+      },
+      "studio": {
+        "type": "null"
+      },
+      "mcp serve": {
+        "type": "null"
+      },
+      "setup": {
+        "anyOf": [
+          {
+            "$ref": "check.schema.json"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "validate": {
+        "anyOf": [
+          {
+            "$ref": "check.schema.json"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "qc": {
+        "anyOf": [
+          {
+            "$ref": "check.schema.json"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "ghost-check": {
+        "anyOf": [
+          {
+            "$ref": "check.schema.json"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "render": {
+        "anyOf": [
+          {
+            "$ref": "check.schema.json"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "voice": {
+        "anyOf": [
+          {
+            "$ref": "check.schema.json"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "sound": {
+        "anyOf": [
+          {
+            "$ref": "check.schema.json"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "imagegen": {
+        "anyOf": [
+          {
+            "$ref": "check.schema.json"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "runs logs": {
+        "type": "object",
+        "properties": {
+          "verdict": {
+            "enum": [
+              "pass",
+              "fail",
+              "not_applicable"
+            ]
+          },
+          "report": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "stdout_tail": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "stderr_tail": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "report",
+          "artifacts",
+          "stdout_tail",
+          "stderr_tail"
+        ],
+        "additionalProperties": false
+      },
+      "runs wait": {
+        "type": "object",
+        "properties": {
+          "verdict": {
+            "enum": [
+              "pass",
+              "fail",
+              "not_applicable"
+            ]
+          },
+          "report": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "stdout_tail": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "stderr_tail": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "report",
+          "artifacts",
+          "stdout_tail",
+          "stderr_tail"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "E_USAGE",
+            "E_INPUT_INVALID",
+            "E_FORM_INVALID",
+            "E_PATH_DENIED",
+            "E_JOB_NOT_FOUND",
+            "E_NOT_A_JOB",
+            "E_OUTPUT_EXISTS",
+            "E_DEPS_MISSING",
+            "E_TOOL_MISSING",
+            "E_ENGINE_UNREACHABLE",
+            "E_BUSY",
+            "E_CONFLICT",
+            "E_RUN_NOT_FOUND",
+            "E_RUN_LOST",
+            "E_TIMEOUT",
+            "E_DISABLED",
+            "E_INTERNAL"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "hint": {
+          "type": "string"
+        },
+        "details": {}
+      },
+      "required": [
+        "code",
+        "message",
+        "hint"
+      ],
+      "additionalProperties": false
+    },
+    "advisory": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {}
+      },
+      "required": [
+        "id",
+        "source",
+        "message"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "smm.report/1",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "mime_type": {
+          "type": "string"
+        },
+        "truncated": {
+          "type": "boolean"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "mime_type",
+        "truncated",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "mime_type": {
+          "const": "image/png"
+        },
+        "truncated": {
+          "type": "boolean"
+        },
+        "data": {
+          "type": "string"
+        },
+        "encoding": {
+          "const": "base64"
+        }
+      },
+      "required": [
+        "path",
+        "mime_type",
+        "truncated",
+        "data",
+        "encoding"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "mime_type": {
+          "const": "image/png"
+        },
+        "truncated": {
+          "const": false
+        },
+        "data": {
+          "type": "null"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 6291456
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "delivered_as": {
+          "const": "image"
+        }
+      },
+      "required": [
+        "path",
+        "mime_type",
+        "truncated",
+        "data",
+        "bytes",
+        "sha256",
+        "delivered_as"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

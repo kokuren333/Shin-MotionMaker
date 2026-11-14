@@ -1,0 +1,37 @@
+import assert from "node:assert/strict";
+import fs from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { test } from "node:test";
+import { gitLaunches } from "./helpers/git-detector.ts";
+
+const root = fileURLToPath(new URL("../", import.meta.url));
+test("test code and helpers never launch the version-control executable", async () => {
+  const violations: string[] = [];
+  async function scan(directory: string) {
+    for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
+      if (entry.name === "node_modules") continue;
+      const file = path.join(directory, entry.name);
+      // Named development-only exceptions; none are imported or executed by tests.
+      const developmentOnly: Record<string, string> = {
+        "tools/ci-local.mjs": "Creates the depth-one checkout and reads HEAD outside the test runner.",
+        "tools/capture-baseline.mjs": "Captures the original baseline outside CI and tests.",
+        "tools/verification-state.mjs": "Records HEAD and cleanliness for manual Tier B/C evidence.",
+        "gui/scripts/build.mjs": "May read HEAD; e2e uses site.mjs with an explicit commit instead.",
+      };
+      if (Object.keys(developmentOnly).some((name) => file === path.join(root, name))) continue;
+      if (entry.isDirectory()) await scan(file);
+      else if (/\.(?:[cm]?[jt]sx?)$/.test(file)) {
+        for (const match of gitLaunches(await fs.readFile(file, "utf8"))) violations.push(`${path.relative(root, file)}: ${match}`);
+      }
+    }
+  }
+  for (const directory of ["tests", "gui", "tools"]) await scan(path.join(root, directory));
+  assert.deepEqual(violations, []);
+});
+
+test("the process-launch guard detects every legacy and regression positive fixture without executing it", async () => {
+  const samples = JSON.parse(await fs.readFile(new URL("./fixtures/git-detector-samples.json", import.meta.url), "utf8")) as { positive: string[]; negative: string[] };
+  for (const source of samples.positive) assert.equal(gitLaunches(source).length, 1, source);
+  for (const source of samples.negative) assert.deepEqual(gitLaunches(source), [], source);
+});

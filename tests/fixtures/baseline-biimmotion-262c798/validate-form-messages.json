@@ -1,0 +1,220 @@
+{
+  "note": "form は defaults と secondCharacter を深く合成する。添付はサイズ・名前の合成メタデータであり巨大ファイルは作らない。URL行番号は1を代表とする（行数に上限がなく具体的文言の集合は無限）。",
+  "messages": [
+    "1人目の字幕色は6桁のHEXカラーで指定してください。",
+    "1人目の配置が不正です。",
+    "2人目のAivis Style IDは0以上の整数で指定してください。",
+    "2人目の字幕色は6桁のHEXカラーで指定してください。",
+    "2人目の話速は0.5〜2.0で指定してください。",
+    "2人目の配置が不正です。",
+    "3Dキャラクターは.glbファイルを選択してください。",
+    "Aivis Engine URLにはHTTP / HTTPS URLを指定してください。",
+    "Aivis Style IDは0以上の整数で指定してください。",
+    "BGMはMP3 / WAV / OGG / M4A / AACを選択してください。",
+    "MVで使用する完成音源をアップロードしてください。",
+    "MVで表現したいことを入力してください。",
+    "キャラクターモードが不正です。",
+    "フレームレートは24 / 25 / 30 / 60fpsから選択してください。",
+    "何を説明する動画かを入力してください。",
+    "全画面モードが不正です。",
+    "動画タイトルを入力してください。",
+    "動画モードが不正です。",
+    "参考URLの1行目を確認してください（HTTP / HTTPSのみ）。",
+    "完成音源の尺を確認してください（0秒超〜7,200秒）。音源の読み込み完了後に生成できます。",
+    "完成音源はMP3 / WAV / OGG / M4A / AACを選択してください。",
+    "対象視聴者を入力してください。",
+    "希望尺は5〜7,200秒の整数で指定してください。",
+    "様式「混在」ではBiim区間が必要なため、全画面モードとBiim使用率「使わない」は選べません。",
+    "様式モードが不正です。",
+    "添付ファイルの合計を500MB以内にしてください。",
+    "空の添付ファイルは除いてください。",
+    "素材生成の設定が不正です。",
+    "縦向きの出力ではBiim枠を置けないため、様式「混在」は選べません。横向きにするか、別の様式を選んでください。",
+    "解像度は240〜7,680pxの偶数で指定してください。",
+    "設定 biimUsage が不正です。",
+    "設定 characterUsage が不正です。",
+    "設定 energy が不正です。",
+    "設定 evidencePolicy が不正です。",
+    "設定 motionAmount が不正です。",
+    "設定 tempo が不正です。",
+    "話速は0.5〜2.0で指定してください。",
+    "音声エンジンが不正です。"
+  ],
+  "parameterized_messages": [
+    {
+      "template": "参考URLの${line}行目を確認してください（HTTP / HTTPSのみ）。",
+      "parameter": "line",
+      "minimum": 1
+    }
+  ],
+  "inputs": [
+    {
+      "id": "invalid-fields",
+      "form": {
+        "videoMode": "invalid",
+        "styleMode": "invalid",
+        "title": "",
+        "description": "",
+        "audience": "",
+        "durationSec": 0,
+        "width": 241,
+        "height": 1080,
+        "fps": 29,
+        "voiceEngine": "invalid",
+        "characterMode": "invalid",
+        "fullScreen": "invalid",
+        "imageGeneration": "invalid",
+        "videoGeneration": "invalid",
+        "characterPosition": "invalid",
+        "subtitleColor": "invalid",
+        "urls": "ftp://invalid.example",
+        "tempo": "invalid",
+        "energy": "invalid",
+        "motionAmount": "invalid",
+        "biimUsage": "invalid",
+        "characterUsage": "invalid",
+        "evidencePolicy": "invalid"
+      },
+      "assets": {
+        "sources": []
+      },
+      "messages": [
+        "様式モードが不正です。",
+        "動画モードが不正です。",
+        "動画タイトルを入力してください。",
+        "何を説明する動画かを入力してください。",
+        "対象視聴者を入力してください。",
+        "希望尺は5〜7,200秒の整数で指定してください。",
+        "解像度は240〜7,680pxの偶数で指定してください。",
+        "フレームレートは24 / 25 / 30 / 60fpsから選択してください。",
+        "音声エンジンが不正です。",
+        "キャラクターモードが不正です。",
+        "全画面モードが不正です。",
+        "素材生成の設定が不正です。",
+        "1人目の配置が不正です。",
+        "1人目の字幕色は6桁のHEXカラーで指定してください。",
+        "参考URLの1行目を確認してください（HTTP / HTTPSのみ）。",
+        "設定 tempo が不正です。",
+        "設定 energy が不正です。",
+        "設定 motionAmount が不正です。",
+        "設定 biimUsage が不正です。",
+        "設定 characterUsage が不正です。",
+        "設定 evidencePolicy が不正です。"
+      ]
+    },
+    {
+      "id": "invalid-duo-voice",
+      "form": {
+        "characterMode": "duo",
+        "voiceEngine": "aivis",
+        "engineUrl": "invalid",
+        "styleId": -1,
+        "voiceSpeed": 0,
+        "characterPosition": "invalid",
+        "subtitleColor": "invalid",
+        "secondCharacter": {
+          "position": "invalid",
+          "subtitleColor": "invalid",
+          "styleId": -1,
+          "voiceSpeed": 0
+        }
+      },
+      "assets": {
+        "sources": [
+          {
+            "name": "large.txt",
+            "size": 524288001
+          }
+        ],
+        "character": {
+          "name": "invalid.bin",
+          "size": 0
+        },
+        "secondCharacter": {
+          "name": "invalid.bin",
+          "size": 0
+        },
+        "bgm": {
+          "name": "invalid.bin",
+          "size": 0
+        }
+      },
+      "messages": [
+        "動画タイトルを入力してください。",
+        "何を説明する動画かを入力してください。",
+        "対象視聴者を入力してください。",
+        "1人目の配置が不正です。",
+        "1人目の字幕色は6桁のHEXカラーで指定してください。",
+        "2人目の配置が不正です。",
+        "2人目の字幕色は6桁のHEXカラーで指定してください。",
+        "2人目のAivis Style IDは0以上の整数で指定してください。",
+        "2人目の話速は0.5〜2.0で指定してください。",
+        "Aivis Engine URLにはHTTP / HTTPS URLを指定してください。",
+        "Aivis Style IDは0以上の整数で指定してください。",
+        "話速は0.5〜2.0で指定してください。",
+        "3Dキャラクターは.glbファイルを選択してください。",
+        "3Dキャラクターは.glbファイルを選択してください。",
+        "BGMはMP3 / WAV / OGG / M4A / AACを選択してください。",
+        "空の添付ファイルは除いてください。",
+        "添付ファイルの合計を500MB以内にしてください。"
+      ]
+    },
+    {
+      "id": "mixed-portrait-fullscreen",
+      "form": {
+        "styleMode": "mixed",
+        "width": 1080,
+        "height": 1920,
+        "fullScreen": true
+      },
+      "assets": {
+        "sources": []
+      },
+      "messages": [
+        "縦向きの出力ではBiim枠を置けないため、様式「混在」は選べません。横向きにするか、別の様式を選んでください。",
+        "様式「混在」ではBiim区間が必要なため、全画面モードとBiim使用率「使わない」は選べません。",
+        "動画タイトルを入力してください。",
+        "何を説明する動画かを入力してください。",
+        "対象視聴者を入力してください。"
+      ]
+    },
+    {
+      "id": "mv-missing",
+      "form": {
+        "videoMode": "mv",
+        "description": ""
+      },
+      "assets": {
+        "sources": []
+      },
+      "messages": [
+        "動画タイトルを入力してください。",
+        "MVで表現したいことを入力してください。",
+        "対象視聴者を入力してください。",
+        "MVで使用する完成音源をアップロードしてください。"
+      ]
+    },
+    {
+      "id": "mv-invalid",
+      "form": {
+        "videoMode": "mv",
+        "musicDurationSec": null
+      },
+      "assets": {
+        "sources": [],
+        "music": {
+          "name": "invalid.bin",
+          "size": 0
+        }
+      },
+      "messages": [
+        "動画タイトルを入力してください。",
+        "MVで表現したいことを入力してください。",
+        "対象視聴者を入力してください。",
+        "完成音源はMP3 / WAV / OGG / M4A / AACを選択してください。",
+        "完成音源の尺を確認してください（0秒超〜7,200秒）。音源の読み込み完了後に生成できます。",
+        "空の添付ファイルは除いてください。"
+      ]
+    }
+  ]
+}

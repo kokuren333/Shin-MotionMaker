@@ -1,0 +1,1376 @@
+{
+  "source_commit": "262c79876a9c4635377114902d58ce783e7578b1",
+  "source_count": 81,
+  "mappings": [
+    {
+      "source": {
+        "file": "tests/explainer.test.ts",
+        "name": "explainer directions have six varied axes and deterministic candidates differing on every active axis"
+      },
+      "targets": [
+        {
+          "file": "tests/explainer.test.ts",
+          "name": "explainer directions have six varied axes and deterministic candidates differing on every active axis",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/explainer.test.ts",
+        "name": "character roles switch with solo, duo and no-character contexts; portrait excludes biim and mixed"
+      },
+      "targets": [
+        {
+          "file": "tests/explainer.test.ts",
+          "name": "character roles switch with solo, duo and no-character contexts; portrait excludes biim and mixed",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/explainer.test.ts",
+        "name": "400 seeds give each style mode at least 15 percent of all candidates"
+      },
+      "targets": [
+        {
+          "file": "tests/explainer.test.ts",
+          "name": "400 seeds give each style mode at least 15 percent of all candidates",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/explainer.test.ts",
+        "name": "script stats count characters, speech estimate, headings, blocks, sentences and evidence hints"
+      },
+      "targets": [
+        {
+          "file": "tests/explainer.test.ts",
+          "name": "script stats count characters, speech estimate, headings, blocks, sentences and evidence hints",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/explainer.test.ts",
+        "name": "script stats share caption geometry, halfwidth handling and explicit line fit with the runtime"
+      },
+      "targets": [
+        {
+          "file": "tests/explainer.test.ts",
+          "name": "script stats share caption geometry, halfwidth handling and explicit line fit with the runtime",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/explainer.test.ts",
+        "name": "all 23 shared failure descriptions also exist in the imported T3 agent harness"
+      },
+      "targets": [
+        {
+          "file": "tests/explainer.test.ts",
+          "name": "all 23 shared failure descriptions also exist in the imported T3 agent harness",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/explainer.test.ts",
+        "name": "explainer style switches change only unedited defaults and preserve mode-specific inputs"
+      },
+      "targets": [
+        {
+          "file": "tests/explainer.test.ts",
+          "name": "explainer style switches change only unedited defaults and preserve mode-specific inputs",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/explainer.test.ts",
+        "name": "style validation keeps optional fields optional and rejects incompatible mixed settings"
+      },
+      "targets": [
+        {
+          "file": "tests/explainer.test.ts",
+          "name": "style validation keeps optional fields optional and rejects incompatible mixed settings",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/explainer.test.ts",
+        "name": "explainer ZIPs carry goals, exact outline, independent differentiation, style and full production guidance"
+      },
+      "targets": [
+        {
+          "file": "tests/explainer.test.ts",
+          "name": "explainer ZIPs carry goals, exact outline, independent differentiation, style and full production guidance",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1",
+        "P2"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/explainer.test.ts",
+        "name": "MV form settings, prompt, brief, project and lyrics remain byte-identical to 955fa5c except schema version"
+      },
+      "targets": [
+        {
+          "file": "tests/baseline.test.ts",
+          "name": "MV form settings, prompt, brief, project and lyrics match the captured baseline without history",
+          "status": "active"
+        },
+        {
+          "file": "tests/baseline.test.ts",
+          "name": "JT-11 golden paths and bytes: mv-landscape",
+          "status": "active"
+        },
+        {
+          "file": "tests/baseline.test.ts",
+          "name": "JT-11 golden paths and bytes: mv-portrait-options",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1",
+        "P2",
+        "P3"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/generate-job.test.ts",
+        "name": "generate-job CLI matches the WebUI ZIP file paths and bytes for biim"
+      },
+      "targets": [
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "generate-job core matches ZIP file paths and bytes for biim",
+          "status": "active"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for biim; BOM, cwd, exclusive rerun",
+          "status": "active"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2a: generate-job compares independent host template loading with the browser template paths and bytes",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1",
+        "P4"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/generate-job.test.ts",
+        "name": "generate-job CLI matches the WebUI ZIP file paths and bytes for anime"
+      },
+      "targets": [
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "generate-job core matches ZIP file paths and bytes for anime",
+          "status": "active"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for anime; cwd, exclusive rerun",
+          "status": "active"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2a: generate-job compares independent host template loading with the browser template paths and bytes",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1",
+        "P4"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/generate-job.test.ts",
+        "name": "generate-job CLI matches the WebUI ZIP file paths and bytes for motion"
+      },
+      "targets": [
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "generate-job core matches ZIP file paths and bytes for motion",
+          "status": "active"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for motion; cwd, exclusive rerun",
+          "status": "active"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2a: generate-job compares independent host template loading with the browser template paths and bytes",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1",
+        "P4"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/generate-job.test.ts",
+        "name": "generate-job CLI matches the WebUI ZIP file paths and bytes for mixed"
+      },
+      "targets": [
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "generate-job core matches ZIP file paths and bytes for mixed",
+          "status": "active"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for mixed; cwd, exclusive rerun",
+          "status": "active"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2a: generate-job compares independent host template loading with the browser template paths and bytes",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1",
+        "P4"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/generate-job.test.ts",
+        "name": "generate-job CLI matches the WebUI ZIP file paths and bytes for mv"
+      },
+      "targets": [
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "generate-job core matches ZIP file paths and bytes for mv",
+          "status": "active"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for mv; cwd, exclusive rerun",
+          "status": "active"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2a: generate-job compares independent host template loading with the browser template paths and bytes",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1",
+        "P4"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/generate-job.test.ts",
+        "name": "generate-job accepts a minimal form and omitted assets using defaults"
+      },
+      "targets": [
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "generate-job core accepts a minimal form and omitted assets using defaults",
+          "status": "active"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2b: generate-job accepts a minimal form and omitted assets using defaults; CLI launch and output",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1",
+        "P4"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/generate-job.test.ts",
+        "name": "generate-job rejects invalid JSON, unknown keys, invalid types and validation errors before writing"
+      },
+      "targets": [
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "generate-job core rejects unknown keys, invalid types and validation errors",
+          "status": "active"
+        },
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2b: generate-job rejects invalid JSON, unknown keys, invalid types and validation errors before writing; missing attachment, exit code and no output",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1",
+        "P4"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/generate-job.test.ts",
+        "name": "generate-job rejects existing empty directories and files without changing siblings"
+      },
+      "targets": [
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2b: generate-job rejects existing empty directories and files without changing siblings",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1",
+        "P4"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/generate-job.test.ts",
+        "name": "generate-job reports usage and exits 1 for missing, duplicate or unsupported arguments"
+      },
+      "targets": [
+        {
+          "file": "tests/generate-job.test.ts",
+          "name": "M2b: generate-job reports usage and exits 1 for missing, duplicate or unsupported arguments; use contract exit codes",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1",
+        "P4"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/ghost.test.ts",
+        "name": "tile signatures average each tile region"
+      },
+      "targets": [
+        {
+          "file": "tests/ghost.test.ts",
+          "name": "tile signatures average each tile region",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/ghost.test.ts",
+        "name": "double-render comparison flags only the frames that differ"
+      },
+      "targets": [
+        {
+          "file": "tests/ghost.test.ts",
+          "name": "double-render comparison flags only the frames that differ",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/ghost.test.ts",
+        "name": "single-frame detection catches a one-frame appearance"
+      },
+      "targets": [
+        {
+          "file": "tests/ghost.test.ts",
+          "name": "single-frame detection catches a one-frame appearance",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/ghost.test.ts",
+        "name": "single-frame detection ignores cuts, sustained and held content"
+      },
+      "targets": [
+        {
+          "file": "tests/ghost.test.ts",
+          "name": "single-frame detection ignores cuts, sustained and held content",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/ghost.test.ts",
+        "name": "templates keep text layers on their own compositing layer by default"
+      },
+      "targets": [
+        {
+          "file": "tests/ghost.test.ts",
+          "name": "templates keep text layers on their own compositing layer by default",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/ghost.test.ts",
+        "name": "validate wires the ghost scan as an advisory, not a failure"
+      },
+      "targets": [
+        {
+          "file": "tests/ghost.test.ts",
+          "name": "validate wires the ghost scan as an advisory, not a failure",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/ghost.test.ts",
+        "name": "flash classification separates isolated ghosts from clustered runs"
+      },
+      "targets": [
+        {
+          "file": "tests/ghost.test.ts",
+          "name": "flash classification separates isolated ghosts from clustered runs",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/ghost.test.ts",
+        "name": "ghost report stems keep the historic final name and suffix others"
+      },
+      "targets": [
+        {
+          "file": "tests/ghost.test.ts",
+          "name": "ghost report stems keep the historic final name and suffix others",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/ghost.test.ts",
+        "name": "machine summary and still selection prioritise isolated flashes"
+      },
+      "targets": [
+        {
+          "file": "tests/ghost.test.ts",
+          "name": "machine summary and still selection prioritise isolated flashes",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/ghost.test.ts",
+        "name": "WebUI parses ghost-check JSON and rejects other files"
+      },
+      "targets": [
+        {
+          "file": "tests/ghost.test.ts",
+          "name": "WebUI parses ghost-check JSON and rejects other files",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/harness-docs.test.ts",
+        "name": "job AGENTS.md opens with the HN-14 guard and the per-mode reading guide"
+      },
+      "targets": [
+        {
+          "file": "tests/harness-docs.test.ts",
+          "name": "job AGENTS.md opens with the HN-14 guard and the per-mode reading guide",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/harness-docs.test.ts",
+        "name": "explainer chapter mirrors the MV chapter: principles, translation, directions, style, steps, QC, checklist"
+      },
+      "targets": [
+        {
+          "file": "tests/harness-docs.test.ts",
+          "name": "explainer chapter mirrors the MV chapter: principles, translation, directions, style, steps, QC, checklist",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/harness-docs.test.ts",
+        "name": "style-mode section covers the four modes, Biim as optional default, mixed segments and non-Biim parts"
+      },
+      "targets": [
+        {
+          "file": "tests/harness-docs.test.ts",
+          "name": "style-mode section covers the four modes, Biim as optional default, mixed segments and non-Biim parts",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/harness-docs.test.ts",
+        "name": "render-ghost chapter is shared by both modes and also covers explainer captions"
+      },
+      "targets": [
+        {
+          "file": "tests/harness-docs.test.ts",
+          "name": "render-ghost chapter is shared by both modes and also covers explainer captions",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/harness-docs.test.ts",
+        "name": "record templates live only under plan/templates and are usable examples"
+      },
+      "targets": [
+        {
+          "file": "tests/harness-docs.test.ts",
+          "name": "record templates live only under plan/templates and are usable examples",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/harness-docs.test.ts",
+        "name": "generated ZIPs (MV and explainer) carry no files at validate/qc-checked paths outside plan/templates"
+      },
+      "targets": [
+        {
+          "file": "tests/harness-docs.test.ts",
+          "name": "generated ZIPs (MV and explainer) carry no files at validate/qc-checked paths outside plan/templates",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/harness-docs.test.ts",
+        "name": "job README documents explainer production symmetric to MV: records, QC commands, gate meaning"
+      },
+      "targets": [
+        {
+          "file": "tests/harness-docs.test.ts",
+          "name": "job README documents explainer production symmetric to MV: records, QC commands, gate meaning",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/imagegen.test.ts",
+        "name": "imagegen parses options and builds a style-aware prompt without lyrics in images"
+      },
+      "targets": [
+        {
+          "file": "tests/imagegen.test.ts",
+          "name": "imagegen parses options and builds a style-aware prompt without lyrics in images",
+          "status": "active"
+        }
+      ],
+      "changes": []
+    },
+    {
+      "source": {
+        "file": "tests/imagegen.test.ts",
+        "name": "imagegen saves a PNG through Codex, versions names and records the manifest"
+      },
+      "targets": [
+        {
+          "file": "tests/imagegen.test.ts",
+          "name": "imagegen saves a PNG through Codex, versions names and records the manifest",
+          "status": "active"
+        }
+      ],
+      "changes": []
+    },
+    {
+      "source": {
+        "file": "tests/imagegen.test.ts",
+        "name": "imagegen continues without an asset when Codex is missing or fails"
+      },
+      "targets": [
+        {
+          "file": "tests/imagegen.test.ts",
+          "name": "imagegen continues without an asset when Codex is missing or fails",
+          "status": "active"
+        }
+      ],
+      "changes": []
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "project is a creative brief with empty scenes and audio creation policy"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "project is a creative brief with empty scenes and audio creation policy",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "MV mode preserves shared inputs and restores each mode's design and instructions"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "MV mode preserves shared inputs and restores each mode's design and instructions",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "MV ZIP includes the exact completed audio and enforces full-screen, no synthesis, no extra audio"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "MV ZIP includes the exact completed audio and enforces full-screen, no synthesis, no extra audio",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "required values, unsafe URLs, invalid numeric values and asset limits are rejected"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "required values, unsafe URLs, invalid numeric values and asset limits are rejected",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "filenames remain portable, traversal-free and unique even with normalized names"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "filenames remain portable, traversal-free and unique even with normalized names",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "ZIP includes the runtime, exact attachment bytes, Japanese brief, and audio instructions"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "ZIP includes the runtime, exact attachment bytes, Japanese brief, and audio instructions",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "generation enforces validation and rejects unsafe template paths"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "generation enforces validation and rejects unsafe template paths",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "procedural BGM and SE are deterministic, finite WAVs with bounded peaks"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "procedural BGM and SE are deterministic, finite WAVs with bounded peaks",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "solo and duo profiles preserve names, roles, custom colors and independent voices"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "solo and duo profiles preserve names, roles, custom colors and independent voices",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "fullscreen and portrait enforce no Biim frame and keep both characters outside captions"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "fullscreen and portrait enforce no Biim frame and keep both characters outside captions",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "Biim subtitles and their SVG border move with character positions"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "Biim subtitles and their SVG border move with character positions",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "duo ZIP packages two separate GLBs; solo omits the inactive second model and its limits"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "duo ZIP packages two separate GLBs; solo omits the inactive second model and its limits",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "MV direction candidates differ on every axis and change with the seed"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "MV direction candidates differ on every axis and change with the seed",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "lyric stats count lines, section tags, blocks and long lines"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "lyric stats count lines, section tags, blocks and long lines",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "MV brief and AGENTS carry design-first principles, diversity steps and asset policy"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "MV brief and AGENTS carry design-first principles, diversity steps and asset policy",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/job.test.ts",
+        "name": "non-Biim parts retain fullscreen captions, actor freedom and clear diagram space"
+      },
+      "targets": [
+        {
+          "file": "tests/job.test.ts",
+          "name": "non-Biim parts retain fullscreen captions, actor freedom and clear diagram space",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "caption rule uses provisional geometry for solo, duo, fullscreen and portrait"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "caption rule uses provisional geometry for solo, duo, fullscreen and portrait",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC pre writes the contract, hashes inspected inputs and never rewrites reviews"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC pre writes the contract, hashes inspected inputs and never rewrites reviews",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC evidence rejects unresolved claims, common numeric claims even hedged, and forbidden web sources"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC evidence rejects unresolved claims, common numeric claims even hedged, and forbidden web sources",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC requires checked review lines and accepts waiver lines only in the owner's section"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC requires checked review lines and accepts waiver lines only in the owner's section",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC biim scopes Biim checks and enforces caption capacity"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC biim scopes Biim checks and enforces caption capacity",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC anime scopes Biim checks and enforces caption capacity"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC anime scopes Biim checks and enforces caption capacity",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC motion scopes Biim checks and enforces caption capacity"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC motion scopes Biim checks and enforces caption capacity",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC mixed scopes Biim checks and enforces caption capacity"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC mixed scopes Biim checks and enforces caption capacity",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC uses narration overrides, ignores comment-only headings and rejects inconsistent storyboard styles"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC uses narration overrides, ignores comment-only headings and rejects inconsistent storyboard styles",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC accepts contract heading annotations with spaces and rejects empty review text"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC accepts contract heading annotations with spaces and rejects empty review text",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC Biim standard constants match the repository standard"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC Biim standard constants match the repository standard",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC post rechecks preflight, validates narration, still reviews, ghost reconciliation and delivery"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC post rechecks preflight, validates narration, still reviews, ghost reconciliation and delivery",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC post rejects missing scene speech, overlapping/cut speech and oversized rendered captions"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC post rejects missing scene speech, overlapping/cut speech and oversized rendered captions",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC no-voice jobs mark automatic caption/sync gates inapplicable"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC no-voice jobs mark automatic caption/sync gates inapplicable",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC post requires a current final scan, all review rows and delivery headings"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC post requires a current final scan, all review rows and delivery headings",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC post enforces scene tolerance and total duration independently of overlap"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC post enforces scene tolerance and total duration independently of overlap",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "QC CLI exits 1 on a failed gate, 2 on usage errors, and MV exits 0 without reports"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "QC CLI exits 1 on a failed gate, 2 on usage errors, and MV exits 0 without reports",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "validate final biim requires explainer design records and scopes note fields"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "validate final biim requires explainer design records and scopes note fields",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "validate final anime requires explainer design records and scopes note fields"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "validate final anime requires explainer design records and scopes note fields",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "validate final motion requires explainer design records and scopes note fields"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "validate final motion requires explainer design records and scopes note fields",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "validate final mixed requires explainer design records and scopes note fields"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "validate final mixed requires explainer design records and scopes note fields",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "validate final MV retains its original records and does not require explainer records"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "validate final MV retains its original records and does not require explainer records",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "fixture CLI generates all styles, isolated failure modes and unchanged MV behavior under --out"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "fixture CLI generates all styles, isolated failure modes and unchanged MV behavior under --out",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "caption fit counts halfwidth, explicit lines and speech units"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "caption fit counts halfwidth, explicit lines and speech units",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/qc.test.ts",
+        "name": "style helpers preserve old jobs and require explicit mixed scene assignments"
+      },
+      "targets": [
+        {
+          "file": "tests/qc.test.ts",
+          "name": "style helpers preserve old jobs and require explicit mixed scene assignments",
+          "status": "active"
+        }
+      ],
+      "changes": [
+        "P1"
+      ]
+    },
+    {
+      "source": {
+        "file": "tests/voice.test.ts",
+        "name": "Aivis pipeline reads scene scripts, splits captions, measures WAVs and rejects overlaps without replacing the previous manifest"
+      },
+      "targets": [
+        {
+          "file": "tests/voice.test.ts",
+          "name": "Aivis pipeline reads scene scripts, splits captions, measures WAVs and rejects overlaps without replacing the previous manifest",
+          "status": "active"
+        }
+      ],
+      "changes": []
+    }
+  ]
+}

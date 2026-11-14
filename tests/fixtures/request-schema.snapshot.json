@@ -1,0 +1,379 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "smm.request/1",
+  "type": "object",
+  "properties": {
+    "form": {
+      "type": "object",
+      "properties": {
+        "videoMode": {
+          "type": "string",
+          "enum": [
+            "explanation",
+            "mv"
+          ]
+        },
+        "styleMode": {
+          "type": "string"
+        },
+        "takeaway": {
+          "type": "string"
+        },
+        "priorKnowledge": {
+          "type": "string"
+        },
+        "outline": {
+          "type": "string"
+        },
+        "explainerDifferentiation": {
+          "type": "string"
+        },
+        "musicMood": {
+          "type": "string"
+        },
+        "musicLyrics": {
+          "type": "string"
+        },
+        "musicDurationSec": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "differentiation": {
+          "type": "string"
+        },
+        "imageGeneration": {
+          "type": "boolean"
+        },
+        "videoGeneration": {
+          "type": "boolean"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "audience": {
+          "type": "string"
+        },
+        "durationSec": {
+          "type": "number"
+        },
+        "urls": {
+          "type": "string"
+        },
+        "instructions": {
+          "type": "string"
+        },
+        "design": {
+          "type": "string"
+        },
+        "characterNotes": {
+          "type": "string"
+        },
+        "characterMode": {
+          "type": "string",
+          "enum": [
+            "solo",
+            "duo"
+          ]
+        },
+        "characterName": {
+          "type": "string"
+        },
+        "characterReading": {
+          "type": "string"
+        },
+        "characterPersonality": {
+          "type": "string"
+        },
+        "characterSpeakingStyle": {
+          "type": "string"
+        },
+        "characterRole": {
+          "type": "string"
+        },
+        "characterPosition": {
+          "type": "string"
+        },
+        "subtitleColor": {
+          "type": "string"
+        },
+        "secondCharacter": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "reading": {
+              "type": "string"
+            },
+            "personality": {
+              "type": "string"
+            },
+            "speakingStyle": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            },
+            "position": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "subtitleColor": {
+              "type": "string"
+            },
+            "styleId": {
+              "type": "number"
+            },
+            "voiceSpeed": {
+              "type": "number"
+            },
+            "voiceNotes": {
+              "type": "string"
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "fullScreen": {
+          "type": "boolean"
+        },
+        "voiceEngine": {
+          "type": "string",
+          "enum": [
+            "aivis",
+            "none"
+          ]
+        },
+        "engineUrl": {
+          "type": "string"
+        },
+        "styleId": {
+          "type": "number"
+        },
+        "voiceSpeed": {
+          "type": "number"
+        },
+        "voiceNotes": {
+          "type": "string"
+        },
+        "generateAudio": {
+          "type": "boolean"
+        },
+        "audioNotes": {
+          "type": "string"
+        },
+        "width": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        },
+        "fps": {
+          "type": "number",
+          "enum": [
+            24,
+            25,
+            30,
+            60
+          ]
+        },
+        "tempo": {
+          "type": "string",
+          "enum": [
+            "slow",
+            "balanced",
+            "fast"
+          ]
+        },
+        "energy": {
+          "type": "string",
+          "enum": [
+            "restrained",
+            "balanced",
+            "bold"
+          ]
+        },
+        "motionAmount": {
+          "type": "string",
+          "enum": [
+            "minimal",
+            "balanced",
+            "rich"
+          ]
+        },
+        "biimUsage": {
+          "type": "string",
+          "enum": [
+            "never",
+            "sometimes",
+            "mostly"
+          ]
+        },
+        "characterUsage": {
+          "type": "string",
+          "enum": [
+            "none",
+            "occasional",
+            "frequent"
+          ]
+        },
+        "diagramPolicy": {
+          "type": "string"
+        },
+        "allowWebResearch": {
+          "type": "boolean"
+        },
+        "evidencePolicy": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "supplied-only",
+            "balanced"
+          ]
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "anyOf": [
+            {
+              "properties": {
+                "videoMode": {
+                  "const": "mv"
+                }
+              },
+              "required": [
+                "videoMode"
+              ]
+            },
+            {
+              "properties": {
+                "styleMode": {
+                  "enum": [
+                    "biim",
+                    "anime",
+                    "motion",
+                    "mixed"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "anyOf": [
+            {
+              "properties": {
+                "videoMode": {
+                  "const": "mv"
+                }
+              },
+              "required": [
+                "videoMode"
+              ]
+            },
+            {
+              "properties": {
+                "characterPosition": {
+                  "enum": [
+                    "left",
+                    "right"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "anyOf": [
+            {
+              "properties": {
+                "videoMode": {
+                  "const": "mv"
+                }
+              },
+              "required": [
+                "videoMode"
+              ]
+            },
+            {
+              "properties": {
+                "characterMode": {
+                  "const": "solo"
+                }
+              }
+            },
+            {
+              "properties": {
+                "secondCharacter": {
+                  "properties": {
+                    "position": {
+                      "enum": [
+                        "left",
+                        "right"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "assets": {
+      "type": "object",
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "character": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "secondCharacter": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "bgm": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "music": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "form"
+  ],
+  "additionalProperties": false
+}

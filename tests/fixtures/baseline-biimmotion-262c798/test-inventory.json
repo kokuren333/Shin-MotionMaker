@@ -1,0 +1,495 @@
+{
+  "commit": "262c79876a9c4635377114902d58ce783e7578b1",
+  "command": "npm --node-options=--test-reporter=<採取レポーターURL> test",
+  "count": 81,
+  "passed": 81,
+  "failed": 0,
+  "tests": [
+    {
+      "file": "tests/explainer.test.ts",
+      "suite": [],
+      "name": "explainer directions have six varied axes and deterministic candidates differing on every active axis",
+      "status": "pass"
+    },
+    {
+      "file": "tests/explainer.test.ts",
+      "suite": [],
+      "name": "character roles switch with solo, duo and no-character contexts; portrait excludes biim and mixed",
+      "status": "pass"
+    },
+    {
+      "file": "tests/explainer.test.ts",
+      "suite": [],
+      "name": "400 seeds give each style mode at least 15 percent of all candidates",
+      "status": "pass"
+    },
+    {
+      "file": "tests/explainer.test.ts",
+      "suite": [],
+      "name": "script stats count characters, speech estimate, headings, blocks, sentences and evidence hints",
+      "status": "pass"
+    },
+    {
+      "file": "tests/explainer.test.ts",
+      "suite": [],
+      "name": "script stats share caption geometry, halfwidth handling and explicit line fit with the runtime",
+      "status": "pass"
+    },
+    {
+      "file": "tests/explainer.test.ts",
+      "suite": [],
+      "name": "all 23 shared failure descriptions also exist in the imported T3 agent harness",
+      "status": "pass"
+    },
+    {
+      "file": "tests/explainer.test.ts",
+      "suite": [],
+      "name": "explainer style switches change only unedited defaults and preserve mode-specific inputs",
+      "status": "pass"
+    },
+    {
+      "file": "tests/explainer.test.ts",
+      "suite": [],
+      "name": "style validation keeps optional fields optional and rejects incompatible mixed settings",
+      "status": "pass"
+    },
+    {
+      "file": "tests/explainer.test.ts",
+      "suite": [],
+      "name": "explainer ZIPs carry goals, exact outline, independent differentiation, style and full production guidance",
+      "status": "pass"
+    },
+    {
+      "file": "tests/explainer.test.ts",
+      "suite": [],
+      "name": "MV form settings, prompt, brief, project and lyrics remain byte-identical to 955fa5c except schema version",
+      "status": "pass"
+    },
+    {
+      "file": "tests/generate-job.test.ts",
+      "suite": [],
+      "name": "generate-job CLI matches the WebUI ZIP file paths and bytes for biim",
+      "status": "pass"
+    },
+    {
+      "file": "tests/generate-job.test.ts",
+      "suite": [],
+      "name": "generate-job CLI matches the WebUI ZIP file paths and bytes for anime",
+      "status": "pass"
+    },
+    {
+      "file": "tests/generate-job.test.ts",
+      "suite": [],
+      "name": "generate-job CLI matches the WebUI ZIP file paths and bytes for motion",
+      "status": "pass"
+    },
+    {
+      "file": "tests/generate-job.test.ts",
+      "suite": [],
+      "name": "generate-job CLI matches the WebUI ZIP file paths and bytes for mixed",
+      "status": "pass"
+    },
+    {
+      "file": "tests/generate-job.test.ts",
+      "suite": [],
+      "name": "generate-job CLI matches the WebUI ZIP file paths and bytes for mv",
+      "status": "pass"
+    },
+    {
+      "file": "tests/generate-job.test.ts",
+      "suite": [],
+      "name": "generate-job accepts a minimal form and omitted assets using defaults",
+      "status": "pass"
+    },
+    {
+      "file": "tests/generate-job.test.ts",
+      "suite": [],
+      "name": "generate-job rejects invalid JSON, unknown keys, invalid types and validation errors before writing",
+      "status": "pass"
+    },
+    {
+      "file": "tests/generate-job.test.ts",
+      "suite": [],
+      "name": "generate-job rejects existing empty directories and files without changing siblings",
+      "status": "pass"
+    },
+    {
+      "file": "tests/generate-job.test.ts",
+      "suite": [],
+      "name": "generate-job reports usage and exits 1 for missing, duplicate or unsupported arguments",
+      "status": "pass"
+    },
+    {
+      "file": "tests/ghost.test.ts",
+      "suite": [],
+      "name": "tile signatures average each tile region",
+      "status": "pass"
+    },
+    {
+      "file": "tests/ghost.test.ts",
+      "suite": [],
+      "name": "double-render comparison flags only the frames that differ",
+      "status": "pass"
+    },
+    {
+      "file": "tests/ghost.test.ts",
+      "suite": [],
+      "name": "single-frame detection catches a one-frame appearance",
+      "status": "pass"
+    },
+    {
+      "file": "tests/ghost.test.ts",
+      "suite": [],
+      "name": "single-frame detection ignores cuts, sustained and held content",
+      "status": "pass"
+    },
+    {
+      "file": "tests/ghost.test.ts",
+      "suite": [],
+      "name": "templates keep text layers on their own compositing layer by default",
+      "status": "pass"
+    },
+    {
+      "file": "tests/ghost.test.ts",
+      "suite": [],
+      "name": "validate wires the ghost scan as an advisory, not a failure",
+      "status": "pass"
+    },
+    {
+      "file": "tests/ghost.test.ts",
+      "suite": [],
+      "name": "flash classification separates isolated ghosts from clustered runs",
+      "status": "pass"
+    },
+    {
+      "file": "tests/ghost.test.ts",
+      "suite": [],
+      "name": "ghost report stems keep the historic final name and suffix others",
+      "status": "pass"
+    },
+    {
+      "file": "tests/ghost.test.ts",
+      "suite": [],
+      "name": "machine summary and still selection prioritise isolated flashes",
+      "status": "pass"
+    },
+    {
+      "file": "tests/ghost.test.ts",
+      "suite": [],
+      "name": "WebUI parses ghost-check JSON and rejects other files",
+      "status": "pass"
+    },
+    {
+      "file": "tests/harness-docs.test.ts",
+      "suite": [],
+      "name": "job AGENTS.md opens with the HN-14 guard and the per-mode reading guide",
+      "status": "pass"
+    },
+    {
+      "file": "tests/harness-docs.test.ts",
+      "suite": [],
+      "name": "explainer chapter mirrors the MV chapter: principles, translation, directions, style, steps, QC, checklist",
+      "status": "pass"
+    },
+    {
+      "file": "tests/harness-docs.test.ts",
+      "suite": [],
+      "name": "style-mode section covers the four modes, Biim as optional default, mixed segments and non-Biim parts",
+      "status": "pass"
+    },
+    {
+      "file": "tests/harness-docs.test.ts",
+      "suite": [],
+      "name": "render-ghost chapter is shared by both modes and also covers explainer captions",
+      "status": "pass"
+    },
+    {
+      "file": "tests/harness-docs.test.ts",
+      "suite": [],
+      "name": "record templates live only under plan/templates and are usable examples",
+      "status": "pass"
+    },
+    {
+      "file": "tests/harness-docs.test.ts",
+      "suite": [],
+      "name": "generated ZIPs (MV and explainer) carry no files at validate/qc-checked paths outside plan/templates",
+      "status": "pass"
+    },
+    {
+      "file": "tests/harness-docs.test.ts",
+      "suite": [],
+      "name": "job README documents explainer production symmetric to MV: records, QC commands, gate meaning",
+      "status": "pass"
+    },
+    {
+      "file": "tests/imagegen.test.ts",
+      "suite": [],
+      "name": "imagegen parses options and builds a style-aware prompt without lyrics in images",
+      "status": "pass"
+    },
+    {
+      "file": "tests/imagegen.test.ts",
+      "suite": [],
+      "name": "imagegen saves a PNG through Codex, versions names and records the manifest",
+      "status": "pass"
+    },
+    {
+      "file": "tests/imagegen.test.ts",
+      "suite": [],
+      "name": "imagegen continues without an asset when Codex is missing or fails",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "project is a creative brief with empty scenes and audio creation policy",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "MV mode preserves shared inputs and restores each mode's design and instructions",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "MV ZIP includes the exact completed audio and enforces full-screen, no synthesis, no extra audio",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "required values, unsafe URLs, invalid numeric values and asset limits are rejected",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "filenames remain portable, traversal-free and unique even with normalized names",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "ZIP includes the runtime, exact attachment bytes, Japanese brief, and audio instructions",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "generation enforces validation and rejects unsafe template paths",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "procedural BGM and SE are deterministic, finite WAVs with bounded peaks",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "solo and duo profiles preserve names, roles, custom colors and independent voices",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "fullscreen and portrait enforce no Biim frame and keep both characters outside captions",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "Biim subtitles and their SVG border move with character positions",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "duo ZIP packages two separate GLBs; solo omits the inactive second model and its limits",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "MV direction candidates differ on every axis and change with the seed",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "lyric stats count lines, section tags, blocks and long lines",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "MV brief and AGENTS carry design-first principles, diversity steps and asset policy",
+      "status": "pass"
+    },
+    {
+      "file": "tests/job.test.ts",
+      "suite": [],
+      "name": "non-Biim parts retain fullscreen captions, actor freedom and clear diagram space",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "caption rule uses provisional geometry for solo, duo, fullscreen and portrait",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC pre writes the contract, hashes inspected inputs and never rewrites reviews",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC evidence rejects unresolved claims, common numeric claims even hedged, and forbidden web sources",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC requires checked review lines and accepts waiver lines only in the owner's section",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC biim scopes Biim checks and enforces caption capacity",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC anime scopes Biim checks and enforces caption capacity",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC motion scopes Biim checks and enforces caption capacity",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC mixed scopes Biim checks and enforces caption capacity",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC uses narration overrides, ignores comment-only headings and rejects inconsistent storyboard styles",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC accepts contract heading annotations with spaces and rejects empty review text",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC Biim standard constants match the repository standard",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC post rechecks preflight, validates narration, still reviews, ghost reconciliation and delivery",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC post rejects missing scene speech, overlapping/cut speech and oversized rendered captions",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC no-voice jobs mark automatic caption/sync gates inapplicable",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC post requires a current final scan, all review rows and delivery headings",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC post enforces scene tolerance and total duration independently of overlap",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "QC CLI exits 1 on a failed gate, 2 on usage errors, and MV exits 0 without reports",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "validate final biim requires explainer design records and scopes note fields",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "validate final anime requires explainer design records and scopes note fields",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "validate final motion requires explainer design records and scopes note fields",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "validate final mixed requires explainer design records and scopes note fields",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "validate final MV retains its original records and does not require explainer records",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "fixture CLI generates all styles, isolated failure modes and unchanged MV behavior under --out",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "caption fit counts halfwidth, explicit lines and speech units",
+      "status": "pass"
+    },
+    {
+      "file": "tests/qc.test.ts",
+      "suite": [],
+      "name": "style helpers preserve old jobs and require explicit mixed scene assignments",
+      "status": "pass"
+    },
+    {
+      "file": "tests/voice.test.ts",
+      "suite": [],
+      "name": "Aivis pipeline reads scene scripts, splits captions, measures WAVs and rejects overlaps without replacing the previous manifest",
+      "status": "pass"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "smm.ghost-check/1",
+  "type": "object",
+  "properties": {
+    "kind": {
+      "const": "biim-ghost-check"
+    },
+    "video": {
+      "type": "string"
+    },
+    "frames": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "fps": {
+      "type": "number"
+    },
+    "duration": {
+      "type": "string"
+    },
+    "counts": {
+      "type": "object"
+    },
+    "skipped": {
+      "type": "string"
+    },
+    "stills": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "required": [
+    "kind"
+  ],
+  "anyOf": [
+    {
+      "required": [
+        "video",
+        "frames",
+        "counts"
+      ]
+    },
+    {
+      "required": [
+        "skipped"
+      ]
+    }
+  ]
+}

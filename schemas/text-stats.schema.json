@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "smm.text-stats/1",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "lines": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "longest": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "longLines": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blocks": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "lines",
+        "sections",
+        "longest",
+        "longLines",
+        "blocks"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "characters": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "estimatedSeconds": {
+          "type": "number"
+        },
+        "headings": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blocks": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "longestSentence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "overCapacitySentences": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "numericLines": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "captionBoxes": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "required": [
+        "characters",
+        "estimatedSeconds",
+        "headings",
+        "blocks",
+        "longestSentence",
+        "overCapacitySentences",
+        "numericLines",
+        "captionBoxes"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

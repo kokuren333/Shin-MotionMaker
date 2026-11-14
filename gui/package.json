@@ -1,0 +1,26 @@
+{
+  "name": "@shin-motionmaker/gui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "build": "tsc --noEmit -p tsconfig.json && node scripts/build.mjs",
+    "test": "node --experimental-strip-types --test \"tests/*.test.ts\" && node --experimental-strip-types e2e/run.mjs",
+    "test:unit": "node --experimental-strip-types --test \"tests/*.test.ts\"",
+    "test:e2e": "node --experimental-strip-types e2e/run.mjs",
+    "shots": "node --experimental-strip-types e2e/shots.mjs"
+  },
+  "dependencies": {
+    "jszip": "3.10.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "vite": "7.3.8"
+  }
+}
