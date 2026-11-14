@@ -123,8 +123,8 @@
 | `node --experimental-strip-types --test --test-name-pattern 'atomic reservation\|P-5\|P-4\|R-7' tests/host-fix.test.ts tests/host-results.test.ts` | 最後の共通書込ヘルパー追補後、4件成功 / 失敗0、終了0 |
 | `node --experimental-strip-types --test --test-name-pattern 'TS-07 completes\|TS-07 unexpected\|R-5 startRun timeout\|atomic reservation' tests/host-run.test.ts tests/host-fix.test.ts tests/host-results.test.ts` | 子の終了後に取得した同一性を破棄する追補後、4件成功 / 失敗0、終了0 |
 | `npm run build` | 最終実装で終了0 |
-| `node tools/ci-local.mjs`（2792f36） | 深さ1複製、npm ci（追加17、audit 0）、build、npm test（177 / pass 166 / fail 0 / skip 2 / todo 9）、workspace test / build がすべて終了0 |
-| `node tools/ci-local.mjs`（1c1eac1） | 最終実装 `1c1eac1e3b5489931dc9e116a427b8726fad4e77` の深さ1複製で終了0。npm ci、build、npm test（177 / pass 166 / fail 0 / cancelled 0 / skip 2 / todo 9）、workspace test / build がすべて終了0。GUI は現時点で専用 scripts がないため if-present の実行対象なし |
+| `node tools/ci-local.mjs`（2792f36・1c1eac1） | 両コミットで深さ1複製、npm ci（追加17、audit 0）、build、npm test（177 / pass 166 / fail 0 / skip 2 / todo 9）、workspace test / build の完了出力を確認。ただし PowerShell のリダイレクトが git clone の stderr を NativeCommandError と扱い、呼出側の終了値が1になったため、次の方法で終了値を採り直した |
+| `node tools/ci-local.mjs`（5af47bf、Node の spawnSync から直接起動） | 最終実装と REPORT を含むコミットの深さ1複製。npm ci、build、npm test（177 / pass 166 / fail 0 / cancelled 0 / skip 2 / todo 9）、workspace test / build がすべて終了0。呼出側も `{"ci_exit_code":0}`、終了0を確認。GUI は現時点で専用 scripts がないため if-present の実行対象なし |
 | `node --experimental-strip-types tools/smoke-host.ts`（1c1eac1） | 68ファイルを持つ実ジョブを生成・実行、終了0。qc:fail / qc_exit_code:1 / sound:not_applicable / voice:not_applicable / style_mode:anime / imagegen:completed / validate:E_DEPS_MISSING / schema_errors:0 |
 | `git diff --check e32b689b1d3b5ee664a72cd56aa0a452317d8e7c...HEAD` | 出力なし、終了0。変更対象コードと REPORT の CRLF は0件 |
 
@@ -134,6 +134,7 @@
 - 所有者を照合できない PID は停止しない。不在または既知の不一致と、権限不足・CIM 障害・識別情報不足を区別し、後者が生存中なら排他を保持する。
 - 同じ host プロセスの同一性取得は Promise を共有する。並列予約時の CIM 多重起動を避け、他プロセスは都度照合する。
 - ChildProcess が取得中に終了した場合は識別情報を採用しない。終了後にその PID が再利用されていても、別プロセスの同一性を所有情報として保存しない。
+- ci-local の終了値を確定する最終実行は、Node の child_process.spawnSync に `process.execPath` と `["tools/ci-local.mjs"]` を渡し、stdout / stderr を同じログ FD に直接流した。PowerShell の NativeCommandError 変換を介さず、実際の status を JSON で採取した。製品・ci-local の処理は変更していない。
 - 時間切れ E2E は製品の入力・timeout 値を変更しない。worker 専用の試験 preload で5分の QC タイマーだけ1秒に短縮する。startRun・runTimeout・worker・停止・回収は製品の経路を通す。lost の15秒は実時間で待つ。
 - read-only の lost 導出は保存しない。書込側の回収・取消時だけ永続化・予約解放を行う。
 - 最初の全体テストで、追加テストの動的タイトルが既存台帳スキャナーに未対応であること、並列予約時の同一性取得の多重実行を検出した。既存の基線・台帳の表明は弱めず、テスト名を既存形式に合わせ、自己 PID の取得を共有した。
