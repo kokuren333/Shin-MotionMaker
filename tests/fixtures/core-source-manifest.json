@@ -1,0 +1,251 @@
+{
+  "source_commit": "262c79876a9c4635377114902d58ce783e7578b1",
+  "chunks": [
+    {
+      "source": "src/job.ts L8–74",
+      "target": "src/core/form.ts",
+      "start": "export interface CharacterForm",
+      "end": "export const aivisPresets",
+      "sha256": "4d695fa60d3744ae5bd96a0e468cba1cf078743e3358410659127816aba3d595"
+    },
+    {
+      "source": "src/job.ts L76–166",
+      "target": "src/core/form.ts",
+      "start": "export const aivisPresets",
+      "end": "export function safeName",
+      "sha256": "6415de573009cdce9e2fee3176a1ff5061eeef3d9953ed8c9e7dbda057f595e9"
+    }
+  ],
+  "exports": [
+    {
+      "name": "StyleMode",
+      "kind": "type"
+    },
+    {
+      "name": "CharacterForm",
+      "kind": "type"
+    },
+    {
+      "name": "MotionForm",
+      "kind": "type"
+    },
+    {
+      "name": "aivisPresets",
+      "kind": "value"
+    },
+    {
+      "name": "aivisStyleLabel",
+      "kind": "value"
+    },
+    {
+      "name": "explainerDesignDefaults",
+      "kind": "value"
+    },
+    {
+      "name": "switchStyleMode",
+      "kind": "value"
+    },
+    {
+      "name": "defaults",
+      "kind": "value"
+    },
+    {
+      "name": "Attachment",
+      "kind": "type"
+    },
+    {
+      "name": "JobAssets",
+      "kind": "type"
+    },
+    {
+      "name": "TemplateFiles",
+      "kind": "type"
+    },
+    {
+      "name": "safeName",
+      "kind": "value"
+    },
+    {
+      "name": "uniqueNames",
+      "kind": "value"
+    },
+    {
+      "name": "urlLines",
+      "kind": "value"
+    },
+    {
+      "name": "usesFullScreen",
+      "kind": "value"
+    },
+    {
+      "name": "mvDesign",
+      "kind": "value"
+    },
+    {
+      "name": "mvInstructions",
+      "kind": "value"
+    },
+    {
+      "name": "agentPromptFor",
+      "kind": "value"
+    },
+    {
+      "name": "GhostCheckFrameEvent",
+      "kind": "type"
+    },
+    {
+      "name": "GhostCheckRun",
+      "kind": "type"
+    },
+    {
+      "name": "GhostCheckStill",
+      "kind": "type"
+    },
+    {
+      "name": "GhostCheckSummary",
+      "kind": "type"
+    },
+    {
+      "name": "parseGhostCheckReport",
+      "kind": "value"
+    },
+    {
+      "name": "ghostCheckVerdict",
+      "kind": "value"
+    },
+    {
+      "name": "ModeSettings",
+      "kind": "type"
+    },
+    {
+      "name": "modeSettingsFor",
+      "kind": "value"
+    },
+    {
+      "name": "switchVideoMode",
+      "kind": "value"
+    },
+    {
+      "name": "characterProfiles",
+      "kind": "value"
+    },
+    {
+      "name": "validateForm",
+      "kind": "value"
+    },
+    {
+      "name": "createProject",
+      "kind": "value"
+    },
+    {
+      "name": "createBiimFrame",
+      "kind": "value"
+    },
+    {
+      "name": "assetBrief",
+      "kind": "value"
+    },
+    {
+      "name": "createBrief",
+      "kind": "value"
+    },
+    {
+      "name": "generateJob",
+      "kind": "value"
+    },
+    {
+      "name": "DirectionAxis",
+      "kind": "type"
+    },
+    {
+      "name": "directionAxes",
+      "kind": "value"
+    },
+    {
+      "name": "DirectionCandidate",
+      "kind": "type"
+    },
+    {
+      "name": "directionCandidates",
+      "kind": "value"
+    },
+    {
+      "name": "formatCandidate",
+      "kind": "value"
+    },
+    {
+      "name": "LyricStats",
+      "kind": "type"
+    },
+    {
+      "name": "lyricStats",
+      "kind": "value"
+    },
+    {
+      "name": "mvQualityChecklist",
+      "kind": "value"
+    },
+    {
+      "name": "explainerStyles",
+      "kind": "value"
+    },
+    {
+      "name": "explainerAxes",
+      "kind": "value"
+    },
+    {
+      "name": "ExplainerContext",
+      "kind": "type"
+    },
+    {
+      "name": "explainerAxesForContext",
+      "kind": "value"
+    },
+    {
+      "name": "ExplainerCandidate",
+      "kind": "type"
+    },
+    {
+      "name": "explainerCandidates",
+      "kind": "value"
+    },
+    {
+      "name": "formatExplainerCandidate",
+      "kind": "value"
+    },
+    {
+      "name": "ScriptStatsOptions",
+      "kind": "type"
+    },
+    {
+      "name": "scriptStats",
+      "kind": "value"
+    },
+    {
+      "name": "explainerQualityChecklist",
+      "kind": "value"
+    }
+  ],
+  "copies": [
+    {
+      "source": "src/mv-assist.ts",
+      "target": "src/core/assist/mv-assist.ts",
+      "sha256": "92901854a4cc7be053daec7607a2d4bf61e3694ff2ec23efb61423216b32d1e6"
+    },
+    {
+      "source": "src/explainer-assist.ts",
+      "target": "src/core/assist/explainer-assist.ts",
+      "sha256": "0535c86217783d533c81ca81853c18d9949ae7e25376c1c34620b8dad6129cbb"
+    },
+    {
+      "source": "src/biim-standard.json",
+      "target": "src/core/data/biim-standard.json",
+      "sha256": "e5eaebf7ef2320d1926693cbaae544eeb6308b46b1de14922c58af7f7ec21c77"
+    },
+    {
+      "source": "src/font-assets.json",
+      "target": "src/core/data/font-assets.json",
+      "sha256": "1a1e99737bdf6a491aa19bde57ea72472816919189c7e55cb53fa6a9307191d1"
+    }
+  ]
+}

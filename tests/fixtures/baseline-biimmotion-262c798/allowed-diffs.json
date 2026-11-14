@@ -1,6 +1,6 @@
 {
   "source_commit": "262c79876a9c4635377114902d58ce783e7578b1",
-  "status": "M0初版。R1の置換対はM1で確定・増補しL2が確認する。",
+  "status": "M1確定。逆変換と基線照合の対象。採否はL2が判定する。",
   "rules": [
     {
       "id": "R1",
@@ -11,11 +11,47 @@
       ],
       "replacements": [
         {
-          "from": "WebUI",
-          "to": "Shin-MotionMaker（GUI・CLI・MCP）"
+          "path": "AGENTS.md",
+          "from": "WebUIの",
+          "to": "Shin-MotionMaker（GUI）の"
+        },
+        {
+          "path": "AGENTS.md",
+          "from": "WebUIとbrief.md",
+          "to": "Shin-MotionMaker（GUI）とbrief.md"
+        },
+        {
+          "path": "README.md",
+          "from": "WebUI自身",
+          "to": "Shin-MotionMaker（GUI）自身"
+        },
+        {
+          "path": "README.md",
+          "from": "WebUIで開ける",
+          "to": "Shin-MotionMaker（GUI）で開ける"
+        },
+        {
+          "path": "README.md",
+          "from": "WebUI更新後",
+          "to": "Shin-MotionMaker更新後"
+        },
+        {
+          "path": "README.md",
+          "from": "WebUIでは",
+          "to": "Shin-MotionMaker（GUI）では"
+        },
+        {
+          "path": "README.md",
+          "from": "WebUIはAivis",
+          "to": "Shin-MotionMaker（GUI）はAivis"
+        },
+        {
+          "path": "README.md",
+          "from": "WebUIで全画面",
+          "to": "Shin-MotionMaker（GUI）で全画面"
         }
       ],
-      "note": "原典で見つかる入口名の置換候補。MVのbrief・歌詞・依頼文への適用は禁止。"
+      "note": "確定した8対。制作ハーネスではGUI名だけを置換する。MVのbrief・歌詞・依頼文への適用は禁止。"
     },
     {
       "id": "R2",
@@ -51,7 +87,19 @@
       "append_only": [
         "README.md"
       ],
-      "note": "CLI・MCP節を追加。ジョブ単体ではnpm runが正。"
+      "note": "CLI・MCP節を追加。ジョブ単体ではnpm runが正。",
+      "appends": [
+        {
+          "path": "README.md",
+          "text": "\n## CLI・MCP から使う\n\nShin-MotionMaker の CLI・MCP は、ジョブ生成とジョブ内スクリプトの実行を呼び出す入口です。生成後の設定の正本は project.json です。\nジョブ単体では、この README にある npm run の手順が正です。CLI・MCP を導入しなくても制作できます。\n"
+        }
+      ],
+      "added_files": [
+        {
+          "path": "NOTICE",
+          "sha256": "93835a5c60462d0e762a51b07ea9c161c354aa333d1fb29c1eace487a2d5318a"
+        }
+      ]
     },
     {
       "id": "R4",
@@ -66,7 +114,60 @@
         "exit_code",
         "validation-logic"
       ],
-      "note": "追加コードはM1で逆変換可能なパッチとして確定する。"
+      "note": "replacementsとappendsは追加箇所の逆変換用。標準出力・終了コード・検査ロジックを維持する。",
+      "replacements": [
+        {
+          "path": "runtime/scripts/validate.mjs",
+          "from": "const errors = [];",
+          "to": "const errors = [];\nconst reportChecks = [];\nconst reportAdvisories = [];\nconst reportAdvisory = (message) => {\n  reportAdvisories.push({ id: `validate-advisory-${reportAdvisories.length + 1}`, source: \"validate\", message });\n  return message;\n};"
+        },
+        {
+          "path": "runtime/scripts/validate.mjs",
+          "from": "    await fn();\n    console.log(\"OK \" + label);",
+          "to": "    await fn();\n    reportChecks.push({ name: label, status: \"ok\", message: \"OK \" + label });\n    console.log(\"OK \" + label);"
+        },
+        {
+          "path": "runtime/scripts/validate.mjs",
+          "from": "    errors.push(label + \": \" + error.message);",
+          "to": "    errors.push(label + \": \" + error.message);\n    reportChecks.push({ name: label, status: \"error\", message: error.message });"
+        },
+        {
+          "path": "runtime/scripts/validate.mjs",
+          "from": "console.log(\"SKIP \" + label + \": \" + error.message)",
+          "to": "console.log(reportAdvisory(\"SKIP \" + label + \": \" + error.message))"
+        },
+        {
+          "path": "runtime/scripts/validate.mjs",
+          "from": "console.log(\"SKIP ghost scan: \" + result.skipped)",
+          "to": "console.log(reportAdvisory(\"SKIP ghost scan: \" + result.skipped))"
+        },
+        {
+          "path": "runtime/scripts/validate.mjs",
+          "from": "console.log(\n      `GHOST single-frame events in final.mp4: ${events.length}` +\n        (events.length\n          ? \" (\" +\n            events\n              .slice(0, 10)\n              .map((event) => event.time)\n              .join(\", \") +\n            \")\"\n          : \"\"),\n    )",
+          "to": "console.log(\n      reportAdvisory(`GHOST single-frame events in final.mp4: ${events.length}` +\n        (events.length\n          ? \" (\" +\n            events\n              .slice(0, 10)\n              .map((event) => event.time)\n              .join(\", \") +\n            \")\"\n          : \"\")),\n    )"
+        },
+        {
+          "path": "runtime/scripts/validate.mjs",
+          "from": "console.log(\n        `GHOST classification: isolated ${result.classification.isolatedCount} (ghost suspects — check stills), clustered ${result.classification.clusteredEventCount} in ${result.classification.clusteredRunCount} runs (likely transitions/motion). Details: reports/ghost-check.json`,\n      )",
+          "to": "console.log(\n        reportAdvisory(`GHOST classification: isolated ${result.classification.isolatedCount} (ghost suspects — check stills), clustered ${result.classification.clusteredEventCount} in ${result.classification.clusteredRunCount} runs (likely transitions/motion). Details: reports/ghost-check.json`),\n      )"
+        },
+        {
+          "path": "runtime/scripts/validate.mjs",
+          "from": "console.log(\n        `GHOST double-render mismatches: ${result.doubleRender.mismatches.length} frames`,\n      )",
+          "to": "console.log(\n        reportAdvisory(`GHOST double-render mismatches: ${result.doubleRender.mismatches.length} frames`),\n      )"
+        },
+        {
+          "path": "runtime/scripts/validate.mjs",
+          "from": "console.log(\n        \"GHOST details recorded in reports/ghost-check.md — confirm flagged frames with stills before delivery.\",\n      )",
+          "to": "console.log(\n        reportAdvisory(\"GHOST details recorded in reports/ghost-check.md — confirm flagged frames with stills before delivery.\"),\n      )"
+        }
+      ],
+      "appends": [
+        {
+          "path": "runtime/scripts/validate.mjs",
+          "text": "\nawait fs.mkdir(path.join(root, \"reports\"), { recursive: true });\nawait fs.writeFile(path.join(root, \"reports/validate.json\"), JSON.stringify({\n  schema: \"smm.validate/1\",\n  final: process.argv.includes(\"--final\"),\n  double_render: process.argv.includes(\"--double-render\"),\n  verdict: errors.length ? \"fail\" : \"pass\",\n  checks: reportChecks,\n  advisories: reportAdvisories,\n}, null, 2) + \"\\n\");\n"
+        }
+      ]
     },
     {
       "id": "R5",
