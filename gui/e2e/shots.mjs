@@ -53,6 +53,11 @@ const shots = [
     await page.waitFor("document.querySelectorAll('.ghost-still-images img').length === 4", "stills");
     await page.reveal("[data-report='ghost-check-preview']");
   }],
+  ["S5c", "S5c-inspection-run-qc-1440.png", [1440, 900], async (page) => {
+    await page.setFiles(byAria("検査結果のJSONと静止画を選択"), [reports.run]);
+    await page.waitFor("document.querySelector('[data-report^=\"run-\"] .waivers')", "run");
+    await page.reveal("[data-report^='run-']");
+  }],
   ["S6", "S6-info-dialog-1440.png", [1440, 900], async (page) => {
     await page.clickText(".about-button", "Shin-MotionMaker について");
     await page.waitFor("document.querySelector('dialog[open]')", "dialog");
@@ -63,6 +68,10 @@ const shots = [
     await fillExplainer(page);
     await page.setFiles(byAria("参考資料を選択"), [asset("reference.pdf")]);
     await page.reveal(".agent-entrances");
+  }],
+  ["S9b", "S9b-cli-shell-examples-1440.png", [1440, 900], async (page) => {
+    await page.fill("#concept input[maxlength='200']", "虹の$(仕組み) it's");
+    await page.reveal(".agent-entrances .command-example");
   }],
   ["S10", "S10-request-imported-1440.png", [1440, 900], async (page) => {
     const file = path.join(work, "虹はどうしてできる？.request.json");
