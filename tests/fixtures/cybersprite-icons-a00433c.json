@@ -1,0 +1,21 @@
+{
+  "source_repo": "kokuren333/CyberSprite",
+  "source_commit": "a00433c",
+  "note": "CyberSprite の a00433c の git blob（assets/ui/icons/<name>.csprite/project.json と ui-icons.gpl）の SHA-256。再利用アイコンが無加工であることの照合用。",
+  "palette_sha256": "c380b3ff8107d47369ff227e960e49bae1c5018f2b9be5aaa49f5ff9d2e5f2d3",
+  "project_json_sha256": {
+    "add": "f29c86d57aa73e8eb86d7262b2173385490bba87bb2ea553562b6fef36d6cff1",
+    "agent": "16558a845e5c2d0c848275d6abf78b3baf189a3621ebaef4a3bc41b6a1fb61c1",
+    "error": "ec8d388a0f9d98da9f9a101858157af287b29a7ad20068a488ce1cce30dc87eb",
+    "eye": "3ccc705d8d3067e7164a8fe0606e77ef933c0818794e1090f7830fa72b82d3fd",
+    "folder": "b7e1971dafbb2d58b04bbeb89a292087a2f2ccea31160dd052f59af54c534efc",
+    "human": "8764b98602143c8d26aa39fd7709f11f77df022e0a935be89ac785fe36244a12",
+    "info": "cea2d28ed1541aa432022c2b73faa8111fe9a34e02d3c108be354091d01310dc",
+    "link": "5e1d0a45ec660ea0a3dcd4362643a732f1d44a4e4e39c7967fe41bc6ba12c0cc",
+    "remove": "796ace267e2db8783640f21320bd699bb7413eb66c1255d36d7d1f5ed839146d",
+    "settings": "9ae7cfa479b292a7a9e1b15c0947229632c3e3d3d9091fe35179d1e9981f6c78",
+    "sources": "fcb17e1a60593197ca852f88ab1781e493066ff8032d9042cd0db6700c69da0d",
+    "validate-ok": "a3b39102e46b44e105f38ca69f8adff3423b7beab75930e8d8515cff31eee316",
+    "warning": "493315d04317604af8f00f8c4040f560dd8a2c556901350194b8a87fd925a29f"
+  }
+}

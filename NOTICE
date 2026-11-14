@@ -8,8 +8,15 @@ BiimMotion（BiimMotionWebUI、Apache-2.0、同一オーナー）のコミット
 M0 では基線の生成物・目録および開発ワークフローを収録した。
 
 CyberSprite（Apache-2.0、同一オーナー）由来のテーマトークン・アイコン:
-M4・M5 で記入。テーマ採取元とアイコン採取元のコミットをそれぞれ記録する。
-固有アイコンは CyberSprite で制作する。
+テーマトークン: M4 で記入。テーマ採取元のコミットを記録する。
+アイコン: CyberSprite のコミット a00433c から、16x16 の GUI アイコン 13 点
+（add、agent、error、eye、folder、human、info、link、remove、settings、sources、
+validate-ok、warning）の原本 .csprite とパレット ui-icons.gpl を無加工で写し、
+PNG は CyberSprite 0.1.0（a00433c）の export image で書き出した。
+固有アイコン 13 点（app、mode-mv、mode-explainer、style-biim、style-anime、
+style-motion、style-mixed、gate、advisory、ghost-check、job-zip、cli、mcp）は
+Shin-MotionMaker の新規制作で、CyberSprite 0.1.0（a00433c）の CLI の Op で描いた。
+各アイコンの由来・版・制作者・SHA-256 は gui/public/icons/manifest.json にある。
 
 同梱予定フォント: Noto Sans JP、M PLUS Rounded 1c（SIL Open Font License 1.1）。
 M0 ではハッシュ目録のみ。フォント本体と OFL 本文は M1 で移植する。
