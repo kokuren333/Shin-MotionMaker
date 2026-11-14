@@ -2,6 +2,11 @@
 
 Shin-MotionMaker は、モーショングラフィックス動画（MV・解説動画）の**制作ジョブ**を作る道具です。入力フォームの内容から、制作エージェントがそのまま開いて制作に入れるジョブフォルダ（または ZIP）を生成します。動画そのものは、生成したジョブの中で制作エージェントが作ります。
 
+- **バージョン**: v0.1.0（公開済み）
+- **リポジトリ**: https://github.com/kokuren333/Shin-MotionMaker （public）
+- **GUI（GitHub Pages）**: https://kokuren333.github.io/Shin-MotionMaker/
+- **ライセンス**: [Apache License 2.0](LICENSE)
+
 入口は3つあり、どれも同じコアを通るので、同じ入力からは同じジョブができます。
 
 | 入口 | 向いている使い方 |
@@ -10,7 +15,7 @@ Shin-MotionMaker は、モーショングラフィックス動画（MV・解説�
 | CLI（`shin-motionmaker`、短縮名 `smm`） | `request.json` からジョブを作る。ジョブ内の検査・レンダーを起動し、結果を JSON で受け取る |
 | MCP（stdio） | 制作エージェントが、生成・状態の確認・ジョブ内スクリプトの起動をツールとして呼ぶ |
 
-> **v0.1.0 を公開しました。** GUI は GitHub Pages（https://kokuren333.github.io/Shin-MotionMaker/ ）で使えます。CLI・MCP は npm レジストリに公開していないので、repo（https://github.com/kokuren333/Shin-MotionMaker ）を手元に置いてビルドします。
+> CLI・MCP は npm レジストリには公開していません。repo を手元に置いてビルドします（導入は [CLI](#cli)）。
 
 ## 考え方
 
@@ -33,6 +38,8 @@ Shin-MotionMaker は、モーショングラフィックス動画（MV・解説�
 ## GUI
 
 ブラウザの中だけで動く静的サイトです。入力はどこにも送信・保存しません。フォームを埋めて「ジョブのZIPを生成」を押すと、ZIP がダウンロードされます。フォームの内容は `request.json` として書き出せ、CLI・MCP の `generate` にそのまま渡せます。
+
+制作モードは MV と解説の2つで、解説では様式モード（biim／anime／motion／mixed）を同格に選べます。見た目は CyberSprite と共通のファミリーテーマ「Circuit White / Solder Mask」です。
 
 公開 URL は https://kokuren333.github.io/Shin-MotionMaker/ です。手元で起動するときは次を実行します（repo の取得と `npm ci` は [CLI](#cli) の導入と同じ）。
 
@@ -65,11 +72,14 @@ smm candidates --mode mv
 smm generate request.json --out jobs
 smm status "jobs/<タイトル>"
 smm qc "jobs/<タイトル>" --stage pre
+smm validate "jobs/<タイトル>"
+smm render "jobs/<タイトル>" --target preview
+smm runs list "jobs/<タイトル>"
 ```
 
 - 標準出力は JSON の封筒1個です。`ok` は「コマンドが実行でき、結果を得た」こと、`result.verdict` はゲートの合否（`pass`・`fail`・`not_applicable`）です。ゲートが不合格でも `ok` は `true` です。
 - `--human` を付けると、標準出力を人向けの要約に切り替えます。
-- 終了コードは 0（成功・対象外・助言だけ）、1（検査の不合格）、2（使い方・入力の誤り）、3（環境・前提の不足）、4（内部エラー・異常終了）です。
+- 終了コードは 0（成功・対象外・助言だけ）、1（検査の不合格。imagegen の strict 未生成を含む）、2（使い方・入力の誤り）、3（環境・前提の不足）、4（内部エラー・異常終了）です。
 - 生成直後の解説ジョブで `qc --stage pre` を実行すると、制作記録がまだ無いので `verdict: fail`・終了コード1になります。これは正常な結果です。
 - `request.json` の形は `{"form": {...}, "assets": {...}}` です。GUI の「request.json を書き出す」で作るか、`smm schema request` でスキーマを確かめて書きます。
 
@@ -77,7 +87,7 @@ smm qc "jobs/<タイトル>" --stage pre
 
 ## MCP
 
-CLI の `mcp serve` が stdio の MCP サーバーを起動します。`--root` で指定したフォルダの中だけを読み書きします。クライアントへの登録例（読み取り専用）は次のとおりで、作業ディレクトリを repo のルートにして起動します。
+CLI の `mcp serve` が stdio の MCP サーバーを起動します。公開するツールは20個で、ジョブの生成から検査・レンダー・run の管理までを扱います。`--root` で指定したフォルダの中だけを読み書きします。クライアントへの登録例（読み取り専用）は次のとおりで、作業ディレクトリを repo のルートにして起動します。
 
 ```json
 {
