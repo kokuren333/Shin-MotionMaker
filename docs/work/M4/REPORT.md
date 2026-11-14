@@ -71,7 +71,7 @@
 | テストで git を起動しない | 実行して合格 | ルートの `tests/no-git.test.ts`（`gui/` 全体を走査）。e2e はビルドに固定の commit を渡す。例外に足したのは開発用の `gui/scripts/build.mjs` だけ |
 | ルート `npm test` | 実行して合格 | tests 123 / pass 113 / fail 0 / todo 10（todo は M1 からの既存分） |
 | `npm test --workspaces --if-present`・`npm run build --workspaces --if-present` | 実行して合格 | 下の ci-local の記録 |
-| `node tools/ci-local.mjs` | 下の記録を参照 | |
+| `node tools/ci-local.mjs` | 実行して合格 | 下の記録 |
 | スクリーンショットの記録 | 済み | `VERIFICATION.md` の M4 節、`docs/work/M4/screenshots/` の13枚 |
 | 実装者以外のレビュー | 未実施 | L2 が別途発注する |
 
@@ -80,7 +80,7 @@
 | 複製したコミット | 結果 |
 | --- | --- |
 | `49f5b94827f768e74274896246fba02cddca665c`（GUI の実装とテスト） | exit 0。深さ1の複製で `npm ci`（監査は esbuild の low 1件）→ `npm run build` → `npm test`（tests 123 / pass 113 / fail 0 / todo 10）→ `npm test --workspaces --if-present`（単体 27/27、e2e 35/35）→ `npm run build --workspaces --if-present`。「CI と同じコマンドが完了しました」 |
-| 最終コミット | 下の「最終の ci-local」に追記する |
+| `6471c8cf3428d28b31c1c139669af603772e1c6e`（文書を含む最終の内容。この行を足したコミットは REPORT だけを変える） | exit 0。同じ手順で `npm test`（tests 123 / pass 113 / fail 0 / todo 10）、単体 27/27、e2e 37/37、ワークスペースのビルド成功。「CI と同じコマンドが完了しました: 6471c8c…」 |
 
 ## テストのコマンドと結果
 
