@@ -21,11 +21,11 @@
 | explainer.test.ts L173 | schema_version の期待値を 0.5 へ（R2） | P2 |
 | explainer.test.ts L209–252 | 履歴ソースの実行を廃止し、baseline.test.ts の MV フォーム照合と golden 2ケースの全本文照合へ置換。schema_version と generator の R2 だけ正規化 | P3 |
 | generate-job.test.ts L16–65 | Vite・旧 CLI の起動とフォルダ読取を、引数注入したテンプレート・core の buildJobFiles と ZIP の比較へ。M2a で独立した host の再帰読込とブラウザ用ヘルパーの全パス・本文・フォントを比較し、専用 TODO を実行テストへ変更した | P4 |
-| generate-job.test.ts L68–140（モード5件） | パス指定の添付をテスト用 loadAssets で読み、mimeTypeFor による .PDF・.glb・.WAV・.unknown の MIME・サイズ・本文を期待値と照合する。読み込んだ添付を core へ渡し ZIP 往復の各本文・フォントを照合する。独立したテンプレート読み込みの比較は M2a で実装済み。cwd・BOM・終了コード・生成先・再実行のユーザー編集保持は9件の TODO の該当5件に移送 | P4 |
-| generate-job.test.ts L142–153 | 最小入力・assets 省略・既定値・全本文一致を core で実行。CLI 起動・出力先は M2b へ移送 | P4 |
-| generate-job.test.ts L155–186 | 未知キー（ネスト・__proto__含む）・型・既存 validateForm の拒否を構造化エラーで検査。shape エラーは契約のコード・日本語 hint とケースごとの details.pointer 集合を表明し、validateForm エラーは details を原典の正規表現で表明する。壊れた JSON・添付不在・書込前拒否・終了コードは M2b へ移送 | P4 |
-| generate-job.test.ts L188–206 | 既存の空ディレクトリ・ファイル・兄弟ファイル保護を M2b TODO へ移送 | P4 |
-| generate-job.test.ts L208–218 | Usage・help・引数検査・終了コードを M2b TODO へ移送。契約では入力エラー2となるため実装時に期待値を変更 | P4 |
+| generate-job.test.ts L68–140（モード5件） | core の MIME・添付・フォント比較を維持。M2b で CLI を別 cwd から起動し、BOM、日本語・空白・& のパス、フォルダ・CLI ZIP・GUI と同じ関数の ZIP の全本文一致を実行。再実行は E_OUTPUT_EXISTS / 2 で拒否し利用者の編集を保持する | P4 |
+| generate-job.test.ts L142–153 | 最小入力・assets 省略・既定値・全本文一致を core と CLI の両方で実行。CLI のフォルダ全本文を比較する | P4 |
+| generate-job.test.ts L155–186 | core の未知キー（ネスト・__proto__含む）・型・validateForm の表明を維持。M2b で壊れた JSON・添付不在・未知キー・型・検査エラーを CLI から渡し、構造化エラー / 終了2・出力親も作らないことを表明する | P4 |
+| generate-job.test.ts L188–206 | M2b で既存の空ディレクトリ・ファイル・兄弟ファイルの保護と E_OUTPUT_EXISTS / 2 を実行 | P4 |
+| generate-job.test.ts L208–218 | M2b で引数不足・空 out・重複・非対応オプションを E_USAGE / 2 の JSON 封筒として検証。旧 help の入力説明取得は契約の schema operation-inputs に移し、終了0と generate の定義を表明。テスト名の原典由来の exits 1 は対応追跡用に保持し、期待値は契約の2とする | P4 |
 
 ## ビルド対象
 
@@ -33,7 +33,7 @@
 
 ## 基線の全テスト名との対応（TS-01）
 
-81件すべてを以下に対応づける。CLI 9件中7件の core 部分を実行し、CLI 固有部分9件を M2b へ移送する。独立したテンプレート読み込みとの比較1件は M2a で実装済み。2件は全体を移送（既存出力先、usage）。M1 の比較母数79件（81−全体移送2）は維持する。
+81件すべてを以下の実行テストへ対応づける。M2b で CLI 固有9件の TODO をすべて実行テストへ変更した。独立したテンプレート読み込みとの比較1件は M2a で実装済み。未移送・TODO は0件で、比較母数は81件である。
 
 | 原典ファイル | 原典テスト名 | 移植先ファイル・テスト名 | 種別 |
 | --- | --- | --- | --- |

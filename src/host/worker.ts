@@ -78,7 +78,9 @@ export async function runWorker(job: string, id: string, limit?: number): Promis
     if ((JSON.parse(await fs.readFile(recordFile, "utf8")) as RunRecord).status !== "running") return;
     run.pid = process.pid; run.heartbeat_at = new Date().toISOString();
     const command = await runCommand(job, run.kind, { ...run.args, job: "." } as OperationInputs[typeof run.kind]);
-    const child = spawn(process.execPath, command.args, { cwd: process.platform === "win32" ? path.toNamespacedPath(command.cwd) : command.cwd, detached: process.platform !== "win32", shell: false, windowsHide: true, stdio: ["ignore", output.fd, errors.fd] });
+    // npm workspace file URLs reject the extended Windows path prefix.
+    const cwd = process.platform === "win32" && run.kind !== "setup" ? path.toNamespacedPath(command.cwd) : command.cwd;
+    const child = spawn(process.execPath, command.args, { cwd, detached: process.platform !== "win32", shell: false, windowsHide: true, stdio: ["ignore", output.fd, errors.fd] });
     run.script_pid = child.pid ?? null;
     const completion = new Promise<number | null>((resolve, reject) => { child.once("error", reject); child.once("close", resolve); });
     // Register rejection handling before the first filesystem await.

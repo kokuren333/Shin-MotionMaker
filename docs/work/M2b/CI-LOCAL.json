@@ -1,0 +1,17 @@
+{
+  "command": "node tools/ci-local.mjs",
+  "commit": "de4809cd18ce1249ba4294bb71d9c6af98aefee6",
+  "node": "v24.15.0",
+  "platform": "win32",
+  "exit_code": 0,
+  "tests": [
+    "ℹ tests 186",
+    "ℹ pass 184",
+    "ℹ fail 0",
+    "ℹ cancelled 0",
+    "ℹ skipped 2",
+    "ℹ todo 0",
+    "ℹ duration_ms 122551.5068"
+  ],
+  "completed": true
+}

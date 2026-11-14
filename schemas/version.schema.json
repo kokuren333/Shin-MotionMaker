@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "smm.version/1",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "commit": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "template_version": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "version",
+    "commit",
+    "template_version"
+  ],
+  "additionalProperties": false
+}

@@ -189,7 +189,7 @@
         {
           "file": "tests/generate-job.test.ts",
           "name": "M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for biim; BOM, cwd, exclusive rerun",
-          "status": "M2b"
+          "status": "active"
         },
         {
           "file": "tests/generate-job.test.ts",
@@ -216,7 +216,7 @@
         {
           "file": "tests/generate-job.test.ts",
           "name": "M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for anime; cwd, exclusive rerun",
-          "status": "M2b"
+          "status": "active"
         },
         {
           "file": "tests/generate-job.test.ts",
@@ -243,7 +243,7 @@
         {
           "file": "tests/generate-job.test.ts",
           "name": "M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for motion; cwd, exclusive rerun",
-          "status": "M2b"
+          "status": "active"
         },
         {
           "file": "tests/generate-job.test.ts",
@@ -270,7 +270,7 @@
         {
           "file": "tests/generate-job.test.ts",
           "name": "M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for mixed; cwd, exclusive rerun",
-          "status": "M2b"
+          "status": "active"
         },
         {
           "file": "tests/generate-job.test.ts",
@@ -297,7 +297,7 @@
         {
           "file": "tests/generate-job.test.ts",
           "name": "M2b: generate-job CLI matches the WebUI ZIP file paths and bytes for mv; cwd, exclusive rerun",
-          "status": "M2b"
+          "status": "active"
         },
         {
           "file": "tests/generate-job.test.ts",
@@ -324,7 +324,7 @@
         {
           "file": "tests/generate-job.test.ts",
           "name": "M2b: generate-job accepts a minimal form and omitted assets using defaults; CLI launch and output",
-          "status": "M2b"
+          "status": "active"
         }
       ],
       "changes": [
@@ -346,7 +346,7 @@
         {
           "file": "tests/generate-job.test.ts",
           "name": "M2b: generate-job rejects invalid JSON, unknown keys, invalid types and validation errors before writing; missing attachment, exit code and no output",
-          "status": "M2b"
+          "status": "active"
         }
       ],
       "changes": [
@@ -363,7 +363,7 @@
         {
           "file": "tests/generate-job.test.ts",
           "name": "M2b: generate-job rejects existing empty directories and files without changing siblings",
-          "status": "M2b"
+          "status": "active"
         }
       ],
       "changes": [
@@ -380,7 +380,7 @@
         {
           "file": "tests/generate-job.test.ts",
           "name": "M2b: generate-job reports usage and exits 1 for missing, duplicate or unsupported arguments; use contract exit codes",
-          "status": "M2b"
+          "status": "active"
         }
       ],
       "changes": [
