@@ -10,7 +10,7 @@ Shin-MotionMaker は、モーショングラフィックス動画（MV・解説�
 | CLI（`shin-motionmaker`、短縮名 `smm`） | `request.json` からジョブを作る。ジョブ内の検査・レンダーを起動し、結果を JSON で受け取る |
 | MCP（stdio） | 制作エージェントが、生成・状態の確認・ジョブ内スクリプトの起動をツールとして呼ぶ |
 
-> **開発中です（v0.1.0 未公開）。** GUI の公開 URL（GitHub Pages）はまだありません。npm レジストリにも公開していないので、使うときは repo を手元に置いてビルドします。
+> **v0.1.0 を公開しました。** GUI は GitHub Pages（https://kokuren333.github.io/Shin-MotionMaker/ ）で使えます。CLI・MCP は npm レジストリに公開していないので、repo（https://github.com/kokuren333/Shin-MotionMaker ）を手元に置いてビルドします。
 
 ## 考え方
 
@@ -34,7 +34,7 @@ Shin-MotionMaker は、モーショングラフィックス動画（MV・解説�
 
 ブラウザの中だけで動く静的サイトです。入力はどこにも送信・保存しません。フォームを埋めて「ジョブのZIPを生成」を押すと、ZIP がダウンロードされます。フォームの内容は `request.json` として書き出せ、CLI・MCP の `generate` にそのまま渡せます。
 
-公開 URL はまだ無いので、手元で起動します（repo の取得と `npm ci` は [CLI](#cli) の導入と同じ）。
+公開 URL は https://kokuren333.github.io/Shin-MotionMaker/ です。手元で起動するときは次を実行します（repo の取得と `npm ci` は [CLI](#cli) の導入と同じ）。
 
 ```sh
 npm run dev --workspace gui
@@ -46,7 +46,7 @@ npm run dev --workspace gui
 
 ### 導入
 
-repo を clone したら、そのルートで次を実行します（GitHub の公開 URL は公開時に記載します）。
+repo（https://github.com/kokuren333/Shin-MotionMaker ）を clone したら、そのルートで次を実行します。
 
 ```sh
 npm ci
@@ -123,4 +123,4 @@ node tools/ci-local.mjs
 
 Pages のローカル確認には `npm run verify:pages:local -- --commit <SHA>`（構文）を使います。サブパス配信で正常経路・8種類の不一致・古いコミットからの再試行を確認します。公開後の構文は `node tools/verify-pages.mjs <末尾が / のURL> --expect-commit <SHA>` です。既存の Chrome/Edge が必要で、HTTP・title・コミット・JS/CSS・主要な表示・コンソールを確認し、既定12回・5秒間隔で再試行します。`--attempts`・`--retry-ms`・`--screenshot`・`--output` も指定できます。
 
-Pages は M8 まで手動起動だけです。実レンダーは独立した workflow で、手動と main push から動きます。実公開 URL の確認と公開前後のスクリーンショット比較は M8 で行います。
+Pages の workflow は main への push と手動で動き、ビルド・デプロイ・公開後確認の3ジョブがすべて成功したときだけ公開できたとみなします。実レンダーは独立した workflow で、手動と main push から動きます。M8 の実公開 URL の確認と公開前後のスクリーンショット比較は [VERIFICATION.md](VERIFICATION.md#m8-公開) にあります。
