@@ -6,6 +6,7 @@ BiimMotion（BiimMotionWebUI、Apache-2.0、同一オーナー）のコミット
 262c79876a9c4635377114902d58ce783e7578b1 に由来する設計とコードを継承する。
 対象は生成コア、入力支援、job-template、テスト、デザイン文書。
 M0 では基線の生成物・目録および開発ワークフローを収録した。
+M1 では生成コア、入力支援、制作ハーネス、原典テストを移植した。
 
 CyberSprite（Apache-2.0、同一オーナー）由来のテーマトークン・アイコン:
 テーマトークン: M4 で記入。テーマ採取元のコミットを記録する。
@@ -18,8 +19,29 @@ style-motion、style-mixed、gate、advisory、ghost-check、job-zip、cli、mcp
 Shin-MotionMaker の新規制作で、CyberSprite 0.1.0（a00433c）の CLI の Op で描いた。
 各アイコンの由来・版・制作者・SHA-256 は gui/public/icons/manifest.json にある。
 
-同梱予定フォント: Noto Sans JP、M PLUS Rounded 1c（SIL Open Font License 1.1）。
-M0 ではハッシュ目録のみ。フォント本体と OFL 本文は M1 で移植する。
+同梱フォント: Noto Sans JP、M PLUS Rounded 1c（SIL Open Font License 1.1）。
+M1 でフォント本体と原典の権利表示・OFL 本文を移植し、実物を確認した。
+Noto: Copyright 2014-2021 Adobe（Reserved Font Name: Source）。
+M PLUS Rounded 1c: Copyright 2016 The Rounded M+ Project Authors.
+OFL 本文は job-template/assets/fonts/ に保持する。
+
+M1 の実行時第三者依存（配布物内の実物のライセンス本文を確認済み）:
+- jszip 3.10.1: MIT を選択（MIT または GPLv3 の選択式。GPLv3 は採用しない）。
+  Copyright 2009-2016 Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso.
+- lie 3.3.0: MIT。Copyright Calvin Metcalf, Jordan Harband.
+- immediate 3.0.6: MIT。Copyright Barnesandnoble.com, Donavon West,
+  Domenic Denicola, Brian Cavalier.
+- pako 1.0.11: MIT AND Zlib。Copyright Vitaly Puzrin, Andrei Tuputcyn,
+  Jean-loup Gailly, Mark Adler（lib/zlib/ の原典由来部分）。
+- readable-stream 2.3.8 / core-util-is 1.0.3 / string_decoder 1.1.1: MIT。
+  Copyright Node.js contributors / Joyent and other Node contributors.
+- inherits 2.0.4: ISC。Copyright Isaac Z. Schlueter.
+- isarray 1.0.0: MIT（配布物 README の License 節）。Copyright Julian Gruber.
+- process-nextick-args 2.0.1: MIT。Copyright Calvin Metcalf.
+- safe-buffer 5.1.2: MIT。Copyright Feross Aboukhadijeh.
+- setimmediate 1.0.5: MIT。Copyright Barnesandnoble.com, Donavon West, Domenic Denicola.
+- util-deprecate 1.0.2: MIT。Copyright Nathan Rajlich.
+直接依存は完全固定、推移依存は package-lock.json の版と integrity で固定する。
 
 M0 の開発用第三者依存（実物の LICENSE を確認済み）:
 - TypeScript 5.9.3: Apache-2.0。Copyright Microsoft Corporation.

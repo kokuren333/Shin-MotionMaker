@@ -12,13 +12,14 @@ test("test code and helpers never launch the version-control executable", async 
     for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
       if (entry.name === "node_modules") continue;
       const file = path.join(directory, entry.name);
+      if (["tools/ci-local.mjs", "tools/capture-baseline.mjs"].some((name) => file === path.join(root, name))) continue;
       if (entry.isDirectory()) await scan(file);
       else if (/\.(?:[cm]?[jt]sx?)$/.test(file)) {
         for (const match of gitLaunches(await fs.readFile(file, "utf8"))) violations.push(`${path.relative(root, file)}: ${match}`);
       }
     }
   }
-  for (const directory of ["tests", "gui"]) await scan(path.join(root, directory));
+  for (const directory of ["tests", "gui", "tools"]) await scan(path.join(root, directory));
   assert.deepEqual(violations, []);
 });
 

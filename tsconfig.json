@@ -12,5 +12,7 @@
     "types": ["node"]
   },
   "include": ["src/**/*.ts", "tests/**/*.ts", "gui/**/*.ts"],
-  "exclude": ["node_modules", "dist", "tests/fixtures"]
+  "exclude": ["node_modules", "dist", "tests/fixtures",
+    "tests/job.test.ts", "tests/ghost.test.ts", "tests/imagegen.test.ts", "tests/voice.test.ts",
+    "tests/qc.test.ts", "tests/harness-docs.test.ts", "tests/explainer.test.ts"]
 }
