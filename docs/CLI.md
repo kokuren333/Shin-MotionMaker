@@ -169,7 +169,7 @@ node dist/cli/main.js qc ".agent-work/cli-evidence/jobs/CLI & 全角 空白" --s
 | `node tools/runtime-smoke.mjs --entry mcp --commit <SHA>` | ビルド後に MCP の実レンダーと run のポーリングを確認する |
 | `node tools/runtime-smoke.mjs --entry cli --legacy-job <原典生成ジョブ> --commit <SHA>` | 原典0.4ジョブの status・report なしの validate pass/fail・QC・レンダー・ghost を確認する |
 
-Tier C は既存の Chrome/Edge を使い、自動導入しない。証拠 JSON・静止画・ghost report を保存し、成功時は一時ジョブの依存と動画を削除する。失敗時は調査用ジョブを保持する。動作確認用ジョブは voice none、音響はジョブ内の合成を使う。実 Aivis・有償画像生成はこの検証に含めない。
+Tier C は既存の Chrome/Edge を使い、自動導入しない。CI の `runtime-smoke.yml` だけは、runner に ffmpeg が無く Remotion 同梱の ffmpeg ではゴースト検査の走査ができないため、版と SHA-256 を固定した ffmpeg（gyan.dev の 8.1）を取得して `FFMPEG_PATH` と PATH に置く（[CPU-Q1](work/CPU/QUESTIONS.md)、オーナー承認）。製品のコマンドは ffmpeg を自動導入しない。証拠 JSON・静止画・ghost report を保存し、成功時は一時ジョブの依存と動画を削除する。失敗時は調査用ジョブを保持する。動作確認用ジョブは voice none、音響はジョブ内の合成を使う。実 Aivis・有償画像生成はこの検証に含めない。
 
 ## MCP の起動
 

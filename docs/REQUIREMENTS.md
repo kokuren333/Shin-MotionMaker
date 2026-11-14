@@ -8,6 +8,7 @@
 | 参照 | CyberSprite `a00433c`（テーマ正本 `gui/src/theme/tokens.css` は `20f787d`、アイコン原本 `assets/ui/icons/` は `93a433f`）、MankoMIX `_handoff/RENOVATION_PACKET_V2.md` |
 | 次の受け手 | L2 オーケストレーター（Opus 5.5 高）。§11 の分解は案であり、計画の確定は L2 が行う |
 | 改訂 | 改訂1（2026-11-15、PM）：CPU 環境対応。§1.2 N11、§6.2 R6、§6.4（JT-14〜19）、JT-11、CI-10・CI-11、TS-10、§9.3 Tier C、D-10・D-19。オーナー指示（2026-11-15）による |
+| 改訂 | 改訂1a（2026-11-15、実装担当。L2 確認事項）：§6.2 R6 の「対象」の文言を、JT-14・JT-17・JT-18 が求める選択・記録・import・終了時の案内を含む形に揃えた（CPU-Q2）。動作と範囲の意図は改訂1のまま |
 
 ## 0. 読み方と実査範囲
 
@@ -365,7 +366,7 @@ Shin-MotionMaker/
 | R3 | `NOTICE` の追加、ジョブの `README.md` への「CLI・MCP から使う」節の追記 | 追加だけ。ジョブ単体では `npm run` が正であることを書く |
 | R4 | `validate.mjs` が `reports/validate.json`（各検査の名前・状態・メッセージ、助言）も書く | 追加だけ。標準出力と終了コードは変えない |
 | R5 | 解説の `brief.md` にある特定モデル名（「Opusが記入する」）を「制作エージェント」に改める | 解説だけ。MV の生成物には無い |
-| R6 | レンダーのエンコーダ選択（§6.4）。ハードウェアエンコーダが実際に使えるかをレンダーの前に確かめ、使えなければ CPU（libx264）で符号化する。選択は環境変数で明示できる | `runtime/scripts/run.mjs`（`preview`・`build` の引数の組み立てと冒頭のコメント）、`runtime/scripts/ghost-check.mjs`（`renderSecondCopy` の引数の組み立てとそのコメント）、新しいファイル `runtime/scripts/encoder.mjs`、ジョブの `README.md` への節の追記（追加だけ）。`AGENTS.md`、`package.json`、`runtime/package.json`、依存の版、ゴーストの検出・分類・照合のロジックとしきい値は変えない |
+| R6 | レンダーのエンコーダ選択（§6.4）。ハードウェアエンコーダが実際に使えるかをレンダーの前に確かめ、使えなければ CPU（libx264）で符号化する。選択は環境変数で明示できる | `runtime/scripts/run.mjs`（`encoder.mjs` の import、`preview`・`build` のエンコーダの選択と `[encoder]` 行の記録、各モードの引数の組み立て（`studio`・`still` の引数は原典と同じ配列を `encoder.mjs` へ移すだけ）、モード名の検査、レンダーの終了時の案内（JT-17）、冒頭のコメント）、`runtime/scripts/ghost-check.mjs`（`encoder.mjs` の import、`renderSecondCopy` のエンコーダの選択・`[encoder]` 行の記録・引数の組み立て・終了時の案内（JT-17）とそのコメント）、新しいファイル `runtime/scripts/encoder.mjs`、ジョブの `README.md` への節の追記（追加だけ）。`AGENTS.md`、`package.json`、`runtime/package.json`、依存の版、ゴーストの検出・分類・照合のロジックとしきい値は変えない |
 
 - **JT-01（MUST）** 上の差分は `tests/fixtures/` の許容差分表に機械可読で載せる。テキストの差分は置換の対として持ち、逆に置換した結果が原典のハッシュと一致することをテストで表明する（JT-11）。
 - **JT-02（MUST）** `job-template/` 配下に置いたファイルはすべてジョブに同梱される。開発用のメモ・ログ・下書きを置かない（原典:`AGENTS.md` §3 の規則5）。
