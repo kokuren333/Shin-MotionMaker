@@ -1,5 +1,7 @@
 # REPORT — M7-fix
 
+指定された修正と実機検証は下記のとおり実施した。**受け入れ条件は未達**：R-2 と整合しない GUI 単体・e2e の既存フィクスチャが各1件残り、ci-local は GUI 単体で終了1。発注の gui/ 変更禁止を守り、M7-fix-Q1 の回答待ちとしている。L2 による受け入れ判定・交差レビューは行っていない。
+
 ## 起動時チェックと範囲
 
 - 層は L3 工学担当。Codex、発注指定モデル 6.1 sol / high。モデル切替・下請け利用なし。縮退レベル1（L4 を利用しない設定）、自己判定となるゲートなし。受け入れ・交差レビューは L2 に残す。
@@ -41,7 +43,49 @@
 
 `git merge main` で main `0df32f3` を `c9fb606` に取り込み、衝突なし。G4-M2 の追跡済み発注・判定記録を採用した。`node tools/tier-b.mjs --commit HEAD~1` と runtime-smoke の同指定、および未追跡の一時プローブがある状態で両ツールの `--commit HEAD` を開発用スクリプトから実行した。4件すべて開始前に終了1で拒否し、プローブは finally で削除、作業ツリーはクリーンへ戻った。
 
-最終コミットでの npm test・GUI・ci-local・Tier B/C は後続の証拠節へ記録する。
+最終の実装・テスト変更をコミット後、main を再確認した（Already up to date）。検証対象は `c0d10ca798b2689a50e91f3556dc73c09cfa3391`。以後のコミットは証拠・文書だけで、製品コード・テスト・テンプレートを変更しない。
+
+## 最終の受け入れ条件ごとの観測結果
+
+| 条件 | 実行結果・証拠 | 状態 |
+| --- | --- | --- |
+| npm test | c0d10ca の深さ1複製で219件 / pass217 / fail0 / skip2、426689.1241ms。MC-05/MC-15 も成功（31480.4686ms） | コマンド終了0 |
+| GUI 単体 | 同じ深さ1複製で33件 / pass31 / fail1 / skip1、2550.7888ms。trio の2人目配置まで拒否する古い期待値 | 未達、Q1 |
+| GUI e2e | 独立実行で41/42。solo の2人目配置を拒否すると期待する古いフィクスチャ | 未達、Q1 |
+| node tools/ci-local.mjs | c0d10ca、2026-11-14T12:41:57.074Z〜12:49:48.814Z、471739ms。npm ci・ライセンス・ビルド・本体テスト完了後、GUI 単体で停止。既存 low1 の audit 表示あり、自動修正なし | 終了1、Q1 |
+| GUI build | 型検査・Vite ビルド終了0。GUI の本文は変更なし | コマンド終了0 |
+| check-licenses | 180項目、導入済130、非対応 optional50、許容集合外なし | コマンド終了0 |
+| verify-cli | 54記録を既定の追跡外へ出力。M2b の既存実測ファイルの差分なし | コマンド終了0 |
+| Tier B（CLI・MCP） | c0d10ca / template0.5.2、各68ファイルを生成。setup と validate の4 run が completed・元終了0・正規化終了0、validate は両方 pass。505834ms | コマンド終了0 |
+| Tier C（CLI・MCP・原典0.4） | 同じ c0d10ca、全26 run completed。24件が元・正規化とも0、原典0.4の validate fail / QC fail の2件だけ期待どおり1。全ツールの revision.head / clean:true を記録 | 各コマンド終了0 |
+| コミット・作業ツリー | 実装とテストは論理単位で M7-fix: の件名で保存。証拠・最終報告も別コミットに保存し、終了時 git status --short を確認 | L2 へ引渡し |
+
+本体の skip2 は Linux 専用の子孫停止と POSIX ファイル名、GUI の skip1 は sh 不在のシェル引数検査。Windows の junction 検査は実行し、ディレクトリ symlink は権限不足の診断を保持した。Windows・Node v24.15.0 での実測であり、ubuntu や hosted runner の成功は主張しない。
+
+## Tier B/C の再実行
+
+```powershell
+node tools/ci-local.mjs
+node tools/tier-b.mjs --commit c0d10ca798b2689a50e91f3556dc73c09cfa3391 --evidence .agent-work/m7fix-evidence/tier-b.json
+node tools/runtime-smoke.mjs --entry cli --commit c0d10ca798b2689a50e91f3556dc73c09cfa3391 --evidence .agent-work/m7fix-evidence/tier-c-cli.json
+node tools/runtime-smoke.mjs --entry mcp --commit c0d10ca798b2689a50e91f3556dc73c09cfa3391 --evidence .agent-work/m7fix-evidence/tier-c-mcp.json
+node tools/runtime-smoke.mjs --entry cli --legacy-job ".agent-work/m7-legacy-source/jobs/Legacy source" --commit c0d10ca798b2689a50e91f3556dc73c09cfa3391 --evidence .agent-work/m7fix-evidence/tier-c-legacy.json
+```
+
+実行時の --commit は HEAD を指定し、ツールが上記の完全 SHA に解決・照合した。各ツールは開始時にクリーン状態を検査し、同じ HEAD から配布 JS を再ビルドした。ビルドとジョブ起動を順に終えてから、独立したジョブの依存導入・レンダーを並行実行した。
+
+| 経路 | 実行日時（UTC） | 所要時間 | 結果・証拠 |
+| --- | --- | --- | --- |
+| Tier B（CLI・MCP） | 12:43:26.016〜12:51:51.850 | 505.834秒 | [tier-b.json](evidence/tier-b.json)、6操作（生成2・run4）、すべて終了0 |
+| Tier C CLI | 12:44:22.567〜12:52:40.926 | 498.343秒 | [tier-c-cli.json](evidence/tier-c-cli.json)、8 run / 終了0 |
+| Tier C MCP | 12:45:40.703〜12:52:46.347 | 425.614秒 | [tier-c-mcp.json](evidence/tier-c-mcp.json)、8 run / 終了0、各 run_get は50秒、1〜4回、protocol_errors:0 |
+| Tier C CLI（原典 0.4 ジョブ） | 12:47:00.175〜12:53:27.881 | 387.691秒 | [tier-c-legacy.json](evidence/tier-c-legacy.json)、10 run、終了0が8件・期待する終了1が2件 |
+
+日付はすべて2026-11-14。生成ジョブ名は `Tier B & ＆（全角）　・ 空白`、`Runtime & ＆（全角）　・ 空白`、`Legacy & ＆（全角）　・ 空白`。実レンダーは既存の640×360・6秒・180フレームの構成で、setup → sound → validate → preview → still(frame30) → ghost preview → final → ghost final を実行した。原典0.4は追加で validate fail と QC fail を観測し、R4 report が無いこと・status.generator:null も確認した。実 Aivis・有償画像生成・外部ブラウザの導入は行っていない。
+
+CLI/MCP の出力5ファイルのハッシュは一致。全3経路の静止画 SHA-256 は `3d737258719e5b789ca6abd0275ebd0fca89307135746e2a88420527a58fae04`。動画と依存はハッシュ採取後に削除し、PNG と ghost JSON を evidence の経路別 artifacts に残した。検出件数は助言のままで、合否判定に使っていない。
+
+証拠は [manifest.json](evidence/manifest.json) の21ファイル・336917 bytes（目録自身を除く）。[commands.json](evidence/commands.json) に単独検査の件数・終了値・生ログのハッシュ、[ci-local-final.json](evidence/ci-local-final.json) に最終の深さ1実行、[revision-rejections.json](evidence/revision-rejections.json) に4件の開始前拒否、[legacy-origin.json](evidence/legacy-origin.json) に原典生成の根拠を保存した。[ci-local.json](evidence/ci-local.json) と [tier-b-initial.json](evidence/tier-b-initial.json) は待機テスト修正前の記録として区別する。ローカルの絶対パスを含む生ログは追跡しない。
 
 ## 決定
 
@@ -58,3 +102,4 @@
 - 契約変更は発注書で明示された R-2/R-4/R-6/S-7 の範囲。追加の要件変更なし。GUI の既存テストへの対応は [QUESTIONS.md](QUESTIONS.md) の M7-fix-Q1。
 - 依存追加・版更新なし。NOTICE の追記対象なし。既存 TypeScript を静的検出にも使用。原典スクラッチの npm ci は既存の low1/high1 を報告したが、原典依存は変更していない。
 - 最終受け入れ・交差レビューは L2。GUI の見た目と文面・スクリーンショットは m7-gui 担当範囲。Windows 以外の実行・リモート CI・公開確認は本タスクで主張しない。
+- 未解決は Q1 の GUI 単体・e2e の各1箇所。単体は非 duo のエラー一覧から2人目配置の期待を外し、e2e の拒否試験は characterMode:duo を明示すれば、原典の条件と試験意図が一致する。gui/ の変更許可または m7-gui 側の反映が無いまま、この2箇所は変更していない。回答が届いた後の GUI・ci-local の成功証拠と L2 の判定が必要である。

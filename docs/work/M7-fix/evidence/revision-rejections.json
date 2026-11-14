@@ -1,0 +1,49 @@
+{
+  "success": true,
+  "records": [
+    {
+      "command": [
+        "node",
+        "tools/tier-b.mjs",
+        "--commit",
+        "HEAD~1"
+      ],
+      "exit_code": 1,
+      "rejected_before_run": true,
+      "reason": "commit_mismatch"
+    },
+    {
+      "command": [
+        "node",
+        "tools/runtime-smoke.mjs",
+        "--commit",
+        "HEAD~1"
+      ],
+      "exit_code": 1,
+      "rejected_before_run": true,
+      "reason": "commit_mismatch"
+    },
+    {
+      "command": [
+        "node",
+        "tools/tier-b.mjs",
+        "--commit",
+        "HEAD"
+      ],
+      "exit_code": 1,
+      "rejected_before_run": true,
+      "reason": "dirty_tree"
+    },
+    {
+      "command": [
+        "node",
+        "tools/runtime-smoke.mjs",
+        "--commit",
+        "HEAD"
+      ],
+      "exit_code": 1,
+      "rejected_before_run": true,
+      "reason": "dirty_tree"
+    }
+  ]
+}

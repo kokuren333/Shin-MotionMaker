@@ -1,0 +1,111 @@
+{
+  "commit": "c0d10ca798b2689a50e91f3556dc73c09cfa3391",
+  "template_version": "0.5.2",
+  "files": [
+    {
+      "path": "ci-local-final.json",
+      "bytes": 1613,
+      "sha256": "987bf4e644d6d56a7ebe4b8540665a039cf40a06e0403e83e68256204973f354"
+    },
+    {
+      "path": "ci-local.json",
+      "bytes": 1295,
+      "sha256": "01e1c3ef2fc366bd5d2437d023707ea7930435018709a5e4737a8d146683e05c"
+    },
+    {
+      "path": "cli-artifacts/ghost-check-preview.json",
+      "bytes": 320,
+      "sha256": "98aeb135ed51ab37ee3f779a4b9bc7914f762f6a799688417504955332c36fd3"
+    },
+    {
+      "path": "cli-artifacts/ghost-check.json",
+      "bytes": 318,
+      "sha256": "186e2127c0441a4422106f28046525b215bd5a75f3016761d9cc8c7ce3bdb954"
+    },
+    {
+      "path": "cli-artifacts/preview.png",
+      "bytes": 27051,
+      "sha256": "3d737258719e5b789ca6abd0275ebd0fca89307135746e2a88420527a58fae04"
+    },
+    {
+      "path": "cli.json",
+      "bytes": 16711,
+      "sha256": "527cb26511ca27b9ff94694e122c91812a83c44cb5214020ab0ccc5f193cdddb"
+    },
+    {
+      "path": "commands.json",
+      "bytes": 3474,
+      "sha256": "d61cbd12e0f88d32a325f1a2dd98ff7a9993b1f004420c702942ba28d1ad7aed"
+    },
+    {
+      "path": "legacy-artifacts/ghost-check-preview.json",
+      "bytes": 320,
+      "sha256": "98aeb135ed51ab37ee3f779a4b9bc7914f762f6a799688417504955332c36fd3"
+    },
+    {
+      "path": "legacy-artifacts/ghost-check.json",
+      "bytes": 318,
+      "sha256": "186e2127c0441a4422106f28046525b215bd5a75f3016761d9cc8c7ce3bdb954"
+    },
+    {
+      "path": "legacy-artifacts/preview.png",
+      "bytes": 27051,
+      "sha256": "3d737258719e5b789ca6abd0275ebd0fca89307135746e2a88420527a58fae04"
+    },
+    {
+      "path": "legacy-origin.json",
+      "bytes": 483,
+      "sha256": "fd06d2ab36f6eb1ebf4d048e4bfb9a36b8a1e71b1029b3d585e4c630660c01ee"
+    },
+    {
+      "path": "licenses.json",
+      "bytes": 77248,
+      "sha256": "c007143e162ec5b31c32604494c4431ef16858e03417632d82871877d11e2563"
+    },
+    {
+      "path": "mcp-artifacts/ghost-check-preview.json",
+      "bytes": 320,
+      "sha256": "98aeb135ed51ab37ee3f779a4b9bc7914f762f6a799688417504955332c36fd3"
+    },
+    {
+      "path": "mcp-artifacts/ghost-check.json",
+      "bytes": 318,
+      "sha256": "186e2127c0441a4422106f28046525b215bd5a75f3016761d9cc8c7ce3bdb954"
+    },
+    {
+      "path": "mcp-artifacts/preview.png",
+      "bytes": 27051,
+      "sha256": "3d737258719e5b789ca6abd0275ebd0fca89307135746e2a88420527a58fae04"
+    },
+    {
+      "path": "revision-rejections.json",
+      "bytes": 893,
+      "sha256": "2d52a982de5ec2bbf55b3169ad258883de42cbb59fc3697bec23a892fd92de5f"
+    },
+    {
+      "path": "tier-b-initial.json",
+      "bytes": 9314,
+      "sha256": "f63146d910ba5059be9ae999e4cf215e74394de896493a7e38cefe9d75b99037"
+    },
+    {
+      "path": "tier-b.json",
+      "bytes": 9313,
+      "sha256": "582b112dfb7ca89b415d51b467ae415f87de3f62f74fc8682c147d9af2ffe7fe"
+    },
+    {
+      "path": "tier-c-cli.json",
+      "bytes": 39612,
+      "sha256": "f96bfddabb2d0561069c7ce0a8042081e20d4e46361b545ecf8909bf116c8471"
+    },
+    {
+      "path": "tier-c-legacy.json",
+      "bytes": 47669,
+      "sha256": "dd10e1bab1885347a2efc5d39730f173950e3335db5fca4e2d6e172a44f814d7"
+    },
+    {
+      "path": "tier-c-mcp.json",
+      "bytes": 46225,
+      "sha256": "952c2a105bdab620575752a2529f9365853ca06c52177917aaca10ca29d6cfc5"
+    }
+  ]
+}

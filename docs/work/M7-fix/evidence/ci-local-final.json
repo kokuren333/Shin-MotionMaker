@@ -1,0 +1,38 @@
+{
+  "command": [
+    "node",
+    "tools/ci-local.mjs"
+  ],
+  "commit": "c0d10ca798b2689a50e91f3556dc73c09cfa3391",
+  "tree_clean": true,
+  "started_at": "2026-11-14T12:41:57.074Z",
+  "ended_at": "2026-11-14T12:49:48.814Z",
+  "elapsed_ms": 471739,
+  "exit_code": 1,
+  "success": false,
+  "summaries": [
+    "✔ baseline metadata is complete and inventory counts match its named tests (98.8727ms)",
+    "✔ TS-07 unexpected exit is failed (6787.2262ms)",
+    "✔ TS-07 mismatched QC exit and report is failed (9699.8236ms)",
+    "✔ JT-12 legacy validate reconstructs pass and fail from completed stdout and exit (30498.4804ms)",
+    "✔ TS-01 ledger covers every baseline test once and points to existing active tests or explicit M2a M2b todos (3294.4711ms)",
+    "✔ QC CLI exits 1 on a failed gate, 2 on usage errors, and MV exits 0 without reports (3643.4849ms)",
+    "✔ R4 JSON preserves original stdout stderr and exit codes for pass fail SKIP and GHOST (49526.4748ms)",
+    "ℹ tests 219",
+    "ℹ pass 217",
+    "ℹ fail 0",
+    "ℹ skipped 2",
+    "ℹ todo 0",
+    "ℹ duration_ms 426689.1241",
+    "✔ advisories never change the verdict: a passing QC with many advisories stays pass (0.6961ms)",
+    "ℹ tests 33",
+    "ℹ pass 31",
+    "ℹ fail 1",
+    "ℹ skipped 1",
+    "ℹ todo 0",
+    "ℹ duration_ms 2550.7888",
+    "      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)",
+    "      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {"
+  ],
+  "log_sha256": "1895478b1e0dcea099b663b91829257f9eb3e1c098111fbfe9a8aad78ec00d16"
+}

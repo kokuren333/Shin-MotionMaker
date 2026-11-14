@@ -2,6 +2,8 @@
 
 この文書は検証の証拠の記録である。記録はオーナーの目視を待つ関門ではない（REQUIREMENTS GU-17、原典 Amendment 01 AM-1）。公開（M8）の記録は CI-08 の4条件に従って後から足す。
 
+最新の工学検証は末尾の [M7-fix](#m7-fix)（テンプレート0.5.2の Tier B/C 再実行）。GUI の既存試験2箇所は R-2 と不整合のまま残り、ci-local 全体の成功は記録していない。
+
 M7-add では main `7741d9594e30305339b8736ee6e2c49591c89384` を `6789f2a` で取り込み、現在のテンプレート版は **0.5.2**（目録 SHA-256 `9e01031edccf35664747a3c38528381b3a52469f74c64ed3164b00de4e30d70a`）になった。下記 Tier C の実測コミット `506a5a893cbb4da0aabfbfa82ecc1d75f6c00d3f` はテンプレート **0.5.1** を使用した記録であり、JSON 内の generator とハッシュをそのまま保持する。JT-12 の入力は原典262c798生成の schema_version 0.4・generator なしで、template_version は存在しない。今回のテンプレート差分は M6 の R3 README 追記の推敲だけであり、追補発注の指定どおり実レンダーは再実行していない。取り込み後の検証は [M7 REPORT の M7-add](docs/work/M7/REPORT.md#m7-add) に記録する。
 
 取り込み後のコミット `bc99306326622d9ff52cdb134b47bf22a0c2a423` は、深さ1複製の ci-local で終了0（本体215件/pass213/skip2/fail0、GUI33件/pass32/skip1/fail0、e2e42/42、ライセンス180項目、両ビルド）。[ci-add.json](docs/work/M7/evidence/ci-add.json) に日時・出力要約・ログハッシュを保存した。同じコミット・テンプレート0.5.2の [pages-add.json](docs/work/M7/evidence/pages-add.json) も正常経路・8不一致・再試行を確認し、verifier CLI は終了0。画面は既存 pages-local.png と同じ SHA-256 だった。実公開の確認ではなく、見た目の判定も行っていない。
@@ -163,3 +165,48 @@ ubuntu Node22/24、リモート CI、G4 レビュー、実公開・公開後検�
 | [tier-c-cli.json](docs/work/M7/evidence/tier-c-cli.json) | 39135 | `fe91ef448adc9eeb2ec1edad18590951ff2b1ef31835596f04c8e272fa2f90ae` |
 | [tier-c-legacy.json](docs/work/M7/evidence/tier-c-legacy.json) | 47074 | `82f437fe0ad5d6f8c5ec86b6b54a8d1515efce226611a3804d104d569c950983` |
 | [tier-c-mcp.json](docs/work/M7/evidence/tier-c-mcp.json) | 45728 | `180409857f2b5c3ebf7837ca3e5fb4d5b157ce833ac66c95aa016dac312ec9d6` |
+
+## M7-fix
+
+- 実行環境：Windows、Node v24.15.0。実装・テストをコミット後に main `0df32f3` を含むことを確認した検証対象 HEAD は **`c0d10ca798b2689a50e91f3556dc73c09cfa3391`**。テンプレートは **0.5.2**、目録 SHA-256 は `9e01031edccf35664747a3c38528381b3a52469f74c64ed3164b00de4e30d70a`。
+- Tier B/C の各ツールは開始時に実 HEAD・指定コミットとの一致・作業ツリーのクリーン状態を検査し、同じ HEAD から配布 JS を再ビルドした。証拠の `revision` にその値と時刻を記録した。以後のコミットはこの証拠と文書のみ。
+- 詳細は [REPORT](docs/work/M7-fix/REPORT.md)、受け入れ未達の理由は [M7-fix-Q1](docs/work/M7-fix/QUESTIONS.md)。L3 による自己合格・公開の完了宣言は行わない。
+
+### 全体検査
+
+| コマンド・対象 | 結果 | 証拠 |
+| --- | --- | --- |
+| `node tools/ci-local.mjs`、上記 HEAD の深さ1複製 | 2026-11-14T12:41:57.074Z〜12:49:48.814Z、471.739秒。npm ci・ライセンス・ビルド・本体219件（pass217 / fail0 / skip2）完了。GUI 単体33件（pass31 / fail1 / skip1）で停止、全体終了1 | [ci-local-final.json](docs/work/M7-fix/evidence/ci-local-final.json) |
+| GUI e2e の独立実行 | 41/42、終了1。solo の2人目配置を拒否すると期待する既存フィクスチャ。単体も非 duo の2人目配置まで検査すると期待する。gui/ の変更禁止により未修正 | [commands.json](docs/work/M7-fix/evidence/commands.json)、[QUESTIONS](docs/work/M7-fix/QUESTIONS.md) |
+| GUI ビルド | 型検査・Vite とも終了0 | 同上 |
+| `node tools/verify-cli.mjs` | 既定の追跡外へ54記録、終了0。M2b の証拠ファイルを上書きしない | [cli.json](docs/work/M7-fix/evidence/cli.json) |
+| `node tools/check-licenses.mjs --output .agent-work/m7fix-licenses.json` | 180項目・導入済130・許容集合外なし、終了0。依存追加・版更新なし | [licenses.json](docs/work/M7-fix/evidence/licenses.json) |
+| Tier B/C の開始前拒否 | 両ツールにコミット不一致・dirty の各条件を与え、4件すべて終了1で開始前に拒否 | [revision-rejections.json](docs/work/M7-fix/evidence/revision-rejections.json) |
+
+最初の ci-local は MC-05/MC-15 の10秒の偽処理と10秒の待機枠の境界で停止した。完了・verdict・通知の表明を維持して待機を契約内の50秒に修正し、上記の深さ1再実行では当該テストも成功した。最初の失敗は [ci-local.json](docs/work/M7-fix/evidence/ci-local.json) に区別して保持している。既存 low1 の audit 表示は自動修正していない。
+
+### Tier B/C
+
+次のコマンドを実行した（実行時の --commit は HEAD で、ツールが上記 SHA に解決・照合）。
+
+```powershell
+node tools/tier-b.mjs --commit c0d10ca798b2689a50e91f3556dc73c09cfa3391 --evidence .agent-work/m7fix-evidence/tier-b.json
+node tools/runtime-smoke.mjs --entry cli --commit c0d10ca798b2689a50e91f3556dc73c09cfa3391 --evidence .agent-work/m7fix-evidence/tier-c-cli.json
+node tools/runtime-smoke.mjs --entry mcp --commit c0d10ca798b2689a50e91f3556dc73c09cfa3391 --evidence .agent-work/m7fix-evidence/tier-c-mcp.json
+node tools/runtime-smoke.mjs --entry cli --legacy-job ".agent-work/m7-legacy-source/jobs/Legacy source" --commit c0d10ca798b2689a50e91f3556dc73c09cfa3391 --evidence .agent-work/m7fix-evidence/tier-c-legacy.json
+```
+
+| 経路 | 実行日時（UTC、2026-11-14） | 所要時間 | 観測結果 |
+| --- | --- | --- | --- |
+| Tier B CLI・MCP | 12:43:26.016〜12:51:51.850 | 505.834秒 | 各68ファイル生成、setup / validate の4 run が completed・元終了0・正規化終了0、validate は両方 pass。[tier-b.json](docs/work/M7-fix/evidence/tier-b.json) |
+| Tier C CLI | 12:44:22.567〜12:52:40.926 | 498.343秒 | 8 run、すべて completed、元・正規化終了とも0。[tier-c-cli.json](docs/work/M7-fix/evidence/tier-c-cli.json) |
+| Tier C MCP | 12:45:40.703〜12:52:46.347 | 425.614秒 | 8 run、すべて completed、元・正規化終了とも0。開始 wait_ms:0、run_get wait_ms:50000 を1〜4回、protocol_errors:0。[tier-c-mcp.json](docs/work/M7-fix/evidence/tier-c-mcp.json) |
+| Tier C CLI（原典 0.4 ジョブ） | 12:47:00.175〜12:53:27.881 | 387.691秒 | 10 run、すべて completed。8件が元・正規化終了とも0、validate fail / QC fail の2件が期待どおり1。[tier-c-legacy.json](docs/work/M7-fix/evidence/tier-c-legacy.json) |
+
+ジョブ名は `Tier B & ＆（全角）　・ 空白`、`Runtime & ＆（全角）　・ 空白`、`Legacy & ＆（全角）　・ 空白`。Tier C は既存の640×360・6秒・180フレームの fixture で setup → sound → validate → preview → still(frame30) → ghost preview → final → ghost final を通した。使用したのは既存ブラウザで、自動導入・実 Aivis・有償画像生成は行っていない。
+
+原典0.4の入力は `git clone --no-hardlinks` で用意した専用スクラッチの原典262c798が実生成したもの。[legacy-origin.json](docs/work/M7-fix/evidence/legacy-origin.json) の validate スクリプト SHA-256 は基線と同じ `c4c8801931616bbc0a561023245acebb1b56e9212221a5e959a1dc825158cee7`。status の generator:null と、R4 report が無い状態で validate pass/fail を読めることも確認した。この入力は schema_version 0.4・generator なしであり、記録中の template_version:0.5.2 は検証したツールの現行テンプレート版を示す。
+
+CLI/MCP の出力5ファイルはハッシュが一致した。全3経路の静止画は27051 bytes、SHA-256 `3d737258719e5b789ca6abd0275ebd0fca89307135746e2a88420527a58fae04`。PNG と ghost JSON を [CLI artifacts](docs/work/M7-fix/evidence/cli-artifacts/preview.png)、[MCP artifacts](docs/work/M7-fix/evidence/mcp-artifacts/preview.png)、[原典0.4 artifacts](docs/work/M7-fix/evidence/legacy-artifacts/preview.png) に保存し、動画・依存・一時ジョブはハッシュ採取後に削除した。ghost の件数は助言のままである。
+
+証拠の [manifest.json](docs/work/M7-fix/evidence/manifest.json) は21ファイル・336917 bytes のパス・サイズ・SHA-256を記録する（目録自身を除く）。目録の SHA-256 は `cd39dac0c6817f6a4fd56682843b832cc9d494d69e842c3bda1bf1c13c0f6dec`。生ログは追跡外に保持し、そのハッシュだけを証拠へ記録した。以前の M7 の JSON・画像は変更していない。

@@ -1,0 +1,152 @@
+{
+  "platform": "win32",
+  "node": "v24.15.0",
+  "records": [
+    {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "tests/integration.test.ts",
+        "tests/cli.test.ts",
+        "tests/host-run.test.ts",
+        "tests/host-files.test.ts",
+        "tests/no-git.test.ts",
+        "tests/fixtures-baseline.test.ts",
+        "tests/baseline.test.ts"
+      ],
+      "exit_code": 0,
+      "metrics": {
+        "tests": 57,
+        "pass": 57,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 142889.7965
+      },
+      "log_sha256": "625f6a3a68dd7c173a168846bcc9725ecda4a3312f961cce1ff3ba204e2aa14d"
+    },
+    {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "tests/mcp-fix.test.ts"
+      ],
+      "exit_code": 0,
+      "metrics": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 89866.6705
+      },
+      "log_sha256": "53e395026022cedd4360db64cd95983fce9b6da8085c384b5407ab6aa2a666df"
+    },
+    {
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "--test-name-pattern",
+        "MC-05 and MC-15",
+        "tests/mcp.test.ts"
+      ],
+      "exit_code": 0,
+      "metrics": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 46815.8929
+      },
+      "log_sha256": "0ebfa390f4397f302c14d05c134a0c63ea70c9bfafa72f0e330ce66f4ece71fb"
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exit_code": 0,
+      "metrics": {
+        "tests": 219,
+        "pass": 217,
+        "fail": 0,
+        "skipped": 2,
+        "todo": 0,
+        "duration_ms": 366551.9502
+      },
+      "log_sha256": "e71b97cc8ca5e86fda1c6bbf7d970c743757639cba4cc489d3e836bd5c531a85"
+    },
+    {
+      "command": [
+        "npm",
+        "test",
+        "--workspaces",
+        "--if-present"
+      ],
+      "exit_code": 1,
+      "metrics": {
+        "tests": 33,
+        "pass": 31,
+        "fail": 1,
+        "skipped": 1,
+        "todo": 0,
+        "duration_ms": 2149.4505
+      },
+      "log_sha256": "08616760f6fc1e289f012543cf55f33d757f92b2dac2c9613090ba33f57a92c8"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:e2e",
+        "--workspace",
+        "gui"
+      ],
+      "exit_code": 1,
+      "metrics": {},
+      "log_sha256": "597e5a4002a7e70c8dbc346b2a765293568c5cfdf52571fd0902d9f248b3ed1c",
+      "passed": 41,
+      "total": 42
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build",
+        "--workspaces",
+        "--if-present"
+      ],
+      "exit_code": 0,
+      "metrics": {},
+      "log_sha256": "6ef8ee6e9228643b9b7b5c7c2e87fdde534915e71f11f0785b0bdb7dd3c02fa2"
+    },
+    {
+      "command": [
+        "node",
+        "tools/verify-cli.mjs"
+      ],
+      "exit_code": 0,
+      "metrics": {},
+      "log_sha256": "5a1551fd7df1b1c0b3755b60324d9f6892a54451d887981cccb5b9954ed7fe05",
+      "records": 54
+    },
+    {
+      "command": [
+        "node",
+        "tools/check-licenses.mjs",
+        "--output",
+        ".agent-work/m7fix-licenses.json"
+      ],
+      "exit_code": 0,
+      "metrics": {},
+      "log_sha256": "b4757989c5f255415a16cd50c530342c44b5b4ebf0c3ce439fe300d6c032a04f",
+      "packages": 180,
+      "installed": 130,
+      "verified": true
+    }
+  ]
+}

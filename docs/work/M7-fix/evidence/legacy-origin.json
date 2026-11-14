@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "source": "BiimMotion 262c79876a9c4635377114902d58ce783e7578b1",
+  "command": [
+    "node",
+    "--experimental-strip-types",
+    "tools/generate-job.ts",
+    "<request.json>",
+    "--out=<scratch jobs>"
+  ],
+  "schema_version": "0.4",
+  "generator": null,
+  "exit_code": 0,
+  "project_sha256": "0e0844fab51df995230fd3246b199aa69b0e5955ede67fe9d2dbf8921254bcfe",
+  "validate_script_sha256": "c4c8801931616bbc0a561023245acebb1b56e9212221a5e959a1dc825158cee7"
+}
