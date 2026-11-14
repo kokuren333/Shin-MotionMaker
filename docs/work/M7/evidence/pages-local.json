@@ -1,0 +1,85 @@
+{
+  "commit": "506a5a893cbb4da0aabfbfa82ecc1d75f6c00d3f",
+  "platform": "win32",
+  "node": "v24.15.0",
+  "started_at": "2026-11-14T11:17:24.985Z",
+  "checks": [
+    {
+      "scenario": "HTTP 404",
+      "rejected": true
+    },
+    {
+      "scenario": "title mismatch",
+      "rejected": true
+    },
+    {
+      "scenario": "commit mismatch",
+      "rejected": true
+    },
+    {
+      "scenario": "js HTTP 404",
+      "rejected": true
+    },
+    {
+      "scenario": "css HTTP 404",
+      "rejected": true
+    },
+    {
+      "scenario": "browser console error",
+      "rejected": true
+    },
+    {
+      "scenario": "hidden heading",
+      "rejected": true
+    },
+    {
+      "scenario": "hidden ZIP button",
+      "rejected": true
+    },
+    {
+      "scenario": "retry after stale commit",
+      "attempt": 2,
+      "success": true
+    }
+  ],
+  "success": true,
+  "verifier": {
+    "success": true,
+    "url": "http://127.0.0.1:58927/Shin-MotionMaker/",
+    "expect_commit": "506a5a893cbb4da0aabfbfa82ecc1d75f6c00d3f",
+    "attempt": 1,
+    "failures": [],
+    "version": {
+      "version": "0.1.0",
+      "template_version": "0.5.1",
+      "commit": "506a5a893cbb4da0aabfbfa82ecc1d75f6c00d3f",
+      "built_at": "2026-11-14T11:17:24.986Z"
+    },
+    "assets": [
+      "http://127.0.0.1:58927/Shin-MotionMaker/assets/index-BaSle2LD.js",
+      "http://127.0.0.1:58927/Shin-MotionMaker/assets/index-CBGikXvU.css"
+    ],
+    "visible": {
+      "heading": "動画ジョブを作成",
+      "sections": [
+        "動画の企画",
+        "参考資料と指示",
+        "デザイン方向性",
+        "キャラクター",
+        "音声と出力",
+        "ジョブの要点",
+        "補足"
+      ],
+      "zip": "ジョブのZIPを生成"
+    },
+    "console_errors": 0
+  },
+  "artifacts": [
+    {
+      "path": "pages-local.png",
+      "bytes": 146070,
+      "sha256": "3bfedde3aeda625194daeca2036212b397f4c48dbabed5c15bc5b0253bba5c0e"
+    }
+  ],
+  "ended_at": "2026-11-14T11:18:24.704Z"
+}
