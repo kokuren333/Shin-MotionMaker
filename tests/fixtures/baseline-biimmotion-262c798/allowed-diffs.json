@@ -1,0 +1,78 @@
+{
+  "source_commit": "262c79876a9c4635377114902d58ce783e7578b1",
+  "status": "M0初版。R1の置換対はM1で確定・増補しL2が確認する。",
+  "rules": [
+    {
+      "id": "R1",
+      "scope": [
+        "AGENTS.md",
+        "README.md",
+        "brief.md"
+      ],
+      "replacements": [
+        {
+          "from": "WebUI",
+          "to": "Shin-MotionMaker（GUI・CLI・MCP）"
+        }
+      ],
+      "note": "原典で見つかる入口名の置換候補。MVのbrief・歌詞・依頼文への適用は禁止。"
+    },
+    {
+      "id": "R2",
+      "scope": [
+        "project.json"
+      ],
+      "replace": {
+        "pointer": "/schema_version",
+        "from": "0.4",
+        "to": "0.5"
+      },
+      "add": {
+        "pointer": "/generator",
+        "keys": [
+          "name",
+          "version",
+          "template_version"
+        ]
+      }
+    },
+    {
+      "id": "R3",
+      "add_files": [
+        "NOTICE"
+      ],
+      "append_only": [
+        "README.md"
+      ],
+      "note": "CLI・MCP節を追加。ジョブ単体ではnpm runが正。"
+    },
+    {
+      "id": "R4",
+      "scope": [
+        "runtime/scripts/validate.mjs"
+      ],
+      "add_outputs": [
+        "reports/validate.json"
+      ],
+      "preserve": [
+        "stdout",
+        "exit_code",
+        "validation-logic"
+      ],
+      "note": "追加コードはM1で逆変換可能なパッチとして確定する。"
+    },
+    {
+      "id": "R5",
+      "scope": [
+        "brief.md"
+      ],
+      "mode": "explanation",
+      "replacements": [
+        {
+          "from": "Opusが記入する",
+          "to": "制作エージェントが記入する"
+        }
+      ]
+    }
+  ]
+}

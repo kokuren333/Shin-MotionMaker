@@ -1,0 +1,228 @@
+{
+  "schema_version": "0.4",
+  "mode": "explanation",
+  "title": "虹のしくみ",
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "orientation": "landscape",
+    "target_duration_sec": 300
+  },
+  "layout": {
+    "preset": "biim-standard-v1",
+    "base_width": 1920,
+    "base_height": 1080,
+    "frame": "assets/biim-frame.svg",
+    "colors": {
+      "background": "#1e1e1e",
+      "border": "#cccccc",
+      "note": "#f4f4f4",
+      "subtitle": "#0000ff"
+    },
+    "regions": {
+      "main": [
+        16,
+        16,
+        1440,
+        810
+      ],
+      "note_top": [
+        1498,
+        34,
+        388,
+        182
+      ],
+      "note_bottom": [
+        1498,
+        274,
+        388,
+        532
+      ],
+      "character": [
+        0,
+        740,
+        330,
+        332
+      ],
+      "subtitle": [
+        350,
+        870,
+        1528,
+        178
+      ],
+      "character_second": [
+        1620,
+        840,
+        300,
+        232
+      ]
+    },
+    "fonts": {
+      "body": {
+        "family": "Noto Sans JP",
+        "path": "assets/fonts/NotoSansJP-Variable.ttf",
+        "weight": 600
+      },
+      "note_top": {
+        "family": "Noto Sans JP",
+        "path": "assets/fonts/NotoSansJP-Variable.ttf",
+        "weight": 800,
+        "size": 44
+      },
+      "note_bottom": {
+        "family": "Noto Sans JP",
+        "path": "assets/fonts/NotoSansJP-Variable.ttf",
+        "weight": 600,
+        "size": 34
+      },
+      "subtitle": {
+        "family": "M PLUS Rounded 1c",
+        "path": "assets/fonts/MPLUSRounded1c-ExtraBold.ttf",
+        "weight": 800,
+        "size": 64
+      }
+    },
+    "mode": "biim",
+    "fullscreen_regions": {
+      "main": [
+        0,
+        0,
+        1920,
+        1080
+      ],
+      "note_top": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "note_bottom": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": [
+        32,
+        700,
+        300,
+        240
+      ],
+      "character_second": [
+        1596,
+        700,
+        300,
+        240
+      ],
+      "subtitle": [
+        96,
+        950,
+        1728,
+        110
+      ]
+    },
+    "subtitle_frame": [
+      300,
+      846,
+      1612,
+      226
+    ]
+  },
+  "direction": {
+    "music_mood": "",
+    "music_lyrics": "",
+    "differentiation": "前作のチャート中心から、光の経路を育てる図へ",
+    "audience": "中高生",
+    "description": "光の分散を説明する",
+    "instructions": "",
+    "design": "Biim形式を軸に、タイポグラフィと図解の動きで理解を助ける。落ち着いた配色に、要所で大胆なアクセント。\nドパガキ向けに最後まで飽きずに見られるように、凝った演出やわかりやすいアニメーションを挿入するように努める。\nBiim枠での説明と、画面全体を使ったアニメーションはバランスよくどちらも取り入れる。各キャラクターの3Dモデルは必要に応じてサイズや位置を変更・移動できるようにする。",
+    "tempo": "fast",
+    "energy": "balanced",
+    "motion_amount": "rich",
+    "biim_usage": "sometimes",
+    "character_usage": "frequent",
+    "diagram_policy": "数式は段階的に導入。図解は関係や因果を動きで説明。チャートは実データと出典を示し、装飾のために数値を作らない。",
+    "style_mode": "biim",
+    "takeaway": "太陽の反対側に虹が見える理由を言える",
+    "prior_knowledge": "光は直進する。雨粒の色が虹になるという誤解。",
+    "outline": "## 問い\r\n\r\n虹はなぜ見える？\r\n雨粒の中で光が曲がる。\n42度の方向を確かめる。\n"
+  },
+  "voice": {
+    "engine": "aivis",
+    "engine_url": "http://127.0.0.1:10101",
+    "style_id": 1069147200,
+    "speed": 1,
+    "notes": "自然な日本語。専門用語の読みと、図解を理解するための間を調整する。"
+  },
+  "character_mode": "solo",
+  "characters": [
+    {
+      "id": "character1",
+      "name": "",
+      "reading": "",
+      "personality": "落ち着いていて、説明が丁寧。",
+      "speaking_style": "わかりやすいです・ます調。",
+      "role": "解説役",
+      "notes": "解説を一緒に進める演者。視線・指差し・リアクションを内容に合わせ、字幕や図解を隠さない。",
+      "position": "left",
+      "model": "assets/character.glb",
+      "original_name": "character.glb",
+      "subtitle_color": "#0000ff",
+      "subtitle_outline": "#ffffff",
+      "voice": {
+        "style_id": 1069147200,
+        "speed": 1,
+        "notes": "自然な日本語。専門用語の読みと、図解を理解するための間を調整する。"
+      }
+    }
+  ],
+  "character": {
+    "id": "character1",
+    "name": "",
+    "reading": "",
+    "personality": "落ち着いていて、説明が丁寧。",
+    "speaking_style": "わかりやすいです・ます調。",
+    "role": "解説役",
+    "notes": "解説を一緒に進める演者。視線・指差し・リアクションを内容に合わせ、字幕や図解を隠さない。",
+    "position": "left",
+    "model": "assets/character.glb",
+    "original_name": "character.glb",
+    "subtitle_color": "#0000ff",
+    "subtitle_outline": "#ffffff",
+    "voice": {
+      "style_id": 1069147200,
+      "speed": 1,
+      "notes": "自然な日本語。専門用語の読みと、図解を理解するための間を調整する。"
+    }
+  },
+  "audio": {
+    "music": null,
+    "music_original_name": null,
+    "music_duration_sec": null,
+    "bgm": "assets/bgm.wav",
+    "bgm_volume": 0.12,
+    "generate_bgm_se": true,
+    "instructions": "場面に合う簡単なBGMとSEを作成する。説明中は控えめなループ、登場や強調には短いチャイム・スウィッシュ・インパクト。ナレーションを優先し、音の密度に緩急をつける。"
+  },
+  "asset_generation": {
+    "image": "codex-imagegen",
+    "image_command": "npm run imagegen -- --name <id> --kind <kind> --prompt \"<内容>\"",
+    "output_dir": "assets/generated",
+    "video_generation": false
+  },
+  "research": {
+    "allow_web_research": true,
+    "evidence_policy": "primary"
+  },
+  "sources": [
+    {
+      "kind": "file",
+      "path": "sources/reference.txt",
+      "original_name": "reference.txt",
+      "size": 64,
+      "mime_type": "text/plain"
+    }
+  ],
+  "scenes": []
+}

@@ -3,4 +3,4 @@
 *.glb binary
 *.ttf binary
 *.png binary
-tests/fixtures/baseline-biimmotion-262c798/golden/** -text
+tests/fixtures/baseline-biimmotion-262c798/golden/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
