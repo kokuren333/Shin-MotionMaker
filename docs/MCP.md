@@ -4,9 +4,9 @@ MCP は公式 TypeScript SDK 1.32.2 による stdio サーバーである。こ�
 
 ## 起動とクライアント登録
 
-正式な CLI 入口は `shin-motionmaker mcp serve`。M3 は `src/mcp/index.ts` の `serveMcp(options)` と開発用の `src/mcp/main.ts` を提供する。M2b の CLI との結線・配布用 JavaScript は L2 の統合で確認する。
+正式な CLI 入口は `shin-motionmaker mcp serve`。ビルド後は `node dist/cli/main.js mcp serve --root <dir>` でも起動できる。上位の `src/main.ts` が CLI と `src/mcp/index.ts` の `serveMcp(options)` を結線する。
 
-開発用エントリには `--root` が必須である。`--read-only`、`--enable-generation`、繰り返せる `--allow-dir` と `--allow-engine-host` を受け付ける。不明なオプション・必須値の欠落は `E_USAGE`、不在またはディレクトリでない allow-dir は接続開始前に `E_PATH_DENIED` で終了する。どちらも終了コード2で、stdout には何も書かない。
+`--root` は必須である。`--read-only`、`--enable-generation`、繰り返せる `--allow-dir` と `--allow-engine-host` を受け付ける。不明なオプション・必須値の欠落は `E_USAGE`、不在またはディレクトリでない root / allow-dir は接続開始前に `E_PATH_DENIED` と hint で終了する。どちらも終了コード2で、stdout には何も書かない。
 
 [クライアント登録例](mcp-client.example.json) は次の設定である。Node 22 以上で、作業ディレクトリをこの repo のルートにして起動する。公式 SDK の `StdioClientTransport` へこの `command`・`args` を渡し、初期化・ツール一覧・候補取得まで実行した。クライアント側の設定ファイルの場所や登録 UI は各クライアントに従う。作業ディレクトリを指定できないクライアントでは、利用環境のエントリと root のパスへ置き換える。
 
@@ -15,13 +15,13 @@ MCP は公式 TypeScript SDK 1.32.2 による stdio サーバーである。こ�
   "mcpServers": {
     "shin-motionmaker": {
       "command": "node",
-      "args": ["--experimental-strip-types", "src/mcp/main.ts", "--root", ".", "--read-only"]
+      "args": ["dist/cli/main.js", "mcp", "serve", "--root", ".", "--read-only"]
     }
   }
 }
 ```
 
-この例は開発用の読み取り専用登録である。TypeScript の直接実行は開発・テストだけで使い、製品配布ではビルド済み JavaScript を使う。
+この例は読み取り専用登録である。先に `npm run build` を実行して、ビルド済み JavaScript を用意する。
 
 ## ツールと封筒
 
@@ -52,7 +52,9 @@ MCP は公式 TypeScript SDK 1.32.2 による stdio サーバーである。こ�
 
 各ツールは同じ封筒 JSON を `structuredContent` と先頭の text ブロックに返す。`isError` は `ok:false` のときだけ true。実行できた QC の fail は `ok:true`・`isError:false` であり、MV の QC は `verdict:not_applicable`。候補とジョブ状態全体には合否・スコア・順位を付けない。状態の checks は保存済み検査の verdict をそのまま示す。
 
-全ツールの outputSchema は host の封筒スキーマで、外部ファイル参照をローカル `$defs` にまとめる。report の PNG は JSON 内で `data` を base64、`encoding` を `base64` とし、後続の image ブロックにも同じ画像を返す。8 MiB の PNG は3箇所に符号化されるため、大きな画像を読むクライアントは受信メッセージ上限を十分に確保する。検証用 SDK クライアントは40 MiBを設定している。
+全ツールの outputSchema は host の封筒スキーマで、外部ファイル参照をローカル `$defs` にまとめる。report の PNG は JSON 内で `data:null`、`mime_type:"image/png"`、元画像の `bytes`・`sha256`、`delivered_as:"image"` を返す。本体の base64 は後続の image ブロックだけに1回入れる。MCP の上限は6 MiBで、符号化後は約8 MiBとなり SDK 既定の受信上限10 MiBに収まる。超過時は `E_INPUT_INVALID` と CLI の `smm report` または縮小を案内する hint を返し、接続を続ける。CLI は従来どおり8 MiBまで、JSON の data に base64 を返す。検証用 SDK クライアントも受信上限を変更しない。
+
+SDK 既定の受信上限10 MiBを超える入力1行をクライアントから送ると、SDK の stdio transport が閉じ、サーバーは終了する。切り離した run は継続する。未知のツール名には `isError:true` と `E_USAGE` の封筒を返す。
 
 ## run の待ち方
 
@@ -70,9 +72,10 @@ run の `wait_ms` は整数0〜50,000。`job_validate` の final=false、`job_qc
 - 例外は `request.assets` だけで、allow-dir 内の実体を持つ絶対パスの添付を読める。allow-dir は存在する絶対パスのディレクトリを指定する。ジョブ・出力・report・画像生成の参照パスの制限は緩めない。添付のファイル名だけを core に渡す。
 - read-only は操作表の公開フラグに従い、全 run・patch・取消・generate を非公開にする。dry_run も generate のため非公開。非公開ツールを直接呼んでも `E_DISABLED`。
 - job_imagegen は enable-generation がある場合だけ公開する。画像生成は費用が発生する場合がある。
-- voice の非ループバック接続は allow-engine-host のホスト名の明示許可が必要。doctor の Aivis 疎通も同じ許可に従い、未許可なら接続せず未確認として報告する。URL のリダイレクト先へ許可を引き継がない。
+- voice の非ループバック接続は allow-engine-host のホスト名の明示許可が必要。doctor の Aivis 疎通も同じ許可に従い、未許可なら接続せず未確認として報告する。host の疎通確認は URL のリダイレクト先へ許可を引き継がない。ジョブ内スクリプトの fetch はそのスクリプトの挙動に従う。
 - 任意のコマンドや任意 argv を実行するツールはない。操作表のジョブ内スクリプトだけを host が配列引数・shell:false で起動する。同じジョブの書込・run は排他的で、衝突は所有 run を示す `E_BUSY`。
-- report_get は reports/・plan/、brief.md・AGENTS.md・README.md、output/ 直下の PNG に限定する。テキストは256 KiBで切り詰め、PNG は8 MiBを超えると拒否する。
+- report_get は reports/・plan/、brief.md・AGENTS.md・README.md、output/ 直下の PNG に限定する。テキストは256 KiBで切り詰め、PNG は6 MiBを超えると拒否する。
+- host の表示用変換で、MCP に返すログ・report の文字列に含まれるホームを `~`、ジョブ・root・導入先の絶対パスを相対表現へ置き換える。realpath、`/` 区切り、file URL、Windows の大文字小文字の違いも対象とする。保存済みのファイルは変更しない。
 
 **ジョブ内スクリプトの実行は `npm run` と同じ信頼の範囲であり、sandbox ではない。** 信頼できるジョブだけを実行する。スクリプト自身のファイル・ネットワークアクセスを隔離する仕組みではない。
 
@@ -85,10 +88,10 @@ run の `wait_ms` は整数0〜50,000。`job_validate` の final=false、`job_qc
 この PC の Windows / Node 24 で以下を実行した。Tier B は実際に生成したジョブに依存を導入する。Tier A の通常テストには含めない。
 
 ```powershell
-node --experimental-strip-types --test tests/mcp.test.ts tests/mcp-setup.test.ts
+node --experimental-strip-types --test tests/mcp.test.ts tests/mcp-fix.test.ts tests/mcp-setup.test.ts
 node --experimental-strip-types --test tests/mcp-docs.test.ts
 node --experimental-strip-types tools/smoke-mcp.ts
 node tools/audit-mcp-licenses.mjs
 ```
 
-Tier B は68ファイルの生成、setup の completed / exit 0、validate の completed / pass / exit 0、依存導入済み、プロトコルエラー0を確認した。Windows の symlink 作成はこの PC では EPERM で、junction の外向き拒否を実測した。Linux の symlink 検証と CLI 統合は L2 の統合・CI で確認する。証拠と残課題は [M3 REPORT](work/M3/REPORT.md) に記録する。文面の推敲は M6 担当へ渡す。
+Tier B は68ファイルの生成、setup の completed / exit 0、validate の completed / pass / exit 0、依存導入済み、プロトコルエラー0を確認した。同じコマンドを ubuntu の CI ジョブに置き、ジョブ依存の npm キャッシュを設定する。Windows の symlink 作成はこの PC では EPERM で、junction の外向き拒否を実測した。Linux / Node 22 の実測は L2 がリモート作成後の CI へ持ち越す。証拠と残課題は [M3 REPORT](work/M3/REPORT.md) に記録する。文面の推敲は M6 担当へ渡す。
