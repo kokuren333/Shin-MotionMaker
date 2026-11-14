@@ -41,6 +41,9 @@ export function validateRequest(input: unknown, check: RequestCheck): Validation
       fields(input.form, defaults, "/form");
       for (const [key, choices] of Object.entries(formChoices)) {
         const nested = key === "secondCharacter";
+        const mv = (input.form.videoMode ?? defaults.videoMode) === "mv";
+        if (mv && ["styleMode", "characterPosition", "secondCharacter"].includes(key)) continue;
+        if (nested && (input.form.characterMode ?? defaults.characterMode) !== "duo") continue;
         const value = nested ? isObject(input.form.secondCharacter) ? input.form.secondCharacter.position : undefined : input.form[key];
         const allowed: readonly unknown[] = nested ? formChoices.secondCharacter.position : choices as readonly unknown[];
         if (value !== undefined && (nested ? typeof value === "string" : typeof value === typeof defaults[key as keyof MotionForm]) && !allowed.includes(value))

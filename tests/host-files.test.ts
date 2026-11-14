@@ -147,7 +147,11 @@ test("MC-09 report whitelist text limit UTF-8 boundary and PNG size limit", asyn
   for (const name of ["project.json", "runtime/.env", "reports/a.mjs", "output/a/b.png", "../project.json"]) await assert.rejects(getReport(context, relative, name), { code: "E_PATH_DENIED" });
   await fs.writeFile(path.join(job, "reports/image.png"), new Uint8Array(8 * 1024 * 1024 + 1));
   await assert.rejects(getReport(context, relative, "reports/image.png"), { code: "E_INPUT_INVALID" });
-  await assert.rejects(getReport({ ...context, restrictToRoot: false, startedBy: "cli" }, relative, "reports/image.png"), { code: "E_PATH_DENIED" });
+  await assert.rejects(getReport({ ...context, restrictToRoot: false, startedBy: "cli" }, relative, "reports/image.png"), { code: "E_INPUT_INVALID" });
+  await fs.writeFile(path.join(job, "reports/image.png"), new Uint8Array(6 * 1024 * 1024 + 1));
+  await assert.rejects(getReport(context, relative, "reports/image.png"), { code: "E_INPUT_INVALID" });
+  const cliImage = await getReport({ ...context, restrictToRoot: false, startedBy: "cli" }, relative, "reports/image.png");
+  assert.ok("data" in cliImage); assert.equal(cliImage.data.byteLength, 6 * 1024 * 1024 + 1);
 });
 
 test("operation table covers contract names flags closed schemas and exported files", async (t) => {

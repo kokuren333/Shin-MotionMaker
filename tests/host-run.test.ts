@@ -3,13 +3,40 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { spawn } from "node:child_process";
 import { test } from "node:test";
-import { execute, startRun, getRun, cancelRun, listRuns, readRunLog, acquireJobLock, schemaIssues, schemaRegistry, schemas, type RunRecord } from "../src/host/index.ts";
+import { execute, startRun, getRun, cancelRun, listRuns, readRunLog, acquireJobLock, schemaIssues, schemaRegistry, schemas, operations, type RunRecord, type RunKind, type OperationInputs } from "../src/host/index.ts";
 import { processExists, releaseOwnedLock } from "../src/host/locks.ts";
 import { identifyProcess } from "../src/host/processes.ts";
 import { defaultWait, runTimeout } from "../src/host/run-options.ts";
 import { fakeJob, fixtureModule, hostModule, workerModule, workspace } from "./helpers/host.ts";
 
 const relative = "job & 全角 空白";
+test("M7-fix all run wait defaults match the contract and advertised schema", () => {
+  const cases: [RunKind, OperationInputs[RunKind], number][] = [
+    ["setup", { job: relative }, 0],
+    ["validate", { job: relative }, 45000],
+    ["validate", { job: relative, final: false }, 45000],
+    ["validate", { job: relative, final: true }, 0],
+    ["qc", { job: relative, stage: "pre" }, 45000],
+    ["qc", { job: relative, stage: "post" }, 45000],
+    ["ghost_check", { job: relative }, 0],
+    ["render", { job: relative, target: "preview" }, 0],
+    ["voice", { job: relative }, 0],
+    ["sound", { job: relative }, 45000],
+    ["imagegen", { job: relative, name: "image", prompt: "自由" }, 0],
+  ];
+  assert.deepEqual([...new Set(cases.map(([kind]) => kind))].sort(), operations.filter((op) => op.kind === "run").map((op) => op.id).sort());
+  for (const [kind, input, expected] of cases) {
+    assert.equal(defaultWait(kind, input), expected, `${kind}: ${JSON.stringify(input)}`);
+    const definition = operations.find((op) => op.id === kind)!;
+    const schema = definition.inputSchema as any;
+    if (kind === "validate" && "final" in input && input.final) {
+      assert.equal(schema.allOf[0].anyOf[0].properties.wait_ms.default, expected);
+    } else {
+      assert.equal(schema.properties.wait_ms.default, expected, kind);
+      assert.equal(definition.defaultWaitMs, expected, kind);
+    }
+  }
+});
 for (const [name, scenario, expected, code] of [
   ["TS-07 completes with advisory without changing verdict", "complete", "completed", 0],
   ["TS-07 gate failure is completed and ok true", "fail", "completed", 1],

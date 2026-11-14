@@ -76,7 +76,9 @@ export async function startRun<K extends RunKind>(context: HostContext, kind: K,
       const owners = await readProcessOwners(job, id);
       await stopProcessTree(workerPid, workerIdentity);
       await stopProcessTree(current.script_pid, owners.script);
-      const failed: RunRecord = { ...current, pid: workerPid, status: "failed", ended_at: new Date().toISOString(), error: normalizeError(error), exit_code: 4 };
+      const cause = normalizeError(error);
+      const failed: RunRecord = { ...current, pid: workerPid, status: "failed", ended_at: new Date().toISOString(),
+        error: { ...cause, details: { reason: "worker_start_failed", ...(cause.details === undefined ? {} : { cause: cause.details }) } }, exit_code: 4 };
       await atomicJson(await jobFile(job, `.smm/runs/${id}/run.json`), failed);
       if (await processState(workerPid, workerIdentity) === "absent" && await processState(current.script_pid, owners.script) === "absent")
         await releaseOwnedLock(job, id, lock.token);

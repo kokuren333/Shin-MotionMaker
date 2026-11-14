@@ -14,13 +14,7 @@
           ]
         },
         "styleMode": {
-          "type": "string",
-          "enum": [
-            "biim",
-            "anime",
-            "motion",
-            "mixed"
-          ]
+          "type": "string"
         },
         "takeaway": {
           "type": "string"
@@ -102,11 +96,7 @@
           "type": "string"
         },
         "characterPosition": {
-          "type": "string",
-          "enum": [
-            "left",
-            "right"
-          ]
+          "type": "string"
         },
         "subtitleColor": {
           "type": "string"
@@ -130,11 +120,7 @@
               "type": "string"
             },
             "position": {
-              "type": "string",
-              "enum": [
-                "left",
-                "right"
-              ]
+              "type": "string"
             },
             "notes": {
               "type": "string"
@@ -254,7 +240,94 @@
         }
       },
       "required": [],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "anyOf": [
+            {
+              "properties": {
+                "videoMode": {
+                  "const": "mv"
+                }
+              },
+              "required": [
+                "videoMode"
+              ]
+            },
+            {
+              "properties": {
+                "styleMode": {
+                  "enum": [
+                    "biim",
+                    "anime",
+                    "motion",
+                    "mixed"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "anyOf": [
+            {
+              "properties": {
+                "videoMode": {
+                  "const": "mv"
+                }
+              },
+              "required": [
+                "videoMode"
+              ]
+            },
+            {
+              "properties": {
+                "characterPosition": {
+                  "enum": [
+                    "left",
+                    "right"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "anyOf": [
+            {
+              "properties": {
+                "videoMode": {
+                  "const": "mv"
+                }
+              },
+              "required": [
+                "videoMode"
+              ]
+            },
+            {
+              "properties": {
+                "characterMode": {
+                  "const": "solo"
+                }
+              }
+            },
+            {
+              "properties": {
+                "secondCharacter": {
+                  "properties": {
+                    "position": {
+                      "enum": [
+                        "left",
+                        "right"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     "assets": {
       "type": "object",

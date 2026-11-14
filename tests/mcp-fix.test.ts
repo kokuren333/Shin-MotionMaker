@@ -53,7 +53,7 @@ test("TS-04 default SDK buffer receives a 6 MiB PNG once and survives an oversiz
   assert.equal(output.envelope.result.encoding, "base64"); assert.deepEqual(Buffer.from(output.envelope.result.data, "base64"), cliData);
   await fs.writeFile(file, pngOfSize(cliData.length + 1));
   const oversizedCli = await cli(["report", jobName, "output/still.png"], context.root, true);
-  assert.equal(oversizedCli.code, 2); assert.ok(!oversizedCli.envelope.ok); assert.equal(oversizedCli.envelope.error.code, "E_PATH_DENIED");
+  assert.equal(oversizedCli.code, 2); assert.ok(!oversizedCli.envelope.ok); assert.equal(oversizedCli.envelope.error.code, "E_INPUT_INVALID");
 });
 
 test("MC-01 built CLI mcp serve forwards every server flag through the SDK", async (t) => {
