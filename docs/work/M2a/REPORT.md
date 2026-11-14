@@ -78,3 +78,73 @@
 - M2b は readRequest の request ファイル親を context.requestDirectory として維持して共通 generate を呼ぶ。CLI は execute、前面待ちは getRun / readRunLog、終了コードは errorExitCode と終端 run.exit_code を使える。stats の任意ファイル読取には host の readTextInput を使える。BOM 読取の追補後も CL-01 の1件と build は終了0。
 - M3 は operations / exposedOperations を登録の正本にし、schemaRegistry の参照も解決して outputSchema を提示する。PNG の Uint8Array は入口で base64 / image ブロックに変換する。CLI 専用の mcp serve の起動処理と version スキーマの所有は M2b / M3 に残る。
 - GUI・アイコン・README の見た目や文面は変更していない。見た目判断の TODO はない。
+
+## M2a-fix
+
+### 起動と対象
+
+- L3 工学、モデル切替・サブエージェント利用なし。指定の `m2a-host`、基準 `e32b689b1d3b5ee664a72cd56aa0a452317d8e7c`、着手時クリーン。Windows / Node v24.15.0。受け入れの判定は L2 に委ねる。
+- REQUIREMENTS の指定節、AGENTS、CONTRACT M0b、WORKFLOW、M2a REVIEW・既存 REPORT を確認した。修正発注は会話中の M2a-fix を正本とした。
+- 変更範囲は `src/host/`、host のテスト・fixture、本 REPORT。core・job-template・フォント・要件・契約・操作表の定義・公開スキーマは変更していない。
+
+### 指摘への対応と証拠の対応表
+
+テスト名は `tests/host-fix.test.ts`。別ファイルの場合だけファイル名を添えた。
+
+| 指摘 | 対応 | テスト名・証拠 |
+| --- | --- | --- |
+| M-1 | 絶対パス添付を allow-dir の文字列上の範囲・名前空間と照合してから FS に渡す。UNC・device・extended の暗黙許可なし。安全確認の FS エラーは E_PATH_DENIED、対象の ENOENT は添付不在として分類 | `M-1 denies absolute UNC device and outside attachments before filesystem access` は realpath / stat / lstat の呼出0件を表明。allow-dir なし・無関係な allow-dir の両方 |
+| M-2 | worker / script に PID と起動時刻を記録。Windows は配列引数の PowerShell / CIM CreationDate ticks、Linux は /proc/stat starttime。既知の不一致は不在、照合不能は停止せず保留。ロックにも所有プロセスの同一性を保存 | `M-2 PID reuse script never kills unrelated process or blocks recovery`、`M-2 PID reuse worker never kills unrelated process or blocks recovery`、`M-2 unknown process identity never receives a stop signal`。無関係な実プロセスを生かしたまま lost・ロック回収・取消・次の run を確認 |
+| M-3 | Windows と Linux の固有テストを分け、skip に対象 OS と理由を明記。POSIX のファイル名・symlink・別セッションの子孫停止は ubuntu で実行される構成 | `MC-02 win32 rejects reserved names ADS and trailing dots and folds case`（host-files）、`R-6 linux cancellation stops a detached grandchild`、`P-2 POSIX generated filenames preserve browser bytes`。ubuntu の実行証拠は L2 持越し |
+| R-1 | restrictToRoot の report と相対指定添付で open 後の nlink > 1 を拒否 | `R-1 rejects hardlinked reports and relative root attachments`。NTFS の実ハードリンクで E_PATH_DENIED |
+| R-2 | open 後の handle.stat と再検査済み realpath の stat の dev/ino を照合。root の実体も固定して再照合。生成・project・台帳・ログ・予約の作成は確認済みの親の直下で行い、作成後に親の実体を再照合 | `R-2 detects a read replacement after open and a parent replacement after creation`。通常の生成・project patch・run・排他の既存テストでも共通経路を通す |
+| R-3 | cancel の worker 不在にも15秒の猶予。worker は保存前に台帳を読み、終端なら上書きしない。予約の移管・解放は owner と token を照合 | `R-3 releaseOwnedLock requires the matching token even for the same owner`、`R-3 worker save preserves an externally written terminal record`、`R-5 real worker death retains startup grace and recovers a surviving script` |
+| R-4 | MCP のログ末尾は job / root / host 導入先と実体パス、file URL、区切り・JSON escape の形を置換。worker のエラー出力は code / message / reason だけ | `R-4 MCP log tails redact file URLs realpaths and host installation paths`。空白・日本語をパーセント符号化した file URL を含めて確認 |
+| R-5 | startRun から本物の worker を起動して強制終了し、実時間で heartbeat の15秒失効、lost、回収、次の run まで確認。時間切れも startRun → runTimeout → worker → 停止 → 次の run | `R-5 real worker death recovers after the script stops`、`R-5 real worker death retains startup grace and recovers a surviving script`、`R-5 startRun timeout uses runTimeout worker stop and next-run recovery` |
+| R-6 | Linux は /proc で別セッションを含む子孫を採取し、同一性を照合して SIGTERM、750ms 後に SIGKILL。Windows は同一性確認後の taskkill /T /F | `R-6 linux cancellation stops a detached grandchild`、`R-6 win32 cancellation stops a detached grandchild`。子は detached: true、SIGTERM を無視する fixture |
+| R-7 | npm_execpath は絶対パスの npm-cli.js だけ。PATH の空・相対要素を候補にしない | `R-7 npm entry ignores yarn and relative PATH entries`。yarn.js を無視し、相対候補を FS へ渡さないことも確認 |
+| P-1 | allow-dir の存在・ディレクトリ・実体を検査し、設定不正と添付不在を区別する検査関数を提供 | `P-1 invalid allow-dir differs from an absent attachment and safety errors are denied` |
+| P-2 | 生成時のパス境界は原典 generate-job.ts の書出先配下検査を維持し、Windows 固有の禁止・大小文字衝突だけ win32 に限定。QC の入力キーを検査できなければ stale: true | `P-2 POSIX generated filenames preserve browser bytes` は GUI 相当 ZIP とファイル全件のバイトを比較。`P-2 invalid QC input keys are stale and P-7 status keeps twenty recent runs` |
+| P-3 | heartbeat 保存失敗、停止失敗、実行失敗に details.reason を付け、取消と区別。停止失敗を終了待ちと競合させ、script が終了しない場合も失敗経路へ進む | TS-07 異常終了・取消・時間切れの実経路と R-4 の worker エラー記録を確認。heartbeat の永続化障害自体の注入テストは未追加 |
+| P-4 | run 起動後の状態取得失敗は、開始した run をエラー封筒に残す | `P-4 a post-start observation failure keeps the active run in the error`。取得時の EACCES を注入し run を使って取消 |
+| P-5 | voice の engine 許可を予約取得後にも再検査 | `P-5 voice authorization is rechecked after lock acquisition without creating a run`。取得中の project 変更を注入し、E_DISABLED・台帳なし |
+| P-6 | doctor は未許可 URL と構文不正 URL の理由を分けて返す | `P-6 doctor reports an invalid engine URL accurately`、既存 engine authorization（host-extra） |
+| P-7 | status.runs は実行中全件＋直近終端20件 | `P-2 invalid QC input keys are stale and P-7 status keeps twenty recent runs` |
+| P-8 | 破損 write.lock / 残存 reclaim.lock の hint に、全 run と所有プロセスの停止確認という条件とジョブ相対の削除対象を明記 | `P-8 damaged reservation hints name job-relative recovery files` |
+| P-9 | mtime の精度による鮮度判定の限界を以下に記録 | 既存 `stale validate report is never adopted after early script termination`（host-run）。比較の許容幅を広げて過去結果を採用する変更はしていない |
+
+### 検証結果
+
+| コマンド | 結果 |
+| --- | --- |
+| 初回 `npm test` | tests 173 / pass 160 / fail 2 / skip 2 / todo 9。動的な追加テスト名を台帳スキャナーが拒否し、並列予約のエラーが E_BUSY 以外になった。修正後に以下を再実行 |
+| `node --experimental-strip-types --test tests/host-results.test.ts tests/host-fix.test.ts tests/porting-ledger.test.ts` | tests 27 / pass 25 / fail 0 / skip 2 / todo 0、終了0。台帳検査と並列予約を含む |
+| `npm test`（作業ツリー） | tests 177 / pass 166 / fail 0 / cancelled 0 / skip 2 / todo 9、終了0。skip は Linux 子孫停止と POSIX ファイル名、TODO は既存 M2b の9件 |
+| `node --experimental-strip-types --test --test-name-pattern 'atomic reservation\|P-5\|P-4\|R-7' tests/host-fix.test.ts tests/host-results.test.ts` | 最後の共通書込ヘルパー追補後、4件成功 / 失敗0、終了0 |
+| `node --experimental-strip-types --test --test-name-pattern 'TS-07 completes\|TS-07 unexpected\|R-5 startRun timeout\|atomic reservation' tests/host-run.test.ts tests/host-fix.test.ts tests/host-results.test.ts` | 子の終了後に取得した同一性を破棄する追補後、4件成功 / 失敗0、終了0 |
+| `npm run build` | 最終実装で終了0 |
+| `node tools/ci-local.mjs`（2792f36） | 深さ1複製、npm ci（追加17、audit 0）、build、npm test（177 / pass 166 / fail 0 / skip 2 / todo 9）、workspace test / build がすべて終了0 |
+| `node tools/ci-local.mjs`（1c1eac1） | 最終実装 `1c1eac1e3b5489931dc9e116a427b8726fad4e77` の深さ1複製で終了0。npm ci、build、npm test（177 / pass 166 / fail 0 / cancelled 0 / skip 2 / todo 9）、workspace test / build がすべて終了0。GUI は現時点で専用 scripts がないため if-present の実行対象なし |
+| `node --experimental-strip-types tools/smoke-host.ts`（1c1eac1） | 68ファイルを持つ実ジョブを生成・実行、終了0。qc:fail / qc_exit_code:1 / sound:not_applicable / voice:not_applicable / style_mode:anime / imagegen:completed / validate:E_DEPS_MISSING / schema_errors:0 |
+| `git diff --check e32b689b1d3b5ee664a72cd56aa0a452317d8e7c...HEAD` | 出力なし、終了0。変更対象コードと REPORT の CRLF は0件 |
+
+### 決定
+
+- 公開 RunRecord / Run の形を変えず、内部ファイル `.smm/runs/<id>/processes.json` に worker・script の PID / birth と予約 token を保存する。絶対パス・コマンドライン・秘密を保存しない。公開スキーマの変更は不要と判断した。
+- 所有者を照合できない PID は停止しない。不在または既知の不一致と、権限不足・CIM 障害・識別情報不足を区別し、後者が生存中なら排他を保持する。
+- 同じ host プロセスの同一性取得は Promise を共有する。並列予約時の CIM 多重起動を避け、他プロセスは都度照合する。
+- ChildProcess が取得中に終了した場合は識別情報を採用しない。終了後にその PID が再利用されていても、別プロセスの同一性を所有情報として保存しない。
+- 時間切れ E2E は製品の入力・timeout 値を変更しない。worker 専用の試験 preload で5分の QC タイマーだけ1秒に短縮する。startRun・runTimeout・worker・停止・回収は製品の経路を通す。lost の15秒は実時間で待つ。
+- read-only の lost 導出は保存しない。書込側の回収・取消時だけ永続化・予約解放を行う。
+- 最初の全体テストで、追加テストの動的タイトルが既存台帳スキャナーに未対応であること、並列予約時の同一性取得の多重実行を検出した。既存の基線・台帳の表明は弱めず、テスト名を既存形式に合わせ、自己 PID の取得を共有した。
+
+### 契約・依存・残課題と M3 への申し送り
+
+- QUESTIONS の新規質問・契約変更・要件変更・依存追加・ライセンス追加はない。NOTICE の変更なし。外部ツールの導入、原典への書込、push・公開は行っていない。
+- M3 はサーバー起動時に `validateAllowDirectories(context)` を呼び、不在の allow-dir を起動時にも検出すること。host 操作時も同じ検査を行う。
+- **残るパスの競合リスク**: Node のパスベース API による照合であり、OS のディレクトリハンドル相対 open / rename を使う隔離ではない。同じ権限で親を差し替え、確認後に元へ戻す攻撃や、照合直後のリンク・本文の変更は完全には排除できない。書込後の検出は、既に発生した副作用を巻き戻すものではない。通常の atomic rename と読取の競合でも一致確認が拒否を返す可能性がある。
+- **残るプロセスの競合リスク**: 同一性の照合とシグナル送信はOSの単一操作ではない。Linux の子孫採取後に新しく別セッションへ逃げるプロセスも完全には拘束しない。Windows の Job Object の常時所有に相当する隔離ではない。ジョブ内スクリプトは従来どおり npm run と同じ信頼範囲であり、任意の悪意あるコードを隔離する sandbox ではない。この点を M3 の安全説明へ引き継ぐ。
+- **mtime の限界**: FAT 系・一部ネットワーク FS で時刻粒度が粗い場合、新しい report が started_at より古く見えて採用されないことがある。過去結果を今回の成功として返すより保守的に拒否する。ローカル NTFS の結果を他 FS の保証とはしない。
+- ubuntu の Node 22 / 24 の実行証拠は、L2 裁定に従い CI 作成後の残課題。Windows では Linux の子孫停止と POSIX ファイル名テストを理由付き skip とする。Windows junction を検証し、symlink 権限不足は既存の診断出力で明示する。
+- GUI・アイコン・README の判断事項・TODO は追加していない。実装者の受け入れ判定は出さず、L2 の再確認を待つ。
+- 実装コミットは `2792f36` と `1c1eac1`。本 REPORT の証拠確定は別の文書コミットとする。
