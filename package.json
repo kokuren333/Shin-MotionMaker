@@ -1,0 +1,22 @@
+{
+  "name": "shin-motionmaker",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "bin": {
+    "shin-motionmaker": "dist/cli/main.js",
+    "smm": "dist/cli/main.js"
+  },
+  "workspaces": ["gui"],
+  "scripts": {
+    "test": "node --experimental-strip-types --test \"tests/**/*.test.ts\"",
+    "build": "tsc --noEmit",
+    "ci:local": "node tools/ci-local.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "typescript": "5.9.3"
+  }
+}

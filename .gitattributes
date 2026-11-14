@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.wav binary
+*.glb binary
+*.ttf binary
+*.png binary
+tests/fixtures/baseline-biimmotion-262c798/golden/** -text

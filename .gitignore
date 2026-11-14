@@ -1,0 +1,7 @@
+/_handoff/
+node_modules/
+dist/
+*.log
+.smm/
+/.agent-work/
+*.tsbuildinfo

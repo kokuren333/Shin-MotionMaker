@@ -1,0 +1,21 @@
+{
+  "positive": [
+    "spawn('git', ['status'])",
+    "spawnSync(\"git\", ['show', 'HEAD'])",
+    "execFile('git.exe', ['log'])",
+    "execFileSync(\"git\", ['show', 'base:file'])",
+    "child_process.exec('git status')",
+    "execa('git', ['status'])",
+    "execaSync(\"git\", ['status'])",
+    "import { execFileSync as run } from 'node:child_process'; run('git', ['status'])",
+    "const {spawn: launch} = require('child_process'); launch('git', ['status'])",
+    "execSync(`git show HEAD`)",
+    "spawn('C:/Program Files/Git/bin/git.exe', ['status'])"
+  ],
+  "negative": [
+    "spawn(process.execPath, ['script.mjs'])",
+    "const label = 'git';",
+    "const manifest = 'test-inventory.json';",
+    "readFile('fixtures/baseline.json')"
+  ]
+}
