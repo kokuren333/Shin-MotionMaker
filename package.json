@@ -17,7 +17,9 @@
   "files": ["dist", "job-template", "job-assets/fonts", "schemas", "LICENSE", "NOTICE"],
   "scripts": {
     "test": "node --experimental-strip-types --test \"tests/**/*.test.ts\"",
-    "build": "tsc --noEmit",
+    "pretest": "npm run build",
+    "test:tier-b": "npm run build && node tools/test-cli-tier-b.mjs",
+    "build": "tsc --noEmit && tsc -p tsconfig.build.json",
     "ci:local": "node tools/ci-local.mjs"
   },
   "devDependencies": {
