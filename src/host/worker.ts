@@ -84,7 +84,10 @@ export async function runWorker(job: string, id: string, limit?: number): Promis
     // Register rejection handling before the first filesystem await.
     completion.catch(() => {});
     owners.script = await identifyProcess(run.script_pid) ?? undefined;
-    if (run.script_pid && !owners.script && await identifyProcess(run.script_pid) !== null)
+    // A PID observed after this child exited may already belong to somebody else.
+    const childExited = child.exitCode !== null || child.signalCode !== null;
+    if (childExited) owners.script = undefined;
+    if (!childExited && run.script_pid && !owners.script && await identifyProcess(run.script_pid) !== null)
       throw hostError("E_INTERNAL", "script の同一性を確認できません。", undefined, { reason: "identity_unavailable" });
     await atomicJson(await jobFile(job, `.smm/runs/${id}/processes.json`), owners);
     await save();

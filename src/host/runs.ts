@@ -59,6 +59,7 @@ export async function startRun<K extends RunKind>(context: HostContext, kind: K,
     finally { await out.close(); await err.close(); }
     workerStarted = true; child.unref();
     workerIdentity = await identifyProcess(workerPid) ?? undefined;
+    if (child.exitCode !== null || child.signalCode !== null) workerIdentity = undefined;
     // Acknowledgment transfers ownership before the caller may exit.
     for (let attempt = 0; attempt < 200; attempt++) {
       const current = await readRecord(job, id);
