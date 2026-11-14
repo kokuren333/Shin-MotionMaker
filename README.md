@@ -2,7 +2,7 @@
 
 Shin-MotionMaker は、モーショングラフィックス動画（MV・解説動画）の**制作ジョブ**を作る道具です。入力フォームの内容から、制作エージェントがそのまま開いて制作に入れるジョブフォルダ（または ZIP）を生成します。動画そのものは、生成したジョブの中で制作エージェントが作ります。
 
-- **バージョン**: v0.1.0（公開済み）
+- **バージョン**: 0.1.1（main と GUI。CPU での符号化に対応。タグ `v0.1.1` は未付与で、最新のタグは `v0.1.0`）
 - **リポジトリ**: https://github.com/kokuren333/Shin-MotionMaker （public）
 - **GUI（GitHub Pages）**: https://kokuren333.github.io/Shin-MotionMaker/
 - **ライセンス**: [Apache License 2.0](LICENSE)
