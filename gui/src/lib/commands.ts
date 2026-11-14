@@ -9,13 +9,28 @@ export const docLinks = [
   { label: "docs/MCP.md（起動・ツール・run の待ち方・安全）", href: `${DOCS_BASE}docs/MCP.md` },
 ] as const;
 
-/** Quote one argument so it survives bash, PowerShell and cmd alike when it contains spaces or symbols. */
-export function shellArgument(value: string): string {
-  return /^[A-Za-z0-9._\/-]+$/.test(value) ? value : `"${value.replaceAll('"', '\\"')}"`;
+/** The shells a command example is written for. Each needs its own quoting. */
+export type Shell = "powershell" | "posix";
+export const shells: { id: Shell; label: string }[] = [
+  { id: "powershell", label: "PowerShell（Windows）" },
+  { id: "posix", label: "bash・zsh などの POSIX シェル（macOS・Linux・WSL）" },
+];
+
+/**
+ * Quote one argument so that the shell passes it through unchanged as a single argument.
+ * Single quotes are used in both shells because nothing inside them is expanded
+ * ($(), $var, backticks, &, spaces). PowerShell treats the typographic single quotes
+ * U+2018–U+201B as quote characters too, so those are doubled along with '.
+ */
+export function shellArgument(value: string, shell: Shell): string {
+  if (/^[A-Za-z0-9._/][A-Za-z0-9._/-]*$/.test(value)) return value;
+  return shell === "powershell"
+    ? `'${value.replace(/['‘’‚‛]/g, (quote) => quote + quote)}'`
+    : `'${value.replaceAll("'", "'\\''")}'`;
 }
 
-export function generateCommand(requestFile: string, options: { out?: string; zip?: boolean } = {}): string {
-  return ["smm", "generate", shellArgument(requestFile), "--out", shellArgument(options.out ?? "jobs"),
+export function generateCommand(requestFile: string, shell: Shell, options: { out?: string; zip?: boolean } = {}): string {
+  return ["smm", "generate", shellArgument(requestFile, shell), "--out", shellArgument(options.out ?? "jobs", shell),
     ...(options.zip ? ["--zip"] : [])].join(" ");
 }
 

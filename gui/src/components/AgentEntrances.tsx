@@ -1,7 +1,7 @@
 // CLI / MCP section (GU-06) and request.json export (GU-04).
 import { useState } from "react";
 import type { JobAssets, MotionForm } from "../../../src/core/index.ts";
-import { docLinks, generateCommand, mcpRegistration } from "../lib/commands";
+import { docLinks, generateCommand, mcpRegistration, shells } from "../lib/commands";
 import { duplicateNames, requestFilename, requestFor, requestText } from "../lib/request-io";
 import { PixelIcon } from "./PixelIcon";
 
@@ -24,8 +24,7 @@ export function AgentEntrances({ form, assets }: { form: MotionForm; assets: Job
     ...(["character", "secondCharacter", "bgm", "music"] as const)
       .map((key) => request.assets?.[key]).filter((name): name is string => typeof name === "string")];
   const duplicates = duplicateNames(request);
-  const command = generateCommand(filename);
-  const zipCommand = generateCommand(filename, { zip: true });
+  const commands = shells.map((shell) => ({ ...shell, command: generateCommand(filename, shell.id) }));
 
   async function copy(text: string, label: string) {
     try {
@@ -58,14 +57,20 @@ export function AgentEntrances({ form, assets }: { form: MotionForm; assets: Job
         {duplicates.length > 0 && <> 同じ名前の添付（{duplicates.join("、")}）は1つのフォルダに並べられないため、名前を変えて選び直してください。</>}
       </small>
       <h4><PixelIcon name="cli" />CLI のコマンド例</h4>
-      <pre className="command-box" aria-label="generate のコマンド例">{command}</pre>
-      <div className="command-actions">
-        <button type="button" className="small-button" onClick={() => void copy(command, "コマンド")}>
-          <PixelIcon name="cli" />コマンドをコピー
-        </button>
-      </div>
+      {commands.map(({ id, label, command }) => (
+        <div className="command-example" key={id} data-shell={id}>
+          <strong className="command-shell">{label}</strong>
+          <pre className="command-box" aria-label={`generate のコマンド例（${label}）`}>{command}</pre>
+          <div className="command-actions">
+            <button type="button" className="small-button" onClick={() => void copy(command, `${label}のコマンド`)}>
+              <PixelIcon name="cli" />コマンドをコピー<span className="sr-only">（{label}）</span>
+            </button>
+          </div>
+        </div>
+      ))}
       <small className="entrance-note">
-        <code>jobs/</code> の下にジョブのフォルダを作ります。ZIP にするときは <code>{zipCommand.replace(command + " ", "")}</code> を付けます。
+        シェルごとに引用符の規則が違うため、使うシェルの例を選んでください。タイトルの記号は引用符の中でそのまま1つの引数として渡ります。
+        <code>jobs/</code> の下にジョブのフォルダを作ります。ZIP にするときは末尾に <code>--zip</code> を付けます。
         標準出力は JSON の封筒1個で、ゲートの不合格と道具の失敗を <code>ok</code> と <code>verdict</code> で分けて返します。
       </small>
       <h4><PixelIcon name="mcp" />MCP の登録例（stdio）</h4>

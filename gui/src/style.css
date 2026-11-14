@@ -1586,6 +1586,14 @@ dialog p {
   display: flex;
   gap: 6px;
 }
+.command-example {
+  margin: 6px 0 8px;
+}
+.command-shell {
+  display: block;
+  font-size: var(--fs-s);
+  font-weight: 700;
+}
 .doc-links {
   margin: 4px 0;
   padding-left: 18px;
