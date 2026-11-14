@@ -25,7 +25,7 @@ test("atomic reservation permits only one concurrent run and terminal completion
   const started = results.filter((result) => result.ok);
   if (started.length !== 1) for (const result of results) if (result.run) t.diagnostic(JSON.stringify(await getRun(context, { job: "job & 全角 空白", run_id: result.run.id })));
   assert.equal(started.length, 1);
-  for (const result of results) if (!result.ok) assert.equal(result.error.code, "E_BUSY");
+  for (const result of results) if (!result.ok) assert.equal(result.error.code, "E_BUSY", JSON.stringify(result));
   await cancelRun(context, "job & 全角 空白", started[0].run!.id);
   const lock = await acquireJobLock(context, "job & 全角 空白", "test"); await lock.release();
 });

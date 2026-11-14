@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import { parseInspectionReport, type JsonObject } from "../core/index.ts";
 import type { CheckFact, FileFact, HostContext, JobStatus } from "./types.ts";
-import { jobFile, readProjectFile, resolveJob } from "./paths.ts";
+import { jobFile, readProjectFile, resolveJob, readJobBytes } from "./paths.ts";
 import { isMissing } from "./errors.ts";
 import { sha256 } from "./io.ts";
 import { hasRuntimeDependencies } from "./tools.ts";
@@ -22,7 +22,7 @@ export async function deriveJobStatus(context: HostContext, relative: string): P
     if (mv && kind.startsWith("qc-")) { checks.push({ kind: kind as "qc-pre" | "qc-post", available: false, verdict: "not_applicable" }); continue; }
     let report: JsonObject;
     try {
-      const raw: unknown = JSON.parse(await fs.readFile(await jobFile(job, `reports/${kind}.json`), "utf8"));
+      const raw: unknown = JSON.parse((await readJobBytes(job, `reports/${kind}.json`)).toString("utf8"));
       if (!raw || typeof raw !== "object" || Array.isArray(raw)) throw Error();
       report = raw as JsonObject;
     } catch (error) {
@@ -40,19 +40,20 @@ export async function deriveJobStatus(context: HostContext, relative: string): P
       fact.stale = false;
       if (report.inputs && typeof report.inputs === "object" && !Array.isArray(report.inputs)) for (const [name, previous] of Object.entries(report.inputs)) {
         let current: string | null = null;
-        try { current = sha256(await fs.readFile(await jobFile(job, name))); }
-        catch (error) { if (!isMissing(error)) throw error; }
+        try { current = sha256(await readJobBytes(job, name)); }
+        catch { fact.stale = true; }
         if (current !== previous) fact.stale = true;
       }
     }
     checks.push(fact);
   }
+  const runs = await listRuns(context, relative);
   return {
     job: { title: String(project.title ?? ""), mode: mv ? "mv" : "explanation", style_mode: mv ? null : ((project.direction as JsonObject | undefined)?.style_mode ?? "biim") as "biim" | "anime" | "motion" | "mixed",
       schema_version: String(project.schema_version ?? ""), generator: project.generator && typeof project.generator === "object" ? project.generator as JsonObject : null },
     deps: { installed: await hasRuntimeDependencies(job) }, records: await Promise.all(records.map((name) => fileFact(job, name))),
     scenes: Array.isArray(project.scenes) ? project.scenes.length : 0,
     outputs: await Promise.all(["output/preview.mp4", "output/final.mp4"].map((name) => fileFact(job, name))), checks,
-    runs: await listRuns(context, relative), hints: [{ operation: "project_get", input: { job: relative }, note: "設定の確認に利用できます。工程の順序を強制するものではありません。" }],
+    runs: [...runs.filter((run) => run.status === "running"), ...runs.filter((run) => run.status !== "running").slice(0, 20)], hints: [{ operation: "project_get", input: { job: relative }, note: "設定の確認に利用できます。工程の順序を強制するものではありません。" }],
   };
 }

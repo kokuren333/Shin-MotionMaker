@@ -83,11 +83,16 @@ async function dispatch<K extends OperationId>(context: HostContext, id: K, inpu
   if (runKinds.includes(id as RunKind)) {
     const kind = id as RunKind, value = input as OperationInputs[RunKind];
     const run = await startRun(context, kind, value);
-    const observed = await getRun(context, { job: value.job, run_id: run.id, wait_ms: value.wait_ms ?? defaultWait(kind, value), log_tail: 0 });
-    if (!observed.ok || !observed.run) throw hostError("E_INTERNAL", "run の開始結果を取得できませんでした。");
-    const current = observed.run;
-    if (current.status !== "running" && current.status !== "completed") return { schema: "smm.envelope/1", command, job: current.job, ok: false, run: current, error: current.error ?? normalizeError(hostError("E_INTERNAL", "run が異常終了しました。")) };
-    return { schema: "smm.envelope/1", command, job: current.job, ok: true, result: (current.status === "running" ? null : current.result) as OperationResults[K], advisories: resultAdvisories(current), warnings: [], run: current };
+    try {
+      const observed = await getRun(context, { job: value.job, run_id: run.id, wait_ms: value.wait_ms ?? defaultWait(kind, value), log_tail: 0 });
+      if (!observed.ok || !observed.run) throw hostError("E_INTERNAL", "run の開始結果を取得できませんでした。");
+      const current = observed.run;
+      if (current.status !== "running" && current.status !== "completed") return { schema: "smm.envelope/1", command, job: current.job, ok: false, run: current, error: current.error ?? normalizeError(hostError("E_INTERNAL", "run が異常終了しました。")) };
+      return { schema: "smm.envelope/1", command, job: current.job, ok: true, result: (current.status === "running" ? null : current.result) as OperationResults[K], advisories: resultAdvisories(current), warnings: [], run: current };
+    } catch (error) {
+      const normalized = normalizeError(error);
+      throw Object.assign(hostError(normalized.code, normalized.message, normalized.hint, normalized.details), { run });
+    }
   }
   switch (id) {
     case "generate": { const value = input as OperationInputs["generate"]; await resolveAllowedPath(context, value.out, "write"); const resolved = await resolveRequest(value.request, context); const built = await buildJobFiles(resolved.request.form, resolved.assets, await loadTemplates()); result = value.dry_run ? generatedResult(built) : await writeJob(context, built, value.out, value.format ?? "dir"); break; }

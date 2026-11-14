@@ -27,7 +27,7 @@ test("atomic ledger replacement remains readable during concurrent polling on Wi
   assert.deepEqual(await fs.readdir(context.root), ["run.json"]);
 });
 
-test("CL-11 node executes a job below a Windows path longer than 260 characters", async (t) => {
+test("CL-11 node executes a job below a path longer than 260 characters", async (t) => {
   const context = await workspace(t);
   const root = path.join(context.root, ...Array.from({ length: 8 }, (_, index) => `${index}-long & 全角 空白 directory`));
   await fs.mkdir(root, { recursive: true }); const nested = { ...context, root, requestDirectory: root };
@@ -56,7 +56,7 @@ test("MCP engine authorization prevents voice and doctor from contacting unappro
   await fs.writeFile(file, JSON.stringify(project));
   const result = await execute(context, "voice", { job: relative, wait_ms: 0 }); assert.equal(result.ok, false); if (!result.ok) assert.equal(result.error.code, "E_DISABLED");
   assert.deepEqual(await listRuns(context, relative), []);
-  const report = await doctor(context, relative); const aivis = report.checks.find((check) => check.id === "aivis"); assert.equal(aivis?.available, false); assert.match(aivis!.message, /未許可.*未確認/);
+  const report = await doctor(context, relative); const aivis = report.checks.find((check) => check.id === "aivis"); assert.equal(aivis?.available, false); assert.match(aivis!.message, /接続先が許可されていません/);
 });
 
 test("schema checker rejects missing hints wrong run states result types and unknown operation keys", async (t) => {

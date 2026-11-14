@@ -2,27 +2,28 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { randomBytes } from "node:crypto";
 import type { JsonObject } from "../core/index.ts";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawn } from "node:child_process";
 import type { Envelope, HostContext, OperationInputs, Run, RunGetResult, RunKind, RunRecord } from "./types.ts";
 import { hostError, isMissing, normalizeError } from "./errors.ts";
-import { displayPath, jobFile, resolveJob } from "./paths.ts";
+import { displayPath, jobFile, resolveJob, openVerified, readJobBytes, ensureDirectory, openWriteVerified } from "./paths.ts";
 import { atomicJson } from "./io.ts";
 import { acquireJobLock, processExists, releaseOwnedLock } from "./locks.ts";
 import { preflight } from "./run-options.ts";
 import { resultAdvisories } from "./run-result.ts";
 import { stopProcessTree } from "./worker.ts";
 import { utf8Prefix } from "./report.ts";
+import { identifyProcess, processState, readProcessOwners, type ProcessIdentity } from "./processes.ts";
 
 export const runIdPattern = /^r-\d{8}T\d{6}Z-[a-f0-9]{8}$/;
 function assertRunId(id: string) { if (!runIdPattern.test(id)) throw hostError("E_INPUT_INVALID", "run ID の形式が不正です。"); }
 async function readRecord(job: string, id: string): Promise<RunRecord> {
   assertRunId(id);
   let run: RunRecord;
-  try { run = JSON.parse(await fs.readFile(await jobFile(job, `.smm/runs/${id}/run.json`), "utf8")) as RunRecord; }
+  try { run = JSON.parse((await readJobBytes(job, `.smm/runs/${id}/run.json`)).toString("utf8")) as RunRecord; }
   catch (error) { if (isMissing(error)) throw hostError("E_RUN_NOT_FOUND", "run が見つかりません。"); throw error; }
   if (run.id !== id || run.schema !== "smm.run/1") throw hostError("E_INTERNAL", "run 台帳の形式が不正です。");
-  if (run.status === "running" && Date.now() - Date.parse(run.heartbeat_at) >= 15000 && !processExists(run.pid)) {
+  if (run.status === "running" && Date.now() - Date.parse(run.heartbeat_at) >= 15000 && await processState(run.pid, (await readProcessOwners(job, id)).worker) === "absent") {
     return { ...run, status: "lost", ended_at: new Date().toISOString(), exit_code: 4, error: normalizeError(hostError("E_RUN_LOST", "run の実行プロセスが見つかりません。", "ログを確認し、必要なら新しい run を開始してください。")) };
   }
   return run;
@@ -35,24 +36,29 @@ export async function startRun<K extends RunKind>(context: HostContext, kind: K,
   let workerStarted = false;
   let recordCreated = false;
   let workerPid: number | null = null;
+  let workerIdentity: ProcessIdentity | undefined;
   try {
+    // Re-read voice policy after acquiring the writer reservation.
+    if (kind === "voice") await preflight(context, job, kind, input);
     const now = new Date().toISOString();
     const { job: _job, wait_ms: _wait, ...args } = input;
     const run: RunRecord = { schema: "smm.run/1", id, kind, args: args as JsonObject, status: "running", exit_code: null,
       pid: process.pid, script_pid: null, started_at: now, heartbeat_at: now, ended_at: null,
       progress: { ratio: null, text: "実行を開始しています。" }, artifacts: [], started_by: context.startedBy };
-    await fs.mkdir(await jobFile(job, `.smm/runs/${id}`), { recursive: true });
+    await ensureDirectory(await jobFile(job, `.smm/runs/${id}`));
+    await atomicJson(await jobFile(job, `.smm/runs/${id}/processes.json`), { token: lock.token, worker: await identifyProcess(process.pid) });
     await atomicJson(await jobFile(job, `.smm/runs/${id}/run.json`), run);
     recordCreated = true;
-    for (const name of ["stdout", "stderr"]) await fs.writeFile(await jobFile(job, `.smm/runs/${id}/${name}.log`), "", { flag: "wx" });
+    for (const name of ["stdout", "stderr"]) await (await openWriteVerified(await jobFile(job, `.smm/runs/${id}/${name}.log`), "wx")).close();
     const worker = fileURLToPath(new URL(import.meta.url.endsWith(".ts") ? "./worker.ts" : "./worker.js", import.meta.url));
-    const out = await fs.open(await jobFile(job, `.smm/runs/${id}/stdout.log`), "a");
-    const err = await fs.open(await jobFile(job, `.smm/runs/${id}/stderr.log`), "a");
+    const out = await openWriteVerified(await jobFile(job, `.smm/runs/${id}/stdout.log`), "a");
+    const err = await openWriteVerified(await jobFile(job, `.smm/runs/${id}/stderr.log`), "a");
     const child = spawn(process.execPath, [...(worker.endsWith(".ts") ? ["--experimental-strip-types"] : []), worker, job, id], { detached: true, shell: false, windowsHide: true, stdio: ["ignore", out.fd, err.fd] });
     workerPid = child.pid ?? null;
     try { await new Promise<void>((resolve, reject) => { child.once("spawn", resolve); child.once("error", reject); }); }
     finally { await out.close(); await err.close(); }
     workerStarted = true; child.unref();
+    workerIdentity = await identifyProcess(workerPid) ?? undefined;
     // Acknowledgment transfers ownership before the caller may exit.
     for (let attempt = 0; attempt < 200; attempt++) {
       const current = await readRecord(job, id);
@@ -60,16 +66,18 @@ export async function startRun<K extends RunKind>(context: HostContext, kind: K,
       if (!processExists(child.pid ?? null)) break;
       await new Promise((resolve) => setTimeout(resolve, 50));
     }
-    await stopProcessTree(child.pid ?? null);
+    await stopProcessTree(child.pid ?? null, workerIdentity);
     throw hostError("E_INTERNAL", "worker の起動を確認できませんでした。");
   } catch (error) {
     if (workerStarted || recordCreated) {
       const current = await readRecord(job, id);
-      await stopProcessTree(workerPid);
-      await stopProcessTree(current.script_pid);
+      const owners = await readProcessOwners(job, id);
+      await stopProcessTree(workerPid, workerIdentity);
+      await stopProcessTree(current.script_pid, owners.script);
       const failed: RunRecord = { ...current, pid: workerPid, status: "failed", ended_at: new Date().toISOString(), error: normalizeError(error), exit_code: 4 };
       await atomicJson(await jobFile(job, `.smm/runs/${id}/run.json`), failed);
-      await releaseOwnedLock(job, id);
+      if (await processState(workerPid, workerIdentity) === "absent" && await processState(current.script_pid, owners.script) === "absent")
+        await releaseOwnedLock(job, id, lock.token);
       throw Object.assign(hostError(failed.error!.code, failed.error!.message, failed.error!.hint, failed.error!.details), { run: { ...failed, job: displayPath(context, job) } });
     } else await lock.release();
     throw error;
@@ -87,7 +95,7 @@ export async function listRuns(context: HostContext, relative: string): Promise<
 export async function readRunLog(job: string, id: string, stream: "stdout" | "stderr", offset: number): Promise<{ text: string; next_offset: number }> {
   assertRunId(id);
   if (!["stdout", "stderr"].includes(stream) || !Number.isSafeInteger(offset) || offset < 0) throw hostError("E_INPUT_INVALID", "ログの位置または種別が不正です。");
-  const handle = await fs.open(await jobFile(job, `.smm/runs/${id}/${stream}.log`), "r");
+  const handle = await openVerified(await jobFile(job, `.smm/runs/${id}/${stream}.log`), () => jobFile(job, `.smm/runs/${id}/${stream}.log`));
   try {
     const size = (await handle.stat()).size;
     if (offset > size) throw hostError("E_INPUT_INVALID", "ログの位置がファイル末尾を超えています。");
@@ -99,7 +107,7 @@ export async function readRunLog(job: string, id: string, stream: "stdout" | "st
 }
 async function tail(job: string, id: string, stream: "stdout" | "stderr", lines: number): Promise<string[]> {
   if (lines === 0) return [];
-  const handle = await fs.open(await jobFile(job, `.smm/runs/${id}/${stream}.log`), "r");
+  const handle = await openVerified(await jobFile(job, `.smm/runs/${id}/${stream}.log`), () => jobFile(job, `.smm/runs/${id}/${stream}.log`));
   try {
     const size = (await handle.stat()).size;
     const chunks: Buffer[] = [];
@@ -126,9 +134,16 @@ export async function getRun(context: HostContext, input: OperationInputs["run_g
     record = await readRecord(job, input.run_id);
   }
   const run = { ...record, job: displayPath(context, job) };
+  const replacements: [string, string][] = [];
+  if (context.restrictToRoot) for (const [root, replacement] of [[job, run.job], [context.root, "."], [fileURLToPath(new URL("../../", import.meta.url)), "."]]) {
+    for (const form of new Set([root, await fs.realpath(root)])) {
+      for (const value of [form, form.split(path.sep).join("/"), path.toNamespacedPath(form), form.replaceAll("\\", "\\\\"), pathToFileURL(form).href])
+        replacements.push([value.replace(/[\\/]$/, ""), replacement]);
+    }
+  }
+  replacements.sort((a, b) => b[0].length - a[0].length);
   const displayLog = (rows: string[]) => context.restrictToRoot ? rows.map((row) => {
-    for (const root of [job, context.root]) for (const value of [root, root.split(path.sep).join("/"), path.toNamespacedPath(root), root.replaceAll("\\", "\\\\")])
-      row = row.replaceAll(value, root === job ? run.job : ".");
+    for (const [value, replacement] of replacements) row = row.replaceAll(value, replacement);
     return row;
   }) : rows;
   return { schema: "smm.envelope/1", command: "runs get", job: run.job, ok: true,
@@ -139,22 +154,24 @@ export async function cancelRun(context: HostContext, relative: string, id: stri
   if (context.readOnly) throw hostError("E_DISABLED", "読み取り専用では取り消せません。");
   const job = await resolveJob(context, relative);
   let run = await readRecord(job, id);
+  const owners = await readProcessOwners(job, id);
   if (run.status !== "running" && run.status !== "lost") return { ...run, job: displayPath(context, job) };
   if (run.status === "lost") {
-    await stopProcessTree(run.script_pid);
+    await stopProcessTree(run.script_pid, owners.script);
     await atomicJson(await jobFile(job, `.smm/runs/${id}/run.json`), run);
-    await releaseOwnedLock(job, id);
+    await releaseOwnedLock(job, id, owners.token);
     return { ...run, job: displayPath(context, job) };
   }
-  if (!processExists(run.pid)) {
-    await stopProcessTree(run.script_pid);
+  if (await processState(run.pid, owners.worker) === "absent" && Date.now() - Date.parse(run.heartbeat_at) >= 15000) {
+    await stopProcessTree(run.script_pid, owners.script);
     run = { ...run, status: "cancelled", exit_code: 4, ended_at: new Date().toISOString(), error: normalizeError(hostError("E_INTERNAL", "実行を取り消しました。", "必要なら再実行してください。", { reason: "cancelled" })) };
     await atomicJson(await jobFile(job, `.smm/runs/${id}/run.json`), run);
-    await releaseOwnedLock(job, id);
+    await releaseOwnedLock(job, id, owners.token);
   } else {
-    await fs.writeFile(await jobFile(job, `.smm/runs/${id}/cancel`), "");
-    for (let attempt = 0; attempt < 200; attempt++) {
+    await (await openWriteVerified(await jobFile(job, `.smm/runs/${id}/cancel`), "a")).close();
+    for (let attempt = 0; attempt < 400; attempt++) {
       run = await readRecord(job, id);
+      if (run.status === "lost") return cancelRun(context, relative, id);
       if (run.status !== "running") break;
       await new Promise((resolve) => setTimeout(resolve, 50));
     }

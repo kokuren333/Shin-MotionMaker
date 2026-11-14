@@ -3,13 +3,17 @@ import path from "node:path";
 import { parseInspectionReport, type Advisory, type JsonObject } from "../core/index.ts";
 import type { CheckResult, RunRecord } from "./types.ts";
 import { hostError, isMissing } from "./errors.ts";
-import { assertRelative, jobFile, readProjectFile } from "./paths.ts";
+import { assertRelative, jobFile, readProjectFile, openVerified } from "./paths.ts";
 
 export async function freshJson(job: string, name: string, started: string): Promise<JsonObject | null> {
   try {
     const file = await jobFile(job, name);
-    if ((await fs.stat(file)).mtimeMs < Date.parse(started)) return null;
-    const value: unknown = JSON.parse(await fs.readFile(await jobFile(job, name), "utf8"));
+    const handle = await openVerified(file, () => jobFile(job, name));
+    let value: unknown;
+    try {
+      if ((await handle.stat()).mtimeMs < Date.parse(started)) return null;
+      value = JSON.parse(await handle.readFile("utf8"));
+    } finally { await handle.close(); }
     if (!value || typeof value !== "object" || Array.isArray(value)) throw Error();
     return value as JsonObject;
   } catch (error) { if (isMissing(error)) return null; throw error; }

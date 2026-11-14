@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { HostContext, ReportResult } from "./types.ts";
-import { assertRelative, jobFile, resolveJob } from "./paths.ts";
+import { assertRelative, jobFile, resolveJob, openVerified } from "./paths.ts";
 import { hostError, isMissing } from "./errors.ts";
 
 export function utf8Prefix(bytes: Uint8Array, limit = bytes.length): { text: string; consumed: number } {
@@ -24,7 +24,7 @@ export async function getReport(context: HostContext, relative: string, name: st
   if (!(directory && (text || png) || ["brief.md", "AGENTS.md", "README.md"].includes(name) || /^output\/[^/]+\.png$/i.test(name))) throw hostError("E_PATH_DENIED", "このファイルは report で取得できません。");
   const job = await resolveJob(context, relative);
   let handle;
-  try { handle = await fs.open(await jobFile(job, name), "r"); }
+  try { handle = await openVerified(await jobFile(job, name), () => jobFile(job, name), context.restrictToRoot); }
   catch (error) { if (isMissing(error)) throw hostError("E_INPUT_INVALID", "指定した記録がありません。"); throw error; }
   try {
     const stat = await handle.stat();

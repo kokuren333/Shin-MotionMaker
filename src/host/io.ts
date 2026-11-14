@@ -5,7 +5,7 @@ import { createHash, randomBytes } from "node:crypto";
 import { includeTemplatePath, mimeTypeFor, validateRequest, zipJobFiles, type BuiltJob, type JobAssets, type TemplateFiles } from "../core/index.ts";
 import fontAssets from "../core/data/font-assets.json" with { type: "json" };
 import type { GenerateResult, HostContext } from "./types.ts";
-import { assertRelative, displayPath, jobFile, resolveAllowedPath } from "./paths.ts";
+import { assertRelative, displayPath, jobFile, resolveAllowedPath, openVerified, withVerifiedParent, ensureDirectory, anchorJob } from "./paths.ts";
 import { hostError, isMissing } from "./errors.ts";
 import { measureAudio } from "./tools.ts";
 
@@ -23,9 +23,11 @@ export async function replaceFile(temporary: string, destination: string): Promi
   }
 }
 export async function atomicJson(file: string, value: unknown): Promise<void> {
-  const temporary = `${file}.${randomBytes(8).toString("hex")}.tmp`;
-  try { await fs.writeFile(temporary, JSON.stringify(value, null, 2) + "\n", { flag: "wx" }); await replaceFile(temporary, file); }
-  finally { await fs.rm(temporary, { force: true }); }
+  return withVerifiedParent(file, async (physicalFile) => {
+    const temporary = `${physicalFile}.${randomBytes(8).toString("hex")}.tmp`;
+    try { await fs.writeFile(temporary, JSON.stringify(value, null, 2) + "\n", { flag: "wx" }); await replaceFile(temporary, physicalFile); }
+    finally { await fs.rm(temporary, { force: true }); }
+  });
 }
 export async function loadTemplates(): Promise<TemplateFiles> {
   const result = await loadTemplateDirectory(path.join(repository, "job-template"));
@@ -56,7 +58,10 @@ export async function readJsonInput(file: string, context: HostContext): Promise
   catch (error) { if (error instanceof SyntaxError || isMissing(error)) throw hostError("E_INPUT_INVALID", "入力 JSON を読めません。", "ファイルの場所と JSON の構文を確認してください。"); throw error; }
 }
 export async function readTextInput(file: string, context: HostContext): Promise<string> {
-  try { return (await fs.readFile(await resolveAllowedPath(context, file, "read"), "utf8")).replace(/^\uFEFF/, ""); }
+  try {
+    const handle = await openVerified(await resolveAllowedPath(context, file, "read"), () => resolveAllowedPath(context, file, "read"));
+    try { return (await handle.readFile("utf8")).replace(/^\uFEFF/, ""); } finally { await handle.close(); }
+  }
   catch (error) { if (isMissing(error)) throw hostError("E_INPUT_INVALID", "入力ファイルが見つかりません。", "指定したパスを確認してください。"); throw error; }
 }
 export async function resolveRequest(input: unknown, context: HostContext) {
@@ -66,7 +71,9 @@ export async function resolveRequest(input: unknown, context: HostContext) {
   const load = async (relative: string) => {
     try {
       const file = await resolveAllowedPath(context, relative, "attachment");
-      const data = new Uint8Array(await fs.readFile(await resolveAllowedPath(context, relative, "attachment")));
+      const handle = await openVerified(file, () => resolveAllowedPath(context, relative, "attachment"), context.restrictToRoot && !path.isAbsolute(relative));
+      let data: Uint8Array;
+      try { data = new Uint8Array(await handle.readFile()); } finally { await handle.close(); }
       const name = path.basename(file);
       return { name, data, size: data.byteLength, type: mimeTypeFor(name) };
     } catch (error) { if (isMissing(error)) throw hostError("E_INPUT_INVALID", "添付ファイルが見つかりません。", "request.json からの相対パスを確認してください。"); throw error; }
@@ -100,7 +107,7 @@ export async function writeJob(context: HostContext, job: BuiltJob, out: string,
   for (const name of Object.keys(job.files)) assertRelative(name);
   // Detect case-insensitive and file/directory collisions before reserving output.
   const names = new Set<string>();
-  const files = Object.keys(job.files).map((name) => name.toLowerCase());
+  const files = Object.keys(job.files).map((name) => process.platform === "win32" ? name.toLowerCase() : name);
   for (const name of files) {
     if (names.has(name) || name.split("/").slice(0, -1).some((_, index, parts) => files.includes(parts.slice(0, index + 1).join("/")))) throw hostError("E_PATH_DENIED", "出力パスが衝突しています。");
     names.add(name);
@@ -108,20 +115,24 @@ export async function writeJob(context: HostContext, job: BuiltJob, out: string,
   const parent = await resolveAllowedPath(context, out, "write");
   const destination = path.join(parent, format === "dir" ? job.rootName : job.filename);
   await resolveAllowedPath(context, path.relative(context.root, destination).split(path.sep).join("/"), "write");
-  await fs.mkdir(await resolveAllowedPath(context, out, "write"), { recursive: true });
+  await ensureDirectory(await resolveAllowedPath(context, out, "write"));
+  await resolveAllowedPath(context, out, "write");
   const result = generatedResult(job);
   try {
     if (format === "dir") {
-      await fs.mkdir(destination);
+      await withVerifiedParent(destination, (file) => fs.mkdir(file));
+      await anchorJob(context, destination);
       for (const [name, bytes] of Object.entries(job.files)) {
         const file = await jobFile(destination, name);
-        await fs.mkdir(path.dirname(file), { recursive: true });
-        await fs.writeFile(await jobFile(destination, name), bytes, { flag: "wx" });
+        await ensureDirectory(path.dirname(file));
+        await withVerifiedParent(await jobFile(destination, name), async (file) => { await fs.writeFile(file, bytes, { flag: "wx" }); });
       }
       result.job = displayPath(context, destination);
     } else {
-      const handle = await fs.open(destination, "wx");
-      try { await handle.writeFile((await zipJobFiles(job)).data); } finally { await handle.close(); }
+      await withVerifiedParent(destination, async (file) => {
+        const handle = await fs.open(file, "wx");
+        try { await handle.writeFile((await zipJobFiles(job)).data); } finally { await handle.close(); }
+      });
       result.archive = displayPath(context, destination);
     }
   } catch (error) {

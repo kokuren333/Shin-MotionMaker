@@ -5,6 +5,7 @@ import { spawn } from "node:child_process";
 import { test } from "node:test";
 import { execute, startRun, getRun, cancelRun, listRuns, readRunLog, acquireJobLock, schemaIssues, schemaRegistry, schemas, type RunRecord } from "../src/host/index.ts";
 import { processExists, releaseOwnedLock } from "../src/host/locks.ts";
+import { identifyProcess } from "../src/host/processes.ts";
 import { defaultWait, runTimeout } from "../src/host/run-options.ts";
 import { fakeJob, fixtureModule, hostModule, workerModule, workspace } from "./helpers/host.ts";
 
@@ -50,10 +51,11 @@ test("TS-07 cancels the process tree then releases E_BUSY reservation", async (t
 test("TS-07 times out a worker and stops descendants before releasing the lock", async (t) => {
   const context = await workspace(t); const job = await fakeJob(context, { scenario: "sleep" });
   const id = "r-20261114T000000Z-abcd1234";
-  await acquireJobLock(context, relative, id);
+  const reservation = await acquireJobLock(context, relative, id);
   const now = new Date().toISOString();
   const record: RunRecord = { schema: "smm.run/1", id, kind: "qc", args: { stage: "pre" }, status: "running", exit_code: null, pid: process.pid, script_pid: null, started_at: now, heartbeat_at: now, ended_at: null, artifacts: [], progress: { ratio: null, text: "テスト" }, started_by: "cli" };
   const folder = path.join(job, ".smm/runs", id); await fs.mkdir(folder, { recursive: true }); await fs.writeFile(path.join(folder, "run.json"), JSON.stringify(record));
+  await fs.writeFile(path.join(folder, "processes.json"), JSON.stringify({ token: reservation.token }));
   for (const stream of ["stdout", "stderr"]) await fs.writeFile(path.join(folder, stream + ".log"), "");
   const child = spawn(process.execPath, ["--experimental-strip-types", fixtureModule("timeout-worker"), workerModule, job, id], { shell: false, windowsHide: true, stdio: "pipe" });
   const code = await new Promise<number | null>((resolve, reject) => { child.once("error", reject); child.once("close", resolve); });
@@ -90,15 +92,15 @@ test("TS-07 lost derivation is read only and stale lock recovery checks process 
   const fetched = await getRun({ ...context, readOnly: true }, { job: relative, run_id: run.id });
   assert.equal(fetched.run?.status, "lost"); assert.equal(fetched.run?.error?.code, "E_RUN_LOST");
   assert.equal(await fs.readFile(file, "utf8"), before);
-  await fs.writeFile(file, JSON.stringify({ ...old, pid: process.pid }));
-  assert.equal((await getRun(context, { job: relative, run_id: run.id })).run?.status, "running");
+  await fs.writeFile(file, JSON.stringify({ ...old, pid: record.pid }));
+  assert.equal((await getRun(context, { job: relative, run_id: run.id })).run?.status, "lost");
   await fs.writeFile(file, before);
   const lockFile = path.join(job, ".smm/write.lock");
   await fs.writeFile(lockFile, JSON.stringify({ pid: 2147483647, owner: run.id, token: "dead" }));
   const recovered = await acquireJobLock(context, relative, "test"); await recovered.release();
   await fs.writeFile(lockFile, JSON.stringify({ pid: process.pid, owner: "live", token: "alive" }));
   await assert.rejects(acquireJobLock(context, relative, "other"), { code: "E_BUSY" });
-  await releaseOwnedLock(job, "live");
+  await releaseOwnedLock(job, "live", "alive");
 });
 
 test("stale validate report is never adopted after early script termination", async (t) => {

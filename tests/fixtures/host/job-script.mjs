@@ -8,7 +8,7 @@ const project = JSON.parse(await fs.readFile(path.join(job, "project.json"), "ut
 const fixture = project.fixture ?? {};
 if (fixture.delay) await new Promise((resolve) => setTimeout(resolve, fixture.delay));
 if (fixture.scenario === "sleep") {
-  const child = spawn(process.execPath, ["-e", "setInterval(() => {}, 1000)"], { shell: false, windowsHide: true, stdio: "ignore" });
+  const child = spawn(process.execPath, ["-e", "process.on('SIGTERM', () => {}); setInterval(() => {}, 1000)"], { detached: fixture.detachedChild === true, shell: false, windowsHide: true, stdio: "ignore" });
   await fs.writeFile(path.join(job, "child.pid"), String(child.pid));
   console.log("子プロセスを開始しました。");
   await new Promise(() => {});

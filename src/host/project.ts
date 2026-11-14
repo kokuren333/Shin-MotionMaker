@@ -4,7 +4,7 @@ import { randomBytes } from "node:crypto";
 import type { JsonValue } from "../core/index.ts";
 import type { HostContext, OperationInputs, ProjectGetResult } from "./types.ts";
 import { hostError } from "./errors.ts";
-import { jobFile, readProjectFile, resolveJob } from "./paths.ts";
+import { jobFile, readProjectFile, resolveJob, withVerifiedParent } from "./paths.ts";
 import { replaceFile, sha256 } from "./io.ts";
 import { acquireJobLock } from "./locks.ts";
 
@@ -43,8 +43,8 @@ export async function patchProject(context: HostContext, input: OperationInputs[
     for (const key of ["schema_version", "mode", "generator"]) if (!isDeepStrictEqual(project[key], result[key])) throw hostError("E_INPUT_INVALID", "schema_version・mode・generator は変更できません。");
     const body = JSON.stringify(result, null, 2) + "\n";
     temporary = await jobFile(job, `.smm/project-${randomBytes(8).toString("hex")}.tmp`);
-    await fs.writeFile(temporary, body, { flag: "wx" });
-    await replaceFile(temporary, await jobFile(job, "project.json"));
+    await withVerifiedParent(temporary, (file) => fs.writeFile(file, body, { flag: "wx" }));
+    await withVerifiedParent(await jobFile(job, "project.json"), (file) => replaceFile(temporary!, file));
     return { sha256: sha256(body) };
   } finally { if (temporary) await fs.rm(temporary, { force: true }); await lock.release(); }
 }

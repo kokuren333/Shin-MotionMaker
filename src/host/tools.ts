@@ -21,11 +21,11 @@ export async function npmEntry(): Promise<string> {
   const candidates: (string | undefined)[] = [process.env.npm_execpath,
     path.join(path.dirname(process.execPath), "node_modules/npm/bin/npm-cli.js"),
     path.resolve(path.dirname(process.execPath), "../lib/node_modules/npm/bin/npm-cli.js")];
-  for (const directory of (process.env.PATH ?? "").split(path.delimiter)) {
+  for (const directory of (process.env.PATH ?? "").split(path.delimiter).filter((entry) => path.isAbsolute(entry))) {
     candidates.push(path.join(directory, "node_modules/npm/bin/npm-cli.js"));
     try { candidates.push(path.join(path.dirname(await fs.realpath(path.join(directory, "npm"))), "npm-cli.js")); } catch {}
   }
-  for (const candidate of candidates) if (candidate?.endsWith(".js")) {
+  for (const candidate of candidates) if (candidate && path.isAbsolute(candidate) && path.basename(candidate) === "npm-cli.js") {
     try { if ((await fs.stat(candidate)).isFile()) return candidate; } catch {}
   }
   throw hostError("E_TOOL_MISSING", "npm の JavaScript 実行ファイルが見つかりません。", "Node.js と npm の導入状態を確認してください。");
@@ -73,7 +73,7 @@ export async function measureAudio(data: Uint8Array, file: string): Promise<numb
 }
 export async function executableExists(name: string): Promise<boolean> {
   const extensions = process.platform === "win32" ? [".exe", ".cmd", ".bat", ""] : [""];
-  for (const directory of (process.env.PATH ?? "").split(path.delimiter)) for (const extension of extensions) {
+  for (const directory of (process.env.PATH ?? "").split(path.delimiter).filter((entry) => path.isAbsolute(entry))) for (const extension of extensions) {
     try { if ((await fs.stat(path.join(directory, name + extension))).isFile()) return true; } catch {}
   }
   return false;
@@ -116,7 +116,7 @@ export async function doctor(context: HostContext, relative?: string): Promise<D
   if (job) {
     const { project } = await readProjectFile(job);
     try { checks.push({ id: "aivis", ...await checkEngine(context, project) }); }
-    catch { checks.push({ id: "aivis", available: false, message: "未許可の接続先のため未確認です。" }); }
+    catch (error) { checks.push({ id: "aivis", available: false, message: error && typeof error === "object" && "message" in error ? String(error.message) : "音声エンジンを確認できません。" }); }
     const generation = project.asset_generation as Record<string, unknown> | undefined;
     if (generation?.image && generation.image !== "off")
       checks.push({ id: "codex", available: await executableExists("codex"), message: "Codex CLI の所在確認です。" });
