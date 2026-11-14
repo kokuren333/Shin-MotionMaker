@@ -263,3 +263,144 @@
 - R-1〜R-10 への対応、または見送りの理由の記録。特に R-1（`--detach` の起動失敗が0になる）、R-2（shape の列挙検査）、R-5（全角記号のパス）、R-6（CONTRACT の古い記述）。
 - コミットの author・committer に個人のメールアドレスが入っている（全コミット）。push すると公開されるので、公開前に noreply アドレスへ切り替えるかどうかをオーナーが判断する。履歴を書き換えるかどうかは絶対規則（履歴を書き換えない）との兼ね合いがあるので、公開前に決める。
 - L1 への質問 L2-Q1・L2-Q2、参考 S-4 を M9 の確認事項としてまとめる。
+
+---
+
+## 再確認（G4R2）
+
+- 対象：`main` `ec800cb`（Merge M7-final）。前回 G4 の対象 `14c6f16` からの差分（M7-gui・M7-fix・M7-final と、L2 の台帳コミット `0df32f3`）
+- レビュー者：Opus 5.5（effort 高）。実装・前回レビューとは別のコンテキスト。L4 は使っていない
+- このレビューで書き込んだのは本節だけ。コード・文書・証拠は変更していない。再撮影と画素比較は repo の外の一時フォルダで行い、作業ツリーはクリーンのまま（`git status --short` が空）
+
+### R2-1. 結論
+
+**条件付き合格（必須修正あり）**
+
+- 前回の必須 G4-M1 は解消した。G4-M2 は G4 時点の範囲（M0〜M7 の発注・判定・計画・環境・質問）では解消した。ただし、G4 の後の作業（M7-gui・M7-fix・M7-final・G4R2）の発注と L2 判定が追跡ファイルに無く、同じ規則に再び反している（必須 G4R2-M1）。
+- M7-fix の差分（R-1〜R-9、S-1、S-7、S-10）は、指摘どおりに実装されている。原典互換（F2、R-2 の duo・MV 条件）、MV の非退行（JT-11）、§2 の思想のどれも壊していない。テストを弱めた箇所も無い。git 検出器に小さな退行が1件ある（推奨 G4R2-R1）。
+- M7-gui（R-10）は、core の文言を変えずに GUI 側で補っている。列挙値の直書きは無く、PH-03 にも影響しない。
+- M7-final のテスト変更は、M4R R1 の意図（不正な列挙値で画面が消えず、入力と添付が残る）を保ったまま、原典互換の条件に合わせたものである。
+- コードの必須修正は無い。必須は工程記録の1件だけである。
+
+### R2-2. 再実行した検査
+
+| 検査 | コマンド | 結果 |
+| --- | --- | --- |
+| CI と同じ一式（深さ1の複製） | `node tools/ci-local.mjs`（2026-11-14、Windows 11、Node v24.15.0） | 終了0。「CI と同じコマンドが完了しました: ec800cb45dd50114b2641e0b6abe6af1405851d5」。npm ci → `check-licenses` → build → `npm test`（tests 219 / pass 217 / fail 0 / skipped 2、161881ms）→ GUI 単体（34 / pass 34 / skip 0。この環境には sh がある）→ e2e 42/42 → GUI build。skip 2 は前回と同じ OS 専用の2件。npm audit は既存の low 1件 |
+| GUI の再撮影（G4-M1） | `npm run shots --workspace gui -- --commit=94ed115ff66bea5f49277e113d68582949aea131 --out=<一時フォルダ>`（`ec800cb` の作業ツリーから） | 16枚とも overflow=0・errors=0。`docs/work/M7-gui/screenshots/` と SHA-256 を比べると、**13枚がバイト一致した（S12 を含む）**。違ったのは3枚で、どれも撮影ごとに変わる部分だけだった：S2（x 55〜893、y 233〜451）と S3（x 55〜950、y 232〜453）は方向性のたたき台の乱数、S6（x 616〜693、y 240〜247、376画素）はビルド日時の行。M7-gui REPORT の記述と一致する。画素の比較には ffmpeg で RGB に展開したものを使った |
+| 実行経路の不変 | `git diff --stat c0d10ca ec800cb -- src tools schemas job-template job-assets package.json package-lock.json tests` | 差分なし。Tier B/C を実測した `c0d10ca` と、現在の HEAD とで、実行経路のコードは同じ |
+| テンプレート・基線・ワークフロー | `git diff --stat 14c6f16 ec800cb -- job-template job-assets tests/fixtures/baseline-biimmotion-262c798 src/core/data .github` | 差分なし |
+| 追跡ファイルの衛生 | `git grep -nIiE` で、ドライブレターのパス・`/Users/`・`/home/`・ローカルのユーザー名・作業フォルダ名・`AppData`・メールアドレスの形を検索した | ローカルの絶対パス・ユーザー名・メールアドレスは0件。該当したのは次のものだけで、どれも問題ない：公開予定の GitHub アカウント名（NOTICE・URL・manifest）、Windows のシステムパス（`C:/Windows` の既定値、テストの拒否例）、`<USER>`・`<ユーザー名>`・`<作業ツリー>` で伏せた例、`127.0.0.1@evil.example`（M3 REVIEW の攻撃入力の例）、`_smm_scratch/` などの相対名 |
+
+Tier C は再実行していない。記録（`docs/work/M7-fix/evidence/`）と、上の「実行経路の不変」で確かめた。
+
+### R2-3. 観点ごとの確認
+
+#### (1) G4-M1：解消
+
+- `94ed115` の後で GUI のビルドに入る変更は2つある：
+  - `src/core/request.ts` の R-2：S12 の入力は解説モードの `styleMode:"unknown"` で、R-2 の後も検査の対象になる。
+  - M7-final の `gui/tests`・`gui/e2e`：テストだけで、ビルドには入らない。
+- `gui/src` の変更は `importErrorLines` だけ（`git diff 14c6f16 ec800cb -- gui/src`）で、`94ed115` に含まれている。
+- 再撮影で S12 を含む13枚がバイト一致した（R2-2）。`VERIFICATION.md` の M7-gui の表は現在の画面と一致する。
+
+#### (2) G4-M2：G4 時点の範囲は解消。G4 の後の作業は未記録（必須 G4R2-M1）
+
+- 解消した部分：`0df32f3` で、各作業の DIRECTION・ACCEPTANCE と、L2 の PLAN・ENVIRONMENT・STATUS・ORCH_LOG・QUESTIONS・OWNER_QUESTIONS が `docs/work/` に入った。どれもローカル情報は伏せてある。M3 の「L2 判定は未実施」と読める問題も、`docs/work/M3/ACCEPTANCE.md` から辿れるようになった。
+- 未解決の部分は G4R2-M1 に書いた。
+
+#### (3) M7-fix
+
+| 指摘 | 確認した内容 | 評価 |
+| --- | --- | --- |
+| R-1 | `runs.ts` で、起動失敗の run を `details.reason:"worker_start_failed"`（元の details は `cause`）で識別する。`cli/index.ts` はこの run だけを detach 成功への変換から外す。テストは source と built の両方で、終了4・`E_INTERNAL`・`script_pid:null` を確かめる。スクリプトの起動後にすぐ落ちる既存の TS-02 は、従来どおり開始0 | 指摘どおり |
+| R-2 | shape の列挙検査を、原典の `validateForm`（`src/core/request.ts:87-`）と1行ずつ照合した：(a) MV では styleMode・1人目と2人目の配置を見ない（原典は `!mv` と `mv ? [] : characterProfiles`）。(b) 2人目は duo のときだけ見る（原典は `characterProfiles` が duo のときだけ2人目を返す）。(c) tempo などの6項目、videoMode・characterMode・voiceEngine・fps は無条件に見る（原典も無条件）。モードと人数が省略されたときは defaults を使う（complete は defaults を合成してから validateForm を呼ぶので同じ結果になる）。JSON Schema の `allOf`/`anyOf` も同じ条件を表す（`characterMode` を省略したときは、`required` の無い solo 分岐に合う）。未使用の項目でも、型と未知キーは検査を続ける。テストは2モード×2人数×全列挙キーを総当たりし、CLI・MCP・台本統計で受理されることも確かめる | 原典互換。§2・F4 に反しない |
+| R-3 | `allowed-diffs.json` の SHA-256 の固定、R1 の9対、逆変換の直前に出現回数を照合 | 指摘どおり。R3〜R5 の出現回数は発注の範囲外（参考 G4R2-S3） |
+| R-4 | 11ケースの表で、全 run 種別の `defaultWait`、スキーマの `default`、`defaultWaitMs` を照合する。`validate final:true` は分岐の注釈で表す | 指摘どおり |
+| R-5 | `入力 ＆（全角）　・ & space` を使った generate → qc の実行テスト。Tier B/C のジョブ名も全角記号を含む | 指摘どおり |
+| R-6・R-9・S-10 | CONTRACT（表題・改訂履歴・shape・qc/imagegen・PNG）、CLI.md の根拠、VERIFICATION の legacy の行 | 指摘どおり。改訂履歴の文言が実際の改訂範囲より狭い（参考 G4R2-S1） |
+| R-7 | `engines >=22.12.0`、README の1行、lock のルート | 指摘どおり。GUI の情報ダイアログの「Node.js 22以上」はジョブの要件の話であり、別物 |
+| R-8 | `verification-state.mjs` が HEAD・指定コミット・クリーンな状態を確かめ、dist を再ビルドし、`revision` に記録する。テストからは呼ばない（no-git の除外に理由がある）。`.gitattributes` が `eol=lf` なので、Windows の runner でもクリーン判定は崩れない。`runtime-smoke.yml` の2ステップ目も、1ステップ目の出力が ignore 済みの `.agent-work/` に出るので通る | 指摘どおり |
+| S-7 | CLI の 8 MiB 超も `E_INPUT_INVALID`。テストは6 MiB と8 MiB の境界を両方の入口で確かめる | 指摘どおり |
+| verify-cli | 既定の出力を `.agent-work/` に変えた | 指摘どおり |
+| S-1 | AST で、関数名によらず第1引数が git の呼び出しを検出する。走査の対象に `tools/` を加えた | 指摘どおり。ただし退行が1件ある（推奨 G4R2-R1） |
+
+- テストの弱化：無い。
+  - MC-05/MC-15 の待機を10秒から50秒に広げたが、表明（completed・verdict・進捗の単調増加・E_BUSY）はそのまま。10秒の偽処理に10秒の枠という境界の競合を直したものである。今回の ci-local では24秒で合格した。
+  - 削除・緩和した表明は、R-2 の原典互換に伴う期待値の反転（MV の不使用項目が受理されること）だけで、意図どおり。
+- CONTRACT の改訂（R-2・R-4・R-6・S-7）は、どれも M7-fix の発注書の「L2 の裁定」1・4・6・9 に挙げられている。L2 の裁定の範囲に収まる。
+- MV の非退行：`job-template/` と基線フィクスチャに差分は無い。JT-11 は ci-local で合格した。
+
+#### (4) M7-gui（R-10）
+
+- core：`git diff 14c6f16 ec800cb -- src` のうち、M7-gui のコミットによる変更は0件（R-2 は M7-fix）。core の message はそのまま先頭に出し、pointer も残す。
+- 列挙値：`choicesAt` は core の `formChoices` を読む。GUI に置いているのは項目名の対応表（`screenNames`）だけで、値の集合は書いていない。e2e の期待値も `formChoices` から作る。
+- `screenNames` の語が画面にあるかを確かめた：残る21項目は `App.tsx` に同じ語がある（「何を説明する動画か／MVで表現したいこと」は、モードごとの2つの見出しをつないだもの）。「1人目／2人目のキャラの初期配置」「1人目／2人目の3Dモデル」は、`App.tsx:755,774,813` で `${index + 1}人目` と組み合わせて表示する語と一致する。
+- PH-03：読み込みエラーは入力の誤りであり、助言でもゲートでもない。`InspectionViewer` には変更が無い。
+- §2：「request.json に書ける値」は既存の列挙だけに出る。自由記述の項目に候補は出ず、カタログ化にはあたらない。
+
+#### (5) M7-final
+
+- 単体テスト（`gui/tests/request-io.test.ts`）：
+  - 複数エラーの一覧から外したのは、非 duo の2人目の配置だけ。
+  - そのかわり、duo の拒否（pointer）、solo を明示した場合と省略した場合の受理、未使用の値が残ることを、新しく表明した。
+- e2e（`gui/e2e/run.mjs` の「GU-04 …（M4R R1）」）：
+  - 拒否する3例（様式・制作モード・duo の2人目の配置）のどれでも、次を確かめ続けている：画面が残る、添付が1件残る、書き出した request が読み込み前と同じ、コンソールエラーが0。
+  - R-10 の項目名・書ける値・保持の説明も確かめている。
+  - 最後の正常な読み込みには、solo のまま不正な2人目の配置を入れ、エラーが出ず値が残ることを加えた。
+- M4R R1 の意図は弱まっていない。むしろ表明は増えた。
+- `gui/src` に変更は無い（`git diff f6b4153 ec800cb -- gui/src` は空）。
+
+#### (6) M8 の前提の整理（`docs/work/L2/OWNER_QUESTIONS.md`・`ENVIRONMENT.md`）
+
+- 整理されているもの：
+  - Q-01〜Q-07 の回答状況と、適用した既定値。
+  - P-1 の2つの案（推奨は (a)、PR の CI に3環境と Tier B を含める）。
+  - author のメールアドレスの扱い。
+  - ubuntu・Node 22 の持ち越し（TS-07・MC-02・CL-11・TS-04、R-6 linux・P-2 POSIX の skip 解除）。
+  - ローカルでのマージという縮退。
+  - CI-08 と verify-pages の実公開 URL での実行。
+- 抜けているもの：G4 §6 の5「公開するコミットで Tier C を取り直す」（推奨 G4R2-R2）。G4R2-M1 で挙げる縮退の記録も無い。
+
+### R2-4. 新たな指摘
+
+#### 必須
+
+##### G4R2-M1　G4 の後の作業の発注と L2 判定が、追跡ファイルに無い
+
+- 根拠：WORKFLOW §3（受け渡しファイルの置き場所は `docs/work/<作業ID>/`）、AGENTS.md の正本の一覧、絶対規則8、前回 G4-M2 の「各作業の最終判定（合格・条件付き合格と、その日時・コミット）を追跡ファイルから辿れるようにする」、WORKFLOW §5 の最低限の関門2（縮退を `ENVIRONMENT.md` に記録する）。
+- 事実：
+  - `docs/work/M7-gui/`・`docs/work/M7-fix/`・`docs/work/M7-final/` のどれにも `ACCEPTANCE.md` が無い。
+  - `docs/work/M7-final/DIRECTION.md` が無い。M7-final REPORT にも「未配置のため、会話内発注を正として実施」とある。本作業 G4R2 の発注書も追跡されていない。
+  - `docs/work/L2/` の最後のコミットは `0df32f3`。その後に main へ入った `e10f571`・`f6b4153`・`ec800cb` の判定が、STATUS・ORCH_LOG に無い。STATUS の M7 の行は「M7-gui・M7-fix で対応中」のまま。
+  - M7-fix-Q1 への L2 の回答は、M7-final の L3 が「会話内の L2 回答」として書き写したものしか無い。
+  - M7-fix REPORT は「受け入れ条件は未達（GUI 単体・e2e が各1件失敗、ci-local は終了1）」で終わっている。それでも `f6b4153`（Merge M7-fix）として main に入った。記録上、`f6b4153` の main は GUI テストが失敗する状態だった。`ec800cb` で解消したが、この判断（既知の失敗を含むマージ）と理由が、どこにも記録されていない。リモートが無い間の縮退ではあるが、CI-05・絶対規則10の趣旨（main には CI が合格したものだけを入れる）から外れる事例なので、記録が要る。
+- 直し方（L2 の台帳作業。コードの変更は不要）：
+  1. M7-final と G4R2 の発注書を、ローカル情報を除いて `docs/work/M7-final/DIRECTION.md` と `docs/work/M7/DIRECTION_G4R2.md` に転記する。
+  2. M7-gui・M7-fix・M7-final の `ACCEPTANCE.md` を作る。M7-fix については、受け入れ未達のままマージした判断と、M7-final で解消したことを書く。
+  3. STATUS の M7 の行を、G4R2 の結論を受けた最終判定・日時・コミットに更新し、ORCH_LOG に `0df32f3` の後の発注・完了・マージ・回答を追記する。
+  4. ENVIRONMENT の縮退2に、`f6b4153` が既知の GUI テスト失敗を含んで main に入ったこと（`ec800cb` で解消）を書く。M8 で P-1 の (a) を取れば、PR の CI は最終の HEAD だけを判定する。そのため、この中間状態がリモートの CI 判定を損なわないことも書いておく。
+
+#### 推奨
+
+| # | 要件 | 場所 | 内容 | 直し方 |
+| --- | --- | --- | --- | --- |
+| G4R2-R1 | CI-01、S-1 | `tests/helpers/git-detector.ts:12-13` | AST 版は、第1引数が `StringLiteral` か `NoSubstitutionTemplateLiteral` の場合しか見ない。前の正規表現版が検出していた ``execSync(`git show ${ref}`)`` のような、置換を含むテンプレートリテラルを検出しなくなった。旧版（`14c6f16`）と新版に同じ文字列を一時フォルダで与えて、旧版1件・新版0件を確かめた。現状でテストから git を起動している箇所は無い（ci-local の no-git テストは合格） | `ts.isTemplateExpression(first)` のときは `first.head.text` を同じ正規表現で判定する。陽性フィクスチャに上の例を加える |
+| G4R2-R2 | §9.3、AGENTS §4、G4 §6 の5 | `docs/work/L2/OWNER_QUESTIONS.md` の「M8 に進むために…」の4 | M8 の作業の一覧に「公開するコミットで Tier C を取り直す」が無い。現状の Tier C は `c0d10ca` で取ったもので、`ec800cb` とは実行経路の差分が無い（R2-2）。ただし M8 で版のタグや `pages.yml` の起動条件などを足すと、公開するコミットは変わる | M8 の前提に次の規則を書く：公開するコミットと `c0d10ca` の間で `src tools schemas job-template job-assets package*.json` の差分が空なら、`c0d10ca` の Tier C を引用する。差分があれば、`runtime-smoke.yml` か手元で CLI・MCP の両方を再実行する |
+
+#### 参考
+
+- G4R2-S1（CONTRACT の改訂履歴）：`docs/CONTRACT.md` の M7-fix の行は「G4 の R-2・R-6 を反映」だけになっている。実際の改訂には R-4（`wait_ms` の default の注釈の段落）と S-7（CLI の PNG 超過のコード）も入っている。どれも L2 の裁定の範囲だが、履歴だけでは改訂の範囲が分からない。発注書の指定した文言どおりではある。
+- G4R2-S2（R-1 の識別子）：CLI の detach の扱いは、`error.details.reason === "worker_start_failed"` という文字列に依存するようになった。CONTRACT・CLI.md はこの値に触れていない。いまの挙動（`--detach` は開始に成功すれば0）は CLI.md と一致するが、host がこの文字列を変えると CLI が黙って元の挙動に戻る。CLI のテスト（source・built の両方）がこれを検出するので、実害は小さい。
+- G4R2-S3（R-3 の範囲）：出現回数を照合しているのは R1 だけ。R3〜R5 の置換・追記は、表の SHA-256 の固定と逆変換後のハッシュ一致で守られている。発注の範囲どおり。
+- G4R2-S4（R-10 の保守）：`screenNames` は画面のラベルを写したものである。ラベルを変えたときに、ずれを検出するテストは無い。e2e が確かめているのは3項目だけ。
+- G4R2-S5（持ち越し）：M7-gui REPORT の残課題（読み込みエラーの間も、字幕帯の見出しが「ジョブを書き出せます」のまま）は未判断のまま。G4 の後の17コミットも、author・committer は個人のメールアドレスのまま。OWNER_QUESTIONS の3でオーナーが判断する事項として記録されているので、前回の推奨の状態から変わっていない。前回の S-4（`job-template/AGENTS.md` の GUI 区画名）は、まだ `docs/work/L2/QUESTIONS.md` に入っていない。
+
+### R2-5. M8 に進む前の条件（前回 §6 の更新）
+
+1. G4-M1：解消した。
+2. G4-M2：G4 時点の範囲は解消した。**G4R2-M1 を解消する**（G4 の後の発注・判定・縮退の記録）。
+3. P-1・Q-01・author のメールアドレス：オーナーの判断待ち。OWNER_QUESTIONS に整理されている。
+4. リモート CI の実行証拠（3環境と Tier B、OS 専用の skip の解除）：M8 で取る。
+5. 公開するコミットでの Tier C：G4R2-R2 の規則で判断する。現在の HEAD `ec800cb` なら、`c0d10ca` の記録を引用できる。
+6. CI-08 の4条件：比較の基準は `docs/work/M7-gui/screenshots/`（S2・S3・S6 は、撮影ごとに変わる範囲を除いて比べる）。
