@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { test } from "node:test";
 
 const base = path.resolve(fileURLToPath(new URL("./fixtures/baseline-biimmotion-262c798/", import.meta.url)));
-const cases = ["mv-landscape", "mv-portrait-options", "explainer-biim-solo", "explainer-biim-duo", "explainer-anime", "explainer-motion", "explainer-mixed", "explainer-fullscreen", "explainer-portrait", "minimal"];
+const cases = ["mv-landscape", "mv-portrait-options", "explainer-biim-solo", "explainer-biim-duo", "explainer-anime", "explainer-motion", "explainer-mixed", "explainer-fullscreen", "explainer-portrait", "minimal", "explainer-attachments"];
 const readJson = async (file: string) => JSON.parse(await fs.readFile(path.join(base, file), "utf8"));
 
 test("baseline metadata is complete and inventory counts match its named tests", async () => {
@@ -40,7 +40,7 @@ test("baseline metadata is complete and inventory counts match its named tests",
   assert.ok((await fs.readFile(path.join(base, "PROVENANCE.md"), "utf8")).includes("955fa5c"));
 });
 
-test("all ten golden cases contain requests, generated bodies and complete ZIP manifests", async () => {
+test("all eleven golden cases contain requests, generated bodies and complete ZIP manifests", async () => {
   assert.deepEqual((await fs.readdir(path.join(base, "golden"))).sort(), [...cases].sort());
   const templates = (await readJson("template-manifest.json")).files;
   for (const name of cases) {
@@ -79,5 +79,19 @@ test("all ten golden cases contain requests, generated bodies and complete ZIP m
         assert.ok((await fs.stat(asset)).size > 0);
       }
     }
+  }
+});
+
+test("attachment golden preserves the upstream CLI MIME types and source bytes", async () => {
+  const prefix = "golden/explainer-attachments";
+  const request = await readJson(`${prefix}/request.json`);
+  const project = await readJson(`${prefix}/project.json`);
+  const expected = ["text/markdown", "text/csv", "application/pdf", "image/png"];
+  assert.equal(request.assets.sources.length, expected.length);
+  assert.deepEqual(project.sources.map((source: { mime_type: string }) => source.mime_type), expected);
+  for (const [index, relative] of request.assets.sources.entries()) {
+    const original = await fs.readFile(path.resolve(base, prefix, relative));
+    const saved = await fs.readFile(path.join(base, prefix, "sources", path.basename(relative)));
+    assert.deepEqual(saved, original, expected[index]);
   }
 });

@@ -1,0 +1,522 @@
+{
+  "filename": "虹のしくみ-motion-job.zip",
+  "root": "虹のしくみ",
+  "entries": [
+    {
+      "path": "虹のしくみ/",
+      "directory": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/AGENTS.md",
+      "directory": false,
+      "sha256": "5ec1c642bbe60e040aa70b2ba92d07d16a008077b3854bd4d9ff0e400608cfa4",
+      "bytes": 63217
+    },
+    {
+      "path": "虹のしくみ/assets/",
+      "directory": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/assets/.gitkeep",
+      "directory": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/assets/biim-frame.svg",
+      "directory": false,
+      "sha256": "5a690597b9d15d40b0108a3e7b8f8d91a7038563619bc66369d22bf26848929d",
+      "bytes": 738
+    },
+    {
+      "path": "虹のしくみ/assets/fonts/",
+      "directory": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/assets/fonts/MPLUSRounded1c-ExtraBold.ttf",
+      "directory": false,
+      "sha256": "8e7c15901dca87f1451b356dda594f7d092ba252a5dcc47da74523a242493c36",
+      "bytes": 3628512
+    },
+    {
+      "path": "虹のしくみ/assets/fonts/MPLUSRounded1c-OFL.txt",
+      "directory": false,
+      "sha256": "9b7cbb54c083e9c21e63952c08389c5fc7691351fb70729e47c91917bfe60097",
+      "bytes": 4396
+    },
+    {
+      "path": "虹のしくみ/assets/fonts/NotoSansJP-Variable.ttf",
+      "directory": false,
+      "sha256": "c2f3b4d463500a2ddcd3849cded1fceeb9fd6d1c32e6cbecd568453ba50fc68f",
+      "bytes": 9589900
+    },
+    {
+      "path": "虹のしくみ/assets/fonts/OFL.txt",
+      "directory": false,
+      "sha256": "babcfe66c8a098b2fa279bc724a3a342f8124f77ce18941fbcc1bbb39823cded",
+      "bytes": 4387
+    },
+    {
+      "path": "虹のしくみ/assets/fonts/README.md",
+      "directory": false,
+      "sha256": "a4d0185c372571edafc971e342e38826793e75f01f2ba6fadaaf6af7f7d103a0",
+      "bytes": 1110
+    },
+    {
+      "path": "虹のしくみ/brief.md",
+      "directory": false,
+      "sha256": "be658dd73f2ee8d2b8703ff9ff2a916b903be4667ea2e7f40baccb9620c19c90",
+      "bytes": 13644
+    },
+    {
+      "path": "虹のしくみ/LICENSE",
+      "directory": false,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "bytes": 11358
+    },
+    {
+      "path": "虹のしくみ/motion-kit/",
+      "directory": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/motion-kit/BiimOverlay.tsx",
+      "directory": false,
+      "sha256": "5de60eb0c4263a95451fcad3ee81d0573a65f72a183faa10dfaa0e007c3e9c7c",
+      "bytes": 3320
+    },
+    {
+      "path": "虹のしくみ/motion-kit/CameraPunch.tsx",
+      "directory": false,
+      "sha256": "c70a453cb8241589e242ac9b06493b2af616f7173d470e139b46b28c40ba6710",
+      "bytes": 677
+    },
+    {
+      "path": "虹のしくみ/motion-kit/Character3D.tsx",
+      "directory": false,
+      "sha256": "545986dc2e98f01676ac477d461ca68c506b363f67c6a3f154429d57dfc4bd1d",
+      "bytes": 4873
+    },
+    {
+      "path": "虹のしくみ/motion-kit/DiagramStage.tsx",
+      "directory": false,
+      "sha256": "a7873531fab194bddf58bbe02f2efdbce7864d96861038bcc6ae9dd9db5429d2",
+      "bytes": 2759
+    },
+    {
+      "path": "虹のしくみ/motion-kit/DrawArrow.tsx",
+      "directory": false,
+      "sha256": "f8baf7d599978083c2dccaa442b5c83c0e57f68320c08d551511899f75f3670e",
+      "bytes": 676
+    },
+    {
+      "path": "虹のしくみ/motion-kit/FullscreenStage.tsx",
+      "directory": false,
+      "sha256": "ac5717f0a50d66571f3ae6215661eff058e807346b575fcce959d022396ec2b7",
+      "bytes": 1891
+    },
+    {
+      "path": "虹のしくみ/motion-kit/Highlight.tsx",
+      "directory": false,
+      "sha256": "be3d3061e6ea586126712af974700b1847bb2c3acf425da8bb6c16906df563ab",
+      "bytes": 771
+    },
+    {
+      "path": "虹のしくみ/motion-kit/KineticText.tsx",
+      "directory": false,
+      "sha256": "64917d510bba2eb378223997e76520d7d07c2b36a2566ddc0a8b88c73cd07ede",
+      "bytes": 1043
+    },
+    {
+      "path": "虹のしくみ/motion-kit/layers.ts",
+      "directory": false,
+      "sha256": "40cebd8a8dba93ac53ba8fc086dc9968fa3eb403155b247be33c9fe4df393b10",
+      "bytes": 1617
+    },
+    {
+      "path": "虹のしくみ/motion-kit/lyric-fit.ts",
+      "directory": false,
+      "sha256": "740105039c24157cea7e0226fe78da433db27d7f914bf936faab6846fc83b7fd",
+      "bytes": 1191
+    },
+    {
+      "path": "虹のしくみ/motion-kit/LyricLine.tsx",
+      "directory": false,
+      "sha256": "faf2b2908724112e0360c4062617210b441c1ebfbb712aea22787783f5f49ff1",
+      "bytes": 2944
+    },
+    {
+      "path": "虹のしくみ/motion-kit/LyricPunch.tsx",
+      "directory": false,
+      "sha256": "16f29a0ae8139a111c42a96b64397b504c0abd7d129bb97628350e86d4bf8886",
+      "bytes": 3934
+    },
+    {
+      "path": "虹のしくみ/motion-kit/Pop.tsx",
+      "directory": false,
+      "sha256": "2fd65498fb2c5c36c26b71ea1af673de9e512013a86bb8a3e99040f1972cb1c7",
+      "bytes": 617
+    },
+    {
+      "path": "虹のしくみ/motion-kit/Slam.tsx",
+      "directory": false,
+      "sha256": "750e7cd319941073ccad19fd6b7c7580f71336fd4319ea9351b62d548b772965",
+      "bytes": 610
+    },
+    {
+      "path": "虹のしくみ/motion-kit/SpeedLines.tsx",
+      "directory": false,
+      "sha256": "b55107d824be954b98097bf2496c8c218e860090d2e0aa5e1f54abb3028d05c0",
+      "bytes": 1082
+    },
+    {
+      "path": "虹のしくみ/motion-kit/Stagger.tsx",
+      "directory": false,
+      "sha256": "dbdbf1006f8824cc474bbba0767146d6465a4f4caf92f5cb8c3f1a46cdfadeab",
+      "bytes": 361
+    },
+    {
+      "path": "虹のしくみ/motion-kit/StandardCaption.tsx",
+      "directory": false,
+      "sha256": "a01ca856dbfa3ea30552bf40c43ae13eb87312e9d3e713da9121390302368139",
+      "bytes": 648
+    },
+    {
+      "path": "虹のしくみ/output/",
+      "directory": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/output/.gitkeep",
+      "directory": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/package.json",
+      "directory": false,
+      "sha256": "cdeefed8b9ae7c25255affd4c69aca3b234b5d3b9e4ae683c4a37540ec3ae83d",
+      "bytes": 590
+    },
+    {
+      "path": "虹のしくみ/plan/",
+      "directory": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/plan/.gitkeep",
+      "directory": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/plan/narration.json",
+      "directory": false,
+      "sha256": "576be18017ccb7dd342238aa8861a7a74d19a5d536bb3809c81c5732584c90f9",
+      "bytes": 17
+    },
+    {
+      "path": "虹のしくみ/plan/outline.txt",
+      "directory": false,
+      "sha256": "7de206d032f1032528a064a19abdb6857c905b2c593f12991e214ab40eb02be7",
+      "bytes": 106
+    },
+    {
+      "path": "虹のしくみ/plan/sound-design.json",
+      "directory": false,
+      "sha256": "a0ac7dc409aede96b058d74cb3088c4f162db7f189258ce86648a5cbea841909",
+      "bytes": 13
+    },
+    {
+      "path": "虹のしくみ/plan/templates/",
+      "directory": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/plan/templates/direction-explainer.md",
+      "directory": false,
+      "sha256": "a7ccf086443401adb7293205ec0bef90bba69736e5ae7d2ff8cb8104446fad9c",
+      "bytes": 2521
+    },
+    {
+      "path": "虹のしくみ/plan/templates/evidence.example.json",
+      "directory": false,
+      "sha256": "0439fdac7a862ceb75900d39731505aeff4b2c8bb829c50c4dd4fce3adce6bcd",
+      "bytes": 1758
+    },
+    {
+      "path": "虹のしくみ/plan/templates/explanation-map.md",
+      "directory": false,
+      "sha256": "55943cff22cf1c15ea6767cb09dea2eb98e1dc15ab600472b0dcd36bbb3d60e5",
+      "bytes": 1610
+    },
+    {
+      "path": "虹のしくみ/plan/templates/qc-review.md",
+      "directory": false,
+      "sha256": "1f741424db034a9070ac095423a1f66bdca4e6bc914ef3932682975dd1202349",
+      "bytes": 2382
+    },
+    {
+      "path": "虹のしくみ/plan/templates/storyboard-explainer.md",
+      "directory": false,
+      "sha256": "4d0b487a9de3d39355f37546365f28f35759e4bdf132f65bc0775474c6d10d3e",
+      "bytes": 2032
+    },
+    {
+      "path": "虹のしくみ/project.json",
+      "directory": false,
+      "sha256": "ee59ad31de31ec226125411e98368f61d30e7cec1214799b652f959adc1666fb",
+      "bytes": 6920
+    },
+    {
+      "path": "虹のしくみ/README.md",
+      "directory": false,
+      "sha256": "f5f4e4e72825d74540af5167f64038c65e82621c23ee96fb0919c853bd9cd4d1",
+      "bytes": 24504
+    },
+    {
+      "path": "虹のしくみ/reports/",
+      "directory": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/reports/.gitkeep",
+      "directory": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/runtime/",
+      "directory": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/runtime/data/",
+      "directory": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/runtime/data/narration.json",
+      "directory": false,
+      "sha256": "5401850896d0e5d8ae8e7e885ff6a86f329fc4023833934849d47a5816a55c30",
+      "bytes": 14
+    },
+    {
+      "path": "虹のしくみ/runtime/data/sound-design.json",
+      "directory": false,
+      "sha256": "5401850896d0e5d8ae8e7e885ff6a86f329fc4023833934849d47a5816a55c30",
+      "bytes": 14
+    },
+    {
+      "path": "虹のしくみ/runtime/package.json",
+      "directory": false,
+      "sha256": "cd867c0aee7823755b6135e31362fcb9ae64d96e14a8207db9f6175327e7a719",
+      "bytes": 987
+    },
+    {
+      "path": "虹のしくみ/runtime/remotion.config.ts",
+      "directory": false,
+      "sha256": "c26da22f0e2798b6a27fe7b034c018451bbdda3396c2e832053026f75e00dfc3",
+      "bytes": 148
+    },
+    {
+      "path": "虹のしくみ/runtime/scripts/",
+      "directory": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/runtime/scripts/aivis.mjs",
+      "directory": false,
+      "sha256": "e108090825778014a636cb364e7c01d269e6a78af401f5b8d7e83dab57788ec6",
+      "bytes": 7341
+    },
+    {
+      "path": "虹のしくみ/runtime/scripts/caption-capacity.d.mts",
+      "directory": false,
+      "sha256": "eef9146ca731ff4031162d49b3e08c9ee9fb377fbd318550bd1b7127d3f886a9",
+      "bytes": 2008
+    },
+    {
+      "path": "虹のしくみ/runtime/scripts/caption-capacity.mjs",
+      "directory": false,
+      "sha256": "715aa2593fa62dfbe580ce52a564c1961570d6ddaded526736969e86b3f8e671",
+      "bytes": 4466
+    },
+    {
+      "path": "虹のしくみ/runtime/scripts/ghost-analysis.mjs",
+      "directory": false,
+      "sha256": "e34aa249596bc1c5c737ff3e055aa71da9e2ce7a1e88371a86a8090effa78eb5",
+      "bytes": 7054
+    },
+    {
+      "path": "虹のしくみ/runtime/scripts/ghost-check.mjs",
+      "directory": false,
+      "sha256": "e6c991a9ca1fa431ff10051d6b097070a6cde56bf3ddf4174177b7978ea1a62b",
+      "bytes": 19949
+    },
+    {
+      "path": "虹のしくみ/runtime/scripts/imagegen.mjs",
+      "directory": false,
+      "sha256": "9d70f99ac04c8ff3e59e0094dff1ea5e23e99211216b4d91e2fc95b48e44a39a",
+      "bytes": 11646
+    },
+    {
+      "path": "虹のしくみ/runtime/scripts/lib.mjs",
+      "directory": false,
+      "sha256": "dd26571ee14235c271a6d895c83276a961d27317ef5192ec1fe53517a4916f70",
+      "bytes": 6269
+    },
+    {
+      "path": "虹のしくみ/runtime/scripts/qc.mjs",
+      "directory": false,
+      "sha256": "95d162fdc545f838e25d3d5019dd8145264548eb1a2f4b6b1a32f76c59e2b26c",
+      "bytes": 22303
+    },
+    {
+      "path": "虹のしくみ/runtime/scripts/run.mjs",
+      "directory": false,
+      "sha256": "1cfcb6f7d27060ac2e242f156ceaaf6970c79c3e14c610335b1bd092d2a38f65",
+      "bytes": 2518
+    },
+    {
+      "path": "虹のしくみ/runtime/scripts/sound-design.mjs",
+      "directory": false,
+      "sha256": "08763f79fa1d7e34b4db8b08ca66609e533e631f89da0003bcd303be5257cb1e",
+      "bytes": 4956
+    },
+    {
+      "path": "虹のしくみ/runtime/scripts/validate.mjs",
+      "directory": false,
+      "sha256": "c4c8801931616bbc0a561023245acebb1b56e9212221a5e959a1dc825158cee7",
+      "bytes": 11095
+    },
+    {
+      "path": "虹のしくみ/runtime/src/",
+      "directory": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/runtime/src/BiimScene.tsx",
+      "directory": false,
+      "sha256": "675b83455fe7a91de3e5012683e26e0d4be73779fc418b2b7d7283db49cb3332",
+      "bytes": 1156
+    },
+    {
+      "path": "虹のしくみ/runtime/src/Captions.tsx",
+      "directory": false,
+      "sha256": "b087ca738a58b4847f89e0d3c2747d1a676cb4ecdc57b3e354c5833c61fb2f02",
+      "bytes": 2428
+    },
+    {
+      "path": "虹のしくみ/runtime/src/Fonts.tsx",
+      "directory": false,
+      "sha256": "8a010950a6cd90e621dfa4b51c7b0b6f870409cbb48e15f02f2c50703cfbdec1",
+      "bytes": 1140
+    },
+    {
+      "path": "虹のしくみ/runtime/src/index.ts",
+      "directory": false,
+      "sha256": "b9900e8f2d9dd0508919db76ded7f60ef532157750339d786c3c395643fc6675",
+      "bytes": 92
+    },
+    {
+      "path": "虹のしくみ/runtime/src/MainVideo.tsx",
+      "directory": false,
+      "sha256": "7aacd77e03e46ac42877523f20cd600b79d22dd1dc0eda87256afbab29faf7ac",
+      "bytes": 3160
+    },
+    {
+      "path": "虹のしくみ/runtime/src/Music.ts",
+      "directory": false,
+      "sha256": "707b7d72ee6223ffa9de171f65445f1f14d9b9bbddc641f8f90a6353771f6f59",
+      "bytes": 1209
+    },
+    {
+      "path": "虹のしくみ/runtime/src/Presentation.ts",
+      "directory": false,
+      "sha256": "1d4fc3f67c2dd76b1e9b0cd4bbbda442a4e5459f0302cac707a17b9d62a62e25",
+      "bytes": 852
+    },
+    {
+      "path": "虹のしくみ/runtime/src/Root.tsx",
+      "directory": false,
+      "sha256": "571a5a3f2ae0c422ffb23155410456c86db79019d7143c80c6ebd55fa936947d",
+      "bytes": 809
+    },
+    {
+      "path": "虹のしくみ/runtime/tsconfig.json",
+      "directory": false,
+      "sha256": "0deb198251273b6c3b91b4205a42b0318f5f93b19914f593e9f27c50002155d6",
+      "bytes": 378
+    },
+    {
+      "path": "虹のしくみ/scenes/",
+      "directory": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/scenes/index.tsx",
+      "directory": false,
+      "sha256": "03ee05af442e908cfda7181650bb6855ed25a1ba5df2c75e96c08c2064a126e6",
+      "bytes": 794
+    },
+    {
+      "path": "虹のしくみ/scenes/Scene001.tsx",
+      "directory": false,
+      "sha256": "f3ec532336a59c0eb923ba68b6b1b803ba9d6e571f93beffe00ea723f19de920",
+      "bytes": 3241
+    },
+    {
+      "path": "虹のしくみ/sources/",
+      "directory": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/sources/.gitkeep",
+      "directory": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "虹のしくみ/sources/reference.csv",
+      "directory": false,
+      "sha256": "84c06c6d30081cc56b43d547ba2ecd527c0b11895ba3eac120ce721a80e91eae",
+      "bytes": 29
+    },
+    {
+      "path": "虹のしくみ/sources/reference.md",
+      "directory": false,
+      "sha256": "74c8f55a73db8cb89a38bd04e9d6795ac4ad7db46e0daca2bf4a4ff258d23849",
+      "bytes": 59
+    },
+    {
+      "path": "虹のしくみ/sources/reference.pdf",
+      "directory": false,
+      "sha256": "70a1d89401df160ac5b5447fe480ac9aaa27ca41a91097f88dc1287074217ab0",
+      "bytes": 344
+    },
+    {
+      "path": "虹のしくみ/sources/reference.png",
+      "directory": false,
+      "sha256": "5e3d382db4dd83d59aa5742793ad6b7903409e865c83bcbc54835049f043bc15",
+      "bytes": 68
+    }
+  ]
+}

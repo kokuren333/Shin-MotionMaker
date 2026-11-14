@@ -76,6 +76,23 @@ wav.writeUInt32LE(8000, 24); wav.writeUInt32LE(16000, 28); wav.writeUInt16LE(2, 
 wav.writeUInt16LE(16, 34); wav.write("data", 36); wav.writeUInt32LE(wav.length - 44, 40);
 await write("assets/song.wav", wav);
 await write("assets/reference.txt", "合成の参考資料。光は水滴で屈折・反射する。\n");
+await write("assets/reference.md", "# 合成の参考資料\n\n雨粒の中で光が曲がる。\n");
+await write("assets/reference.csv", "angle,color\n42,red\n40,violet\n");
+await write("assets/reference.png", Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=", "base64"));
+// Small synthetic one-page PDF with a complete cross-reference table.
+let pdf = "%PDF-1.4\n";
+const pdfOffsets = [0];
+for (const [index, body] of [
+  "<< /Type /Catalog /Pages 2 0 R >>",
+  "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+  "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 72 72] /Resources << >> >>",
+].entries()) {
+  pdfOffsets.push(Buffer.byteLength(pdf));
+  pdf += `${index + 1} 0 obj\n${body}\nendobj\n`;
+}
+const xrefOffset = Buffer.byteLength(pdf);
+pdf += `xref\n0 4\n0000000000 65535 f \n${pdfOffsets.slice(1).map((offset) => `${String(offset).padStart(10, "0")} 00000 n \n`).join("")}trailer\n<< /Size 4 /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF\n`;
+await write("assets/reference.pdf", pdf);
 // Minimal valid GLB 2.0 container with a JSON-only scene.
 const glbJson = Buffer.from(JSON.stringify({ asset: { version: "2.0" }, scene: 0, scenes: [{ nodes: [] }] }).padEnd(80, " "));
 const glb = Buffer.alloc(20 + glbJson.length);
@@ -100,13 +117,18 @@ const cases = [
   ["explainer-fullscreen", { ...originalForm, fullScreen: true }, attachments],
   ["explainer-portrait", { ...originalForm, width: 1080, height: 1920 }, attachments],
   ["minimal", { title: "最小入力", description: "最小の解説入力", audience: "一般" }, {}],
+  ["explainer-attachments", originalForm, { sources: ["md", "csv", "pdf", "png"].map((extension) => `../../assets/reference.${extension}`) }],
 ];
-const mime = { ".txt": "text/plain", ".wav": "audio/wav", ".glb": "model/gltf-binary" };
+// Read the pinned upstream CLI table instead of approximating browser MIME types.
+const cliSource = await fs.readFile(path.join(source, "tools/generate-job.ts"), "utf8");
+const mimeTable = cliSource.match(/const mimeTypes: Record<string, string> = \{([\s\S]*?)\n\};/)?.[1];
+if (!mimeTable) throw new Error("原典 CLI の MIME 表が見つかりません。");
+const mime = Object.fromEntries([...mimeTable.matchAll(/"([^"]+)": "([^"]+)"/g)].map((match) => [match[1], match[2]]));
 async function resolveAssets(request, directory) {
   const load = async (relative) => {
     const file = path.resolve(directory, relative);
     const data = new Uint8Array(await fs.readFile(file));
-    return { name: path.basename(file), data, size: data.length, type: mime[path.extname(file)] ?? "application/octet-stream" };
+    return { name: path.basename(file), data, size: data.length, type: mime[path.extname(file).toLowerCase()] ?? "application/octet-stream" };
   };
   const assets = { sources: [] };
   for (const relative of request.sources ?? []) assets.sources.push(await load(relative));
@@ -181,7 +203,7 @@ await json("allowed-diffs.json", {
   source_commit: commit, status: "M0初版。R1の置換対はM1で確定・増補しL2が確認する。",
   rules: [
     { id: "R1", scope: ["AGENTS.md", "README.md", "brief.md"], replacements: [{ from: "WebUI", to: "Shin-MotionMaker（GUI・CLI・MCP）" }], note: "原典で見つかる入口名の置換候補。MVのbrief・歌詞・依頼文への適用は禁止。" },
-    { id: "R2", scope: ["project.json"], replace: { pointer: "/schema_version", from: "0.4", to: "0.5" }, add: { pointer: "/generator", keys: ["name", "version", "template_version"] } },
+    { id: "R2", scope: ["project.json"], replace: { pointer: "/schema_version", from: "0.4", to: "0.5" }, add: { pointer: "/generator", after: "schema_version", keys: ["name", "version", "template_version"], name: "shin-motionmaker", version_source: "src/core/data/version.ts", normalize_values: ["/generator/version", "/generator/template_version"] } },
     { id: "R3", add_files: ["NOTICE"], append_only: ["README.md"], note: "CLI・MCP節を追加。ジョブ単体ではnpm runが正。" },
     { id: "R4", scope: ["runtime/scripts/validate.mjs"], add_outputs: ["reports/validate.json"], preserve: ["stdout", "exit_code", "validation-logic"], note: "追加コードはM1で逆変換可能なパッチとして確定する。" },
     { id: "R5", scope: ["brief.md"], mode: "explanation", replacements: [{ from: "Opusが記入する", to: "制作エージェントが記入する" }] },
@@ -189,4 +211,4 @@ await json("allowed-diffs.json", {
 });
 const versionCommand = npmCommand(["--version"]);
 const npmVersion = run(versionCommand.file, versionCommand.args).trim();
-await write("PROVENANCE.md", `# 基線の採取記録\n\n- 採取元: BiimMotion（BiimMakerWebUI）、コミット \`${commit}\`。\n- 採取日: 2026-11-14（Asia/Tokyo）。Node ${process.version}、npm ${npmVersion}。\n- 原典の作業ツリーは読み取り専用。複製で依存導入・テスト・生成を実行した。\n\n## 採取コマンド\n\n\`\`\`text\ngit clone --no-hardlinks <原典> <原典の複製>\ngit -C <原典の複製> checkout --detach 262c798\nnpm ci（作業フォルダ: <原典の複製>）\nnode tools/capture-baseline.mjs --source <原典の複製>\n\`\`\`\n\n- 原典ソースは変更せず、src/job.tsを直接importしgenerateJob・agentPromptFor・validateFormを呼んだ。テンプレート読み込みは原典tools/generate-job.tsの除外・UTF-8復号・フォント検査を再現した。\n- 原典npm testをカスタムNodeレポーターで実行。${tests.length}件、全件pass。原典テストはトップレベルtestのみでsuiteは空配列。\n- 原典tests/explainer.test.ts L210付近はgit show 955fa5c:src/<file>で過去ソースを読み、MVフォーム・依頼文・brief・project・歌詞の一致を表明していた。浅いcheckoutで失敗する§8.1の原因である。今回だけ採取用複製の完全履歴で実行した。新repoのテストはgitを起動しない。\n- MV2ケースは原典L225付近のform・settingsをswitchVideoModeに渡す順序まで再現。元テストの3バイト疑似WAVは有効な30秒無音WAVへ置換したため音源サイズ・内容のハッシュのみ異なる。設定・歌詞は同じ。\n- 最小入力はformのtitle・description・audienceだけ。解説7ケースは同じ基礎フォームへ様式・人数・向き等を適用した。\n- 時刻は生成中だけDateを${fixedTime}に固定（ZIPエントリーの時刻）。コアソースは変更していない。乱数は生成関数の経路にない。ZIP本体・圧縮バイトは保存せず、全パス（ディレクトリ含む）と展開本文SHA-256を保存。\n- 原典生成物のCRLFを含む歌詞・構成メモはバイトのまま保存。新規開発ファイルはLF。テンプレートとの差分がある本文はgolden内にすべて保存した。\n- validateFormのURLエラーは行番号が任意なので文言集合は無限。全分岐の具体例とパラメーター付き文言を保存した。\n- 採取できなかった出力・固定できなかった生成内容: なし。実レンダー・音声合成・画像生成はM0の対象外。\n`);
+await write("PROVENANCE.md", `# 基線の採取記録\n\n- 採取元: BiimMotion（BiimMakerWebUI）、コミット \`${commit}\`。\n- 採取日: 2026-11-14（Asia/Tokyo）。Node ${process.version}、npm ${npmVersion}。\n- 原典の作業ツリーは読み取り専用。複製で依存導入・テスト・生成を実行した。\n\n## 採取コマンド\n\n\`\`\`text\ngit clone --no-hardlinks <原典> <原典の複製>\ngit -C <原典の複製> checkout --detach 262c798\nnpm ci（作業フォルダ: <原典の複製>）\nnode tools/capture-baseline.mjs --source <原典の複製>\n\`\`\`\n\n- 原典ソースは変更せず、src/job.tsを直接importしgenerateJob・agentPromptFor・validateFormを呼んだ。テンプレート読み込みは原典tools/generate-job.tsの除外・UTF-8復号・フォント検査を再現した。\n- 原典npm testをカスタムNodeレポーターで実行。${tests.length}件、全件pass。原典テストはトップレベルtestのみでsuiteは空配列。\n- 原典tests/explainer.test.ts L210付近はgit show 955fa5c:src/<file>で過去ソースを読み、MVフォーム・依頼文・brief・project・歌詞の一致を表明していた。浅いcheckoutで失敗する§8.1の原因である。今回だけ採取用複製の完全履歴で実行した。新repoのテストはgitを起動しない。\n- MV2ケースは原典L225付近のform・settingsをswitchVideoModeに渡す順序まで再現。元テストの3バイト疑似WAVは有効な30秒無音WAVへ置換したため音源サイズ・内容のハッシュのみ異なる。設定・歌詞は同じ。\n- 最小入力はformのtitle・description・audienceだけ。既存の解説7ケースは同じ基礎フォームへ様式・人数・向き等を適用した。M0bでexplainer-attachmentsを追加し全11ケースとした。追加ケースは小さな合成.md・.csv・.pdf・.pngを含み、MIME型は原典CLIの拡張子表を直接読み取って決めた（text/markdown・text/csv・application/pdf・image/png）。\n- 時刻は生成中だけDateを${fixedTime}に固定（ZIPエントリーの時刻）。コアソースは変更していない。乱数は生成関数の経路にない。ZIP本体・圧縮バイトは保存せず、全パス（ディレクトリ含む）と展開本文SHA-256を保存。\n- 原典生成物のCRLFを含む歌詞・構成メモはバイトのまま保存。新規開発ファイルはLF。テンプレートとの差分がある本文はgolden内にすべて保存した。\n- validateFormのURLエラーは行番号が任意なので文言集合は無限。全分岐の具体例とパラメーター付き文言を保存した。\n- 採取できなかった出力・固定できなかった生成内容: なし。実レンダー・音声合成・画像生成はM0の対象外。\n`);

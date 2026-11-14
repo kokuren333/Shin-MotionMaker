@@ -29,10 +29,17 @@
       },
       "add": {
         "pointer": "/generator",
+        "after": "schema_version",
         "keys": [
           "name",
           "version",
           "template_version"
+        ],
+        "name": "shin-motionmaker",
+        "version_source": "src/core/data/version.ts",
+        "normalize_values": [
+          "/generator/version",
+          "/generator/template_version"
         ]
       }
     },
