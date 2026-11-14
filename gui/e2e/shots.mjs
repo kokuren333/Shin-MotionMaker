@@ -74,6 +74,13 @@ const shots = [
   ["S11", "S11-high-contrast-1440.png", [1440, 900], async (page) => {
     await page.evaluate("document.documentElement.dataset.contrast = 'high'");
   }],
+  ["S12", "S12-request-invalid-choice-1440.png", [1440, 900], async (page) => {
+    await fillExplainer(page);
+    const file = path.join(work, "unknown-style.request.json");
+    fs.writeFileSync(file, JSON.stringify({ form: { title: "test", description: "test", audience: "test", styleMode: "unknown" } }));
+    await page.setFiles(byAria("request.json を読み込む"), [file]);
+    await page.waitFor("document.querySelector('.errors')", "import error");
+  }],
 ];
 
 let browser;
