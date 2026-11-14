@@ -4,17 +4,17 @@ import path from "node:path";
 import { prepareRuntimeSmoke } from "./prepare-runtime-smoke.mjs";
 import { findBrowser } from "../gui/e2e/browser.mjs";
 import { cli, mcp, option, repository, owned, removeOwned, facts, saveEvidence, cancelActiveRuns } from "./verification-lib.mjs";
+import { verifyEvidenceState } from "./verification-state.mjs";
 
 const entry = option("entry", "cli");
 assert.ok(["cli", "mcp"].includes(entry));
-const commit = option("commit", process.env.GITHUB_SHA);
-assert.ok(commit, "--commit に検証対象のコミットを指定してください。");
+const revision = await verifyEvidenceState(option("commit", process.env.GITHUB_SHA));
 const legacy = option("legacy-job");
 assert.ok(!legacy || entry === "cli", "原典ジョブの検証は CLI で実行してください。");
 const label = legacy ? "legacy" : entry;
 const root = owned(path.join(repository, ".agent-work", `m7-runtime-${label}`));
 const evidenceFile = path.resolve(option("evidence", path.join(repository, ".agent-work", "m7-evidence", `tier-c-${label}.json`)));
-const evidence = { tier: "C", entry, legacy: !!legacy, commit, platform: process.platform, node: process.version,
+const evidence = { tier: "C", entry, legacy: !!legacy, commit: revision.head, template_version: revision.template_version, revision, platform: process.platform, node: process.version,
   started_at: new Date().toISOString(), records: [], success: false };
 await removeOwned(root);
 await fs.mkdir(root, { recursive: true });
@@ -22,10 +22,10 @@ let connection, job;
 const start = Date.now();
 try {
   if (entry === "mcp") connection = await mcp(root);
-  const request = { form: { title: "Runtime & 全角 空白", description: "枠・字幕・3D・音響の動作確認", audience: "開発者",
+  const request = { form: { title: "Runtime & ＆（全角）　・ 空白", description: "枠・字幕・3D・音響の動作確認", audience: "開発者",
     width: 640, height: 360, durationSec: 30, voiceEngine: "none", generateAudio: true, imageGeneration: false } };
   if (legacy) {
-    job = "Legacy & 全角 空白";
+    job = "Legacy & ＆（全角）　・ 空白";
     await fs.cp(path.resolve(legacy), path.join(root, job), { recursive: true,
       filter: (source) => !["node_modules", ".smm", "output"].includes(path.basename(source)) });
     const project = JSON.parse(await fs.readFile(path.join(root, job, "project.json"), "utf8"));

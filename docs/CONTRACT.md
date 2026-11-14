@@ -1,7 +1,8 @@
-# Shin-MotionMaker 契約（M0b）
+# Shin-MotionMaker 契約（M7-fix）
 
 | 版 | 日付 | 改訂内容 |
 | --- | --- | --- |
+| M7-fix | 2026-11-14 | M7-fix：G4 の R-2・R-6 を反映（L2 承認） |
 | M7 | 2026-11-14 | M7：formChoices と shape の列挙検査（M4-Q1、L2 承認） |
 | M3-fix | 2026-11-14 | M3-fix：MCP の画像は image ブロックだけで送る、MCP の PNG 上限 6 MiB（M3R M-1、L2 承認） |
 | M0b | 2026-11-14 | M0R の M-1〜M-6、R-1〜R-14、I-1・I-4〜I-10 を L2 の裁定に従い反映 |
@@ -209,7 +210,7 @@ type Inspection = {
 function parseInspectionReport(kind: Inspection["kind"], text: string): Validation<Inspection>;
 ```
 
-`validateRequest` の shape は未知キー・オブジェクト・型・有限数・assets のパス型を検査し、defaults と secondCharacter を合成する。complete は同じ検査を通り、解決済み assets で原典の `validateForm` を呼ぶ。host は shape → パス検査と添付読取 → complete、GUI も同じ関数の complete を必ず通る。入力スキーマや検査を入口にコピーしない。構造の不正は `E_INPUT_INVALID`、原典 validateForm の文言は `E_FORM_INVALID` の details にそのまま入れる。パスの実体・ファイル有無は host の責務。MV の尺補完（CL-03）は host の complete 前に行う。
+`validateRequest` の shape は未知キー・オブジェクト・型・有限数・assets のパス型と、原典 `validateForm` が検査する既存の列挙値を検査し、defaults と secondCharacter を合成する。列挙検査の条件も原典に合わせ、MV では styleMode・キャラクターの位置を検査せず、解説では1人目の位置と duo のときだけ2人目の位置を検査する。省略されたモード・人数には defaults を使う。入力スキーマも同じ条件を表す。未使用の項目でも型・未知キーは検査する。complete は同じ検査を通り、解決済み assets で原典の `validateForm` を呼ぶ。host は shape → パス検査と添付読取 → complete、GUI も同じ関数の complete を必ず通る。入力スキーマや検査を入口にコピーしない。構造・対象の列挙値の不正は `E_INPUT_INVALID`、原典 validateForm の文言は `E_FORM_INVALID` の details にそのまま入れる。パスの実体・ファイル有無は host の責務。MV の尺補完（CL-03）は host の complete 前に行う。
 
 buildJobFiles は validateForm とテンプレート必須ファイルの検査を維持し、原典 generateJob と同じ本文を組み立てる。例外は SmmError に揃え、フォーム不正は E_FORM_INVALID、テンプレート不足は E_INTERNAL とする。`createBrief` の返却文字列と ZIP に含む brief（原典 generateJob の追記を含む）を混同しない。UTF-8、project の2空白インデント＋末尾 LF、入力歌詞・outline の改行を含む原文を維持する。ZIP 名は `<safeName(title)>-motion-job.zip`、ルートは safeName(title)。R1〜R5 以外の本文変更は禁止。
 
@@ -287,13 +288,15 @@ function getReport(context: HostContext, job: string, relative: string): Promise
 - ジョブ内スクリプトは `<job>/runtime` を cwd とし process.execPath＋配列引数＋shell:false で直接起動する。setup はジョブルートで npm の JavaScript entry を node から起動し、lock があれば ci、なければ install。npm.cmd を shell 経由で起動しない。依存を要求するのは validate・render・double_render 付き ghost_check だけ。hasRuntimeDependencies は `<job>/runtime` から @remotion/cli/package.json と typescript/bin/tsc の両方を resolve できるか判定し、事前検査・status・doctor が共有する。未導入なら実行前に E_DEPS_MISSING。render はブラウザの有無で事前拒否せず、doctor の報告だけに留める。
 - run の全種別・project_patch・CLI の studio は同じジョブ排他を取る。排他予約は原子的に行い `E_BUSY` に所有 run ID（studio・patch は所有操作）を入れる。read 系は設定の写しを持たない。依存不足・E_BUSY・E_DISABLED 等の事前検査失敗では run を作らず、台帳も残さない。
 - project_get は実バイトの SHA-256 を内容と返す。pointer は RFC 6901。patch は JSON Merge Patch（RFC 7396）。現在 hash の不一致は E_CONFLICT。結果が object、schema_version・mode・generator の不変だけを検査する。一時ファイル＋rename で置換する。場面の質や構造を検査しない。
-- report は reports/・plan/ 配下、brief.md・AGENTS.md・README.md、および output/ 直下の PNG だけ。テキストの拡張子は .md・.json・.txt・.csv、画像は .png（reports/ghost-stills/ も含む）。それ以外は E_PATH_DENIED。text は UTF-8 を256 KiBまで読んで文字境界で切り詰め truncated を返す。PNG は CLI では8 MiBまで、超過は E_PATH_DENIED（hint 付き）。MCP（restrictToRoot）は6 MiBまで、超過は E_INPUT_INVALID と CLI の smm report または縮小を案内する hint を返し、接続を継続する。PNG は bytes と MIME を host 内で返し、MCP の画像ブロックと CLI の base64 に変換する。設定・認証情報の任意読取口を作らない。
+- report は reports/・plan/ 配下、brief.md・AGENTS.md・README.md、および output/ 直下の PNG だけ。テキストの拡張子は .md・.json・.txt・.csv、画像は .png（reports/ghost-stills/ も含む）。それ以外は E_PATH_DENIED。text は UTF-8 を256 KiBまで読んで文字境界で切り詰め truncated を返す。PNG は CLI では8 MiBまで、超過は E_INPUT_INVALID（hint 付き）。MCP（restrictToRoot）は6 MiBまで、超過は E_INPUT_INVALID と CLI の smm report または縮小を案内する hint を返し、接続を継続する。PNG は bytes と MIME を host 内で返し、MCP の画像ブロックと CLI の base64 に変換する。設定・認証情報の任意読取口を作らない。
 - doctor は Node・npm・依存・ffmpeg（FFMPEG_PATH→PATH→Remotion compositor）・ブラウザ・必要な Aivis 接続と Style ID・必要な Codex・空き容量を報告するだけ。自動導入しない。MCP の voice は非 loopback 接続を allowEngineHosts で明示許可された host に限る。MCP の doctor の Aivis 疎通も同じ許可に従い、未許可のホストへ接続せず「未確認」と報告する。CLI の voice・doctor は明示呼び出しを接続の許可とみなす。
 - readRunLog の offset・next_offset は UTF-8 ログのバイト位置（0開始）。不完全な末尾文字は次回へ残し、text と next_offset が対応するように読む。CLI の前面待ちはこれで stdout/stderr の差分を標準エラーへ欠落・重複なく流す。MCP の run_get は log_tail のままとし、log_offset は追加しない。
 
 ## 4. 操作定義表（AR-05）
 
 入力名は共通の snake_case。CLI は対応する kebab-case オプションに変換する。すべての操作の外側の入力は additionalProperties:false。form は既存の自由記述、patch と既存 JSON 本文は任意キーを許す明示的な型とする。`job` は必須と記した行ではジョブフォルダへの利用者指定パス（CLI は cwd 基準、MCP は root 相対）。wait_ms は全 run と run_get で整数0〜50,000、log_tail は整数0〜2,000（既定100行）。表の上限はプロセスの実行時間であり、1呼出の待ち時間とは別である。
+
+入力スキーマには全 run の wait_ms の default を載せる。validate は final 省略時の45,000を基本とし、final:true の分岐には0を記す。default は注釈であり、実際の省略値は host の共通 defaultWait が決める。
 
 | ID | CLI | MCP | 種別 | 入力の要旨 | read-only 公開 | enable-generation | 既定 wait_ms | 上限 ms |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -485,9 +488,9 @@ report は更新時刻が run.started_at 以降のものだけ採用する。古
 | 原典スクリプト | 原典の終了と根拠 | host の正規化 |
 | --- | --- | --- |
 | validate.mjs | check が収集した errors があれば1、なければ0（末尾）。prepare・project 読取等の外側の例外も Node が1を返し得る | 検査完了0→pass/0、検査完了1→fail/1。依存不足等を事前分類し、検査完了の証拠なしの異常は E_INTERNAL/4。R4 report があればそれを読む |
-| qc.mjs | MV は検査せず0で report なし。QC pass=0、fail=1、catch は2（末尾） | MV→not_applicable/0。report 付き0/1は completed、verdictをそのまま使う。2は入力ミスなら E_USAGE/2、先に job・依存を検査済みで未分類の読取例外等なら E_INTERNAL/4 |
+| qc.mjs | MV は検査せず0で report なし。QC pass=0、fail=1、catch は2（末尾） | MV→not_applicable/0。report 付き0/1は completed、verdictをそのまま使う。stage の入力ミスは実行前 E_INPUT_INVALID/2、先に job・依存を検査済みで未分類の読取例外等なら E_INTERNAL/4 |
 | ghost-check.mjs | analyzeGhosts の skipped は1、catch は1。検出件数に関係なく走査成功は0 | 成功0→助言/0（verdictを作らない）。ツール不足は E_TOOL_MISSING/3、動画不足は E_INPUT_INVALID/2 の事前検査。分類できない1だけ E_INTERNAL/4。件数で不合格にしない |
-| imagegen.mjs | skipped は既定0、strictかつskippedだけ1。引数不正・catchは1 | skipped既定は助言/0。strictの記録済みskippedはfail/1。入力不正は実行前E_USAGE/2、未分類異常はE_INTERNAL/4。Codex不在を通常モードの環境失敗にしない |
+| imagegen.mjs | skipped は既定0、strictかつskippedだけ1。引数不正・catchは1 | skipped既定は助言/0。strictの記録済みskippedはfail/1。入力不正は実行前E_INPUT_INVALID/2、パス不正はE_PATH_DENIED/2、未分類異常はE_INTERNAL/4。Codex不在を通常モードの環境失敗にしない |
 | aivis.mjs | 合成成功0、catch 1。voice.engine none は何もせず成功 | noneは対象外/0。必要時に疎通不足E_ENGINE_UNREACHABLE/3。場面・台本入力不正はE_INPUT_INVALID/2、未分類異常はE_INTERNAL/4 |
 | sound-design.mjs | 成功0、catch 1。MV・生成無効は生成せず成功 | 対象外/0または生成成功/0。planの不正はE_INPUT_INVALID/2、未分類異常はE_INTERNAL/4 |
 | run.mjs | 不明mode=1、prepare/catch=1、子Remotionの終了コードをそのまま転送しnullは1 | 操作表から既知modeのみ渡す。依存不足は事前にE_DEPS_MISSING/3。ブラウザの有無で事前拒否しない。実行後のブラウザ・ffmpeg不足は証拠でE_TOOL_MISSING/3に分類。成功0、予期しない非0はE_INTERNAL/4 |

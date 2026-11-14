@@ -1,0 +1,1585 @@
+{
+  "tier": "C",
+  "entry": "cli",
+  "legacy": true,
+  "commit": "c0d10ca798b2689a50e91f3556dc73c09cfa3391",
+  "template_version": "0.5.2",
+  "revision": {
+    "head": "c0d10ca798b2689a50e91f3556dc73c09cfa3391",
+    "clean": true,
+    "template_version": "0.5.2",
+    "build": "tsc -p tsconfig.build.json",
+    "checked_at": "2026-11-14T12:47:00.174Z"
+  },
+  "platform": "win32",
+  "node": "v24.15.0",
+  "started_at": "2026-11-14T12:47:00.175Z",
+  "records": [
+    {
+      "command": [
+        "setup",
+        "Legacy & ＆（全角）　・ 空白"
+      ],
+      "cli_exit_code": 0,
+      "polling": null,
+      "elapsed_ms": 161341,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T124704Z-f4790027",
+        "kind": "setup",
+        "args": {},
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 7904,
+        "script_pid": 20848,
+        "started_at": "2026-11-14T12:47:07.078Z",
+        "heartbeat_at": "2026-11-14T12:49:44.028Z",
+        "ended_at": "2026-11-14T12:49:44.028Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [],
+        "started_by": "cli",
+        "script_exit_code": 0,
+        "result": {
+          "report": null,
+          "artifacts": []
+        },
+        "job": "Legacy & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": null,
+        "artifacts": []
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T124704Z-f4790027/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tail": [
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T124704Z-f4790027/stdout.log",
+          "bytes": 306,
+          "sha256": "957f4db2e97589927cdcc235f1c21cb331c3792c3f648e61bf36a941465e370e",
+          "tail": [
+            "",
+            "added 277 packages, and audited 279 packages in 3m",
+            "",
+            "52 packages are looking for funding",
+            "  run `npm fund` for details",
+            "",
+            "10 high severity vulnerabilities",
+            "",
+            "To address issues that do not require attention, run:",
+            "  npm audit fix",
+            "",
+            "To address all issues, run:",
+            "  npm audit fix --force",
+            "",
+            "Run `npm audit` for details.",
+            ""
+          ]
+        }
+      ],
+      "artifacts": []
+    },
+    {
+      "command": [
+        "sound",
+        "Legacy & ＆（全角）　・ 空白"
+      ],
+      "cli_exit_code": 0,
+      "polling": null,
+      "elapsed_ms": 5733,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T124946Z-0ba1e8ce",
+        "kind": "sound",
+        "args": {},
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 18592,
+        "script_pid": 25068,
+        "started_at": "2026-11-14T12:49:48.359Z",
+        "heartbeat_at": "2026-11-14T12:49:51.387Z",
+        "ended_at": "2026-11-14T12:49:51.387Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "assets/audio/sound-design.json",
+          "assets/audio/sound-bed.wav",
+          "assets/audio/sound-reveal.wav",
+          "assets/audio/sound-sweep.wav",
+          "assets/audio/sound-slam.wav"
+        ],
+        "started_by": "cli",
+        "script_exit_code": 0,
+        "result": {
+          "report": {
+            "clips": [
+              {
+                "id": "bed",
+                "kind": "bgm",
+                "path": "assets/audio/sound-bed.wav",
+                "start_sec": 0,
+                "duration_sec": 6,
+                "volume": 0.08,
+                "loop": false,
+                "play_duration_sec": 6
+              },
+              {
+                "id": "reveal",
+                "kind": "chime",
+                "path": "assets/audio/sound-reveal.wav",
+                "start_sec": 0.6,
+                "duration_sec": 0.7,
+                "volume": 0.15,
+                "loop": false,
+                "play_duration_sec": 0.7
+              },
+              {
+                "id": "sweep",
+                "kind": "whoosh",
+                "path": "assets/audio/sound-sweep.wav",
+                "start_sec": 2.5,
+                "duration_sec": 0.35,
+                "volume": 0.15,
+                "loop": false,
+                "play_duration_sec": 0.35
+              },
+              {
+                "id": "slam",
+                "kind": "impact",
+                "path": "assets/audio/sound-slam.wav",
+                "start_sec": 4,
+                "duration_sec": 0.3,
+                "volume": 0.1,
+                "loop": false,
+                "play_duration_sec": 0.3
+              }
+            ],
+            "method": "deterministic procedural synthesis / 48 kHz mono PCM16"
+          },
+          "artifacts": [
+            "assets/audio/sound-design.json",
+            "assets/audio/sound-bed.wav",
+            "assets/audio/sound-reveal.wav",
+            "assets/audio/sound-sweep.wav",
+            "assets/audio/sound-slam.wav"
+          ]
+        },
+        "job": "Legacy & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": {
+          "clips": [
+            {
+              "id": "bed",
+              "kind": "bgm",
+              "path": "assets/audio/sound-bed.wav",
+              "start_sec": 0,
+              "duration_sec": 6,
+              "volume": 0.08,
+              "loop": false,
+              "play_duration_sec": 6
+            },
+            {
+              "id": "reveal",
+              "kind": "chime",
+              "path": "assets/audio/sound-reveal.wav",
+              "start_sec": 0.6,
+              "duration_sec": 0.7,
+              "volume": 0.15,
+              "loop": false,
+              "play_duration_sec": 0.7
+            },
+            {
+              "id": "sweep",
+              "kind": "whoosh",
+              "path": "assets/audio/sound-sweep.wav",
+              "start_sec": 2.5,
+              "duration_sec": 0.35,
+              "volume": 0.15,
+              "loop": false,
+              "play_duration_sec": 0.35
+            },
+            {
+              "id": "slam",
+              "kind": "impact",
+              "path": "assets/audio/sound-slam.wav",
+              "start_sec": 4,
+              "duration_sec": 0.3,
+              "volume": 0.1,
+              "loop": false,
+              "play_duration_sec": 0.3
+            }
+          ],
+          "method": "deterministic procedural synthesis / 48 kHz mono PCM16"
+        },
+        "artifacts": [
+          "assets/audio/sound-design.json",
+          "assets/audio/sound-bed.wav",
+          "assets/audio/sound-reveal.wav",
+          "assets/audio/sound-sweep.wav",
+          "assets/audio/sound-slam.wav"
+        ]
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T124946Z-0ba1e8ce/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tail": [
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T124946Z-0ba1e8ce/stdout.log",
+          "bytes": 85,
+          "sha256": "f96bfeb2f7d2ef94fef3f380789366078e44ed0176e6c1241543f659c237da77",
+          "tail": [
+            "bed: bgm, 6 sec",
+            "reveal: chime, 0.7 sec",
+            "sweep: whoosh, 0.35 sec",
+            "slam: impact, 0.3 sec",
+            ""
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "assets/audio/sound-bed.wav",
+          "bytes": 576044,
+          "sha256": "8b46207a22d9cacd146acc8c492a5c11ccdef73d9b2ae6e40b6c02f081047f2d"
+        },
+        {
+          "path": "assets/audio/sound-design.json",
+          "bytes": 991,
+          "sha256": "b8523772bd371b2d8354a1e6278da57c4771c485db5e91b22fa42a0b0c53e999"
+        },
+        {
+          "path": "assets/audio/sound-reveal.wav",
+          "bytes": 67244,
+          "sha256": "eaad9e69ee15969536bcac46d9312adb2052b77bd4080a64d03d507e4534104e"
+        },
+        {
+          "path": "assets/audio/sound-slam.wav",
+          "bytes": 28844,
+          "sha256": "46c7fc0a76491b8c4afc03e5d664332586aa957accf0cfba4bfaf25111279feb"
+        },
+        {
+          "path": "assets/audio/sound-sweep.wav",
+          "bytes": 33644,
+          "sha256": "64a4f29d19605cd7ef7f2f9ef6645d72685bf96974f6b4e5c9e8f99272688430"
+        }
+      ]
+    },
+    {
+      "command": [
+        "validate",
+        "Legacy & ＆（全角）　・ 空白"
+      ],
+      "cli_exit_code": 0,
+      "polling": null,
+      "elapsed_ms": 29495,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T124952Z-d422308a",
+        "kind": "validate",
+        "args": {},
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 18784,
+        "script_pid": 6900,
+        "started_at": "2026-11-14T12:49:53.384Z",
+        "heartbeat_at": "2026-11-14T12:50:20.920Z",
+        "ended_at": "2026-11-14T12:50:20.920Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [],
+        "started_by": "cli",
+        "script_exit_code": 0,
+        "result": {
+          "report": {
+            "schema": "smm.validate/1",
+            "final": false,
+            "double_render": false,
+            "verdict": "pass",
+            "checks": [
+              {
+                "name": "project.json",
+                "status": "ok",
+                "message": "OK project.json"
+              },
+              {
+                "name": "sources and assets",
+                "status": "ok",
+                "message": "OK sources and assets"
+              },
+              {
+                "name": "audio manifests",
+                "status": "ok",
+                "message": "OK audio manifests"
+              },
+              {
+                "name": "sync public assets",
+                "status": "ok",
+                "message": "OK sync public assets"
+              },
+              {
+                "name": "TypeScript",
+                "status": "ok",
+                "message": "OK TypeScript"
+              }
+            ],
+            "advisories": []
+          },
+          "artifacts": [],
+          "verdict": "pass"
+        },
+        "job": "Legacy & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": {
+          "schema": "smm.validate/1",
+          "final": false,
+          "double_render": false,
+          "verdict": "pass",
+          "checks": [
+            {
+              "name": "project.json",
+              "status": "ok",
+              "message": "OK project.json"
+            },
+            {
+              "name": "sources and assets",
+              "status": "ok",
+              "message": "OK sources and assets"
+            },
+            {
+              "name": "audio manifests",
+              "status": "ok",
+              "message": "OK audio manifests"
+            },
+            {
+              "name": "sync public assets",
+              "status": "ok",
+              "message": "OK sync public assets"
+            },
+            {
+              "name": "TypeScript",
+              "status": "ok",
+              "message": "OK TypeScript"
+            }
+          ],
+          "advisories": []
+        },
+        "artifacts": [],
+        "verdict": "pass"
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T124952Z-d422308a/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tail": [
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T124952Z-d422308a/stdout.log",
+          "bytes": 178,
+          "sha256": "b22bbd19e3b396d9851d033c96e1377afbadb08d207fa6fc58820a2e067525f9",
+          "tail": [
+            "OK project.json",
+            "OK sources and assets",
+            "OK audio manifests",
+            "OK sync public assets",
+            "OK TypeScript",
+            "Structural checks passed. Visual and audio QA still requires watching and listening.",
+            ""
+          ]
+        }
+      ],
+      "artifacts": []
+    },
+    {
+      "command": [
+        "validate",
+        "Legacy & ＆（全角）　・ 空白"
+      ],
+      "cli_exit_code": 1,
+      "polling": null,
+      "elapsed_ms": 29115,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T125022Z-a1874042",
+        "kind": "validate",
+        "args": {},
+        "status": "completed",
+        "exit_code": 1,
+        "pid": 23000,
+        "script_pid": 1460,
+        "started_at": "2026-11-14T12:50:24.253Z",
+        "heartbeat_at": "2026-11-14T12:50:50.128Z",
+        "ended_at": "2026-11-14T12:50:50.128Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [],
+        "started_by": "cli",
+        "script_exit_code": 1,
+        "result": {
+          "report": {
+            "schema": "smm.validate/1",
+            "final": false,
+            "double_render": false,
+            "verdict": "fail",
+            "checks": [
+              {
+                "name": "sources and assets",
+                "status": "ok",
+                "message": "OK sources and assets"
+              },
+              {
+                "name": "audio manifests",
+                "status": "ok",
+                "message": "OK audio manifests"
+              },
+              {
+                "name": "sync public assets",
+                "status": "ok",
+                "message": "OK sync public assets"
+              },
+              {
+                "name": "TypeScript",
+                "status": "ok",
+                "message": "OK TypeScript"
+              },
+              {
+                "name": "project.json",
+                "status": "error",
+                "message": "project.json: Title is missing"
+              }
+            ],
+            "advisories": []
+          },
+          "artifacts": [],
+          "verdict": "fail"
+        },
+        "job": "Legacy & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": {
+          "schema": "smm.validate/1",
+          "final": false,
+          "double_render": false,
+          "verdict": "fail",
+          "checks": [
+            {
+              "name": "sources and assets",
+              "status": "ok",
+              "message": "OK sources and assets"
+            },
+            {
+              "name": "audio manifests",
+              "status": "ok",
+              "message": "OK audio manifests"
+            },
+            {
+              "name": "sync public assets",
+              "status": "ok",
+              "message": "OK sync public assets"
+            },
+            {
+              "name": "TypeScript",
+              "status": "ok",
+              "message": "OK TypeScript"
+            },
+            {
+              "name": "project.json",
+              "status": "error",
+              "message": "project.json: Title is missing"
+            }
+          ],
+          "advisories": []
+        },
+        "artifacts": [],
+        "verdict": "fail"
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T125022Z-a1874042/stderr.log",
+          "bytes": 31,
+          "sha256": "dbaba064442f3c75bb17e91497ec4ae2f16c72a34160f6c48172e4f0666fe259",
+          "tail": [
+            "project.json: Title is missing",
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T125022Z-a1874042/stdout.log",
+          "bytes": 77,
+          "sha256": "e65dd4180113834cf34a9ee80e1651f975c3581d39aad48faeba4432b7c8a892",
+          "tail": [
+            "OK sources and assets",
+            "OK audio manifests",
+            "OK sync public assets",
+            "OK TypeScript",
+            ""
+          ]
+        }
+      ],
+      "artifacts": []
+    },
+    {
+      "command": [
+        "qc",
+        "Legacy & ＆（全角）　・ 空白",
+        "--stage",
+        "pre"
+      ],
+      "cli_exit_code": 1,
+      "polling": null,
+      "elapsed_ms": 8602,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T125051Z-883c0dad",
+        "kind": "qc",
+        "args": {
+          "stage": "pre"
+        },
+        "status": "completed",
+        "exit_code": 1,
+        "pid": 2592,
+        "script_pid": 17416,
+        "started_at": "2026-11-14T12:50:53.275Z",
+        "heartbeat_at": "2026-11-14T12:50:58.481Z",
+        "ended_at": "2026-11-14T12:50:58.481Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "reports/qc-pre.json"
+        ],
+        "started_by": "cli",
+        "script_exit_code": 1,
+        "result": {
+          "report": {
+            "schema_version": "1",
+            "kind": "biim-explainer-qc",
+            "stage": "pre",
+            "mode": "explanation",
+            "style_mode": "biim",
+            "verdict": "fail",
+            "gates": [
+              {
+                "id": "PRE-1",
+                "title": "理解設計の記録",
+                "kind": "machine",
+                "scope": "all",
+                "status": "fail",
+                "detail": "ENOENT: no such file or directory, open '.\\Legacy & ＆（全角）　・ 空白\\plan\\explanation-map.md'"
+              },
+              {
+                "id": "PRE-2",
+                "title": "方向性の記録",
+                "kind": "machine",
+                "scope": "all",
+                "status": "fail",
+                "detail": "ENOENT: no such file or directory, open '.\\Legacy & ＆（全角）　・ 空白\\plan\\direction.md'"
+              },
+              {
+                "id": "PRE-3",
+                "title": "根拠台帳の構造",
+                "kind": "machine",
+                "scope": "all",
+                "status": "fail",
+                "detail": "ENOENT: no such file or directory, open '.\\Legacy & ＆（全角）　・ 空白\\plan\\evidence.json'"
+              },
+              {
+                "id": "PRE-4",
+                "title": "台本と根拠の整合",
+                "kind": "review",
+                "scope": "all",
+                "status": "fail",
+                "detail": "Missing checked review line: PRE-4"
+              },
+              {
+                "id": "PRE-5",
+                "title": "数式・数値・図解の正確さ",
+                "kind": "review",
+                "scope": "all",
+                "status": "fail",
+                "detail": "Missing checked review line: PRE-5"
+              },
+              {
+                "id": "PRE-6",
+                "title": "字幕帯域",
+                "kind": "machine",
+                "scope": "all",
+                "status": "not-applicable",
+                "detail": "No applicable scenes or voice"
+              },
+              {
+                "id": "PRE-7",
+                "title": "ストーリーボードの様式",
+                "kind": "machine",
+                "scope": "all",
+                "status": "fail",
+                "detail": "ENOENT: no such file or directory, open '.\\Legacy & ＆（全角）　・ 空白\\plan\\storyboard.md'"
+              },
+              {
+                "id": "PRE-8",
+                "title": "Biim 場面の標準",
+                "kind": "machine",
+                "scope": "biim-scenes",
+                "status": "pass",
+                "detail": "Checks passed",
+                "scene_ids": [
+                  "scene001"
+                ]
+              }
+            ],
+            "advisories": [
+              {
+                "id": "ADV-REVIEW-1",
+                "scope": "all",
+                "detail": "review_mode missing; recorded as self"
+              },
+              {
+                "id": "ADV-PRE-6",
+                "scope": "all",
+                "detail": "No pronunciation heading in plan/script.md"
+              }
+            ],
+            "review_mode": "self",
+            "waivers": [],
+            "inputs": {
+              "project.json": "9951ac97c0cd69ea9eba50ab84b86d0298f6cdb33b84520fe733bac82803d703",
+              "plan/explanation-map.md": null,
+              "plan/direction.md": null,
+              "plan/evidence.json": null,
+              "plan/storyboard.md": null,
+              "plan/script.md": null,
+              "plan/narration.json": "576be18017ccb7dd342238aa8861a7a74d19a5d536bb3809c81c5732584c90f9",
+              "reports/qc-review.md": null
+            },
+            "rule_versions": {
+              "caption_capacity": "1"
+            },
+            "generated_at": "2026-11-14T12:50:58.160Z"
+          },
+          "artifacts": [
+            "reports/qc-pre.json"
+          ],
+          "verdict": "fail"
+        },
+        "job": "Legacy & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": {
+          "schema_version": "1",
+          "kind": "biim-explainer-qc",
+          "stage": "pre",
+          "mode": "explanation",
+          "style_mode": "biim",
+          "verdict": "fail",
+          "gates": [
+            {
+              "id": "PRE-1",
+              "title": "理解設計の記録",
+              "kind": "machine",
+              "scope": "all",
+              "status": "fail",
+              "detail": "ENOENT: no such file or directory, open '.\\Legacy & ＆（全角）　・ 空白\\plan\\explanation-map.md'"
+            },
+            {
+              "id": "PRE-2",
+              "title": "方向性の記録",
+              "kind": "machine",
+              "scope": "all",
+              "status": "fail",
+              "detail": "ENOENT: no such file or directory, open '.\\Legacy & ＆（全角）　・ 空白\\plan\\direction.md'"
+            },
+            {
+              "id": "PRE-3",
+              "title": "根拠台帳の構造",
+              "kind": "machine",
+              "scope": "all",
+              "status": "fail",
+              "detail": "ENOENT: no such file or directory, open '.\\Legacy & ＆（全角）　・ 空白\\plan\\evidence.json'"
+            },
+            {
+              "id": "PRE-4",
+              "title": "台本と根拠の整合",
+              "kind": "review",
+              "scope": "all",
+              "status": "fail",
+              "detail": "Missing checked review line: PRE-4"
+            },
+            {
+              "id": "PRE-5",
+              "title": "数式・数値・図解の正確さ",
+              "kind": "review",
+              "scope": "all",
+              "status": "fail",
+              "detail": "Missing checked review line: PRE-5"
+            },
+            {
+              "id": "PRE-6",
+              "title": "字幕帯域",
+              "kind": "machine",
+              "scope": "all",
+              "status": "not-applicable",
+              "detail": "No applicable scenes or voice"
+            },
+            {
+              "id": "PRE-7",
+              "title": "ストーリーボードの様式",
+              "kind": "machine",
+              "scope": "all",
+              "status": "fail",
+              "detail": "ENOENT: no such file or directory, open '.\\Legacy & ＆（全角）　・ 空白\\plan\\storyboard.md'"
+            },
+            {
+              "id": "PRE-8",
+              "title": "Biim 場面の標準",
+              "kind": "machine",
+              "scope": "biim-scenes",
+              "status": "pass",
+              "detail": "Checks passed",
+              "scene_ids": [
+                "scene001"
+              ]
+            }
+          ],
+          "advisories": [
+            {
+              "id": "ADV-REVIEW-1",
+              "scope": "all",
+              "detail": "review_mode missing; recorded as self"
+            },
+            {
+              "id": "ADV-PRE-6",
+              "scope": "all",
+              "detail": "No pronunciation heading in plan/script.md"
+            }
+          ],
+          "review_mode": "self",
+          "waivers": [],
+          "inputs": {
+            "project.json": "9951ac97c0cd69ea9eba50ab84b86d0298f6cdb33b84520fe733bac82803d703",
+            "plan/explanation-map.md": null,
+            "plan/direction.md": null,
+            "plan/evidence.json": null,
+            "plan/storyboard.md": null,
+            "plan/script.md": null,
+            "plan/narration.json": "576be18017ccb7dd342238aa8861a7a74d19a5d536bb3809c81c5732584c90f9",
+            "reports/qc-review.md": null
+          },
+          "rule_versions": {
+            "caption_capacity": "1"
+          },
+          "generated_at": "2026-11-14T12:50:58.160Z"
+        },
+        "artifacts": [
+          "reports/qc-pre.json"
+        ],
+        "verdict": "fail"
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T125051Z-883c0dad/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tail": [
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T125051Z-883c0dad/stdout.log",
+          "bytes": 37,
+          "sha256": "5403d6bfad1ff157556ec47418b7d79e8e3eb5ca1b3650e642bd9fa4d01bb82c",
+          "tail": [
+            "QC pre: fail — reports/qc-pre.json",
+            ""
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "reports/qc-pre.json",
+          "bytes": 3283,
+          "sha256": "acfedcd186ca879bb9b364188f73b64fc936366f07f9bc14df890f14836f1f59"
+        }
+      ]
+    },
+    {
+      "command": [
+        "render",
+        "Legacy & ＆（全角）　・ 空白",
+        "--target",
+        "preview"
+      ],
+      "cli_exit_code": 0,
+      "polling": null,
+      "elapsed_ms": 86874,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T125059Z-9d774130",
+        "kind": "render",
+        "args": {
+          "target": "preview"
+        },
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 12540,
+        "script_pid": 10376,
+        "started_at": "2026-11-14T12:51:01.605Z",
+        "heartbeat_at": "2026-11-14T12:52:25.549Z",
+        "ended_at": "2026-11-14T12:52:25.549Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "output/preview.mp4"
+        ],
+        "started_by": "cli",
+        "script_exit_code": 0,
+        "result": {
+          "report": null,
+          "artifacts": [
+            "output/preview.mp4"
+          ]
+        },
+        "job": "Legacy & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": null,
+        "artifacts": [
+          "output/preview.mp4"
+        ]
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T125059Z-9d774130/stderr.log",
+          "bytes": 268,
+          "sha256": "3dbed638aa4db380d244c7324aec6576e0a91e51de59b607cbfc252a155a6f6a",
+          "tail": [
+            "[Tab 1, ../node_modules/three/build/three.core.js:2022] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.",
+            "[Tab 0, ../node_modules/three/build/three.core.js:2022] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.",
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T125059Z-9d774130/stdout.log",
+          "bytes": 7315,
+          "sha256": "b8cbdc6f1c0cc0d77e82354056f3535d38a6ddb22a0e8e082443bc69acfcaae4",
+          "tail": [
+            "Rendered 159/180, time remaining: 1s",
+            "Rendered 160/180, time remaining: 1s",
+            "Rendered 161/180, time remaining: 1s",
+            "Rendered 162/180, time remaining: 1s",
+            "Rendered 162/180, time remaining: 1s",
+            "Rendered 163/180, time remaining: 1s",
+            "Rendered 164/180, time remaining: 1s",
+            "Rendered 165/180, time remaining: 1s",
+            "Rendered 166/180, time remaining: 1s",
+            "Rendered 166/180, time remaining: 1s",
+            "Rendered 167/180, time remaining: 1s",
+            "Rendered 168/180, time remaining: 1s",
+            "Rendered 169/180, time remaining: 1s",
+            "Rendered 170/180, time remaining: 0s",
+            "Rendered 171/180, time remaining: 0s",
+            "Rendered 171/180, time remaining: 0s",
+            "Rendered 172/180, time remaining: 0s",
+            "Rendered 173/180, time remaining: 0s",
+            "Rendered 174/180, time remaining: 0s",
+            "Rendered 175/180, time remaining: 0s",
+            "Rendered 175/180, time remaining: 0s",
+            "Rendered 176/180, time remaining: 0s",
+            "Rendered 177/180, time remaining: 0s",
+            "Rendered 178/180, time remaining: 0s",
+            "Rendered 179/180, time remaining: 0s",
+            "Encoded 128/180",
+            "Encoded 144/180",
+            "Encoded 180/180",
+            "+                    ../output/preview.mp4 495.6 kB",
+            ""
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "output/preview.mp4",
+          "bytes": 495584,
+          "sha256": "e067ad9ba5759dda8c47f6e43d5fab7b29fc5e396f35537b392204d5e5af036b"
+        }
+      ]
+    },
+    {
+      "command": [
+        "render",
+        "Legacy & ＆（全角）　・ 空白",
+        "--target",
+        "still",
+        "--frame",
+        "30"
+      ],
+      "cli_exit_code": 0,
+      "polling": null,
+      "elapsed_ms": 27115,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T125226Z-af1262a4",
+        "kind": "render",
+        "args": {
+          "target": "still",
+          "frame": 30
+        },
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 23644,
+        "script_pid": 12264,
+        "started_at": "2026-11-14T12:52:28.150Z",
+        "heartbeat_at": "2026-11-14T12:52:52.752Z",
+        "ended_at": "2026-11-14T12:52:52.752Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "output/preview.png"
+        ],
+        "started_by": "cli",
+        "script_exit_code": 0,
+        "result": {
+          "report": null,
+          "artifacts": [
+            "output/preview.png"
+          ]
+        },
+        "job": "Legacy & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": null,
+        "artifacts": [
+          "output/preview.png"
+        ]
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T125226Z-af1262a4/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tail": [
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T125226Z-af1262a4/stdout.log",
+          "bytes": 371,
+          "sha256": "64982abdbdade668a625ec79427390697177951e96b0a2e5eb6d438ad5a79a81",
+          "tail": [
+            "Bundling 6%",
+            "Bundling 23%",
+            "Bundling 63%",
+            "Bundling 69%",
+            "Bundling 74%",
+            "Bundling 80%",
+            "Bundling 85%",
+            "Bundling 90%",
+            "Bundling 95%",
+            "Bundling 100%",
+            "Copying public dir 13.9 MB",
+            "Getting composition",
+            "Composition          MainVideo",
+            "Format               png",
+            "Output               ../output/preview.png",
+            "Rendered 0/1",
+            "Rendered 0/1",
+            "Rendered 0/1",
+            "Rendered 1/1",
+            "+                    ../output/preview.png",
+            ""
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "output/preview.png",
+          "bytes": 27051,
+          "sha256": "3d737258719e5b789ca6abd0275ebd0fca89307135746e2a88420527a58fae04"
+        }
+      ]
+    },
+    {
+      "command": [
+        "ghost-check",
+        "Legacy & ＆（全角）　・ 空白",
+        "--target",
+        "preview"
+      ],
+      "cli_exit_code": 0,
+      "polling": null,
+      "elapsed_ms": 3085,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T125253Z-11a69927",
+        "kind": "ghost_check",
+        "args": {
+          "target": "preview"
+        },
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 19544,
+        "script_pid": 11692,
+        "started_at": "2026-11-14T12:52:54.118Z",
+        "heartbeat_at": "2026-11-14T12:52:55.889Z",
+        "ended_at": "2026-11-14T12:52:55.889Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "reports/ghost-check-preview.json"
+        ],
+        "started_by": "cli",
+        "script_exit_code": 0,
+        "result": {
+          "report": {
+            "kind": "biim-ghost-check",
+            "version": 1,
+            "video": "output/preview.mp4",
+            "fps": 30,
+            "frames": 180,
+            "duration": "0:06.00",
+            "counts": {
+              "singleFrameEvents": 0,
+              "isolated": 0,
+              "clusteredRuns": 0,
+              "clusteredEvents": 0
+            },
+            "isolated": [],
+            "clustered": [],
+            "worst": [],
+            "stills": []
+          },
+          "artifacts": [
+            "reports/ghost-check-preview.json"
+          ]
+        },
+        "job": "Legacy & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": {
+          "kind": "biim-ghost-check",
+          "version": 1,
+          "video": "output/preview.mp4",
+          "fps": 30,
+          "frames": 180,
+          "duration": "0:06.00",
+          "counts": {
+            "singleFrameEvents": 0,
+            "isolated": 0,
+            "clusteredRuns": 0,
+            "clusteredEvents": 0
+          },
+          "isolated": [],
+          "clustered": [],
+          "worst": [],
+          "stills": []
+        },
+        "artifacts": [
+          "reports/ghost-check-preview.json"
+        ]
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T125253Z-11a69927/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tail": [
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T125253Z-11a69927/stdout.log",
+          "bytes": 204,
+          "sha256": "b0807be78c9ffda898f269d7d58553e34dc7170b5edc4697b60ef895f4bd769a",
+          "tail": [
+            "Scanned 180 frames of output/preview.mp4 at 0:06.00 total.",
+            "Single-frame events: 0 (isolated 0, clustered 0 in 0 runs)",
+            "Report written to reports/ghost-check-preview.md and reports/ghost-check-preview.json",
+            ""
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "reports/ghost-check-preview.json",
+          "bytes": 320,
+          "sha256": "98aeb135ed51ab37ee3f779a4b9bc7914f762f6a799688417504955332c36fd3"
+        }
+      ]
+    },
+    {
+      "command": [
+        "render",
+        "Legacy & ＆（全角）　・ 空白",
+        "--target",
+        "final"
+      ],
+      "cli_exit_code": 0,
+      "polling": null,
+      "elapsed_ms": 29335,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T125256Z-e7555f4a",
+        "kind": "render",
+        "args": {
+          "target": "final"
+        },
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 4664,
+        "script_pid": 10572,
+        "started_at": "2026-11-14T12:52:57.074Z",
+        "heartbeat_at": "2026-11-14T12:53:25.220Z",
+        "ended_at": "2026-11-14T12:53:25.220Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "output/final.mp4"
+        ],
+        "started_by": "cli",
+        "script_exit_code": 0,
+        "result": {
+          "report": null,
+          "artifacts": [
+            "output/final.mp4"
+          ]
+        },
+        "job": "Legacy & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": null,
+        "artifacts": [
+          "output/final.mp4"
+        ]
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T125256Z-e7555f4a/stderr.log",
+          "bytes": 268,
+          "sha256": "3dbed638aa4db380d244c7324aec6576e0a91e51de59b607cbfc252a155a6f6a",
+          "tail": [
+            "[Tab 1, ../node_modules/three/build/three.core.js:2022] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.",
+            "[Tab 0, ../node_modules/three/build/three.core.js:2022] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.",
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T125256Z-e7555f4a/stdout.log",
+          "bytes": 7182,
+          "sha256": "ea937fa334a88ccfcba8791333d4de2e63259b41e4b13c9c4d9574daa07dbd46",
+          "tail": [
+            "Rendered 158/180, time remaining: 1s",
+            "Rendered 159/180, time remaining: 1s",
+            "Rendered 160/180, time remaining: 1s",
+            "Rendered 161/180, time remaining: 1s",
+            "Rendered 162/180, time remaining: 1s",
+            "Rendered 162/180, time remaining: 1s",
+            "Rendered 163/180, time remaining: 1s",
+            "Rendered 164/180, time remaining: 1s",
+            "Rendered 165/180, time remaining: 1s",
+            "Rendered 166/180, time remaining: 1s",
+            "Rendered 167/180, time remaining: 1s",
+            "Rendered 168/180, time remaining: 1s",
+            "Rendered 168/180, time remaining: 1s",
+            "Rendered 169/180, time remaining: 0s",
+            "Rendered 170/180, time remaining: 0s",
+            "Rendered 171/180, time remaining: 0s",
+            "Rendered 172/180, time remaining: 0s",
+            "Rendered 173/180, time remaining: 0s",
+            "Rendered 174/180, time remaining: 0s",
+            "Rendered 174/180, time remaining: 0s",
+            "Rendered 175/180, time remaining: 0s",
+            "Rendered 176/180, time remaining: 0s",
+            "Rendered 177/180, time remaining: 0s",
+            "Rendered 178/180, time remaining: 0s",
+            "Rendered 179/180, time remaining: 0s",
+            "Encoded 127/180",
+            "Encoded 144/180",
+            "Encoded 180/180",
+            "+                    ../output/final.mp4 643.5 kB",
+            ""
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "output/final.mp4",
+          "bytes": 643491,
+          "sha256": "e65be40d0c5c3adcd485e72d178c885a2eab878346479524e79742ba508a3229"
+        }
+      ]
+    },
+    {
+      "command": [
+        "ghost-check",
+        "Legacy & ＆（全角）　・ 空白"
+      ],
+      "cli_exit_code": 0,
+      "polling": null,
+      "elapsed_ms": 2574,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T125325Z-0bf367f7",
+        "kind": "ghost_check",
+        "args": {},
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 19360,
+        "script_pid": 9964,
+        "started_at": "2026-11-14T12:53:26.339Z",
+        "heartbeat_at": "2026-11-14T12:53:27.803Z",
+        "ended_at": "2026-11-14T12:53:27.803Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "reports/ghost-check.json"
+        ],
+        "started_by": "cli",
+        "script_exit_code": 0,
+        "result": {
+          "report": {
+            "kind": "biim-ghost-check",
+            "version": 1,
+            "video": "output/final.mp4",
+            "fps": 30,
+            "frames": 180,
+            "duration": "0:06.00",
+            "counts": {
+              "singleFrameEvents": 0,
+              "isolated": 0,
+              "clusteredRuns": 0,
+              "clusteredEvents": 0
+            },
+            "isolated": [],
+            "clustered": [],
+            "worst": [],
+            "stills": []
+          },
+          "artifacts": [
+            "reports/ghost-check.json"
+          ]
+        },
+        "job": "Legacy & ＆（全角）　・ 空白"
+      },
+      "result": {
+        "report": {
+          "kind": "biim-ghost-check",
+          "version": 1,
+          "video": "output/final.mp4",
+          "fps": 30,
+          "frames": 180,
+          "duration": "0:06.00",
+          "counts": {
+            "singleFrameEvents": 0,
+            "isolated": 0,
+            "clusteredRuns": 0,
+            "clusteredEvents": 0
+          },
+          "isolated": [],
+          "clustered": [],
+          "worst": [],
+          "stills": []
+        },
+        "artifacts": [
+          "reports/ghost-check.json"
+        ]
+      },
+      "error": null,
+      "logs": [
+        {
+          "path": ".smm/runs/r-20261114T125325Z-0bf367f7/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tail": [
+            ""
+          ]
+        },
+        {
+          "path": ".smm/runs/r-20261114T125325Z-0bf367f7/stdout.log",
+          "bytes": 186,
+          "sha256": "510d799a024eacbccee586b17b692ec5d727b4c248302e168b55117c0a9dbae5",
+          "tail": [
+            "Scanned 180 frames of output/final.mp4 at 0:06.00 total.",
+            "Single-frame events: 0 (isolated 0, clustered 0 in 0 runs)",
+            "Report written to reports/ghost-check.md and reports/ghost-check.json",
+            ""
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "reports/ghost-check.json",
+          "bytes": 318,
+          "sha256": "186e2127c0441a4422106f28046525b215bd5a75f3016761d9cc8c7ce3bdb954"
+        }
+      ]
+    }
+  ],
+  "success": true,
+  "origin": "BiimMotion 262c798 tools/generate-job.ts",
+  "job": "Legacy & ＆（全角）　・ 空白",
+  "fixture": [
+    {
+      "path": "assets/character.glb",
+      "bytes": 1316,
+      "sha256": "b3ca76cc7e54f8d26dd94d235808284d5727c2dca647ce14d5a8f5ee2d369578"
+    },
+    {
+      "path": "plan/sound-design.json",
+      "bytes": 328,
+      "sha256": "59b283241964ee7dc0130dcb9fe4bc519349c812e5e25cc39b42bf9c248f61ff"
+    },
+    {
+      "path": "project.json",
+      "bytes": 6289,
+      "sha256": "9951ac97c0cd69ea9eba50ab84b86d0298f6cdb33b84520fe733bac82803d703"
+    },
+    {
+      "path": "runtime/remotion.config.ts",
+      "bytes": 266,
+      "sha256": "febb9b15b9cea7b203be09723fd86077b8a1ede9e519dbac00ac69ad6a8065b4"
+    },
+    {
+      "path": "runtime/scripts/validate.mjs",
+      "bytes": 11095,
+      "sha256": "c4c8801931616bbc0a561023245acebb1b56e9212221a5e959a1dc825158cee7"
+    }
+  ],
+  "status": {
+    "job": {
+      "title": "Biim枠・字幕・3D・音響の動作確認",
+      "mode": "explanation",
+      "style_mode": "biim",
+      "schema_version": "0.4",
+      "generator": null
+    },
+    "deps": {
+      "installed": true
+    },
+    "records": [
+      {
+        "path": "plan/direction.md",
+        "exists": false,
+        "bytes": null,
+        "modified_at": null
+      },
+      {
+        "path": "plan/storyboard.md",
+        "exists": false,
+        "bytes": null,
+        "modified_at": null
+      },
+      {
+        "path": "plan/sources.md",
+        "exists": false,
+        "bytes": null,
+        "modified_at": null
+      },
+      {
+        "path": "reports/visual-qa.md",
+        "exists": false,
+        "bytes": null,
+        "modified_at": null
+      },
+      {
+        "path": "reports/delivery.md",
+        "exists": false,
+        "bytes": null,
+        "modified_at": null
+      },
+      {
+        "path": "plan/script.md",
+        "exists": false,
+        "bytes": null,
+        "modified_at": null
+      },
+      {
+        "path": "plan/explanation-map.md",
+        "exists": false,
+        "bytes": null,
+        "modified_at": null
+      },
+      {
+        "path": "plan/evidence.json",
+        "exists": false,
+        "bytes": null,
+        "modified_at": null
+      },
+      {
+        "path": "plan/narration.json",
+        "exists": true,
+        "bytes": 17,
+        "modified_at": "2026-11-14T12:28:27.472Z"
+      },
+      {
+        "path": "reports/qc-review.md",
+        "exists": false,
+        "bytes": null,
+        "modified_at": null
+      },
+      {
+        "path": "assets/audio/narration.json",
+        "exists": false,
+        "bytes": null,
+        "modified_at": null
+      },
+      {
+        "path": "reports/ghost-check-preview.json",
+        "exists": false,
+        "bytes": null,
+        "modified_at": null
+      },
+      {
+        "path": "reports/ghost-check.json",
+        "exists": false,
+        "bytes": null,
+        "modified_at": null
+      }
+    ],
+    "scenes": 1,
+    "outputs": [
+      {
+        "path": "output/preview.mp4",
+        "exists": false,
+        "bytes": null,
+        "modified_at": null
+      },
+      {
+        "path": "output/final.mp4",
+        "exists": false,
+        "bytes": null,
+        "modified_at": null
+      }
+    ],
+    "checks": [
+      {
+        "kind": "validate",
+        "available": false
+      },
+      {
+        "kind": "qc-pre",
+        "available": false
+      },
+      {
+        "kind": "qc-post",
+        "available": false
+      },
+      {
+        "kind": "ghost-check",
+        "available": false
+      },
+      {
+        "kind": "ghost-check-preview",
+        "available": false
+      }
+    ],
+    "runs": [
+      {
+        "schema": "smm.run/1",
+        "id": "r-20261114T124704Z-f4790027",
+        "kind": "setup",
+        "args": {},
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 7904,
+        "script_pid": 20848,
+        "started_at": "2026-11-14T12:47:07.078Z",
+        "heartbeat_at": "2026-11-14T12:49:44.028Z",
+        "ended_at": "2026-11-14T12:49:44.028Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [],
+        "started_by": "cli",
+        "script_exit_code": 0,
+        "result": {
+          "report": null,
+          "artifacts": []
+        },
+        "job": "Legacy & ＆（全角）　・ 空白"
+      }
+    ],
+    "hints": [
+      {
+        "operation": "project_get",
+        "input": {
+          "job": "Legacy & ＆（全角）　・ 空白"
+        },
+        "note": "設定の確認に利用できます。工程の順序を強制するものではありません。"
+      }
+    ]
+  },
+  "legacy_validate_report_absent": true,
+  "outputs": [
+    {
+      "path": "output/final.mp4",
+      "bytes": 643491,
+      "sha256": "e65be40d0c5c3adcd485e72d178c885a2eab878346479524e79742ba508a3229"
+    },
+    {
+      "path": "output/preview.mp4",
+      "bytes": 495584,
+      "sha256": "e067ad9ba5759dda8c47f6e43d5fab7b29fc5e396f35537b392204d5e5af036b"
+    },
+    {
+      "path": "output/preview.png",
+      "bytes": 27051,
+      "sha256": "3d737258719e5b789ca6abd0275ebd0fca89307135746e2a88420527a58fae04"
+    },
+    {
+      "path": "reports/ghost-check-preview.json",
+      "bytes": 320,
+      "sha256": "98aeb135ed51ab37ee3f779a4b9bc7914f762f6a799688417504955332c36fd3"
+    },
+    {
+      "path": "reports/ghost-check.json",
+      "bytes": 318,
+      "sha256": "186e2127c0441a4422106f28046525b215bd5a75f3016761d9cc8c7ce3bdb954"
+    }
+  ],
+  "protocol_errors": 0,
+  "ended_at": "2026-11-14T12:53:27.881Z",
+  "elapsed_ms": 387691
+}

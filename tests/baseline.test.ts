@@ -12,6 +12,8 @@ import {
 import { baseline, repository, readJson, hash, fileMap, loadAssets, loadTemplates } from "./helpers/templates.ts";
 
 const diffs = await readJson("allowed-diffs.json");
+const r1Occurrences = [2, 1, 1, 1, 1, 1, 1, 1, 1];
+assert.equal(diffs.rules[0].replacements.length, r1Occurrences.length);
 function reverseText(name: string, text: string): string {
   for (const rule of [...diffs.rules].reverse()) {
     for (const append of rule.appends ?? []) if (append.path === name) {
@@ -21,6 +23,10 @@ function reverseText(name: string, text: string): string {
     for (const pair of [...(rule.replacements ?? [])].reverse() as { path?: string; from: string; to: string }[]) {
       if (pair.path !== name) continue;
       assert.ok(text.includes(pair.to), `missing ${rule.id} replacement: ${name}`);
+      if (rule.id === "R1") {
+        const index = rule.replacements.indexOf(pair);
+        assert.equal(text.split(pair.to).length - 1, r1Occurrences[index], `R1 occurrence count: ${name} / ${pair.to}`);
+      }
       text = text.replaceAll(pair.to, pair.from);
     }
   }

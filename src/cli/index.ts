@@ -73,7 +73,8 @@ export async function runCli(argv: string[], cwd: string, output: Output,
     envelope = await execute(context, invocation.definition.id, invocation.input as OperationInputs[typeof invocation.definition.id]);
     envelope = { ...envelope, command: invocation.command };
     observedRun = envelope.run;
-    if (invocation.definition.kind === "run" && invocation.detach && !envelope.ok && envelope.run) {
+    if (invocation.definition.kind === "run" && invocation.detach && !envelope.ok && envelope.run &&
+        !(envelope.error.details && typeof envelope.error.details === "object" && !Array.isArray(envelope.error.details) && envelope.error.details.reason === "worker_start_failed")) {
       const { run, error } = envelope;
       envelope = { schema: "smm.envelope/1", command: invocation.command, job: run.job, ok: true, result: null,
         advisories: [], warnings: run.error ? [] : [{ code: error.code, message: error.message, hint: error.hint }], run };

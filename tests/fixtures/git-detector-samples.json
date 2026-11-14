@@ -10,12 +10,20 @@
     "import { execFileSync as run } from 'node:child_process'; run('git', ['status'])",
     "const {spawn: launch} = require('child_process'); launch('git', ['status'])",
     "execSync(`git show HEAD`)",
-    "spawn('C:/Program Files/Git/bin/git.exe', ['status'])"
+    "spawn('C:/Program Files/Git/bin/git.exe', ['status'])",
+    "run('git', ['status'])",
+    "arbitraryWrapper(\"git\", ['show', 'HEAD'])",
+    "runner.execute('git', ['log'])",
+    "wrapper?.(`git`, ['status'])"
   ],
   "negative": [
     "spawn(process.execPath, ['script.mjs'])",
     "const label = 'git';",
     "const manifest = 'test-inventory.json';",
-    "readFile('fixtures/baseline.json')"
+    "readFile('fixtures/baseline.json')",
+    "// run('git', ['status'])",
+    "const text = \"run('git', ['status'])\";",
+    "run('github', ['status'])",
+    "run('legit', ['status'])"
   ]
 }

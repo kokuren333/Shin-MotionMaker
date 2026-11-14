@@ -61,7 +61,7 @@ Shin-MotionMaker の MCP サーバーは、公式 TypeScript SDK 1.32.2 によ�
 | `schema_get` | name? | スキーマ一覧または本文 |
 
 - 外側の入力は `additionalProperties: false`。自由記述と任意の patch 本文を、候補の一覧に制限しない。正確な型と範囲は `tools/list` と [CONTRACT](CONTRACT.md) に従う。
-- request の既存の列挙値は core の `formChoices` を共有し、generate・台本統計と GUI の request 読込で同じ shape 検査を通る。範囲外の列挙値は `E_INPUT_INVALID` と JSON Pointer 付き `details` で返す。未完成の自由記述は shape 検査で拒否しない。
+- request の既存の列挙値は core の `formChoices` を共有し、generate・台本統計と GUI の request 読込で同じ shape 検査を通る。原典 `validateForm` と同じ条件で、MV では様式・配置を見ず、解説の2人目の配置は duo のときだけ確認する。対象の範囲外の列挙値は `E_INPUT_INVALID` と JSON Pointer 付き `details` で返す。未完成の自由記述は shape 検査で拒否しない。
 - ツールのスナップショットは `tests/fixtures/mcp-tools.json` にある。共通の outputSchema を1回だけ格納し、各ツールから参照している。
 
 ### 封筒と isError

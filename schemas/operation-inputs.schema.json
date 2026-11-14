@@ -19,13 +19,7 @@
                   ]
                 },
                 "styleMode": {
-                  "type": "string",
-                  "enum": [
-                    "biim",
-                    "anime",
-                    "motion",
-                    "mixed"
-                  ]
+                  "type": "string"
                 },
                 "takeaway": {
                   "type": "string"
@@ -107,11 +101,7 @@
                   "type": "string"
                 },
                 "characterPosition": {
-                  "type": "string",
-                  "enum": [
-                    "left",
-                    "right"
-                  ]
+                  "type": "string"
                 },
                 "subtitleColor": {
                   "type": "string"
@@ -135,11 +125,7 @@
                       "type": "string"
                     },
                     "position": {
-                      "type": "string",
-                      "enum": [
-                        "left",
-                        "right"
-                      ]
+                      "type": "string"
                     },
                     "notes": {
                       "type": "string"
@@ -259,7 +245,94 @@
                 }
               },
               "required": [],
-              "additionalProperties": false
+              "additionalProperties": false,
+              "allOf": [
+                {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "videoMode": {
+                          "const": "mv"
+                        }
+                      },
+                      "required": [
+                        "videoMode"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "styleMode": {
+                          "enum": [
+                            "biim",
+                            "anime",
+                            "motion",
+                            "mixed"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "videoMode": {
+                          "const": "mv"
+                        }
+                      },
+                      "required": [
+                        "videoMode"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "characterPosition": {
+                          "enum": [
+                            "left",
+                            "right"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "videoMode": {
+                          "const": "mv"
+                        }
+                      },
+                      "required": [
+                        "videoMode"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "characterMode": {
+                          "const": "solo"
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "secondCharacter": {
+                          "properties": {
+                            "position": {
+                              "enum": [
+                                "left",
+                                "right"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             "assets": {
               "type": "object",
@@ -402,13 +475,7 @@
                   ]
                 },
                 "styleMode": {
-                  "type": "string",
-                  "enum": [
-                    "biim",
-                    "anime",
-                    "motion",
-                    "mixed"
-                  ]
+                  "type": "string"
                 },
                 "takeaway": {
                   "type": "string"
@@ -490,11 +557,7 @@
                   "type": "string"
                 },
                 "characterPosition": {
-                  "type": "string",
-                  "enum": [
-                    "left",
-                    "right"
-                  ]
+                  "type": "string"
                 },
                 "subtitleColor": {
                   "type": "string"
@@ -518,11 +581,7 @@
                       "type": "string"
                     },
                     "position": {
-                      "type": "string",
-                      "enum": [
-                        "left",
-                        "right"
-                      ]
+                      "type": "string"
                     },
                     "notes": {
                       "type": "string"
@@ -642,7 +701,94 @@
                 }
               },
               "required": [],
-              "additionalProperties": false
+              "additionalProperties": false,
+              "allOf": [
+                {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "videoMode": {
+                          "const": "mv"
+                        }
+                      },
+                      "required": [
+                        "videoMode"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "styleMode": {
+                          "enum": [
+                            "biim",
+                            "anime",
+                            "motion",
+                            "mixed"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "videoMode": {
+                          "const": "mv"
+                        }
+                      },
+                      "required": [
+                        "videoMode"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "characterPosition": {
+                          "enum": [
+                            "left",
+                            "right"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "videoMode": {
+                          "const": "mv"
+                        }
+                      },
+                      "required": [
+                        "videoMode"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "characterMode": {
+                          "const": "solo"
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "secondCharacter": {
+                          "properties": {
+                            "position": {
+                              "enum": [
+                                "left",
+                                "right"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             "assets": {
               "type": "object",
@@ -770,7 +916,8 @@
         "wait_ms": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 50000
+          "maximum": 50000,
+          "default": 0
         }
       },
       "required": [
@@ -787,7 +934,8 @@
         "wait_ms": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 50000
+          "maximum": 50000,
+          "default": 45000
         },
         "final": {
           "type": "boolean",
@@ -801,7 +949,36 @@
       "required": [
         "job"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "anyOf": [
+            {
+              "properties": {
+                "final": {
+                  "const": true
+                },
+                "wait_ms": {
+                  "default": 0
+                }
+              },
+              "required": [
+                "final"
+              ]
+            },
+            {
+              "properties": {
+                "final": {
+                  "const": false
+                },
+                "wait_ms": {
+                  "default": 45000
+                }
+              }
+            }
+          ]
+        }
+      ]
     },
     "qc": {
       "type": "object",
@@ -812,7 +989,8 @@
         "wait_ms": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 50000
+          "maximum": 50000,
+          "default": 45000
         },
         "stage": {
           "type": "string",
@@ -837,7 +1015,8 @@
         "wait_ms": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 50000
+          "maximum": 50000,
+          "default": 0
         },
         "target": {
           "type": "string",
@@ -888,7 +1067,8 @@
         "wait_ms": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 50000
+          "maximum": 50000,
+          "default": 0
         },
         "target": {
           "type": "string",
@@ -919,7 +1099,8 @@
         "wait_ms": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 50000
+          "maximum": 50000,
+          "default": 0
         }
       },
       "required": [
@@ -936,7 +1117,8 @@
         "wait_ms": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 50000
+          "maximum": 50000,
+          "default": 45000
         }
       },
       "required": [
@@ -953,7 +1135,8 @@
         "wait_ms": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 50000
+          "maximum": 50000,
+          "default": 0
         },
         "name": {
           "type": "string"

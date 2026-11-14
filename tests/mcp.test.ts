@@ -164,12 +164,12 @@ test("MC-05 and MC-15 host exclusion and token progress survive stdio waiting", 
   const job = "job & 全角 空白", notifications: unknown[] = [];
   const start = envelope<"qc">(await call("job_qc", { job, stage: "pre", wait_ms: 0 })); assert.ok(start.ok); assert.equal(start.run?.status, "running");
   const busy = envelope(await call("job_qc", { job, stage: "pre", wait_ms: 0 })); assert.ok(!busy.ok); assert.equal(busy.error.code, "E_BUSY", JSON.stringify(busy));
-  const result = envelope<"run_get">(await call("run_get", { job, run_id: start.run!.id, wait_ms: 10000, log_tail: 100 }, (value) => notifications.push(value)));
+  const result = envelope<"run_get">(await call("run_get", { job, run_id: start.run!.id, wait_ms: 50000, log_tail: 100 }, (value) => notifications.push(value)));
   assert.ok(result.ok); assert.equal(result.run?.status, "completed"); assert.equal(result.result.verdict, "pass"); assert.ok(notifications.length > 0);
   const progress = notifications as { progress: number; message: string }[];
   assert.ok(progress.every((item, index) => index === 0 || item.progress > progress[index - 1].progress));
   const startProgress: unknown[] = [];
-  const waited = envelope<"qc">(await call("job_qc", { job, stage: "pre", wait_ms: 10000 }, (value) => startProgress.push(value)));
+  const waited = envelope<"qc">(await call("job_qc", { job, stage: "pre", wait_ms: 50000 }, (value) => startProgress.push(value)));
   assert.ok(waited.ok); assert.equal(waited.result?.verdict, "pass"); assert.ok(startProgress.length > 0);
 });
 

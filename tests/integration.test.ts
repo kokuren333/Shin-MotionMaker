@@ -8,14 +8,16 @@ import { cli } from "./helpers/cli.ts";
 import { fakeJob, workspace } from "./helpers/host.ts";
 import { connectMcp, envelope } from "./helpers/mcp.ts";
 
-test("M7 shape accepts exactly the existing choices in both phases including inactive mode fields", () => {
+test("M7-fix shape checks existing choices only when validateForm checks them", () => {
+  for (const videoMode of ["mv", "explanation"] as const) for (const characterMode of ["solo", "duo"] as const) {
   for (const [key, choices] of Object.entries(formChoices)) {
     const nested = key === "secondCharacter";
     const allowed = nested ? formChoices.secondCharacter.position : choices as readonly unknown[];
     for (const value of [...allowed, "unknown", "toString", ...(key === "fps" ? [29] : [])]) {
-      const form = { ...defaults, ...(nested ? { secondCharacter: { ...defaults.secondCharacter, position: value } } : { [key]: value }) };
+      const form = { ...defaults, videoMode, characterMode, ...(nested ? { secondCharacter: { ...defaults.secondCharacter, position: value } } : { [key]: value }) };
       const shaped = validateRequest({ form }, { phase: "shape" });
-      assert.equal(shaped.ok, allowed.includes(value), `${key}: ${value}`);
+      const ignored = videoMode === "mv" && ["styleMode", "characterPosition", "secondCharacter"].includes(key) || nested && characterMode !== "duo";
+      assert.equal(shaped.ok, ignored || allowed.includes(value), `${videoMode}/${characterMode}/${key}: ${value}`);
       if (!shaped.ok) {
         assert.equal(shaped.error.code, "E_INPUT_INVALID");
         assert.equal((shaped.error.details as { pointer: string }[])[0].pointer, `/form/${nested ? "secondCharacter/position" : key}`);
@@ -23,8 +25,9 @@ test("M7 shape accepts exactly the existing choices in both phases including ina
       }
     }
   }
+  }
   for (const field of [{ styleMode: "unknown" }, { characterPosition: "top" }, { secondCharacter: { position: "middle" } }])
-    assert.equal(validateRequest({ form: { videoMode: "mv", ...field } }, { phase: "shape" }).ok, false);
+    assert.equal(validateRequest({ form: { videoMode: "mv", ...field } }, { phase: "shape" }).ok, true);
   const wrongObject = validateRequest({ form: { secondCharacter: "wrong" } }, { phase: "shape" });
   assert.deepEqual(!wrongObject.ok && wrongObject.error.details, [{ pointer: "/form/secondCharacter", reason: "オブジェクトを指定してください。" }]);
   assert.ok(validateRequest({ form: { design: "自由な未登録の演出", instructions: "自由", title: "" } }, { phase: "shape" }).ok);
@@ -34,7 +37,7 @@ test("M7 CLI and MCP reject fixed choices through core before reading attachment
   const context = await workspace(t);
   const connection = await connectMcp(context.root);
   t.after(() => connection.close());
-  for (const form of [{ videoMode: "film" }, { styleMode: "toString" }, { tempo: "x" }, { fps: 29 }, { secondCharacter: { position: "middle" } }]) {
+  for (const form of [{ videoMode: "film" }, { styleMode: "toString" }, { tempo: "x" }, { fps: 29 }, { characterMode: "duo", secondCharacter: { position: "middle" } }]) {
     const request = { form, assets: { sources: ["missing.pdf"] } };
     await fs.writeFile(path.join(context.root, "request.json"), JSON.stringify(request));
     const local = await cli(["generate", "request.json", "--out", "absent"], context.root, true);
@@ -43,6 +46,31 @@ test("M7 CLI and MCP reject fixed choices through core before reading attachment
     assert.equal(remote.error.code, "E_INPUT_INVALID");
     assert.deepEqual(local.envelope.error, remote.error);
     await assert.rejects(fs.access(path.join(context.root, "absent")));
+  }
+});
+
+test("M7-fix inactive choices survive complete validation and CLI MCP schemas", async (t) => {
+  const context = await workspace(t);
+  const connection = await connectMcp(context.root); t.after(() => connection.close());
+  await fs.writeFile(path.join(context.root, "music.wav"), "fixture music");
+  await fs.writeFile(path.join(context.root, "script.txt"), "自由な台本");
+  for (const inactive of [
+    { videoMode: "mv", styleMode: "bogus", characterPosition: "center", characterMode: "duo", secondCharacter: { position: "center" }, musicDurationSec: 30 },
+    { videoMode: "explanation", characterMode: "solo", secondCharacter: { position: "center" } },
+  ]) {
+    const request = { form: { title: "互換", description: "原典で未使用の設定", audience: "開発者", voiceEngine: "none", ...inactive },
+      ...(inactive.videoMode === "mv" ? { assets: { music: "music.wav" } } : {}) };
+    const complete = validateRequest(request, { phase: "complete", assets: { sources: [], ...(inactive.videoMode === "mv" ? {
+      music: { name: "music.wav", data: new Uint8Array([1]), size: 1, type: "audio/wav" },
+    } : {}) } });
+    assert.ok(complete.ok, JSON.stringify(complete));
+    await fs.writeFile(path.join(context.root, "request.json"), JSON.stringify(request));
+    const local = await cli(["generate", "request.json", "--out", "unused", "--dry-run"], context.root, true);
+    const remote = envelope(await connection.call("job_generate", { request, out: "unused", dry_run: true }));
+    assert.equal(local.code, 0, local.stdout); assert.ok(remote.ok, JSON.stringify(remote));
+    const stats = envelope(await connection.call("text_stats", { kind: "script", text: "自由な台本", request }));
+    assert.ok(stats.ok, JSON.stringify(stats));
+    assert.equal((await cli(["stats", "script.txt", "--kind", "script", "--request", "request.json"], context.root, true)).code, 0);
   }
 });
 

@@ -124,7 +124,7 @@ const syntheticJob = `${workspace}/synthetic/smoke-video`;
 await raw("qc", ["--stage=pre"], 0, "検証専用の合成記録による QC pass", process.env, syntheticJob);
 await cli(["qc", syntheticJob, "--stage", "pre"]);
 const outputIndex = process.argv.indexOf("--output");
-const output = outputIndex < 0 ? "docs/work/M2b/CLI-EXAMPLES.json" : process.argv[outputIndex + 1];
+const output = outputIndex < 0 ? ".agent-work/cli-verification.json" : process.argv[outputIndex + 1];
 assert.ok(output, "--output requires a path");
 await fs.mkdir(path.dirname(path.resolve(repository, output)), { recursive: true });
 await fs.writeFile(path.resolve(repository, output), JSON.stringify({ node: process.version, platform: process.platform, records }, null, 2) + "\n");

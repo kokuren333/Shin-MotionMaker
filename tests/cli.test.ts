@@ -77,6 +77,37 @@ test("TS-02 advisory-only execution exits zero and CLI results match shared oper
   const version = await cli(["version"], context.root, true); assert.equal(version.code, 0); assert.ok(version.envelope.ok); assert.equal(version.envelope.result.version, "0.1.0");
 });
 
+test("M7-fix detach preserves worker launch failure as ok false and exit four", async (t) => {
+  const context = await workspace(t); const job = await fakeJob(context);
+  const env = { ...process.env, NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ""} --import="${new URL("./fixtures/worker-start-failure.mjs", import.meta.url).href}"` };
+  for (const built of [false, true]) {
+    const result = await cli(["qc", job, "--stage", "pre", "--detach"], context.root, built, env);
+    assert.equal(result.code, 4, result.stdout);
+    assert.ok(!result.envelope.ok);
+    assert.equal(result.envelope.error.code, "E_INTERNAL");
+    assert.equal((result.envelope.error.details as any).reason, "worker_start_failed");
+    assert.equal(result.envelope.run?.status, "failed");
+    assert.equal(result.envelope.run?.exit_code, 4);
+    assert.equal(result.envelope.run?.script_pid, null);
+  }
+});
+
+test("M7-fix generate and run support fullwidth punctuation and spaces", async (t) => {
+  const context = await workspace(t);
+  const directory = "入力 ＆（全角）　・ & space";
+  await fs.mkdir(path.join(context.root, directory));
+  await fs.writeFile(path.join(context.root, directory, "request.json"), JSON.stringify({ form: {
+    title: "生成 ＆（全角）　・ & space", description: "パスの動作確認", audience: "開発者", voiceEngine: "none", generateAudio: false,
+  } }));
+  const generated = await cli(["generate", path.join(directory, "request.json"), "--out", directory], context.root, true);
+  assert.equal(generated.code, 0, generated.stdout); assert.ok(generated.envelope.ok);
+  const job = generated.envelope.result.job;
+  assert.ok(job.includes(directory));
+  const run = await cli(["qc", job, "--stage", "pre"], context.root, true);
+  assert.equal(run.code, 1, run.stdout); assert.ok(run.envelope.ok);
+  assert.equal(run.envelope.run?.status, "completed"); assert.equal(run.envelope.result.verdict, "fail");
+});
+
 test("CLI reads BOM text patch and request files returns PNG base64 and offers a human summary", async (t) => {
   const context = await workspace(t); const job = await fakeJob(context);
   await fs.writeFile(path.join(context.root, "text.txt"), "\uFEFF# 台本\n本文です。\n");
