@@ -41,8 +41,7 @@ export function validateRequest(input: unknown, check: RequestCheck): Validation
       fields(input.form, defaults, "/form");
       for (const [key, choices] of Object.entries(formChoices)) {
         const nested = key === "secondCharacter";
-        const value = nested && isObject(input.form.secondCharacter)
-          ? input.form.secondCharacter.position : input.form[key];
+        const value = nested ? isObject(input.form.secondCharacter) ? input.form.secondCharacter.position : undefined : input.form[key];
         const allowed: readonly unknown[] = nested ? formChoices.secondCharacter.position : choices as readonly unknown[];
         if (value !== undefined && (nested ? typeof value === "string" : typeof value === typeof defaults[key as keyof MotionForm]) && !allowed.includes(value))
           issue(`/form/${nested ? "secondCharacter/position" : key}`, `${JSON.stringify(value)} は選べる値ではありません。`);

@@ -23,6 +23,10 @@ test("M7 shape accepts exactly the existing choices in both phases including ina
       }
     }
   }
+  for (const field of [{ styleMode: "unknown" }, { characterPosition: "top" }, { secondCharacter: { position: "middle" } }])
+    assert.equal(validateRequest({ form: { videoMode: "mv", ...field } }, { phase: "shape" }).ok, false);
+  const wrongObject = validateRequest({ form: { secondCharacter: "wrong" } }, { phase: "shape" });
+  assert.deepEqual(!wrongObject.ok && wrongObject.error.details, [{ pointer: "/form/secondCharacter", reason: "オブジェクトを指定してください。" }]);
   assert.ok(validateRequest({ form: { design: "自由な未登録の演出", instructions: "自由", title: "" } }, { phase: "shape" }).ok);
 });
 
