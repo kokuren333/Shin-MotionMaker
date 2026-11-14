@@ -4,6 +4,7 @@
 - 作業ツリー: `Shin-MotionMaker-wt/m5`、ブランチ `m5-icons`（`35b3c20` から）。push していない。
 - 道具: CyberSprite 0.1.0（`cybersprite --version`）、コミット `a00433c`。CyberSprite の既存 `.venv` を `uv run --project <CyberSprite> --no-sync` で使った。Python 3.12.10、Node は repo の既定。
 - 本報告は見た目を自己採点しない（CyberSprite `AGENTS.md` §6.3）。見た目の判定は別コンテキストのレビュー待ちで、`pending`。
+- レビュー（`REVIEW.md`、M5R）を受けた差し戻しの修正は末尾の §9「M5-fix」にある。§5 の表のうち様式4種と `gate` の行は修正前の記述で、修正後の形は §9 に書いた。
 
 ## 1. 実装したもの
 
@@ -136,3 +137,71 @@ CyberSprite §6.3-6 の関門について：`direct` の手順に従い、(2) �
 - 見た目の別コンテキストのレビュー（L2 が発注）。指摘が出たら `icon_grids.py` を直して `draw validate export` を流す。
 - GUI への組み込み（M4）：`index.html` の favicon、アイコンを文字のラベルと並べる配置（GU-10）、`docs/DESIGN.md` への「追加のアイコン」の記載（GU-09）。
 - `NOTICE` のテーマトークンの行は M4 が記入する。
+
+## 9. M5-fix（レビュー M5R への対応）
+
+発注: 差し戻し発注書 M5-fix（必須 M-1、推奨 R-1〜R-3、参考 S-1）。L4 は使っていない。
+
+### 9.1 変更点
+
+| 指摘 | 対象 | 変更 |
+| --- | --- | --- |
+| M-1（GU-07） | `style-anime` | 4方向の輝き（菱形の星）をやめ、前髪と大きな目のキャラクターの顔にした（キャラクターの演技が主役、という原典の説明に合わせた）。輪郭線を持たず、再利用の `eye`（目だけ）・`human`（全身のシルエット）とは形の系統が違う |
+| M-1 | `style-motion` | 菱形2つと ink の 3px の連結をやめ、同じ四角が対角線に沿って3段（trace-soft → trace → trace-deep）に進むオニオンスキンにした。図形が動くことを表す。重さを他の3つに近づけた |
+| M-1・S-4 | `style-mixed` | 四角と ink 輪郭付きの角丸の四角の重なり（レイヤーに見える）をやめ、1枚の画面を斜めに2分割（trace-deep と trace、間に白の 1px）にした。1本の中に2種類の区間がある、を表す。ink の輪郭は使わない |
+| M-1 | `style-biim` | 上の帯を 2 行から 1 行にして軽くし、図形を枠の中で上下中央に寄せた。モチーフ（上下の帯と中央の画面）は変えない |
+| M-1 共通 | 様式4種 | 枠・白の面・10×10 の図形領域は前と同じ。図形の中は trace-deep・trace・trace-soft だけで、ink は4種とも使わない。内部の白以外の画素は biim 54・anime 54・motion 46・mixed 56（前は 64・48・29・63）。画素数は手がかりとして測っただけで、しきい値にはしていない |
+| R-1 | `gate` | 支柱を太く低い箱（行 5〜13）にし、縞の腕を箱の中ほど（行 7〜9）から右端（列 14）まで水平に出した。腕の先の下に受けの支柱（行 10〜13）を足した。縞は trace-deep と白のまま。赤・金は使わない |
+| R-2 | `tests/icons.test.ts` | 固有アイコンの `author` を固定値で照合せず、空でないことを表明する |
+| R-3 | `assets/ui/icons/tools/contact_sheet.py` | 様式4種を選択欄の順に並べたシート（×1・×4）を毎回書き出す。`--before DIR` を渡すと、直したアイコンの前後シート（×1・×4）を書き出す |
+| S-1 | 本報告 | 下の §9.5 に M4 への申し送りを書いた |
+
+`icon_grids.py` の設計データを直し、`build_icons.py ... draw validate export` で描き直した（CyberSprite CLI の `draw_rows` 1 トランザクション）。manifest の SHA-256（PNG と `source_sha256`）は書き出しで更新された。
+
+### 9.2 前の版のリビジョン番号
+
+| アイコン | 前の版 | 直した版 |
+| --- | --- | --- |
+| `style-biim` | revision 1（コミット `9e96420` の `project.json`） | revision 2 |
+| `style-anime` | revision 1 | revision 2 |
+| `style-motion` | revision 1 | revision 2 |
+| `style-mixed` | revision 1 | revision 2 |
+| `gate` | revision 1 | revision 2 |
+
+前の版の画素は、git の `9e96420` の `.csprite/project.json` と `gui/public/icons/<名前>.png` に残っている。
+
+### 9.3 シート
+
+| ファイル | 内容 |
+| --- | --- |
+| `docs/work/M5/compare-before-after-x1.png`・`compare-before-after-x4.png` | 上の行が前の版（`9e96420` の PNG）、下の行が直した版。様式4種（選択欄の順）と `gate`。左半分は `--cs-board`、右半分は `--cs-ink` の下地 |
+| `docs/work/M5/contact-sheet-styles-x1.png`・`contact-sheet-styles-x4.png` | 様式4種を原典 GUI の選択欄の順（`biim`・`anime`・`motion`・`mixed`。原典 `src/explainer-assist.ts` の `explainerStyles` の定義順で、選択欄はこの順に `option` を並べる）に並べた |
+| `docs/work/M5/contact-sheet-x1.png`・`contact-sheet-x4.png`・`contact-sheet-status-x4.png` | 26 点の全体と、PH-03 の状態系の並び。直した版で作り直した |
+
+作成コマンド（repo のルート。前の版の PNG は作業ツリーの外の一時フォルダに写してから描き直した）:
+
+```
+uv run --project <CyberSprite> --no-sync python assets/ui/icons/tools/contact_sheet.py docs/work/M5 --before <前の版の PNG のフォルダ>
+```
+
+### 9.4 受け入れ条件の証拠
+
+| 条件 | 状態 | 証拠 |
+| --- | --- | --- |
+| 直したアイコンの `validate` が error 0・warning 0 | 実行済み | `python assets/ui/icons/tools/build_icons.py --cybersprite <CyberSprite> draw validate export` → 終了コード 0。`draw` は直した5点だけが `drawn: true`、検証デルタは5点とも `ok: true, errors: 0, warnings: 0`。`validate` は 26 点すべて `validate_ok: true`・`error 0`・`warning 0`。直した5点の info は `Q-PAL-02`（未使用のパレット番号）だけ |
+| 書き出しの `validation_ok`・`verified` | 実行済み | 27 ファイル（26 アイコン + favicon）すべて `validation_ok: true`・`verified: true`。もう一度 `export` を流し、全 PNG と manifest の SHA-256 が一致した |
+| `npm test` 全件合格 | 実行済み | `tests 9 / pass 9 / fail 0`。`npm run build`（`tsc --noEmit`）エラーなし |
+| CyberSprite の作業ツリー無変更 | 確認済み | `git -C <CyberSprite> status --short` は 0 行、HEAD は `a00433c` のまま |
+
+### 9.5 M4 への申し送り（参考 S-1）
+
+アイコンを ink の面（`--ui-inverse-bg`、`--cs-ink`）に置かない。置く必要があれば、明るい面のチップに載せる。ink の 1px の輪郭と ink だけで描いた部分（`gate` の腕の輪郭、`mode-mv` の符幹、再利用の `link`・`settings` など）は、暗い下地で消える（比較シートの右半分を参照）。`docs/DESIGN.md` は M4 で作るので、そこに書き写すこと。
+
+### 9.6 自分で疑っている箇所
+
+1. **`style-anime` の顔は ×1 で読めるか。** 9×10 の中の顔で、×1 では「髪の塊と2つの点」になる。キャラクターの顔と読めず、`agent`（ロボットの顔）や `human` に近く見えるおそれがある。
+2. **`style-motion` の後ろの段は trace-soft で、白の面の上では淡い。** ×1 では最も後ろの四角がほとんど見えず、2段に見えるかもしれない。また、四角の段が「重ねた層」や「上昇・成長」に読まれるおそれがある（前の `style-mixed` で指摘された「レイヤー」の印象が、motion に移っていないか）。
+3. **`style-mixed` の斜めの2分割は、「コントラスト」や「画像なし」の印にも見える。** 「Biim の区間とそれ以外の区間を織り交ぜる」の意味は、ラベルに頼る部分が大きい。
+4. **重さの釣り合い。** 画素数では近づけたが、`style-biim` と `style-mixed` は trace-deep の量が多く、`style-motion` は淡い色を含むので、見た目の濃さはまだ motion が軽いかもしれない。
+5. **`gate` は ×1 で、箱から棒が出た形（ベンチや机、L 字の金具）にも見えるおそれがある。** 旗の形からは離れたが、遮断機と読めるかはレビューで見てほしい。暗い下地では腕の輪郭が消え、縞だけが点線のように残る（S-1 の性質）。
+6. **`style-anime` の目の配置は左右対称で、無表情に見えるかもしれない。** 演技の印象は弱い。

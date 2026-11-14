@@ -5,8 +5,12 @@ Reads gui/public/icons/manifest.json and the PNGs it lists, and writes one sheet
 original icons and the reused icons in separate rows. Colours are the CyberSprite --cs-*
 token values (theme "Circuit White / Solder Mask", normal theme).
 
+Also writes the style sheet (the four style icons in the order of the style selector of the
+original GUI: biim, anime, motion, mixed). With --before DIR (a folder holding the previous PNGs
+of the redrawn icons, same file names), writes before/after sheets of those icons (x1 and x4).
+
 Needs Pillow; run it with the CyberSprite environment, from the repo root:
-  uv run --project <CyberSprite> --no-sync python assets/ui/icons/tools/contact_sheet.py <out dir>
+  uv run --project <CyberSprite> --no-sync python assets/ui/icons/tools/contact_sheet.py <out dir> [--before DIR]
 """
 
 from __future__ import annotations
@@ -65,8 +69,17 @@ def sheet(groups: list[tuple[str, list[tuple[str, Image.Image]]]], scale: int) -
     return img
 
 
+STYLE_ORDER = ["style-biim", "style-anime", "style-motion", "style-mixed"]
+
+
 def main() -> int:
-    out = Path(sys.argv[1])
+    args = sys.argv[1:]
+    before = None
+    if "--before" in args:
+        i = args.index("--before")
+        before = Path(args[i + 1])
+        del args[i : i + 2]
+    out = Path(args[0])
     out.mkdir(parents=True, exist_ok=True)
     m = json.loads(MANIFEST.read_text(encoding="utf-8"))
     groups: dict[str, list[tuple[str, Image.Image]]] = {
@@ -93,6 +106,18 @@ def main() -> int:
     status = [(n, by[n]) for n in ("advisory", "info", "validate-ok", "gate", "warning", "error")]
     sheet([("status family (PH-03): advisory vs info / ok / gate / warning / error", status)],
           4).save(out / "contact-sheet-status-x4.png")
+    styles = [(n, by[n]) for n in STYLE_ORDER]
+    for scale in (1, 4):
+        sheet([("style modes in selector order: biim / anime / motion / mixed", styles)],
+              scale).save(out / f"contact-sheet-styles-x{scale}.png")
+    if before:
+        names = [n for n in STYLE_ORDER + sorted(by) if (before / f"{n}.png").exists()]
+        names = list(dict.fromkeys(names))
+        old = [(n, Image.open(before / f"{n}.png").convert("RGBA")) for n in names]
+        new = [(n, by[n]) for n in names]
+        for scale in (1, 4):
+            sheet([("before", old), ("after", new)], scale).save(
+                out / f"compare-before-after-x{scale}.png")
     print(json.dumps({"out": str(out), "icons": len(icons)}))
     return 0
 
