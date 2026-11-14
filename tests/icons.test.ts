@@ -120,7 +120,8 @@ test("every manifest entry has a complete origin record and its .csprite source"
       assert.equal(icon.modified, false, icon.name);
       assert.equal(icon.source_sha256, reuseFixture.project_json_sha256[icon.name], `${icon.name}: unmodified CyberSprite original`);
     } else {
-      assert.equal(icon.author, "Claude Opus 5.5", icon.name);
+      // GU-12 asks for an author record, not a particular name: anyone may redraw an icon later.
+      assert.ok(icon.author.trim().length > 0, `${icon.name}: author recorded`);
     }
   }
   for (const name of REQUIRED_ORIGINAL) {
