@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { cli, mcp, option, repository, owned, removeOwned, facts, saveEvidence, cancelActiveRuns } from "./verification-lib.mjs";
+import { verifyEvidenceState } from "./verification-state.mjs";
 
-const commit = option("commit", process.env.GITHUB_SHA);
-assert.ok(commit, "--commit に検証対象のコミットを指定してください。");
-const evidence = { tier: "B", commit, node: process.version, platform: process.platform, started_at: new Date().toISOString(), records: [], success: false };
+const revision = await verifyEvidenceState(option("commit", process.env.GITHUB_SHA));
+const evidence = { tier: "B", commit: revision.head, template_version: revision.template_version, revision, node: process.version, platform: process.platform, started_at: new Date().toISOString(), records: [], success: false };
 const evidenceFile = path.resolve(option("evidence", path.join(repository, ".agent-work/m7-evidence/tier-b.json")));
 const started = Date.now();
 try {
@@ -15,7 +15,7 @@ try {
     const connection = entry === "mcp" ? await mcp(root) : undefined;
     let job;
     try {
-      const request = { form: { title: "Tier B & 全角 空白", description: "生成から実依存導入と構造検査", audience: "開発者", voiceEngine: "none", generateAudio: false } };
+      const request = { form: { title: "Tier B & ＆（全角）　・ 空白", description: "生成から実依存導入と構造検査", audience: "開発者", voiceEngine: "none", generateAudio: false } };
       await fs.writeFile(path.join(root, "request.json"), JSON.stringify(request));
       const generated = entry === "cli" ? (await cli(["generate", "request.json", "--out", "jobs"], root)).envelope
         : await connection.call("job_generate", { request, out: "jobs" });

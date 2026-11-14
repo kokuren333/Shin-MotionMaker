@@ -1,13 +1,19 @@
-// Static guard for process-launch literals, including common imported aliases.
+import ts from "typescript";
+
+// Inspect literal first arguments regardless of the wrapper's function name.
 export function gitLaunches(source: string): string[] {
-  const names = new Set(["spawn", "spawnSync", "exec", "execSync", "execFile", "execFileSync", "execa", "execaSync", "execaCommand", "execaCommandSync"]);
-  for (const match of source.matchAll(/(?:import\s*\{([^}]+)\}\s*from\s*["'](?:node:)?child_process["']|(?:const|let|var)\s*\{([^}]+)\}\s*=\s*require\(["'](?:node:)?child_process["']\))/g)) {
-    for (const member of (match[1] ?? match[2]).split(",")) {
-      const parts = member.trim().split(/\s+as\s+|\s*:\s*/);
-      if (names.has(parts[0])) names.add(parts[1] ?? parts[0]);
-    }
-  }
+  const file = ts.createSourceFile("source.ts", source, ts.ScriptTarget.Latest, true);
+  const matches: string[] = [];
   const executable = "g" + "it";
-  const calls = new RegExp(`\\b(?:${[...names].join("|")})\\s*\\(\\s*(["'\x60])(?:[^"'\x60\\r\\n]*[/\\\\])?${executable}(?:\\.exe)?(?:\\1|\\s)[^\\r\\n]*`, "g");
-  return [...source.matchAll(calls)].map((match) => match[0]);
+  const command = new RegExp(`^(?:[^\\r\\n]*[/\\\\])?${executable}(?:\\.exe)?(?:$|\\s)`);
+  const visit = (node: ts.Node) => {
+    if (ts.isCallExpression(node)) {
+      const first = node.arguments[0];
+      if (first && (ts.isStringLiteral(first) || ts.isNoSubstitutionTemplateLiteral(first)) && command.test(first.text))
+        matches.push(node.getText(file));
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(file);
+  return matches;
 }

@@ -36,7 +36,10 @@ test("baseline metadata is complete and inventory counts match its named tests",
   assert.ok(messages.inputs.every((entry: { messages: string[] }) => entry.messages.length > 0));
   assert.deepEqual(new Set(messages.inputs.flatMap((entry: { messages: string[] }) => entry.messages)), new Set(messages.messages));
   const diffs = await readJson("allowed-diffs.json");
+  assert.equal(createHash("sha256").update(await fs.readFile(path.join(base, "allowed-diffs.json"))).digest("hex"),
+    "49b33de541d4e68cd3d3a0c10c0d26556556e9e264204e6d480b8ac63df2a925");
   assert.deepEqual(diffs.rules.map((rule: { id: string }) => rule.id), ["R1", "R2", "R3", "R4", "R5"]);
+  assert.equal(diffs.rules[0].replacements.length, 9);
   assert.ok((await fs.readFile(path.join(base, "PROVENANCE.md"), "utf8")).includes("955fa5c"));
 });
 
