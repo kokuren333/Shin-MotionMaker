@@ -41,8 +41,11 @@ async function inspectProcess(pid: number | null): Promise<ProcessIdentity | nul
     if (process.platform === "win32") {
       const executable = path.join(process.env.SystemRoot ?? "C:/Windows", "System32/WindowsPowerShell/v1.0/powershell.exe");
       const value = await new Promise<string>((resolve, reject) => {
+        // Call .NET directly: cmdlets trigger module discovery, which takes over 20 seconds under the
+        // reduced environment MCP clients pass to stdio servers. Ticks are floored to microseconds so
+        // both sources yield the same value as Win32_Process.CreationDate.
         const child = spawn(executable, ["-NoLogo", "-NoProfile", "-NonInteractive", "-Command",
-          `$ErrorActionPreference='Stop'; $p=Get-CimInstance Win32_Process -Filter 'ProcessId = ${pid}'; if($p){$p.CreationDate.ToUniversalTime().Ticks.ToString()}`],
+          `$ErrorActionPreference='Stop'; $t=$null; try { $t=[System.Diagnostics.Process]::GetProcessById(${pid}).StartTime.ToUniversalTime().Ticks } catch { foreach($p in ([wmisearcher]'SELECT CreationDate FROM Win32_Process WHERE ProcessId=${pid}').Get()){ $t=[System.Management.ManagementDateTimeConverter]::ToDateTime($p.CreationDate).ToUniversalTime().Ticks } }; if($t -ne $null){ ($t - ($t % 10)).ToString() }`],
         { shell: false, windowsHide: true, stdio: ["ignore", "pipe", "ignore"] });
         let output = "";
         const timer = setTimeout(() => { child.kill(); reject(Error("identity_timeout")); }, 10000);
