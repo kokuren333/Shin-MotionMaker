@@ -82,3 +82,5 @@
 - 2026-11-14 23:00 | 判定 | M7-gui・M7-fix・M7-final・M7-detector | **合格**（各 ACCEPTANCE）。main 17d8112 で ci-local RC=0（217 pass／2 skip／0 fail、GUI 34、e2e 42）を L2 実測。
 - 2026-11-14 23:00 | 判定 | M7 | **合格**。G4R2-M1 は本台帳作業で解消（発注書・判定・STATUS・ORCH_LOG・ENVIRONMENT を docs/work/ に転記）。_handoff/M7/ACCEPTANCE.md。
 - 2026-11-14 23:00 | 停止 | M8 | Q-01（repo 作成と公開状態）、main をリモートへ出す経路（CI-05）、author のメールアドレスの扱いがオーナー判断。リモート作成・push・Pages・npm 公開は行わない。報告して停止。
+- 2026-11-14 23:06 | 実測 | 最終 | main c5edd07 で ci-local RC=0（217 pass／2 skip／0 fail、GUI 34/34、e2e 42/42）。リモート 0 件。
+- 2026-11-14 23:06 | メモ | 原典・CyberSprite | 最終点検で、原典 HEAD が f9fccda（2026-11-14 21:42:05「Docs: README - add live Pages link…」）に進んでいること、CyberSprite に未コミットの変更（quarter-view 関連、23:03 にも更新中）があることを確認。同時刻に CyberSprite にも同種の README コミット（6c7417e）があり、L2 配下のセッションのログに該当操作は無い（M0 が 16:00 に原典の author メールを読んだだけ）。オーナー側の別作業と判断。D-18 により原典の新コミットは取り込まない（README のみの変更で、基線 262c798 の job-template・コアには影響しない）。
