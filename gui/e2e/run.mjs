@@ -449,7 +449,7 @@ test("GU-04 不正な列挙値の request.json は入力エラーとして表示
   for (const [name, form, pointer, label, values] of [
     ["style.request.json", { title: "test", description: "test", audience: "test", styleMode: "unknown" }, "/form/styleMode", "様式モード", formChoices.styleMode.join("、")],
     ["mode.request.json", { title: "test", videoMode: "film" }, "/form/videoMode", "制作モード", formChoices.videoMode.join("、")],
-    ["position.request.json", { secondCharacter: { position: "middle" } }, "/form/secondCharacter/position", "2人目のキャラの初期配置", formChoices.secondCharacter.position.join("、")],
+    ["position.request.json", { characterMode: "duo", secondCharacter: { position: "middle" } }, "/form/secondCharacter/position", "2人目のキャラの初期配置", formChoices.secondCharacter.position.join("、")],
   ]) {
     await page.setFiles(byAria("request.json を読み込む"), [write(name, { form })]);
     await page.waitFor(`document.querySelector('.errors')?.textContent.includes(${JSON.stringify(name)})`, "エラー");
@@ -462,10 +462,17 @@ test("GU-04 不正な列挙値の request.json は入力エラーとして表示
     assert.equal(await count(page, "#sources .attachments li"), 1, "attachments are kept");
     assert.deepEqual((await exportRequest(page)).request, before, "input is kept");
   }
-  // The screen keeps working: a valid request imports afterwards.
-  await page.setFiles(byAria("request.json を読み込む"), [write("ok.request.json", { form: { title: "読み込み後", styleMode: "anime" } })]);
+  // The screen keeps working: solo imports an inactive second character position, as upstream does.
+  await page.setFiles(byAria("request.json を読み込む"), [write("ok.request.json", { form: {
+    title: "読み込み後", styleMode: "anime", characterMode: "solo", secondCharacter: { position: "middle" },
+  } })]);
   await page.waitFor("document.querySelector('.import-note')", "読み込み");
-  assert.equal((await exportRequest(page)).request.form.styleMode, "anime");
+  const imported = (await exportRequest(page)).request.form;
+  assert.equal(imported.styleMode, "anime");
+  assert.equal(imported.characterMode, "solo");
+  assert.equal(imported.secondCharacter.position, "middle");
+  assert.equal(await count(page, ".errors"), 0, "solo does not reject the inactive position");
+  assert.equal(await count(page, "form.studio"), 1, "the screen stays after import");
   assert.deepEqual(page.consoleErrors, []);
 });
 

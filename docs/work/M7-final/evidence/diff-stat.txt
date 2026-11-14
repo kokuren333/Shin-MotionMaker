@@ -1,0 +1,47 @@
+ VERIFICATION.md                                    |   77 +
+ docs/work/M7-fix/QUESTIONS.md                      |    2 +
+ docs/work/M7-fix/REPORT.md                         |   47 +-
+ docs/work/M7-fix/evidence/ci-local-final.json      |   38 +
+ docs/work/M7-fix/evidence/ci-local.json            |   30 +
+ .../cli-artifacts/ghost-check-preview.json         |   18 +
+ .../M7-fix/evidence/cli-artifacts/ghost-check.json |   18 +
+ .../work/M7-fix/evidence/cli-artifacts/preview.png |  Bin 0 -> 27051 bytes
+ docs/work/M7-fix/evidence/cli.json                 |  570 ++++
+ docs/work/M7-fix/evidence/commands.json            |  152 ++
+ .../legacy-artifacts/ghost-check-preview.json      |   18 +
+ .../evidence/legacy-artifacts/ghost-check.json     |   18 +
+ .../M7-fix/evidence/legacy-artifacts/preview.png   |  Bin 0 -> 27051 bytes
+ docs/work/M7-fix/evidence/legacy-origin.json       |   16 +
+ docs/work/M7-fix/evidence/licenses.json            | 2808 ++++++++++++++++++++
+ docs/work/M7-fix/evidence/manifest.json            |  111 +
+ .../mcp-artifacts/ghost-check-preview.json         |   18 +
+ .../M7-fix/evidence/mcp-artifacts/ghost-check.json |   18 +
+ .../work/M7-fix/evidence/mcp-artifacts/preview.png |  Bin 0 -> 27051 bytes
+ docs/work/M7-fix/evidence/revision-rejections.json |   49 +
+ docs/work/M7-fix/evidence/tier-b-initial.json      |  340 +++
+ docs/work/M7-fix/evidence/tier-b.json              |  340 +++
+ docs/work/M7-fix/evidence/tier-c-cli.json          | 1248 +++++++++
+ docs/work/M7-fix/evidence/tier-c-legacy.json       | 1585 +++++++++++
+ docs/work/M7-fix/evidence/tier-c-mcp.json          | 1411 ++++++++++
+ docs/work/M7-gui/REPORT.md                         |   85 +
+ .../screenshots/S1-explainer-initial-1440.png      |  Bin 0 -> 146070 bytes
+ .../screenshots/S10-request-imported-1440.png      |  Bin 0 -> 142319 bytes
+ .../M7-gui/screenshots/S11-high-contrast-1440.png  |  Bin 0 -> 141826 bytes
+ .../S12-request-invalid-choice-1440.png            |  Bin 0 -> 182262 bytes
+ .../M7-gui/screenshots/S1m-mv-initial-1440.png     |  Bin 0 -> 157143 bytes
+ .../S2-explainer-filled-direction-1440.png         |  Bin 0 -> 196147 bytes
+ docs/work/M7-gui/screenshots/S3-mv-filled-1440.png |  Bin 0 -> 199638 bytes
+ .../screenshots/S4-required-missing-error-1440.png |  Bin 0 -> 159613 bytes
+ .../screenshots/S5-inspection-results-1440.png     |  Bin 0 -> 164078 bytes
+ .../S5b-inspection-ghost-stills-1440.png           |  Bin 0 -> 162446 bytes
+ .../screenshots/S5c-inspection-run-qc-1440.png     |  Bin 0 -> 161563 bytes
+ .../M7-gui/screenshots/S6-info-dialog-1440.png     |  Bin 0 -> 150318 bytes
+ docs/work/M7-gui/screenshots/S7-explainer-390.png  |  Bin 0 -> 63961 bytes
+ docs/work/M7-gui/screenshots/S8-mv-390.png         |  Bin 0 -> 74129 bytes
+ .../M7-gui/screenshots/S9-cli-mcp-request-1440.png |  Bin 0 -> 177792 bytes
+ .../screenshots/S9b-cli-shell-examples-1440.png    |  Bin 0 -> 171632 bytes
+ gui/e2e/run.mjs                                    |   27 +-
+ gui/src/App.tsx                                    |    4 +-
+ gui/src/lib/request-io.ts                          |   52 +-
+ gui/tests/request-io.test.ts                       |   35 +-
+ 46 files changed, 9120 insertions(+), 15 deletions(-)

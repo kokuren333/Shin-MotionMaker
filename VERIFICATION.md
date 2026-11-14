@@ -2,7 +2,7 @@
 
 この文書は検証の証拠の記録である。記録はオーナーの目視を待つ関門ではない（REQUIREMENTS GU-17、原典 Amendment 01 AM-1）。公開（M8）の記録は CI-08 の4条件に従って後から足す。
 
-最新の工学検証は末尾の [M7-fix](#m7-fix)（テンプレート0.5.2の Tier B/C 再実行）。GUI の既存試験2箇所は R-2 と不整合のまま残り、ci-local 全体の成功は記録していない。
+最新の統合検証は末尾の [M7-final](#m7-final)。M7-fix-Q1 の L2 回答に従い GUI テストを整合させ、最終コードコミットの ci-local は終了0。Tier B/C の実測は [M7-fix](#m7-fix)（テンプレート0.5.2）に保持する。以下の既存節の結果・未達の記述は、それぞれの実行時点の履歴である。
 
 M7-add では main `7741d9594e30305339b8736ee6e2c49591c89384` を `6789f2a` で取り込み、現在のテンプレート版は **0.5.2**（目録 SHA-256 `9e01031edccf35664747a3c38528381b3a52469f74c64ed3164b00de4e30d70a`）になった。下記 Tier C の実測コミット `506a5a893cbb4da0aabfbfa82ecc1d75f6c00d3f` はテンプレート **0.5.1** を使用した記録であり、JSON 内の generator とハッシュをそのまま保持する。JT-12 の入力は原典262c798生成の schema_version 0.4・generator なしで、template_version は存在しない。今回のテンプレート差分は M6 の R3 README 追記の推敲だけであり、追補発注の指定どおり実レンダーは再実行していない。取り込み後の検証は [M7 REPORT の M7-add](docs/work/M7/REPORT.md#m7-add) に記録する。
 
@@ -240,3 +240,21 @@ node tools/runtime-smoke.mjs --entry cli --legacy-job ".agent-work/m7-legacy-sou
 CLI/MCP の出力5ファイルはハッシュが一致した。全3経路の静止画は27051 bytes、SHA-256 `3d737258719e5b789ca6abd0275ebd0fca89307135746e2a88420527a58fae04`。PNG と ghost JSON を [CLI artifacts](docs/work/M7-fix/evidence/cli-artifacts/preview.png)、[MCP artifacts](docs/work/M7-fix/evidence/mcp-artifacts/preview.png)、[原典0.4 artifacts](docs/work/M7-fix/evidence/legacy-artifacts/preview.png) に保存し、動画・依存・一時ジョブはハッシュ採取後に削除した。ghost の件数は助言のままである。
 
 証拠の [manifest.json](docs/work/M7-fix/evidence/manifest.json) は21ファイル・336917 bytes のパス・サイズ・SHA-256を記録する（目録自身を除く）。目録の SHA-256 は `cd39dac0c6817f6a4fd56682843b832cc9d494d69e842c3bda1bf1c13c0f6dec`。生ログは追跡外に保持し、そのハッシュだけを証拠へ記録した。以前の M7 の JSON・画像は変更していない。
+
+## M7-final
+
+検証対象の最終コードコミットは **`4cafdbe79cd2232361c8891f1485066d02d5b6ca`**（`M7-final: align GUI import fixtures with active character checks`）。M7-gui と M7-fix のマージ済み HEAD `f6b4153` に、L2 回答で許可された GUI 単体・e2e のテスト修正を加えた。2人目の不正な位置は duo で拒否し、solo では原典どおり受理して値を保持する。同じ e2e で拒否時の画面・入力・添付の保持も確認した。L2 回答は [M7-fix-Q1](docs/work/M7-fix/QUESTIONS.md) に記録した。
+
+環境は Windows / Node v24.15.0 / npm 11.12.1。日時は UTC、2026-11-14。結果の保存は文書のみのコミット（`M7-final: record integrated verification and L2 answer`）に分け、検証後の実装・テスト変更は無い。受け入れ・G4 の判定は L2 に委ねる。
+
+| コマンド・対象 | 観測結果 |
+| --- | --- |
+| `npm ci`（指定作業ツリー） | 終了0。131追加・133監査。既存 low1 の表示は自動修正していない |
+| `node tools/ci-local.mjs`（最終コードコミットの深さ1複製） | 13:08:37.020Z〜13:13:12.945Z、275.924秒、終了0。本体219件（pass217 / fail0 / skip2）、GUI 単体34件（pass33 / fail0 / skip1）、e2e42/42。ライセンス180項目・導入済130・verified:true、本体と GUI のビルド完了。末尾は「CI と同じコマンドが完了しました」と対象の完全 SHA |
+| `npm run build` → `node tools/verify-cli.mjs`（指定作業ツリー） | 両方終了0。build は13:08:57.162Z〜13:09:03.915Z、verify-cli は13:09:04.095Z〜13:10:39.214Z。54件の実動記録を既定の追跡外 `.agent-work/cli-verification.json` に出力 |
+
+本体の skip2 は Linux 専用の子孫停止と POSIX ファイル名、GUI の skip1 は sh 不在。Windows の junction 検査は実行され、ディレクトリ symlink の EPERM 診断も記録された。ci-local の生ログは追跡外 `.agent-work/m7final-ci.log`、SHA-256 `67401bd69ac03a5a99d0ba1a73394519350c5f3e23629293ecd06e14b1f64cb9`。時刻・件数・各コマンドの終了値とログハッシュは [verification.json](docs/work/M7-final/evidence/verification.json)、詳細は [REPORT](docs/work/M7-final/REPORT.md) に保存した。
+
+`VERIFICATION.md` の M7-gui 節はマージ前 `e10f571`、M7-fix 節はマージ後 `f6b4153` と本文一致し、重複・食い違いは無かった。既存の16画像と M7-fix の21証拠ファイル（336917 bytes）のサイズ・SHA-256 もすべて一致。記録は変更せず、今回の結果を追記した。
+
+Tier C 実測コミット **`c0d10ca798b2689a50e91f3556dc73c09cfa3391`** から最終コードコミットへの `git diff --stat` は46ファイル・9120追加・15削除（[diff-stat.txt](docs/work/M7-final/evidence/diff-stat.txt)）。差分は `gui/`・`docs/` とルートの証拠文書 `VERIFICATION.md` のみ。`git diff --exit-code c0d10ca798b2689a50e91f3556dc73c09cfa3391 4cafdbe79cd2232361c8891f1485066d02d5b6ca -- src tools schemas job-template job-assets package.json package-lock.json` は出力なし・終了0で、core・host・CLI・MCP・テンプレート・実行ツール・依存のコードに差分は無い。証拠を保存する後続コミットも文書のみ。今回 Tier C は再実行していない。
