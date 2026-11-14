@@ -246,3 +246,27 @@ Aivis APIとBiim制作方針の参考: https://github.com/kokuren333/BiimSlideMa
 
 - 生成後の設定の正本は project.json です。CLI・MCP は設定の写しを持ちません。
 - CLI・MCP から実行すると、実行の記録がジョブ内の`.smm/runs/`に残ります。これは実行の記録であり、設定ではありません。
+
+## レンダーのエンコーダ（GPU・CPU）
+
+`npm run preview`・`npm run build`と、`npm run ghost-check -- --double-render`の2本目のレンダーは、始める前にNVIDIAのGPUのハードウェアエンコーダ（NVENC）で1フレームを実際に符号化してみます。成功すればNVENCで、失敗すれば自動でCPU（libx264）で符号化します。NVIDIAのGPUが無いPCでもレンダーできますが、CPUでは符号化に時間がかかります。macOSでは試行せず、従来どおりの指定でレンダーします。
+
+環境変数`MOTION_JOB_ENCODER`で明示することもできます。
+
+| 値 | 動作 |
+| --- | --- |
+| `auto`（既定。未設定・空も同じ） | 上の試行で選ぶ |
+| `cpu` | 試行せずにCPU（libx264）で符号化する |
+| `gpu` | 試行せずにハードウェアエンコーダ（Windows・LinuxではNVENC）で符号化する。使えなければレンダーは失敗する |
+
+```sh
+MOTION_JOB_ENCODER=cpu npm run preview   # sh・Git Bash
+```
+
+```powershell
+$env:MOTION_JOB_ENCODER = "cpu"; npm run preview   # PowerShell（同じウィンドウの以降のコマンドにも効く）
+```
+
+レンダーの開始時に、標準エラーへ`[encoder]`で始まる1行が出ます。`route=gpu`ならハードウェアエンコーダ、`route=cpu`ならCPUで符号化しています。CLI・MCPから実行した場合は、この行がrunの`stderr.log`に残ります。CLI・MCPでは、CLIを起動する環境、またはMCPクライアントの登録の`env`に設定します。
+
+選んだエンコーダでレンダーが失敗しても、別のエンコーダでやり直しはしません。NVENCで失敗したときは`MOTION_JOB_ENCODER=cpu`を付けて実行し直してください。どちらのエンコーダで作った動画も同じ扱いで、検査の合否には影響しません。

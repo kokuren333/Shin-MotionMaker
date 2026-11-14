@@ -71,7 +71,12 @@ try {
     const logNames = current.run ? ["stdout", "stderr"].map((stream) => `.smm/runs/${current.run.id}/${stream}.log`) : [];
     const logs = current.run ? await facts(path.join(root, job), logNames) : [];
     for (const log of logs) log.tail = (await fs.readFile(path.join(root, job, log.path), "utf8")).split(/\r?\n/).slice(-30);
+    // R6 (JT-18): keep the job's "[encoder]" lines, which the 30-line tail can miss on long renders.
+    const stderrLog = current.run ? await fs.readFile(path.join(root, job, logNames[1]), "utf8") : "";
+    const encoderLines = stderrLog.split(/\r?\n/).filter((line) => line.startsWith("[encoder]"));
+    for (const line of encoderLines) console.log(`エンコーダ: ${kind} ${input.target ?? ""} ${line}`);
     evidence.records.push({ command, cli_exit_code: cliExit ?? null, polling: polls ? { count: polls, wait_ms: 50000 } : null,
+      encoder_lines: encoderLines, nvcuda_mentions: (stderrLog.match(/nvcuda/gi) ?? []).length,
       elapsed_ms: Date.now() - began, run: current.run, result: current.result,
       error: current.error ?? null, logs, artifacts: current.run ? await facts(path.join(root, job), current.run.artifacts) : [] });
     if (entry === "cli") assert.equal(cliExit, expected, JSON.stringify(current));

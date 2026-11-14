@@ -36,7 +36,7 @@ test("TS-04 real explanation and MV jobs preserve QC verdicts without tool error
   const title = "MCP & 全角 空白";
   const generated = envelope<"generate">(await call("job_generate", { request: request(title), out: "." }));
   assert.ok(generated.ok); const job = generated.result.job!;
-  assert.equal(generated.result.file_count, 68);
+  assert.equal(generated.result.file_count, 69);
   const status = envelope<"status">(await call("job_status", { job })); assert.ok(status.ok); assert.equal(status.result.deps.installed, false);
   for (const key of ["verdict", "score", "rank"]) assert.equal(Object.hasOwn(status.result, key), false);
   const project = envelope<"project_get">(await call("project_get", { job })); assert.ok(project.ok); assert.deepEqual(project.result.project, generated.result.project);

@@ -1,0 +1,141 @@
+{
+  "machine": "Windows 11、NVIDIA GeForce RTX 3080（ドライバ 610.88）、Node v24.15.0",
+  "commit": "a67b042a38daf75302a6b924b268d01f7a75d44c",
+  "template_version": "0.5.3",
+  "job": "jobs/Encoder & ＆（全角）　・ 空白（640×360・30秒、tools/prepare-runtime-smoke.mjs の場面、setup は CLI で 53秒）",
+  "C5": {
+    "render_final_auto": {
+      "ok": true,
+      "error": null,
+      "run": {
+        "id": "r-20261114T213223Z-0094120f",
+        "status": "completed",
+        "exit_code": 0,
+        "script_exit_code": 0
+      },
+      "encoder_lines": [
+        "[encoder] route=gpu encoder=h264_nvenc MOTION_JOB_ENCODER=auto (unset) reason: h264_nvenc test encode succeeded (427 ms)"
+      ]
+    },
+    "double_render_auto": {
+      "command": "node dist/cli/main.js ghost-check <job> --double-render（MOTION_JOB_ENCODER 未設定）",
+      "elapsed_s": 25,
+      "ok": true,
+      "error": null,
+      "run": {
+        "id": "r-20261114T213249Z-e5825ad2",
+        "status": "completed",
+        "exit_code": 0,
+        "script_exit_code": 0
+      },
+      "encoder_lines": [
+        "[encoder] route=gpu encoder=h264_nvenc MOTION_JOB_ENCODER=auto (unset) reason: h264_nvenc test encode succeeded (327 ms)"
+      ]
+    },
+    "double_render_cpu": {
+      "command": "MOTION_JOB_ENCODER=cpu node dist/cli/main.js ghost-check <job> --double-render",
+      "elapsed_s": 25,
+      "ok": true,
+      "error": null,
+      "run": {
+        "id": "r-20261114T213315Z-c8e9072d",
+        "status": "completed",
+        "exit_code": 0,
+        "script_exit_code": 0
+      },
+      "encoder_lines": [
+        "[encoder] route=cpu encoder=libx264 MOTION_JOB_ENCODER=\"cpu\" reason: probe skipped (set explicitly)"
+      ]
+    },
+    "report_double_render": {
+      "comparedFrames": 180,
+      "mismatchCount": 0,
+      "mismatches": []
+    }
+  },
+  "C6": {
+    "command": "PowerShell：cd <job>/runtime; $env:MOTION_JOB_ENCODER = \"cpu\"; npm run preview",
+    "exit_code": 0,
+    "elapsed_s": 28,
+    "encoder_line": [
+      "[encoder] route=cpu encoder=libx264 MOTION_JOB_ENCODER=\"cpu\" reason: probe skipped (set explicitly)"
+    ],
+    "note": "CLI を使わない。PowerShell は標準エラーの行を `node.exe : ` 付きで包む",
+    "sh": {
+      "command": "Git Bash：MOTION_JOB_ENCODER=cpu npm run preview",
+      "exit_code": 0,
+      "encoder_line": [
+        "[encoder] route=cpu encoder=libx264 MOTION_JOB_ENCODER=\"cpu\" reason: probe skipped (set explicitly)"
+      ]
+    }
+  },
+  "C7": {
+    "cli": {
+      "command": "MOTION_JOB_ENCODER=nvenc node dist/cli/main.js render <job> --target preview",
+      "cli_exit_code": 4,
+      "ok": false,
+      "error": {
+        "code": "E_INTERNAL",
+        "message": "スクリプトの終了と今回の完了記録が一致しません。",
+        "hint": "stdout.log・stderr.log とレポートの更新時刻を確認してください。",
+        "details": {
+          "reason": "execution_failed"
+        }
+      },
+      "run": {
+        "id": "r-20261114T212653Z-4b113222",
+        "status": "failed",
+        "exit_code": 4,
+        "script_exit_code": 1
+      },
+      "encoder_lines": [
+        "[encoder] MOTION_JOB_ENCODER must be auto, cpu or gpu (got \"nvenc\"). No render was started."
+      ],
+      "runtime_public_created": false,
+      "note": "prepare() の前に終了（runtime/public が作られていない）。Remotion は起動していない"
+    },
+    "mcp": {
+      "registration_env": {
+        "MOTION_JOB_ENCODER": "nvenc"
+      },
+      "ok": false,
+      "error": {
+        "code": "E_INTERNAL",
+        "message": "スクリプトの終了と今回の完了記録が一致しません。",
+        "hint": "stdout.log・stderr.log とレポートの更新時刻を確認してください。",
+        "details": {
+          "reason": "execution_failed"
+        }
+      },
+      "run": {
+        "status": "failed",
+        "exit_code": 4,
+        "script_exit_code": 1
+      }
+    }
+  },
+  "docs_examples": {
+    "cli_sh": {
+      "command": "MOTION_JOB_ENCODER=cpu node dist/cli/main.js render <job> --target preview",
+      "cli_exit_code": 0,
+      "elapsed_s": 42,
+      "ok": true,
+      "error": null,
+      "run": {
+        "id": "r-20261114T212925Z-c4cca5aa",
+        "status": "completed",
+        "exit_code": 0,
+        "script_exit_code": 0
+      },
+      "encoder_lines": [
+        "[encoder] route=cpu encoder=libx264 MOTION_JOB_ENCODER=\"cpu\" reason: probe skipped (set explicitly)"
+      ]
+    },
+    "cli_powershell": {
+      "command": "$env:MOTION_JOB_ENCODER = \"cpu\"; node dist/cli/main.js render <job> --target preview",
+      "cli_exit_code": 0,
+      "result": "ok true, completed, [encoder] route=cpu encoder=libx264"
+    }
+  },
+  "measured_at": "2026-11-14T21:35:07.190Z"
+}

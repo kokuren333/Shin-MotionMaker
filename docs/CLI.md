@@ -42,6 +42,22 @@ CLI のコマンドは、host の共通の操作定義表にある名前と入�
 - `runs wait` は終端まで取得を繰り返す。`runs logs` はすぐに取得する。`runs get` だけは、`--wait-ms` で指定した時間（最大50,000ms）まで待って取得できる。
 - `--log-tail` は0〜2,000行で、既定は100行。
 
+### ジョブ内スクリプトへの環境変数
+
+CLI が起動するジョブ内スクリプトは、CLI のプロセスの環境をそのまま受け継ぐ。CLI・host は環境変数を解釈・追加・削除しない。たとえば生成ジョブのレンダーのエンコーダ（テンプレート 0.5.3 以降、要件 §6.4）は `MOTION_JOB_ENCODER`（`auto`・`cpu`・`gpu`）で明示できる。既定の `auto` は NVENC を実際に試し、使えなければ CPU（libx264）で符号化するので、通常は設定しなくてよい。
+
+```powershell
+$env:MOTION_JOB_ENCODER = "cpu"; node dist/cli/main.js render "jobs/<タイトル>" --target preview
+```
+
+```sh
+MOTION_JOB_ENCODER=cpu node dist/cli/main.js render "jobs/<タイトル>" --target preview
+```
+
+- 選んだ経路は、run の `stderr.log` の先頭近くにある `[encoder]` で始まる1行で確かめられる（`runs logs`）。
+- 不正な値では、ジョブ内のレンダーが始まらずに終わる。封筒は下の対応表の run.mjs の行のとおり。
+- 値の意味と自動のやり直しをしないことは、生成ジョブの README の「レンダーのエンコーダ（GPU・CPU）」節にある。
+
 ### imagegen の制限
 
 - `--kind` は原典と同じ `background`・`transparent`・`character-sheet`・`motion`・`texture`・`prop`。
@@ -113,7 +129,7 @@ CLI のコマンドは、host の共通の操作定義表にある名前と入�
 | imagegen.mjs | Codex 不在の SKIPPED は0、strict は1、必要引数不在も1 | SKIPPED は助言 / 0、strict の記録済み SKIPPED だけ fail / 1。入力不正を起動前に2、未分類異常を4とする |
 | aivis.mjs | engine none は0、未対応 engine は1 | none は not_applicable / 0、明示的入力エラーは E_INPUT_INVALID / 2。必要時の疎通不足は E_ENGINE_UNREACHABLE / 3。未分類異常は4 |
 | sound-design.mjs | 生成無効は0、有効な cue の WAV 合成は0、空の cues は1 | 対象外 / 成功0、明示的 plan エラーは E_INPUT_INVALID / 2、未分類異常は4 |
-| run.mjs | 不正 mode は1、依存未導入の preview も1。M7 の CLI/MCP 実レンダーは元・正規化終了とも0 | CLI は既知 target だけを渡す。依存不足を起動前3とする。成功は0、実行後に判明した道具不足は3、未分類非0は4 |
+| run.mjs | 不正 mode は1、依存未導入の preview も1。M7 の CLI/MCP 実レンダーは元・正規化終了とも0。R6：`MOTION_JOB_ENCODER` が不正な値なら Remotion を起動せずに1（`[encoder]` の行を標準エラーへ。[CPU の実測](work/CPU/REPORT.md)） | CLI は既知 target だけを渡す。依存不足を起動前3とする。成功は0、実行後に判明した道具不足は3、未分類非0は4。`MOTION_JOB_ENCODER` の不正値は解釈せず、未分類の非0として `ok: false`・`E_INTERNAL`（details.reason `execution_failed`）・run は `failed`・終了コード4（`script_exit_code` は1） |
 | setup（npm） | 実依存の install と、依存なし workspace の install / ci は0。Windows 拡張 cwd の npm URL エラーは1 | 成功0、npm 不在は3、導入失敗は4。拡張 cwd の不具合は host で修正 |
 
 - 使う report は、run の開始日時以降に書かれた最新のものだけである。
@@ -153,7 +169,7 @@ node dist/cli/main.js qc ".agent-work/cli-evidence/jobs/CLI & 全角 空白" --s
 | `node tools/runtime-smoke.mjs --entry mcp --commit <SHA>` | ビルド後に MCP の実レンダーと run のポーリングを確認する |
 | `node tools/runtime-smoke.mjs --entry cli --legacy-job <原典生成ジョブ> --commit <SHA>` | 原典0.4ジョブの status・report なしの validate pass/fail・QC・レンダー・ghost を確認する |
 
-Tier C は既存の Chrome/Edge を使い、自動導入しない。証拠 JSON・静止画・ghost report を保存し、成功時は一時ジョブの依存と動画を削除する。失敗時は調査用ジョブを保持する。動作確認用ジョブは voice none、音響はジョブ内の合成を使う。実 Aivis・有償画像生成はこの検証に含めない。
+Tier C は既存の Chrome/Edge を使い、自動導入しない。CI の `runtime-smoke.yml` だけは、runner に ffmpeg が無く Remotion 同梱の ffmpeg ではゴースト検査の走査ができないため、版と SHA-256 を固定した ffmpeg（gyan.dev の 8.1）を取得して `FFMPEG_PATH` と PATH に置く（[CPU-Q1](work/CPU/QUESTIONS.md)、オーナー承認）。製品のコマンドは ffmpeg を自動導入しない。証拠 JSON・静止画・ghost report を保存し、成功時は一時ジョブの依存と動画を削除する。失敗時は調査用ジョブを保持する。動作確認用ジョブは voice none、音響はジョブ内の合成を使う。実 Aivis・有償画像生成はこの検証に含めない。
 
 ## MCP の起動
 

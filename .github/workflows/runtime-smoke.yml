@@ -16,6 +16,30 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      # CPU-Q1 option A (owner decision 2026-11-15): the runner image ships no ffmpeg and the one bundled with
+      # Remotion cannot write rawvideo, which ghost-check needs. Fetch a pinned gyan.dev build (official GitHub
+      # mirror), verify its SHA-256, and expose it to the job scripts. Product code is unchanged.
+      # FFMPEG_PATH reaches the CLI path; the MCP stdio client forwards only a fixed set of variables
+      # (PATH among them), so the bin directory is also prepended to PATH.
+      - name: Fetch pinned ffmpeg 8.1 (gyan.dev essentials)
+        shell: pwsh
+        env:
+          FFMPEG_URL: https://github.com/GyanD/codexffmpeg/releases/download/8.1/ffmpeg-8.1-essentials_build.zip
+          FFMPEG_SHA256: 8748283d821613d930b0e7be685aaa9df4ca6f0ad4d0c42fd02622b3623463c6
+        run: |
+          $zip = Join-Path $env:RUNNER_TEMP 'ffmpeg-8.1-essentials_build.zip'
+          $dir = Join-Path $env:RUNNER_TEMP 'ffmpeg-8.1'
+          $ProgressPreference = 'SilentlyContinue'
+          Invoke-WebRequest -Uri $env:FFMPEG_URL -OutFile $zip -MaximumRetryCount 3 -RetryIntervalSec 5
+          $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath $zip).Hash.ToLowerInvariant()
+          if ($actual -ne $env:FFMPEG_SHA256) { throw "ffmpeg SHA-256 mismatch: expected $env:FFMPEG_SHA256, got $actual" }
+          Expand-Archive -LiteralPath $zip -DestinationPath $dir
+          $bin = Join-Path $dir 'ffmpeg-8.1-essentials_build\bin'
+          $exe = Join-Path $bin 'ffmpeg.exe'
+          & $exe -hide_banner -version | Select-Object -First 1
+          if (-not (& $exe -hide_banner -muxers | Select-String -Pattern '\srawvideo\s' -Quiet)) { throw 'ffmpeg has no rawvideo muxer' }
+          "FFMPEG_PATH=$exe" >> $env:GITHUB_ENV
+          $bin >> $env:GITHUB_PATH
       - run: node tools/runtime-smoke.mjs --entry cli --commit "${{ github.sha }}"
       - run: node tools/runtime-smoke.mjs --entry mcp --commit "${{ github.sha }}"
         if: ${{ !cancelled() }}
