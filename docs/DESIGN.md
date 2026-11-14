@@ -1,6 +1,6 @@
 # DESIGN — Shin-MotionMaker GUI のデザイン言語
 
-- 状態：M4 の初版（実装に合わせて記述）
+- 状態：M4 の初版（実装に合わせて記述）。M6 で文面を確認した
 - 根拠：要件定義書 `docs/REQUIREMENTS.md` §7（GU-01〜GU-17）、§2.2 の PH-03・PH-04。出発点は原典 BiimMotion の `docs/DESIGN.md`（コミット 262c798、確定版）で、原典 Amendment 03（製品ファミリーテーマへの統一）を引き継ぐ
 - 対象：`gui/`（`index.html`、`src/App.tsx`、`src/components/`、`src/style.css`、`src/theme/tokens.css`、`public/icons/`）。**出力映像の仕様（biim-standard-v1、字幕帯域、QC 規則）は対象外で、ここでは変えない**
 - 本書と実装が食い違ったときは、実装を確かめたうえで本書を直すか、本書に合わせる修正を別タスクとして起こす。本書だけを書き換えて規則を変えない
