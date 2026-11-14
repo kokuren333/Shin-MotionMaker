@@ -1,0 +1,31 @@
+{
+  "success": true,
+  "url": "https://kokuren333.github.io/Shin-MotionMaker/",
+  "expect_commit": "29382a3e293502ac8337a0ec74fcac7b0dc26d7b",
+  "attempt": 1,
+  "failures": [],
+  "version": {
+    "version": "0.1.0",
+    "template_version": "0.5.2",
+    "commit": "29382a3e293502ac8337a0ec74fcac7b0dc26d7b",
+    "built_at": "2026-11-14T16:43:38.350Z"
+  },
+  "assets": [
+    "https://kokuren333.github.io/Shin-MotionMaker/assets/index-DC4PpN-B.js",
+    "https://kokuren333.github.io/Shin-MotionMaker/assets/index-CBGikXvU.css"
+  ],
+  "visible": {
+    "heading": "動画ジョブを作成",
+    "sections": [
+      "動画の企画",
+      "参考資料と指示",
+      "デザイン方向性",
+      "キャラクター",
+      "音声と出力",
+      "ジョブの要点",
+      "補足"
+    ],
+    "zip": "ジョブのZIPを生成"
+  },
+  "console_errors": 0
+}

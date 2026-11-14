@@ -1,0 +1,198 @@
+{
+  "repository": "kokuren333/Shin-MotionMaker",
+  "collected_at": "2026-11-14T16:47:38.747Z",
+  "runs": [
+    {
+      "workflow": "CI",
+      "event": "push",
+      "head_sha": "efdd1ead2ecdc58f170cc3739591fddd387faff4",
+      "head_branch": "m8-record",
+      "run_id": 43616399951,
+      "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616399951",
+      "attempts": [
+        {
+          "attempt": 1,
+          "conclusion": "success",
+          "jobs": [
+            {
+              "name": "tier-b",
+              "conclusion": "success",
+              "started_at": "2026-11-14T16:35:07Z",
+              "completed_at": "2026-11-14T16:35:51Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616399951/job/132512295704"
+            },
+            {
+              "name": "test (ubuntu-latest, 24)",
+              "conclusion": "success",
+              "started_at": "2026-11-14T16:35:06Z",
+              "completed_at": "2026-11-14T16:37:20Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616399951/job/132512295845"
+            },
+            {
+              "name": "test (ubuntu-latest, 22)",
+              "conclusion": "success",
+              "started_at": "2026-11-14T16:35:07Z",
+              "completed_at": "2026-11-14T16:38:07Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616399951/job/132512295868"
+            },
+            {
+              "name": "test (windows-latest, 24)",
+              "conclusion": "success",
+              "started_at": "2026-11-14T16:35:06Z",
+              "completed_at": "2026-11-14T16:39:50Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616399951/job/132512295875"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "CI",
+      "event": "pull_request",
+      "head_sha": "efdd1ead2ecdc58f170cc3739591fddd387faff4",
+      "head_branch": "m8-record",
+      "run_id": 43616418899,
+      "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616418899",
+      "attempts": [
+        {
+          "attempt": 1,
+          "conclusion": "success",
+          "jobs": [
+            {
+              "name": "test (ubuntu-latest, 24)",
+              "conclusion": "success",
+              "started_at": "2026-11-14T16:35:17Z",
+              "completed_at": "2026-11-14T16:38:06Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616418899/job/132512349338"
+            },
+            {
+              "name": "test (windows-latest, 24)",
+              "conclusion": "success",
+              "started_at": "2026-11-14T16:35:17Z",
+              "completed_at": "2026-11-14T16:39:49Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616418899/job/132512349484"
+            },
+            {
+              "name": "test (ubuntu-latest, 22)",
+              "conclusion": "success",
+              "started_at": "2026-11-14T16:35:17Z",
+              "completed_at": "2026-11-14T16:37:40Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616418899/job/132512349592"
+            },
+            {
+              "name": "tier-b",
+              "conclusion": "success",
+              "started_at": "2026-11-14T16:35:18Z",
+              "completed_at": "2026-11-14T16:36:06Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616418899/job/132512350123"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "Pages",
+      "event": "push",
+      "head_sha": "29382a3e293502ac8337a0ec74fcac7b0dc26d7b",
+      "head_branch": "main",
+      "run_id": 43616863781,
+      "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616863781",
+      "attempts": [
+        {
+          "attempt": 1,
+          "conclusion": "success",
+          "jobs": [
+            {
+              "name": "build",
+              "conclusion": "success",
+              "started_at": "2026-11-14T16:40:17Z",
+              "completed_at": "2026-11-14T16:43:45Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616863781/job/132513721101"
+            },
+            {
+              "name": "deploy",
+              "conclusion": "success",
+              "started_at": "2026-11-14T16:43:50Z",
+              "completed_at": "2026-11-14T16:44:01Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616863781/job/132514693153"
+            },
+            {
+              "name": "verify",
+              "conclusion": "success",
+              "started_at": "2026-11-14T16:44:03Z",
+              "completed_at": "2026-11-14T16:44:19Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616863781/job/132514764909"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "CI",
+      "event": "push",
+      "head_sha": "29382a3e293502ac8337a0ec74fcac7b0dc26d7b",
+      "head_branch": "main",
+      "run_id": 43616863870,
+      "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616863870",
+      "attempts": [
+        {
+          "attempt": 1,
+          "conclusion": "failure",
+          "jobs": [
+            {
+              "name": "tier-b",
+              "conclusion": "success",
+              "started_at": "2026-11-14T16:40:17Z",
+              "completed_at": "2026-11-14T16:41:06Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616863870/job/132513721676"
+            },
+            {
+              "name": "test (windows-latest, 24)",
+              "conclusion": "success",
+              "started_at": "2026-11-14T16:40:17Z",
+              "completed_at": "2026-11-14T16:44:55Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616863870/job/132513721749"
+            },
+            {
+              "name": "test (ubuntu-latest, 24)",
+              "conclusion": "success",
+              "started_at": "2026-11-14T16:40:17Z",
+              "completed_at": "2026-11-14T16:42:44Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616863870/job/132513721766"
+            },
+            {
+              "name": "test (ubuntu-latest, 22)",
+              "conclusion": "failure",
+              "started_at": "2026-11-14T16:40:17Z",
+              "completed_at": "2026-11-14T16:42:33Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616863870/job/132513721810"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflow": "Runtime smoke",
+      "event": "push",
+      "head_sha": "29382a3e293502ac8337a0ec74fcac7b0dc26d7b",
+      "head_branch": "main",
+      "run_id": 43616863876,
+      "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616863876",
+      "attempts": [
+        {
+          "attempt": 1,
+          "conclusion": "failure",
+          "jobs": [
+            {
+              "name": "runtime-smoke",
+              "conclusion": "failure",
+              "started_at": "2026-11-14T16:40:17Z",
+              "completed_at": "2026-11-14T16:43:29Z",
+              "url": "https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616863876/job/132513720954"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -317,6 +317,16 @@ GitHub Pages を「GitHub Actions」から配信する設定で有効化し、ma
 
 以上で、main `9d3314e` の公開は CI-08 の4条件を満たした。
 
+### main への push での公開（PR #2 のマージ後）
+
+[PR #2](https://github.com/kokuren333/Shin-MotionMaker/pull/2)（上の記録・README・`pages.yml` の push 契機）は、PR の CI 8ジョブが成功した head `efdd1ea` をマージし、main は `29382a3e293502ac8337a0ec74fcac7b0dc26d7b` になった（木は head と同じ）。run の一覧は [ci-runs-pr2.json](docs/work/M8/evidence/ci-runs-pr2.json)。
+
+- push を契機に Pages が自動で動き、[run 43616863781](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616863781) の build・deploy・verify がすべて success。手元の `verify-pages`（2026-11-14T16:45Z 台）も1回目で合格し、`version.json` の commit は `29382a3…`（[verify-pages-29382a3.json](docs/work/M8/evidence/verify-pages-29382a3.json)）。スクリーンショットは公開前の基準 S1 と同じバイト（SHA-256 `3bfedde3…`）。
+- 同じコミットの CI（push）[run 43616863870](https://github.com/kokuren333/Shin-MotionMaker/actions/runs/43616863870) は ubuntu/22 の e2e 1件が失敗した（他の3ジョブは成功）。GU-04「request.json の読み込みは core validateRequest で検査する」が、2つ目のファイルを読み込んだ直後に、まだ画面に残っている1つ目のエラーを読んでいた（テストの待ち合わせの競合。手元と PR の CI では出ていなかった）。待ち合わせを「今回のファイルのエラー文が出るまで」に直した（この節を含む PR）。製品の挙動は変えていない。
+- Runtime smoke は同じ `nvcuda.dll` の理由で失敗した（残課題）。
+
+**版のタグ**：`v0.1.0` は、この節を含む PR のマージコミットに付ける。付ける条件は、そのコミットの main の CI（4ジョブ）と Pages（3ジョブ）の成功、手元からの `verify-pages` の合格。公開コミット `9d3314e` からの差分は文書・テスト・`pages.yml`・README だけで、実行経路（`src/`・`job-template/`・`tools/runtime-smoke.mjs`・`tools/tier-b.mjs`・依存の lock）に差分は無いので、Tier C は `9d3314e` の記録を引用する。
+
 ### 残課題（M8 時点）
 
 - **Runtime smoke の CI（windows runner）が失敗する。** 生成ジョブの `runtime/scripts/run.mjs` が `--hardware-acceleration if-possible` を渡し、GPU の無い runner でも Remotion が `h264_nvenc` を選んで `nvcuda.dll` を読めずに変換に失敗する（`Cannot load nvcuda.dll` → `Conversion failed!`）。原典 `262c798` から引き継いだ挙動で、NVIDIA GPU の無い Windows 機の利用者でも起こりうる。`job-template/` は R1〜R5 以外を変えられないので M8 では直していない。L1 の判断（要件 §6.2 の改訂）が要る。Windows 実機（NVIDIA GPU あり）の Tier C は上記のとおり成功している。
