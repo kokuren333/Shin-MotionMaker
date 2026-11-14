@@ -124,15 +124,22 @@ function runView(file: string, raw: JsonObject): Classified {
   const report = result && isObject(result.report) ? result.report : null;
   const error = isObject(raw.error)
     ? { code: text(raw.error.code), message: text(raw.error.message), hint: text(raw.error.hint) } : undefined;
-  const reportAdvisories: Advisory[] = report && Array.isArray(report.advisories)
+  // The embedded report is read by the same path as a report opened directly, so a QC run
+  // shows the same gate rows, review_mode and waivers (GU-05). The run's recorded verdict stays.
+  const inner = report ? classifyReport(file, JSON.stringify(report)) : null;
+  const innerView = inner?.ok ? inner.view : null;
+  const reportAdvisories: Advisory[] = innerView ? innerView.advisories : report && Array.isArray(report.advisories)
     ? report.advisories.filter(isObject).map((entry) => ({
         id: text(entry.id), source: text(entry.source) || text(raw.kind),
         message: text(entry.message ?? entry.detail),
       })) : [];
+  const gate: GateView | null = !verdict ? null
+    : innerView?.gate ? { ...innerView.gate, verdict }
+    : { verdict, rows: [], waivers: [],
+      ...(report && typeof report.review_mode === "string" ? { reviewMode: report.review_mode } : {}) };
   return { ok: true, view: {
     key: `run-${raw.id}`, title: `run ${raw.kind}`, file,
-    gate: verdict ? { verdict, rows: [], waivers: [],
-      ...(report && typeof report.review_mode === "string" ? { reviewMode: report.review_mode } : {}) } : null,
+    gate,
     advisories: reportAdvisories,
     facts: [
       ["run ID", raw.id], ["種類", raw.kind], ["引数", JSON.stringify(raw.args ?? {})],

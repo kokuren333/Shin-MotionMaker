@@ -58,6 +58,17 @@ test("run.json: run status and gate verdict are separate facts", () => {
   assert.equal(run.run?.abnormal, false);
   assert.equal(run.gate?.verdict, "fail", "a completed run may carry a failed gate");
   assert.equal(run.gate?.reviewMode, "self");
+  // M4R R2: the embedded QC report is shown with the same gate fields as the report opened directly.
+  const direct = view("qc-pre.json", qcPre).gate!;
+  assert.deepEqual(run.gate?.waivers, [{ gateId: "PRE-3", reason: qcPre.waivers[0].reason }]);
+  assert.deepEqual(run.gate?.waivers, direct.waivers);
+  assert.deepEqual(run.gate?.rows, direct.rows);
+  assert.deepEqual(run.advisories, view("qc-pre.json", qcPre).advisories);
+  const independent = view("run.json", { ...runRecord, result: { ...runRecord.result, verdict: "pass",
+    report: { ...qcPre, verdict: "pass", review_mode: "independent", waivers: [] } } });
+  assert.equal(independent.gate?.verdict, "pass");
+  assert.equal(independent.gate?.reviewMode, "independent");
+  assert.deepEqual(independent.gate?.waivers, []);
   const lost = view("run.json", { ...runRecord, status: "lost", result: undefined,
     error: { code: "E_RUN_LOST", message: "消失", hint: "再実行" } });
   assert.equal(lost.run?.abnormal, true);
