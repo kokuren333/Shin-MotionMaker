@@ -1,6 +1,58 @@
 # M1 REPORT — コア・制作ハーネス・原典テストの移植
 
-## 起動時チェックと範囲
+## M1-fix
+
+交差レビュー M1R と L2 の差し戻し裁定を反映した。以下は実行証拠の報告であり、受け入れ判定は L2 に委ねる。初回報告の実行件数・版・判断は後段に履歴として残し、この節と末尾の許容差分表を最新とする。
+
+### 起動時チェック
+
+- L3 工学担当、Codex 6.1 sol / high の発注。モデル切替・サブエージェント利用なし（レベル1相当）、自己判定になるゲートなし。
+- 指定ブランチ m1-core、着手時 HEAD 43b6d8517670b0a0449cf5855019d6edee53ab55、作業ツリーはクリーン。Windows / Node v24.15.0。コマンド・対話・ネットワーク利用可。
+- REQUIREMENTS の指定節、AGENTS、CONTRACT 全文、WORKFLOW、REVIEW 全文、既存 REPORT と PORTING_LEDGER を確認。差し戻し発注書は会話中の DIRECTION を使用した（作業ツリーに DIRECTION.md はない）。原典 262c798 は読み取り専用の git show で位置と原文を確認し、原典でコード実行・依存導入・変更は行っていない。
+- 実装修正コミット: 3919845（M1: preserve validation output and restore upstream test assertions）。
+
+### 指摘と対応
+
+| 指摘 | 対応と証拠 |
+| --- | --- |
+| M-1 | tests/generate-job.test.ts の15ケースを復元。構造エラー12ケースは details.pointer の集合を完全一致で比較し、validateForm の3ケースは原典の正規表現を details の連結文字列に適用。2項目同時エラー・MV 完成音源必須・混在・必須文言を検査。全体テストで実行 |
+| M-2 | validate.mjs の R4 書出しだけを try/catch で包み、allowed-diffs.json の appends も更新。reports がファイルのケースで原典・追加後とも status 0、stderr 空、stdout 完全一致。report の不在と既存ファイルの保持も表明 |
+| R-1 | AGENTS.md の MV・解説2箇所の免責を「Shin-MotionMaker（GUI・CLI・MCP）の」へ変更。ゴースト結果・チェックリストの GUI 表記を維持し、R1 の置換対を9対へ分割。JT-11 の逆変換・基線照合で検査 |
+| R-2 | baseline.test.ts で原典 explainer.test.ts L110〜115 の解説 form と L225〜226 の設定2組・歌詞・尺から入力を構成。explanation であることを確認後 switchVideoMode(..., "mv") を呼び、golden 2ケースの form に完全一致 |
+| R-3 | 解説 brief に Opus が残らないこと、biim・mixed の R5 対象分岐に置換先が存在することを逆変換前に表明。golden 全11ケースを実行 |
+| R-4(a) | テストで書き出した添付を loadAssets から読み、mimeTypeFor が決める .PDF・.glb・.WAV・.unknown の MIME・サイズ・本文を独立した期待値と完全一致で比較。モード5件で読み込み結果を buildJobFiles へ渡した。独立したテンプレート読み込みとの比較は専用 test.todo と機械可読・文書台帳に M2a への移送を明記 |
+| R-5 | 原典 262c798 を読み、generate-job の準備 L16〜65・モード L68〜140・最小 L142〜153・拒否 L155〜186・出力先 L188〜206・usage L208〜218、explainer の基線 L209〜252 に台帳を修正 |
+| I-4 | mimeTypeFor は先頭のドットだけの名前を拡張子なしとして扱う。.md・folder/.PDF は application/octet-stream、..wav・.notes.MD は実拡張子の MIME となることも検査 |
+| I-6 | no-git.test.ts の走査を tools 全体へ拡大。開発専用の tools/ci-local.mjs と tools/capture-baseline.mjs だけを名前で明示除外。陽性サンプルとともに実行 |
+| I-7 | R4 の差分実行に解説の通常検査を追加。status 0、stdout・stderr が原典と完全一致し、report が pass であることを表明 |
+| I-8 | explainer.test.ts の未使用 import 3件を除去。porting-ledger.test.ts は基線81件の全 ID（ファイル名＋テスト名）と機械可読台帳・文書の行の1対1対応、各対応先の一意な実在、種別も表明 |
+
+### 実行結果
+
+| コマンド | 結果 |
+| --- | --- |
+| npm run build | exit 0、strict 型検査完了 |
+| npm test | exit 0、tests 119 / pass 109 / fail 0 / todo 10 / skipped 0。TODO は既存 M2b 9件と明示した M2a 1件 |
+| node --experimental-strip-types tools/smoke-core.mjs | exit 0。Node は69ファイル、ZIP 7,726,528 bytes、schema 0.5。既存 Chrome で69ファイルすべての SHA-256 が Node と一致。空白・&・全角を含む一時パスで実生成 |
+| node tools/ci-local.mjs | exit 0。3919845eeb7bf5bfd655e233f23e3edac7a82038 を深さ1で複製し npm ci → build → test → workspace test/build を完了。tests 119 / pass 109 / fail 0 / todo 10。npm ci の監査は vulnerabilities 0 |
+| git diff --check 43b6d8517670b0a0449cf5855019d6edee53ab55 | exit 0（実装修正コミット前）。git diff --cached --check も exit 0 |
+
+R4 差分実行は通常成功、final＋SKIP、分類なし GHOST、分類・二重レンダー付き GHOST、解説の通常成功、reports がファイル、TypeScript 不正＋走査例外の7条件。先頭6条件は status 0、最後は status 1 で、全条件で原典と stdout・stderr・status が一致した。
+
+途中の対象テスト実行は tests 42 / pass 31 / fail 1 / todo 10。失敗は追加テストが ENOTDIR だけを期待した一方、Windows が report 不在を ENOENT で返したため。両方を受け付ける検査へ直し、上記の全体実行で fail 0 を確認した。
+
+### 決定・質問・依存・残件
+
+- テンプレート本文の変更を識別するため、CONTRACT §1 に従い TEMPLATE_VERSION を 0.5.1 に更新し、旧0.5.0の目録を保持したまま新目録と版→ハッシュを追加。新目録 SHA-256 は eca744e87e30d5e8985311a0593b8b781043f8aa84081769892118e70248df1a。PACKAGE_VERSION は0.1.0。
+- R4 の記録失敗は無出力で吸収する。report が無い場合の host 側読取は既存契約どおり後続の責務とする。
+- 添付の読み込みはテスト用ヘルパーを使い、host の実装は追加しない。独立した host・ブラウザのテンプレート比較だけを M2a に移送した。M2b の9件の移送範囲は維持。
+- 契約・要件への新しい質問なし。QUESTIONS.md の状態は変わらない。CONTRACT・REQUIREMENTS の変更なし。
+- 依存追加・更新なし。追加のライセンス確認対象なし。初回記録のライセンス選択と NOTICE を維持。
+- I-2（ジョブ README のモデル名）・I-3（JT-11(2) と R4）は裁定どおり変更せず L2・L1 の扱いに委ねる。I-5（buildJobFiles の除外一元化とパス検査の厳格化）は既存契約に沿う差として記録を維持。
+- L2 による再実測・判定が残る。Linux・Node22 は手元未実測。GUI の見た目・アイコン・README の推敲判断は行っていない。リモート repo 作成・push・npm 公開なし。
+
+
+## 初回報告の起動時チェックと範囲
 
 - 層: L3 工学担当。発注指定は Codex 6.1 sol / high。モデル切替・サブエージェント起動なし。L4 を使わず順次実施したレベル1相当。自己判定になるゲートは設けず、受け入れは L2 と別製品の交差レビューに委ねる。
 - 作業ブランチ: m1-core。着手時 HEAD: 6bb8c5bc3d1e6b8e1740ad3dc468cd455656d978。着手時の追跡変更なし。
@@ -110,7 +162,7 @@
 
 - L2 による再実測と別製品 Opus の交差レビュー。
 - M2b で上の CLI 9件を完成させる。入力 BOM・壊れた JSON・添付不在・cwd・終了コード・書込前拒否・排他的出力と編集保持を含む。
-- GUI の Vite 読込との直接比較は M4/M2b で行う。今回のブラウザ実行は core の実行と ZIP 本文比較であり、GUI の画面検査ではない。
+- 独立した host とブラウザのテンプレート読込との比較は M2a に移送する（M1-fix の専用 TODO）。今回のブラウザ実行は core の実行と ZIP 本文比較であり、GUI の画面検査ではない。
 - M6 で README の R3 追記の文面を Opus が推敲する。既存の特定モデル名など R5 の解説 brief 以外の本文は今回の許容範囲を越えて置換していない。
 - Linux と Node22 は手元にないため未実測。Windows / Node24 の深さ1複製で確認した。実レンダーの CLI/MCP runtime-smoke は M7 の範囲。
 - ツール prepare-runtime-smoke.mjs と ui-shots.mjs の用途別移植は M7 / M4 の担当で行う。今回の原典テストが使う make-fixture.ts は移植済み。
@@ -126,7 +178,8 @@
 
 | 適用先 | 置換前 | 置換後 |
 | --- | --- | --- |
-| AGENTS.md | WebUIの | Shin-MotionMaker（GUI）の |
+| AGENTS.md | WebUIの「方向性のたたき台」 | Shin-MotionMaker（GUI・CLI・MCP）の「方向性のたたき台」 |
+| AGENTS.md | WebUIの「レンダーゴースト検査の結果」 | Shin-MotionMaker（GUI）の「レンダーゴースト検査の結果」 |
 | AGENTS.md | WebUIとbrief.md | Shin-MotionMaker（GUI）とbrief.md |
 | README.md | WebUI自身 | Shin-MotionMaker（GUI）自身 |
 | README.md | WebUIで開ける | Shin-MotionMaker（GUI）で開ける |
@@ -137,7 +190,7 @@
 
 ## allowed-diffs.json の最終形
 
-[最終ファイル](../../../tests/fixtures/baseline-biimmotion-262c798/allowed-diffs.json)。SHA-256: 0e8a3f6b0b325eae73dd9571b20c0be8c146428047a2e97249095d867bcb63d9。以下はコミットする JSON の全文。
+[最終ファイル](../../../tests/fixtures/baseline-biimmotion-262c798/allowed-diffs.json)。SHA-256: 24b1328930c385100a07e82ad963d12129fbcdcd566915a609ebb0575b73bc8b。M1-fix で R1 と R4 を更新した。以下はコミットする JSON の全文。
 
 <details>
 <summary>最終形（R1〜R5）</summary>
@@ -157,8 +210,13 @@
       "replacements": [
         {
           "path": "AGENTS.md",
-          "from": "WebUIの",
-          "to": "Shin-MotionMaker（GUI）の"
+          "from": "WebUIの「方向性のたたき台」",
+          "to": "Shin-MotionMaker（GUI・CLI・MCP）の「方向性のたたき台」"
+        },
+        {
+          "path": "AGENTS.md",
+          "from": "WebUIの「レンダーゴースト検査の結果」",
+          "to": "Shin-MotionMaker（GUI）の「レンダーゴースト検査の結果」"
         },
         {
           "path": "AGENTS.md",
@@ -196,7 +254,7 @@
           "to": "Shin-MotionMaker（GUI）で全画面"
         }
       ],
-      "note": "確定した8対。制作ハーネスではGUI名だけを置換する。MVのbrief・歌詞・依頼文への適用は禁止。"
+      "note": "確定した9対。候補の免責はGUI・CLI・MCP、GUI固有の操作はGUI名を示す。MVのbrief・歌詞・依頼文への適用は禁止。"
     },
     {
       "id": "R2",
@@ -310,7 +368,7 @@
       "appends": [
         {
           "path": "runtime/scripts/validate.mjs",
-          "text": "\nawait fs.mkdir(path.join(root, \"reports\"), { recursive: true });\nawait fs.writeFile(path.join(root, \"reports/validate.json\"), JSON.stringify({\n  schema: \"smm.validate/1\",\n  final: process.argv.includes(\"--final\"),\n  double_render: process.argv.includes(\"--double-render\"),\n  verdict: errors.length ? \"fail\" : \"pass\",\n  checks: reportChecks,\n  advisories: reportAdvisories,\n}, null, 2) + \"\\n\");\n"
+          "text": "\ntry {\n  await fs.mkdir(path.join(root, \"reports\"), { recursive: true });\n  await fs.writeFile(path.join(root, \"reports/validate.json\"), JSON.stringify({\n    schema: \"smm.validate/1\",\n    final: process.argv.includes(\"--final\"),\n    double_render: process.argv.includes(\"--double-render\"),\n    verdict: errors.length ? \"fail\" : \"pass\",\n    checks: reportChecks,\n    advisories: reportAdvisories,\n  }, null, 2) + \"\\n\");\n} catch {}\n"
         }
       ]
     },
