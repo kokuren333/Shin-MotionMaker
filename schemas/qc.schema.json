@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "smm.qc/1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "kind": {
+      "const": "biim-explainer-qc"
+    },
+    "stage": {
+      "enum": [
+        "pre",
+        "post"
+      ]
+    },
+    "mode": {
+      "const": "explanation"
+    },
+    "style_mode": {
+      "type": "string"
+    },
+    "verdict": {
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
+    "gates": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "advisories": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "review_mode": {
+      "type": "string"
+    },
+    "waivers": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "rule_versions": {
+      "type": "object"
+    },
+    "generated_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "stage",
+    "verdict",
+    "gates",
+    "advisories",
+    "inputs"
+  ]
+}

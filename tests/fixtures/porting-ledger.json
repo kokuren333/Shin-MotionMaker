@@ -194,7 +194,7 @@
         {
           "file": "tests/generate-job.test.ts",
           "name": "M2a: generate-job compares independent host template loading with the browser template paths and bytes",
-          "status": "M2a"
+          "status": "active"
         }
       ],
       "changes": [
@@ -221,7 +221,7 @@
         {
           "file": "tests/generate-job.test.ts",
           "name": "M2a: generate-job compares independent host template loading with the browser template paths and bytes",
-          "status": "M2a"
+          "status": "active"
         }
       ],
       "changes": [
@@ -248,7 +248,7 @@
         {
           "file": "tests/generate-job.test.ts",
           "name": "M2a: generate-job compares independent host template loading with the browser template paths and bytes",
-          "status": "M2a"
+          "status": "active"
         }
       ],
       "changes": [
@@ -275,7 +275,7 @@
         {
           "file": "tests/generate-job.test.ts",
           "name": "M2a: generate-job compares independent host template loading with the browser template paths and bytes",
-          "status": "M2a"
+          "status": "active"
         }
       ],
       "changes": [
@@ -302,7 +302,7 @@
         {
           "file": "tests/generate-job.test.ts",
           "name": "M2a: generate-job compares independent host template loading with the browser template paths and bytes",
-          "status": "M2a"
+          "status": "active"
         }
       ],
       "changes": [

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "smm.generate/1",
+  "type": "object",
+  "properties": {
+    "job": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "archive": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "dry_run": {
+      "type": "boolean"
+    },
+    "file_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "project": {
+      "$ref": "project.schema.json"
+    },
+    "project_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "agent_prompt": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "job",
+    "archive",
+    "dry_run",
+    "file_count",
+    "project",
+    "project_sha256",
+    "agent_prompt"
+  ],
+  "additionalProperties": false
+}
