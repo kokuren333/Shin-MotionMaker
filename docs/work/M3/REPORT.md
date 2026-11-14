@@ -2,6 +2,8 @@
 
 実装と実行証拠の報告であり、受け入れ判定は L2 と別製品 Opus の安全検査・交差レビューへ委ねる。
 
+初回実装の記録を以下に保持する。差し戻し後の変更・証拠・残課題は末尾の「M3-fix」を最新とする。
+
 ## 起動時チェック
 
 - L3 工学担当。発注は Codex 6.1 sol / high。モデル切替・サブエージェント利用なし。縮退レベル1相当、自己判定となるゲートなし。
@@ -109,3 +111,66 @@ SDK依存閉包の95配置（名前・版の組は92件）を調べた。MIT 85�
 - 進捗通知はhostの観測であり、開始要求に対応するrunを一意に通知する専用hookは共有契約にない。同じjob・種別・開始時刻以降のMCP runだけを候補にするが、他プロセスが直後に同種runを開始する場合まで要求IDと厳密に対応する保証はしない。結果と排他には影響しない。
 - 実レンダー・実Aivisエンジン・費用の発生する画像生成はM7の範囲。M3の許可エンジン試験はローカルfixtureである。
 - 見た目・アイコン・README文面の判断はしていない。docs/MCP.mdの文面の推敲はM6担当へ渡す。
+
+## M3-fix — M3R の反映と CLI 結線
+
+### 起動・統合
+
+- L3 工学担当。発注指定のモデルを維持し、サブエージェントは利用していない。Windows / Node v24.15.0 / npm 11.12.1。L2 の受け入れ・交差レビューの再判定は行っていない。
+- 指定の `m3-mcp` で着手時クリーン。必須の REQUIREMENTS・AGENTS・CONTRACT・WORKFLOW、M3 REVIEW 全文・初回 REPORT、取り込み後の CLI と M2b REPORT を確認した。
+- 最初に `git merge main` で `91c939f` を取り込み、`7196448` に記録した。worker の setup cwd は同じ実装だったためコメントを統一した。NOTICE は SDK と GUI の記録を併存させ、lockfile は両方の固定版を保持した。`npm ci` は終了0（added 131 / audited 133、low 1件の表示）。依存版の更新はしていない。
+- 修正前のマージ基線: `npm test` は202件 / pass 200 / fail 0 / skip 2 / TODO 0、終了0。`npm test --workspace gui` は33件 / pass 32 / fail 0 / skip 1、e2e 42 / 42、終了0。この確認後に修正へ入った。
+
+### 指摘 → 対応 → テスト名
+
+| 指摘 | 対応・実装ファイル | 証拠・テスト名 |
+| --- | --- | --- |
+| M-1 PNG が3重に符号化され SDK 既定上限を超える | `src/mcp/server.ts` の JSON は data:null と MIME・bytes・sha256・delivered_as:image。本体は image ブロックの1回だけ。`src/host/report.ts` で restrictToRoot の上限を6 MiB、超過を E_INPUT_INVALID と CLI 案内にした。CLI の8 MiB / base64 は維持 | `MC-06 report PNG sends metadata in JSON and bytes only in the image block`、`TS-04 default SDK buffer receives a 6 MiB PNG once and survives an oversized rejection; CLI keeps 8 MiB`。6,291,456バイトの有効 PNG を既定 SDK 設定で取得、本体出現1回・受信行10 MiB未満・元バイトとハッシュ一致。6 MiB＋1の拒否後も project_get 成功。CLI は8 MiB取得成功、8 MiB＋1を E_PATH_DENIED / 2 |
+| M-1 契約・スキーマ | 承認済み変更を `docs/CONTRACT.md` §3・§5・改訂履歴に反映。`src/host/output-schemas.ts` / `schemas/report.schema.json` にメタデータの分岐を追加。封筒は既存の report 参照から同じ分岐を利用し、ローカル化した MCP outputSchema の snapshot も再生成 | `TS-04 tools list matches the complete tool schema snapshot and operation table` と SDK クライアントの outputSchema 検査。`tools/write-schemas.ts`・`tools/write-mcp-snapshot.ts` を実行。maxBufferSize の拡大は全廃し、例外設定も0件 |
+| M-2 Tier B の CI | `.github/workflows/ci.yml` に ubuntu / Node 24 の Tier B ジョブ。npm キャッシュのキーに本体 lock とジョブ・runtime の package.json を含め、build 後に `tools/smoke-mcp.ts` を実行 | この PC でも同じスクリプトを実行し、68ファイル生成→実依存 setup completed / 0→validate completed / pass / 0、deps_installed:true、protocol_errors:0。Node の親プロセスから tier_b_exit_code:0 を確認 |
+| M-2 Node 22 の警告による stderr 比較 | `tests/helpers/mcp.ts` と MC-01 は `dist/mcp/main.js`、登録例はビルド済み CLI を起動。型除去フラグをサーバーに渡さない | `MC-01 invalid startup fails on stderr with no protocol stdout`、`DC-03 MCP client registration example launches from the repository directory`。通常登録では stderr 空、起動不正では stdout 空・stderr の JSON を検査。Node 22 自体は L2 持越し |
+| M-2 TS-05 CLI 側 | 同じ root を CLI の cwd とし、共通操作表と CLI 登録を照合。決定論の同期・読取8操作に schema の一覧／本文、生成 dry-run を含む10ケースで CLI result と MCP result を完全比較 | `TS-05 CLI and MCP deterministic synchronous read results match at the same root`。候補・統計・status・project_get・text report・run_get・run_list・schema を比較。doctor は時点で変わる空き容量の available_bytes だけを比較対象から外し、他の全項目を完全比較 |
+| M-2 CLI 結線 | 上位の `src/main.ts` が CLI の起動処理へ serveMcp を渡す。`src/cli/main.ts` / `index.ts` から root・read-only・enable-generation・allow-dir・allow-engine-host を受け渡す。CLI と MCP の相互 import は追加しない。MCP 起動エラーは stderr へ出す | `MC-01 built CLI mcp serve forwards every server flag through the SDK`。SDK から `node dist/cli/main.js mcp serve --root <dir>` を起動し、初期化・公開フラグ・許可添付を実行。既存 `MC-04 explicit engine host permission reaches only the local fixture engine` もビルド済み CLI 経由にし、明示許可後の実 HTTP 接続を確認。`AR-03` も実行 |
+| R-1 ホーム・ジョブの絶対パスがログ／report に残る | `src/host/display.ts` の表示用コピー変換を runs / operations に適用。ホームを ~、ジョブ・root・導入先を相対化。realpath・スラッシュ区切り・file URL・Windows の大小文字・JSON 内のエスケープ形も対象。入れ子の report、advisories、run の結果、report_get の本文にも適用 | `R-1 MCP displays home job and root paths relatively in logs nested reports and report text`。ジョブ内スクリプトが実際に home・job・root を stderr と入れ子の QC detail に出力。開始結果・run_get/list・status・report_get に絶対パスがなく、元の stderr.log / QC ファイルには元のパスが残ることを確認。既存 `R-4 MCP log tails redact file URLs realpaths and host installation paths` も維持 |
+| R-2 不正な root | `src/host/paths.ts` の起動用ディレクトリ検査を mcpContext から呼ぶ。不在・ファイルは E_PATH_DENIED と hint、終了2 | `MC-01 invalid startup fails on stderr with no protocol stdout` に不在 root・ファイル root の2ケース追加。stdout 空・stderr の code と hint・終了2を確認 |
+| R-3 正しい入力の read-only／ジョブ内リンク | 非公開を正しい書込入力で直接呼び、root 内全ファイルのハッシュと目録を前後比較。report 内の外向き junction / symlink・ハードリンク、root 内添付のハードリンクも SDK 経由で検査 | `MC-04 read-only rejects valid write inputs without changing any root file` は12呼出すべて E_DISABLED、変化0。`MC-02 MCP rejects in-job junctions symlinks hardlinks and hardlinked attachments` は E_PATH_DENIED。Windows の dir symlink は EPERM の診断付き、junction とハードリンクは実行 |
+| P-1・P-2 | 10 MiB超の入力1行では SDK transport が閉じ、detached run は継続することを MCP 文書に記載。未知ツールは E_USAGE の封筒を返す現状を維持 | P-1 は M3R の実測を記載したもので、本修正で上限超過入力の probe は再実行していない。未知ツールの isError:true は既存 MC-04 試験で検査 |
+| P-3 | host の normalizeError で RangeError を E_INPUT_INVALID に分類。原典由来の core 統計は変更しない | `P-3 host classifies a deeply nested patch as input error without changing the project`。5,500段の patch を host に直接渡し、E_INPUT_INVALID・project のバイト保持・後続 MCP 呼出成功を確認 |
+| P-4・P-7 | リダイレクト拒否の文書の主語を「host の疎通確認は」に限定。進捗の run_list 観測は維持 | `docs/MCP.md` を更新。進捗通知・排他・再起動後の run 取得は既存 MC-05 / MC-15 / MC-13 を維持 |
+
+### 決定
+
+- CLI と MCP の結線は層の外の composition root に置き、相互 import の検査例外を増やさない。通常の CLI 操作では SDK を読み込まず、サーバー起動時にだけ import する。
+- host の表示用コピーは restrictToRoot だけに適用する。生成された project・入力の自由記述・CLI の取得結果・ジョブ内の保存済みファイルを書き換えない。
+- ツール結果・stderr の厳密比較はビルド済み入口で行い、Node の警告文を恣意的に削除する比較にはしない。
+- TS-05 の doctor はライブの空き容量を同時点の決定論結果とみなさない。available_bytes 以外は CLI と MCP で同じ入力の全項目を比較する。
+- 深い patch の SDK 往復を最初に試すと、送信前の SDK JSON.stringify 自身が RangeError となった。製品側の分類を確かめる試験は host 直接呼出とし、受信バッファや SDK の serializer は変更しない。
+- 初回の全体実行で検出した、CLI の未接続を期待する1行と MCP の8 MiB超過を E_PATH_DENIED とする期待を更新した。CLI の8 MiB超過拒否は別 context の表明として保持し、接続動作は SDK 統合試験で検証する。
+- PowerShell の stderr redirect が NativeCommandError として終了を扱った実行と区別し、Tier B の確定値は Node の spawnSync / shell:false / ログFD直接渡しから得た終了0を使う。
+
+### 契約・要件への質問、依存、残課題
+
+- 新しい未回答質問は0件。M3R M-1 の契約変更は本発注で L2 承認済み。`QUESTIONS.md` に承認受領を追記した。操作定義表・入力・run スキーマの変更はない。
+- M3-fix で依存追加・版更新は0件。main との統合で既存 GUI 依存と SDK 依存を保持した。`node tools/audit-mcp-licenses.mjs` は95配置すべて verified:true（MIT 85 / ISC 7 / BSD-3-Clause 2 / BSD-2-Clause 1）。既存 NOTICE の許諾記録を維持した。
+- ubuntu / Node 22 の実行、Windows で権限不足だった dir symlink の実測は L2 の CI 確認へ持越し。CI ジョブの定義追加を ubuntu 実行済みとは扱わない。
+- M3R への対応後の L2 判定・必要な再レビューは未実施。実レンダー・実 Aivis・有償画像生成は M7 の範囲。P-7 の観測負荷と、初回報告の TOCTOU・プロセス同一性・mtime の限界は継続する。
+- 見た目・アイコン・README の推敲はしていない。文書の変更は契約と起動手順の事実更新であり、文面の最終判断は M6 へ渡す。原典・CyberSprite・core・job-template・フォント・REQUIREMENTS・_handoff の編集、push・公開・repo 作成はしていない。
+
+### 検証の確定記録
+
+| コマンド | 件数・出力・終了 |
+| --- | --- |
+| `npm run build` | 型検査と配布用 JS の生成、終了0。全体 npm test の pretest でも実行 |
+| `npm test`（修正後の最終実行） | tests 209 / pass 207 / fail 0 / cancelled 0 / skipped 2 / TODO 0、duration_ms 150503.309、終了0。Node の親から `{"command":"npm test","exit_code":0}` も確認 |
+| `npm test --workspace gui` | tests 33 / pass 32 / fail 0 / skipped 1 / TODO 0、e2e 42 / 42、終了0。GU-02 全機能・request 往復・検査結果・幅390px・サブパスを含む |
+| `npm run build --workspace gui` | 型検査と GUI ビルド、終了0 |
+| `node --experimental-strip-types tools/smoke-mcp.ts` | `{"tier":"B","generated_files":68,"setup":"completed","setup_exit_code":0,"validate":"completed","verdict":"pass","validate_exit_code":0,"deps_installed":true,"protocol_errors":0}`。Node の親から `{"tier_b_exit_code":0}` を確認 |
+| `node tools/ci-local.mjs` | `ff7ebca51d0053e2f5db359e7c3548aab8b79106` の深さ1複製で終了0。npm ci・build・npm test（209 / pass 207 / fail 0 / skip 2 / TODO 0、duration_ms 167218.5958）・GUI（33 / pass 32 / fail 0 / skip 1、e2e 42 / 42）・GUI build を完了。Node の親から `{"command":"node tools/ci-local.mjs","exit_code":0}` を確認 |
+| `node tools/audit-mcp-licenses.mjs` | 95配置、MIT 85 / ISC 7 / BSD-3-Clause 2 / BSD-2-Clause 1、verified:true、終了0 |
+| `git diff --check 7196448...HEAD` | 出力なし、終了0。修正ファイルの CR と利用者のローカル絶対パスは0件 |
+
+経過も保存する。最初の MCP・architecture の絞り込み実行は25件 / pass 24 / fail 1で、深い patch を SDK が送信前に JSON.stringify できなかった。host 直接試験へ直した後、その1件は成功した。続く最初の全体実行は209件 / pass 205 / fail 2 / skip 2で、旧 CLI 未接続の期待と旧 MCP PNG 超過コードの期待が残っていた。両方を更新し、`node --experimental-strip-types --test --test-name-pattern "advisory-only|report whitelist" tests/cli.test.ts tests/host-files.test.ts` は2件 / pass 2 / fail 0、終了0。上表の最終全体実行で全件を再確認した。
+
+skip の内訳は、本体の Linux 子孫停止・POSIX 固有ファイル名の2件、GUI の sh 不在による POSIX 引数受渡しの1件。Windows の junction とハードリンクは skip していない。
+
+コミットは `7196448`（main 統合）、`e776002`（実装・回帰試験・Tier B CI）、`7baaac7`（承認済み契約と登録文書）、`ff7ebca`（旧期待値の更新）。最終の全体試験・ci-local は同じ実装 `ff7ebca` を対象にしている。本追記・QUESTIONS の承認記録・CLI の human と JSON-RPC の説明の明確化だけを、後続の文書コミットとして確定する。

@@ -29,7 +29,7 @@ Node.js 22 以上で使用する。実行ファイル名は `shin-motionmaker` �
 | `mcp serve --root <dir> [--allow-dir <dir>] [--read-only] [--enable-generation] [--allow-engine-host <host>]` | MCP stdio サーバーを起動する。allow-dir / allow-engine-host は繰返し指定可 |
 | `version` | パッケージ版・コミット・テンプレート版。現在 commit は null |
 
-すべてのコマンドで `--human` を指定できる。run の開始コマンドには `--detach` と `--wait-ms` もある。CLI は通常完了まで前面で待つため、開始時の wait-ms にかかわらず短い取得を繰り返す。detach では待たない。runs wait も終端まで取得を繰り返す。runs logs は即時取得、runs get だけは wait-ms の指定時間（最大50,000ms）まで取得を待てる。log-tail は0〜2,000行で既定100行。
+`--human` は通常の封筒を人向けの要約へ切り替える。`mcp serve` の標準出力は指定の有無によらず JSON-RPC 専用である。run の開始コマンドには `--detach` と `--wait-ms` もある。CLI は通常完了まで前面で待つため、開始時の wait-ms にかかわらず短い取得を繰り返す。detach では待たない。runs wait も終端まで取得を繰り返す。runs logs は即時取得、runs get だけは wait-ms の指定時間（最大50,000ms）まで取得を待てる。log-tail は0〜2,000行で既定100行。
 
 imagegen の kind は原典の background / transparent / character-sheet / motion / texture / prop。refs は assets/・sources/、prompt-file と style は plan/・sources/ に限る。任意の子プロセス引数を通す口はない。
 
