@@ -10,7 +10,9 @@ import { fakeJob, workspace } from "./helpers/host.ts";
 test("host reads ghost counts as advice and rejects inconsistent completion evidence", async (t) => {
   const context = await workspace(t); const job = await fakeJob(context);
   await fs.mkdir(path.join(job, "reports"));
-  const run: RunRecord = { schema: "smm.run/1", id: "r-20261114T000000Z-abcdef12", kind: "ghost_check", args: {}, status: "running", exit_code: null, pid: process.pid, script_pid: null, started_at: new Date().toISOString(), heartbeat_at: new Date().toISOString(), ended_at: null, progress: { ratio: null, text: "検証" }, artifacts: [], started_by: "mcp" };
+  // File mtimes use a coarser clock than Date (Linux kernel tick), so a report written in the same
+  // millisecond can predate a started_at taken just before it. Real runs spawn processes in between.
+  const run: RunRecord = { schema: "smm.run/1", id: "r-20261114T000000Z-abcdef12", kind: "ghost_check", args: {}, status: "running", exit_code: null, pid: process.pid, script_pid: null, started_at: new Date(Date.now() - 1000).toISOString(), heartbeat_at: new Date().toISOString(), ended_at: null, progress: { ratio: null, text: "検証" }, artifacts: [], started_by: "mcp" };
   await fs.writeFile(path.join(job, "reports/ghost-check.json"), JSON.stringify({ kind: "biim-ghost-check", video: "output/final.mp4", frames: 120, fps: 30, duration: "4", counts: { isolated: 12, clusteredRuns: 4 }, stills: [] }));
   const result = await collectRunResult(job, run, 0, "", ""); assert.equal(result.exit_code, 0); assert.equal(Object.hasOwn(result.result, "verdict"), false);
   assert.deepEqual(schemaIssues(schemas["ghost-check"], result.result.report, schemaRegistry), []);
