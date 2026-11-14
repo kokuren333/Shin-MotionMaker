@@ -16,7 +16,7 @@ import { InfoDialog } from "./components/InfoDialog";
 import { InspectionViewer } from "./components/InspectionViewer";
 import { AttachmentList, Notch, PixelIcon, sizeLabel, type IconName } from "./components/PixelIcon";
 import {
-  assetsFor, attachmentsToReselect, checkComplete, errorLines, parseRequestText,
+  assetsFor, attachmentsToReselect, checkComplete, errorLines, importErrorLines, parseRequestText,
 } from "./lib/request-io";
 
 const sections = [
@@ -264,7 +264,7 @@ export default function App() {
     const parsed = parseRequestText(await file.text());
     if (!parsed.ok) {
       // Nothing is applied on failure: the current input, attachments and import note stay as they were.
-      showErrors([`${file.name} を読み込めませんでした。`, ...errorLines(parsed.error)]);
+      showErrors([`${file.name} を読み込めませんでした。`, ...importErrorLines(parsed.error)]);
       return;
     }
     modeDrafts.current = {};

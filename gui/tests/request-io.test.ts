@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { defaults, formChoices, mimeTypeFor, validateForm, validateRequest, type MotionForm } from "../../src/core/index.ts";
 import {
-  assetsFor, attachmentsToReselect, checkComplete, duplicateNames, errorLines, parseRequestText,
+  assetsFor, attachmentsToReselect, checkComplete, duplicateNames, errorLines, importErrorLines, importKeptNote, parseRequestText,
   requestFilename, requestFor, requestText,
 } from "../src/lib/request-io.ts";
 
@@ -95,4 +95,23 @@ test("imported fixed choices use the shared core shape result", () => {
   for (const value of ["toString", "unknown"])
     assert.deepEqual(parseRequestText(JSON.stringify({ form: { styleMode: value } })),
       validateRequest({ form: { styleMode: value } }, { phase: "shape" }));
+});
+
+test("importErrorLines keeps the core message and pointers, adds screen names, core choices and the kept note (R-10)", () => {
+  const bad = parseRequestText(JSON.stringify({ form: { styleMode: "unknown", secondCharacter: { position: "middle" }, colour: "red" } }));
+  assert.ok(!bad.ok);
+  const lines = !bad.ok ? importErrorLines(bad.error) : [];
+  assert.equal(lines[0], !bad.ok && bad.error.message, "core message is shown unchanged");
+  const style = lines.find((line) => line.includes("/form/styleMode"))!;
+  assert.ok(style.startsWith("様式モード（/form/styleMode）："), style);
+  assert.ok(style.endsWith(`request.json に書ける値：${formChoices.styleMode.join("、")}`), style);
+  const position = lines.find((line) => line.includes("/form/secondCharacter/position"))!;
+  assert.ok(position.startsWith("2人目のキャラの初期配置") && position.includes(formChoices.secondCharacter.position.join("、")), position);
+  assert.ok(lines.some((line) => line.startsWith("/form/colour：")), "unknown keys keep the bare pointer");
+  assert.ok(!lines.some((line) => line.includes("details の pointer")), "the hand-authoring hint is replaced");
+  assert.equal(lines.at(-1), importKeptNote);
+  const broken = parseRequestText("{");
+  const brokenLines = !broken.ok ? importErrorLines(broken.error) : [];
+  assert.ok(!broken.ok && brokenLines.includes(broken.error.hint));
+  assert.equal(brokenLines.at(-1), importKeptNote);
 });
