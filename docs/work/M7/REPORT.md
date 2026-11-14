@@ -111,7 +111,21 @@ ci-local の未加工出力は `.agent-work/m7-evidence/ci.log`（SHA-256 `bf767
 
 ### 受け入れ条件と証拠
 
-検証中。指定コマンドの結果・件数・対象コミットを、実行終了後に本節と evidence/ に追記する。実装者による G4・受け入れ判定は行わない。
+| 条件・コマンド | 実行結果と証拠 |
+| --- | --- |
+| main の取り込み | `git merge main`、衝突なし。M6 の R3 差分・版0.5.2と目録を採用。原典・CyberSprite の変更なし |
+| `npm test` | 終了0。215件 / pass213 / fail0 / skip2 / TODO0、164952.6644ms。[unit-add.json](evidence/unit-add.json)。この独立実行後に libc 選別を追加し、追加箇所の単独2件も成功。最終コード全体も ci-local で再実行し、同じ件数・失敗0を確認した |
+| `npm test --workspaces --if-present` | 終了0。GUI 単体33件 / pass32 / fail0 / skip1、e2e42/42。[gui-add.json](evidence/gui-add.json) |
+| `node tools/verify-cli.mjs --output docs/work/M7/evidence/cli-add.json` | 終了0、54記録。MCP EOF・終了0・stdout空を確認し、最後の合成 QC pass まで実行。[cli-add.json](evidence/cli-add.json) |
+| `node tools/check-licenses.mjs --output docs/work/M7/evidence/licenses-add.json` | 終了0。全180項目、導入済み130・非対応 optional未導入50。許容集合外なし、jszip は MIT 選択。[licenses-add.json](evidence/licenses-add.json) |
+| `node tools/audit-mcp-licenses.mjs` | 終了0、MCP 専用の既存95項目を照合。MIT85・BSD-3-Clause2・ISC7・BSD-2-Clause1 |
+| `node --experimental-strip-types --test tests/licenses.test.ts tests/agents-declaration.test.ts` | 終了0、4件成功。GPL系・未知式・未記載の拒否、入れ子GUI開発依存、未導入optionalの一覧、本文欠落・必要依存欠落の拒否、保護文と段落全文を表明。libc 追加後のライセンス2件も成功 |
+| `npm run verify:pages:local -- --commit bc99306326622d9ff52cdb134b47bf22a0c2a423 --evidence docs/work/M7/evidence/pages-add.json` | 終了0。8不一致を拒否・古いコミットからの再試行2回目成功、verifier CLI 終了0・コンソールエラー0。[pages-add.json](evidence/pages-add.json)。画面は既存 pages-local.png と同じ SHA-256 `3bfedde3aeda625194daeca2036212b397f4c48dbabed5c15bc5b0253bba5c0e`。見た目の判定なし |
+| `node tools/ci-local.mjs` | 終了0。コミット `bc99306326622d9ff52cdb134b47bf22a0c2a423` の深さ1複製、2026-11-14 11:50:14.022Z〜11:55:56.325Z。npm ci・ライセンス180項目照合・本体215件/pass213/skip2/fail0（194901.7884ms）・GUI33件/pass32/skip1/fail0（1663.0707ms）・e2e42/42・両ビルドを完了。[ci-add.json](evidence/ci-add.json) |
+
+追加ライセンス監査の CI は PR/push の ubuntu Node24・Windows Node24・ubuntu Node22 の共通ステップに置いた。手元で実測した OS・Node は Windows / v24.15.0。Linux・hosted runner の結果は主張しない。実装者による G4・受け入れ判定は行わない。
+
+ci-local の未加工ログは `.agent-work/m7-add/ci.log`、SHA-256 `7f9b010240c644e09c1eb1034a19817f386b1f9c1ce696b1e97cb03e29062f08`。ローカルの絶対パスを含む生ログは追跡せず、コマンド・コミット・日時・終了値・件数とログハッシュを保存した。以後のコミットは検証証拠・目録と文書の実績追記だけで、実装・テスト・CI・製品の本文を変更しない。既存の証拠17ファイルはハッシュ・サイズが不変であることを確認し、追補を含む24ファイルの目録へ更新した。既存の Windows スキップ（本体2・GUI1）の理由は上記 M7 本体の記録と同じである。npm ci の既存 low 脆弱性1件は継続しており、自動の audit fix は行っていない。
 
 ### 決定
 

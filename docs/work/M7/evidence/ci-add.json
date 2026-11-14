@@ -1,0 +1,32 @@
+{
+  "command": [
+    "node",
+    "tools/ci-local.mjs"
+  ],
+  "commit": "bc99306326622d9ff52cdb134b47bf22a0c2a423",
+  "node": "v24.15.0",
+  "platform": "win32",
+  "started_at": "2026-11-14T11:50:14.022Z",
+  "ended_at": "2026-11-14T11:55:56.325Z",
+  "exit_code": 0,
+  "log_sha256": "7f9b010240c644e09c1eb1034a19817f386b1f9c1ce696b1e97cb03e29062f08",
+  "summary": [
+    "{\"packages\":180,\"installed\":130,\"licenses\":{\"Apache-2.0\":1,\"BSD-2-Clause\":1,\"BSD-3-Clause\":3,\"ISC\":8,\"MIT\":166,\"MIT AND Zlib\":1},\"verified\":true}",
+    "ℹ tests 215",
+    "ℹ pass 213",
+    "ℹ fail 0",
+    "ℹ cancelled 0",
+    "ℹ skipped 2",
+    "ℹ todo 0",
+    "ℹ duration_ms 194901.7884",
+    "ℹ tests 33",
+    "ℹ pass 32",
+    "ℹ fail 0",
+    "ℹ cancelled 0",
+    "ℹ skipped 1",
+    "ℹ todo 0",
+    "ℹ duration_ms 1663.0707",
+    "e2e: 42 件合格 / 42 件",
+    "CI と同じコマンドが完了しました: bc99306326622d9ff52cdb134b47bf22a0c2a423"
+  ]
+}
