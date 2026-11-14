@@ -1,4 +1,4 @@
-import { defaults, characterProfiles, urlLines, type MotionForm } from "./form.ts";
+import { defaults, formChoices, characterProfiles, urlLines, type MotionForm } from "./form.ts";
 import type { JobAssets } from "./types.ts";
 import type { AssetPaths, JsonObject, NormalizedRequest, RequestCheck, Validation } from "./types.ts";
 import { formError } from "./errors.ts";
@@ -37,7 +37,16 @@ export function validateRequest(input: unknown, check: RequestCheck): Validation
   else {
     rejectUnknown(input, { form: true, assets: true }, "");
     if (!isObject(input.form)) issue("/form", "オブジェクトを指定してください。");
-    else fields(input.form, defaults, "/form");
+    else {
+      fields(input.form, defaults, "/form");
+      for (const [key, choices] of Object.entries(formChoices)) {
+        const nested = key === "secondCharacter";
+        const value = nested ? isObject(input.form.secondCharacter) ? input.form.secondCharacter.position : undefined : input.form[key];
+        const allowed: readonly unknown[] = nested ? formChoices.secondCharacter.position : choices as readonly unknown[];
+        if (value !== undefined && (nested ? typeof value === "string" : typeof value === typeof defaults[key as keyof MotionForm]) && !allowed.includes(value))
+          issue(`/form/${nested ? "secondCharacter/position" : key}`, `${JSON.stringify(value)} は選べる値ではありません。`);
+      }
+    }
     const assets = input.assets === undefined ? {} : input.assets;
     if (!isObject(assets)) issue("/assets", "オブジェクトを指定してください。");
     else {
@@ -53,7 +62,7 @@ export function validateRequest(input: unknown, check: RequestCheck): Validation
   }
   if (issues.length) return { ok: false, error: {
     code: "E_INPUT_INVALID", message: "入力の構造に誤りがあります。",
-    hint: "details の pointer が指す項目のキーと型を修正してください。", details: issues,
+    hint: "details の pointer が指す項目のキー・型・列挙値を修正してください。", details: issues,
   } };
   const valid = input as { form: Partial<MotionForm>; assets?: AssetPaths };
   const form: MotionForm = {
@@ -76,14 +85,14 @@ export function validateForm(form: MotionForm, assets?: JobAssets): string[] {
   const errors: string[] = [];
   const mv = form.videoMode === "mv";
   if (!mv) {
-    if (!["biim", "anime", "motion", "mixed"].includes(form.styleMode))
+    if (!(formChoices.styleMode as readonly string[]).includes(form.styleMode))
       errors.push("様式モードが不正です。");
     if (form.styleMode === "mixed" && form.height > form.width)
       errors.push("縦向きの出力ではBiim枠を置けないため、様式「混在」は選べません。横向きにするか、別の様式を選んでください。");
     if (form.styleMode === "mixed" && (form.fullScreen || form.biimUsage === "never"))
       errors.push("様式「混在」ではBiim区間が必要なため、全画面モードとBiim使用率「使わない」は選べません。");
   }
-  if (!["explanation", "mv"].includes(form.videoMode))
+  if (!(formChoices.videoMode as readonly string[]).includes(form.videoMode))
     errors.push("動画モードが不正です。");
   if (!form.title.trim()) errors.push("動画タイトルを入力してください。");
   if (!form.description.trim())
@@ -105,11 +114,11 @@ export function validateForm(form: MotionForm, assets?: JobAssets): string[] {
     )
   )
     errors.push("解像度は240〜7,680pxの偶数で指定してください。");
-  if (![24, 25, 30, 60].includes(form.fps))
+  if (!(formChoices.fps as readonly number[]).includes(form.fps))
     errors.push("フレームレートは24 / 25 / 30 / 60fpsから選択してください。");
-  if (!["aivis", "none"].includes(form.voiceEngine))
+  if (!(formChoices.voiceEngine as readonly string[]).includes(form.voiceEngine))
     errors.push("音声エンジンが不正です。");
-  if (!["solo", "duo"].includes(form.characterMode))
+  if (!(formChoices.characterMode as readonly string[]).includes(form.characterMode))
     errors.push("キャラクターモードが不正です。");
   if (typeof form.fullScreen !== "boolean")
     errors.push("全画面モードが不正です。");
@@ -119,7 +128,7 @@ export function validateForm(form: MotionForm, assets?: JobAssets): string[] {
   )
     errors.push("素材生成の設定が不正です。");
   (mv ? [] : characterProfiles(form)).forEach((character, i) => {
-    if (!["left", "right"].includes(character.position))
+    if (!(formChoices.characterPosition as readonly string[]).includes(character.position))
       errors.push(`${i + 1}人目の配置が不正です。`);
     if (!/^#[0-9a-f]{6}$/i.test(character.subtitleColor))
       errors.push(`${i + 1}人目の字幕色は6桁のHEXカラーで指定してください。`);
@@ -159,15 +168,8 @@ export function validateForm(form: MotionForm, assets?: JobAssets): string[] {
       );
     }
   });
-  for (const [key, options] of Object.entries({
-    tempo: ["slow", "balanced", "fast"],
-    energy: ["restrained", "balanced", "bold"],
-    motionAmount: ["minimal", "balanced", "rich"],
-    biimUsage: ["never", "sometimes", "mostly"],
-    characterUsage: ["none", "occasional", "frequent"],
-    evidencePolicy: ["primary", "supplied-only", "balanced"],
-  })) {
-    if (!options.includes(String(form[key as keyof MotionForm])))
+  for (const key of ["tempo", "energy", "motionAmount", "biimUsage", "characterUsage", "evidencePolicy"] as const) {
+    if (!(formChoices[key] as readonly string[]).includes(String(form[key])))
       errors.push(`設定 ${key} が不正です。`);
   }
   for (const model of mv

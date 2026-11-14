@@ -213,17 +213,24 @@ test("MC-04 explicit engine host permission reaches only the local fixture engin
 });
 
 test("MC-13 detached MCP runs remain queryable after the stdio server restarts", async (t) => {
-  const context = await workspace(t); await fakeJob(context, { delay: 6000 });
+  const context = await workspace(t); const job = await fakeJob(context);
+  const script = path.join(job, "runtime/scripts/qc.mjs");
+  const body = await fs.readFile(script, "utf8");
+  // Complete only after the replacement server has observed the surviving run.
+  await fs.writeFile(script, `while (!await import("node:fs/promises").then((fs) => fs.access(new URL("../../release", import.meta.url)).then(() => true, () => false))) await new Promise((resolve) => setTimeout(resolve, 50));\n` + body);
   const first = await connectMcp(context.root);
   let id: string;
   try {
     const result = envelope<"qc">(await first.call("job_qc", { job: "job & 全角 空白", stage: "pre", wait_ms: 0 }));
-    assert.ok(result.ok); assert.equal(result.run?.status, "running"); id = result.run!.id;
+    assert.ok(result.ok, JSON.stringify(result)); assert.equal(result.run?.status, "running"); id = result.run!.id;
   } finally { await first.close(); }
   const second = await connectMcp(context.root, ["--read-only"]);
   try {
-    const result = envelope<"run_get">(await second.call("run_get", { job: "job & 全角 空白", run_id: id, wait_ms: 10000, log_tail: 0 }));
-    assert.ok(result.ok); assert.equal(result.run?.status, "completed"); assert.equal(result.result.verdict, "pass");
+    const surviving = envelope<"run_get">(await second.call("run_get", { job: "job & 全角 空白", run_id: id, wait_ms: 0, log_tail: 0 }));
+    assert.ok(surviving.ok, JSON.stringify(surviving)); assert.equal(surviving.run?.status, "running");
+    await fs.writeFile(path.join(job, "release"), "continue\n");
+    const result = envelope<"run_get">(await second.call("run_get", { job: "job & 全角 空白", run_id: id, wait_ms: 50000, log_tail: 0 }));
+    assert.ok(result.ok, JSON.stringify(result)); assert.equal(result.run?.status, "completed"); assert.equal(result.result.verdict, "pass");
     const listed = envelope<"run_list">(await second.call("run_list", { job: "job & 全角 空白" })); assert.ok(listed.ok); assert.equal(listed.result.runs[0].id, id);
   } finally { await second.close(); }
 });

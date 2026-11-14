@@ -1,0 +1,20 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "verify:pages:local",
+    "--",
+    "--commit",
+    "bc99306326622d9ff52cdb134b47bf22a0c2a423",
+    "--evidence",
+    "docs/work/M7/evidence/pages-add.json"
+  ],
+  "commit": "bc99306326622d9ff52cdb134b47bf22a0c2a423",
+  "node": "v24.15.0",
+  "platform": "win32",
+  "started_at": "2026-11-14T11:50:14.065Z",
+  "ended_at": "2026-11-14T11:50:34.497Z",
+  "exit_code": 0,
+  "log_sha256": "bb13884b8d933e3dd75f492000d609f29c479002a94318c825417d7c23f2539f",
+  "summary": []
+}

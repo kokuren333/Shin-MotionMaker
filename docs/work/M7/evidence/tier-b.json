@@ -1,0 +1,332 @@
+{
+  "tier": "B",
+  "commit": "f98dc051fff88ca4c7eefba4db60e9819913e349",
+  "node": "v24.15.0",
+  "platform": "win32",
+  "started_at": "2026-11-14T11:11:18.620Z",
+  "records": [
+    {
+      "entry": "cli",
+      "operation": "generate",
+      "file_count": 68,
+      "project_sha256": "86257ea44a60ddd7b74ce0692eb08ef15005ad51f954d62fd5866b9b5f33bdc7"
+    },
+    {
+      "entry": "cli",
+      "operation": "setup",
+      "elapsed_ms": 234678,
+      "polls": 0,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T111143Z-2a83372d",
+        "kind": "setup",
+        "args": {},
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 23200,
+        "script_pid": 10152,
+        "started_at": "2026-11-14T11:11:45.711Z",
+        "heartbeat_at": "2026-11-14T11:15:36.725Z",
+        "ended_at": "2026-11-14T11:15:36.725Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [],
+        "started_by": "cli",
+        "script_exit_code": 0,
+        "result": {
+          "report": null,
+          "artifacts": []
+        },
+        "job": "jobs/Tier B & 全角 空白"
+      },
+      "result": {
+        "report": null,
+        "artifacts": []
+      },
+      "artifacts": []
+    },
+    {
+      "entry": "cli",
+      "operation": "validate",
+      "elapsed_ms": 35853,
+      "polls": 0,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T111537Z-313005b3",
+        "kind": "validate",
+        "args": {},
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 25020,
+        "script_pid": 24944,
+        "started_at": "2026-11-14T11:15:38.444Z",
+        "heartbeat_at": "2026-11-14T11:16:12.502Z",
+        "ended_at": "2026-11-14T11:16:12.502Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "reports/validate.json"
+        ],
+        "started_by": "cli",
+        "script_exit_code": 0,
+        "result": {
+          "report": {
+            "schema": "smm.validate/1",
+            "final": false,
+            "double_render": false,
+            "verdict": "pass",
+            "checks": [
+              {
+                "name": "project.json",
+                "status": "ok",
+                "message": "OK project.json"
+              },
+              {
+                "name": "sources and assets",
+                "status": "ok",
+                "message": "OK sources and assets"
+              },
+              {
+                "name": "audio manifests",
+                "status": "ok",
+                "message": "OK audio manifests"
+              },
+              {
+                "name": "sync public assets",
+                "status": "ok",
+                "message": "OK sync public assets"
+              },
+              {
+                "name": "TypeScript",
+                "status": "ok",
+                "message": "OK TypeScript"
+              }
+            ],
+            "advisories": []
+          },
+          "artifacts": [
+            "reports/validate.json"
+          ],
+          "verdict": "pass"
+        },
+        "job": "jobs/Tier B & 全角 空白"
+      },
+      "result": {
+        "report": {
+          "schema": "smm.validate/1",
+          "final": false,
+          "double_render": false,
+          "verdict": "pass",
+          "checks": [
+            {
+              "name": "project.json",
+              "status": "ok",
+              "message": "OK project.json"
+            },
+            {
+              "name": "sources and assets",
+              "status": "ok",
+              "message": "OK sources and assets"
+            },
+            {
+              "name": "audio manifests",
+              "status": "ok",
+              "message": "OK audio manifests"
+            },
+            {
+              "name": "sync public assets",
+              "status": "ok",
+              "message": "OK sync public assets"
+            },
+            {
+              "name": "TypeScript",
+              "status": "ok",
+              "message": "OK TypeScript"
+            }
+          ],
+          "advisories": []
+        },
+        "artifacts": [
+          "reports/validate.json"
+        ],
+        "verdict": "pass"
+      },
+      "artifacts": [
+        {
+          "path": "reports/validate.json",
+          "bytes": 662,
+          "sha256": "a926b23ddcb71e40b8791854b971fc5bdfa3903284a2cdf9f3da827098f60508"
+        }
+      ]
+    },
+    {
+      "entry": "mcp",
+      "operation": "generate",
+      "file_count": 68,
+      "project_sha256": "86257ea44a60ddd7b74ce0692eb08ef15005ad51f954d62fd5866b9b5f33bdc7"
+    },
+    {
+      "entry": "mcp",
+      "operation": "setup",
+      "elapsed_ms": 205858,
+      "polls": 4,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T111630Z-85757490",
+        "kind": "setup",
+        "args": {},
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 15460,
+        "script_pid": 10180,
+        "started_at": "2026-11-14T11:16:32.056Z",
+        "heartbeat_at": "2026-11-14T11:19:56.150Z",
+        "ended_at": "2026-11-14T11:19:56.150Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [],
+        "started_by": "mcp",
+        "script_exit_code": 0,
+        "result": {
+          "report": null,
+          "artifacts": []
+        },
+        "job": "jobs/Tier B & 全角 空白"
+      },
+      "result": {
+        "report": null,
+        "artifacts": [],
+        "stdout_tail": [],
+        "stderr_tail": []
+      },
+      "artifacts": []
+    },
+    {
+      "entry": "mcp",
+      "operation": "validate",
+      "elapsed_ms": 27216,
+      "polls": 1,
+      "run": {
+        "schema": "smm.run/1",
+        "id": "r-20261114T111956Z-97b5be91",
+        "kind": "validate",
+        "args": {},
+        "status": "completed",
+        "exit_code": 0,
+        "pid": 1992,
+        "script_pid": 23312,
+        "started_at": "2026-11-14T11:19:56.436Z",
+        "heartbeat_at": "2026-11-14T11:20:23.420Z",
+        "ended_at": "2026-11-14T11:20:23.420Z",
+        "progress": {
+          "ratio": 1,
+          "text": "実行が完了しました。"
+        },
+        "artifacts": [
+          "reports/validate.json"
+        ],
+        "started_by": "mcp",
+        "script_exit_code": 0,
+        "result": {
+          "report": {
+            "schema": "smm.validate/1",
+            "final": false,
+            "double_render": false,
+            "verdict": "pass",
+            "checks": [
+              {
+                "name": "project.json",
+                "status": "ok",
+                "message": "OK project.json"
+              },
+              {
+                "name": "sources and assets",
+                "status": "ok",
+                "message": "OK sources and assets"
+              },
+              {
+                "name": "audio manifests",
+                "status": "ok",
+                "message": "OK audio manifests"
+              },
+              {
+                "name": "sync public assets",
+                "status": "ok",
+                "message": "OK sync public assets"
+              },
+              {
+                "name": "TypeScript",
+                "status": "ok",
+                "message": "OK TypeScript"
+              }
+            ],
+            "advisories": []
+          },
+          "artifacts": [
+            "reports/validate.json"
+          ],
+          "verdict": "pass"
+        },
+        "job": "jobs/Tier B & 全角 空白"
+      },
+      "result": {
+        "report": {
+          "schema": "smm.validate/1",
+          "final": false,
+          "double_render": false,
+          "verdict": "pass",
+          "checks": [
+            {
+              "name": "project.json",
+              "status": "ok",
+              "message": "OK project.json"
+            },
+            {
+              "name": "sources and assets",
+              "status": "ok",
+              "message": "OK sources and assets"
+            },
+            {
+              "name": "audio manifests",
+              "status": "ok",
+              "message": "OK audio manifests"
+            },
+            {
+              "name": "sync public assets",
+              "status": "ok",
+              "message": "OK sync public assets"
+            },
+            {
+              "name": "TypeScript",
+              "status": "ok",
+              "message": "OK TypeScript"
+            }
+          ],
+          "advisories": []
+        },
+        "artifacts": [
+          "reports/validate.json"
+        ],
+        "verdict": "pass",
+        "stdout_tail": [],
+        "stderr_tail": []
+      },
+      "artifacts": [
+        {
+          "path": "reports/validate.json",
+          "bytes": 662,
+          "sha256": "a926b23ddcb71e40b8791854b971fc5bdfa3903284a2cdf9f3da827098f60508"
+        }
+      ]
+    }
+  ],
+  "success": true,
+  "elapsed_ms": 556119,
+  "ended_at": "2026-11-14T11:20:34.741Z"
+}

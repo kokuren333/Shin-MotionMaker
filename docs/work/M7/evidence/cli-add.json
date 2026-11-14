@@ -1,0 +1,570 @@
+{
+  "node": "v24.15.0",
+  "platform": "win32",
+  "records": [
+    {
+      "command": "node dist/cli/main.js version",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js schema",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js schema request",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js schema version",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js candidates --mode explanation --seed 42 --count 3",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js stats .agent-work/cli-evidence/text.txt --kind script --request .agent-work/cli-evidence/request.json",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js generate .agent-work/cli-evidence/request.json --out .agent-work/cli-evidence/dry --dry-run",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js generate .agent-work/cli-evidence/request.json --out .agent-work/cli-evidence/jobs",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js generate .agent-work/cli-evidence/request.json --out .agent-work/cli-evidence/archives --zip",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js generate .agent-work/cli-evidence/request.json --out .agent-work/cli-evidence/jobs",
+      "exit_code": 2,
+      "ok": false,
+      "error": "E_OUTPUT_EXISTS"
+    },
+    {
+      "command": "node dist/cli/main.js status \".agent-work/cli-evidence/jobs/CLI & 全角 空白\"",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js project get \".agent-work/cli-evidence/jobs/CLI & 全角 空白\"",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js project get \".agent-work/cli-evidence/jobs/CLI & 全角 空白\" --pointer /title",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js project patch \".agent-work/cli-evidence/jobs/CLI & 全角 空白\" .agent-work/cli-evidence/patch.json --expect-sha256 588a1f8ef30efa38e9d83e23a87ba30dcf197318e536ce05aaa98980ad6ba219",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js report \".agent-work/cli-evidence/jobs/CLI & 全角 空白\" brief.md",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js doctor \".agent-work/cli-evidence/jobs/CLI & 全角 空白\"",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js mcp serve --root .agent-work/cli-evidence",
+      "exit_code": 0,
+      "stdout": "",
+      "scenario": "stdio EOF で正常終了"
+    },
+    {
+      "command": "node dist/cli/main.js validate \".agent-work/cli-evidence/jobs/CLI & 全角 空白\"",
+      "exit_code": 3,
+      "ok": false,
+      "error": "E_DEPS_MISSING"
+    },
+    {
+      "script": "validate.mjs",
+      "args": [],
+      "scenario": "依存未導入の TypeScript 検査エラー",
+      "script_exit_code": 1,
+      "stdout": [
+        "OK project.json",
+        "OK sources and assets",
+        "OK audio manifests"
+      ],
+      "stderr": [
+        "TypeScript: ../motion-kit/BiimOverlay.tsx(2,63): error TS2307: Cannot find module 'remotion' or its corresponding type declarations.",
+        "../motion-kit/CameraPunch.tsx(2,57): error TS2307: Cannot find module 'remotion' or its corresponding type declarations.",
+        "../motion-kit/Character3D.tsx(8,26): error TS2307: Cannot find module '@react-three/fiber' or its corresponding type declarations."
+      ]
+    },
+    {
+      "script": "qc.mjs",
+      "args": [
+        "--stage=invalid"
+      ],
+      "scenario": "不正 stage",
+      "script_exit_code": 2,
+      "stdout": [],
+      "stderr": [
+        "Usage: npm run qc -- --stage=pre|post",
+        "Use --stage=pre|post"
+      ]
+    },
+    {
+      "script": "qc.mjs",
+      "args": [
+        "--stage=pre"
+      ],
+      "scenario": "制作記録のない解説",
+      "script_exit_code": 1,
+      "stdout": [
+        "QC pre: fail — reports/qc-pre.json"
+      ],
+      "stderr": []
+    },
+    {
+      "command": "node dist/cli/main.js qc \".agent-work/cli-evidence/jobs/CLI & 全角 空白\" --stage pre",
+      "exit_code": 1,
+      "ok": true,
+      "verdict": "fail",
+      "advisories": 2,
+      "run": {
+        "id": "r-20261114T114509Z-f534de0e",
+        "status": "completed",
+        "exit_code": 1,
+        "script_exit_code": 1
+      }
+    },
+    {
+      "command": "node dist/cli/main.js qc \".agent-work/cli-evidence/jobs/CLI & 全角 空白\" --stage pre --detach",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0,
+      "run": {
+        "id": "r-20261114T114511Z-03d114f3",
+        "status": "running",
+        "exit_code": null,
+        "script_exit_code": null
+      }
+    },
+    {
+      "command": "node dist/cli/main.js runs wait \".agent-work/cli-evidence/jobs/CLI & 全角 空白\" r-20261114T114511Z-03d114f3",
+      "exit_code": 1,
+      "ok": true,
+      "verdict": "fail",
+      "advisories": 2,
+      "run": {
+        "id": "r-20261114T114511Z-03d114f3",
+        "status": "completed",
+        "exit_code": 1,
+        "script_exit_code": 1
+      }
+    },
+    {
+      "command": "node dist/cli/main.js runs list \".agent-work/cli-evidence/jobs/CLI & 全角 空白\"",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0
+    },
+    {
+      "command": "node dist/cli/main.js runs get \".agent-work/cli-evidence/jobs/CLI & 全角 空白\" r-20261114T114511Z-03d114f3",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": "fail",
+      "advisories": 2,
+      "run": {
+        "id": "r-20261114T114511Z-03d114f3",
+        "status": "completed",
+        "exit_code": 1,
+        "script_exit_code": 1
+      }
+    },
+    {
+      "command": "node dist/cli/main.js runs logs \".agent-work/cli-evidence/jobs/CLI & 全角 空白\" r-20261114T114511Z-03d114f3",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": "fail",
+      "advisories": 2,
+      "run": {
+        "id": "r-20261114T114511Z-03d114f3",
+        "status": "completed",
+        "exit_code": 1,
+        "script_exit_code": 1
+      }
+    },
+    {
+      "command": "node dist/cli/main.js runs cancel \".agent-work/cli-evidence/jobs/CLI & 全角 空白\" r-20261114T114511Z-03d114f3",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0,
+      "run": {
+        "id": "r-20261114T114511Z-03d114f3",
+        "status": "completed",
+        "exit_code": 1,
+        "script_exit_code": 1
+      }
+    },
+    {
+      "script": "aivis.mjs",
+      "args": [],
+      "scenario": "voice.engine none",
+      "script_exit_code": 0,
+      "stdout": [
+        "Voice synthesis disabled by project settings."
+      ],
+      "stderr": []
+    },
+    {
+      "command": "node dist/cli/main.js voice \".agent-work/cli-evidence/jobs/CLI & 全角 空白\"",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": "not_applicable",
+      "advisories": 0,
+      "run": {
+        "id": "r-20261114T114515Z-054cc75b",
+        "status": "completed",
+        "exit_code": 0,
+        "script_exit_code": 0
+      }
+    },
+    {
+      "script": "aivis.mjs",
+      "args": [],
+      "scenario": "未対応 voice.engine",
+      "script_exit_code": 1,
+      "stdout": [],
+      "stderr": [
+        "Unsupported voice engine"
+      ]
+    },
+    {
+      "command": "node dist/cli/main.js voice \".agent-work/cli-evidence/jobs/CLI & 全角 空白\"",
+      "exit_code": 2,
+      "ok": false,
+      "error": "E_INPUT_INVALID",
+      "run": {
+        "id": "r-20261114T114518Z-ee0b2c93",
+        "status": "failed",
+        "exit_code": 2,
+        "script_exit_code": 1
+      }
+    },
+    {
+      "script": "sound-design.mjs",
+      "args": [],
+      "scenario": "音響生成無効",
+      "script_exit_code": 0,
+      "stdout": [
+        "BGM/SE generation disabled by project settings."
+      ],
+      "stderr": []
+    },
+    {
+      "command": "node dist/cli/main.js sound \".agent-work/cli-evidence/jobs/CLI & 全角 空白\"",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": "not_applicable",
+      "advisories": 0,
+      "run": {
+        "id": "r-20261114T114521Z-8c9b3513",
+        "status": "completed",
+        "exit_code": 0,
+        "script_exit_code": 0
+      }
+    },
+    {
+      "script": "sound-design.mjs",
+      "args": [],
+      "scenario": "空の cues",
+      "script_exit_code": 1,
+      "stdout": [],
+      "stderr": [
+        "Write 1–100 cues to plan/sound-design.json first."
+      ]
+    },
+    {
+      "command": "node dist/cli/main.js sound \".agent-work/cli-evidence/jobs/CLI & 全角 空白\"",
+      "exit_code": 2,
+      "ok": false,
+      "error": "E_INPUT_INVALID",
+      "run": {
+        "id": "r-20261114T114524Z-8649c3f5",
+        "status": "failed",
+        "exit_code": 2,
+        "script_exit_code": 1
+      }
+    },
+    {
+      "script": "sound-design.mjs",
+      "args": [],
+      "scenario": "有効な cue から WAV 合成",
+      "script_exit_code": 0,
+      "stdout": [
+        "chime: chime, 0.1 sec"
+      ],
+      "stderr": []
+    },
+    {
+      "command": "node dist/cli/main.js sound \".agent-work/cli-evidence/jobs/CLI & 全角 空白\"",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 0,
+      "run": {
+        "id": "r-20261114T114526Z-bfaf134c",
+        "status": "completed",
+        "exit_code": 0,
+        "script_exit_code": 0
+      }
+    },
+    {
+      "script": "ghost-check.mjs",
+      "args": [
+        "--target=preview"
+      ],
+      "scenario": "動画不在",
+      "script_exit_code": 1,
+      "stdout": [],
+      "stderr": [
+        "ENOENT: no such file or directory, access '<repo>.agent-work\\cli-evidence\\jobs\\CLI & 全角 空白\\output\\preview.mp4'"
+      ]
+    },
+    {
+      "command": "node dist/cli/main.js ghost-check \".agent-work/cli-evidence/jobs/CLI & 全角 空白\" --target preview",
+      "exit_code": 2,
+      "ok": false,
+      "error": "E_INPUT_INVALID"
+    },
+    {
+      "script": "run.mjs",
+      "args": [
+        "unknown"
+      ],
+      "scenario": "不正 mode",
+      "script_exit_code": 1,
+      "stdout": [],
+      "stderr": [
+        "Use studio / preview / still / build"
+      ]
+    },
+    {
+      "script": "run.mjs",
+      "args": [
+        "preview"
+      ],
+      "scenario": "Remotion 依存未導入",
+      "script_exit_code": 1,
+      "stdout": [],
+      "stderr": [
+        "Cannot find module '@remotion/cli/package.json'",
+        "Require stack:",
+        "- <repo>.agent-work\\cli-evidence\\jobs\\CLI & 全角 空白\\runtime\\scripts\\run.mjs"
+      ]
+    },
+    {
+      "command": "node dist/cli/main.js render \".agent-work/cli-evidence/jobs/CLI & 全角 空白\" --target preview",
+      "exit_code": 3,
+      "ok": false,
+      "error": "E_DEPS_MISSING"
+    },
+    {
+      "script": "imagegen.mjs",
+      "args": [
+        "--name",
+        "raw-skipped",
+        "--prompt",
+        "抽象図"
+      ],
+      "scenario": "Codex 不在の SKIPPED",
+      "script_exit_code": 0,
+      "stdout": [
+        "SKIPPED raw-skipped: Codex CLI was not found (install it or set CODEX_BIN)",
+        "素材なしで制作を続行できます。代替（コード描画・提供素材）を使い、reports/delivery.mdに未生成の素材と理由を記録してください。"
+      ],
+      "stderr": [
+        "(node:18780) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.",
+        "(Use `node --trace-deprecation ...` to show where the warning was created)"
+      ]
+    },
+    {
+      "script": "imagegen.mjs",
+      "args": [
+        "--name",
+        "raw-strict",
+        "--prompt",
+        "抽象図",
+        "--strict"
+      ],
+      "scenario": "Codex 不在の strict SKIPPED",
+      "script_exit_code": 1,
+      "stdout": [
+        "SKIPPED raw-strict: Codex CLI was not found (install it or set CODEX_BIN)",
+        "素材なしで制作を続行できます。代替（コード描画・提供素材）を使い、reports/delivery.mdに未生成の素材と理由を記録してください。"
+      ],
+      "stderr": [
+        "(node:12540) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.",
+        "(Use `node --trace-deprecation ...` to show where the warning was created)"
+      ]
+    },
+    {
+      "script": "imagegen.mjs",
+      "args": [],
+      "scenario": "必要引数不在",
+      "script_exit_code": 1,
+      "stdout": [],
+      "stderr": [
+        "id must be 1–80 ASCII letters, digits, underscores or hyphens",
+        "Usage: npm run imagegen -- --name <id> --prompt \"<内容>\" [options]",
+        "  --name <id>          出力名（英数字・-・_）。assets/generated/<id>.png に保存"
+      ]
+    },
+    {
+      "command": "node dist/cli/main.js imagegen \".agent-work/cli-evidence/jobs/CLI & 全角 空白\" --name skipped --prompt 抽象図",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": null,
+      "advisories": 1,
+      "run": {
+        "id": "r-20261114T114530Z-267d3807",
+        "status": "completed",
+        "exit_code": 0,
+        "script_exit_code": 0
+      }
+    },
+    {
+      "command": "node dist/cli/main.js imagegen \".agent-work/cli-evidence/jobs/CLI & 全角 空白\" --name strict --prompt 抽象図 --strict",
+      "exit_code": 1,
+      "ok": true,
+      "verdict": "fail",
+      "advisories": 1,
+      "run": {
+        "id": "r-20261114T114533Z-a9c2a903",
+        "status": "completed",
+        "exit_code": 1,
+        "script_exit_code": 1
+      }
+    },
+    {
+      "script": "qc.mjs",
+      "args": [
+        "--stage=pre"
+      ],
+      "scenario": "制作記録の読取対象がディレクトリ",
+      "script_exit_code": 2,
+      "stdout": [],
+      "stderr": [
+        "Usage: npm run qc -- --stage=pre|post",
+        "EISDIR: illegal operation on a directory, read"
+      ]
+    },
+    {
+      "command": "node dist/cli/main.js qc \".agent-work/cli-evidence/jobs/CLI & 全角 空白\" --stage pre",
+      "exit_code": 4,
+      "ok": false,
+      "error": "E_INTERNAL",
+      "run": {
+        "id": "r-20261114T114537Z-29bede34",
+        "status": "failed",
+        "exit_code": 4,
+        "script_exit_code": 2
+      }
+    },
+    {
+      "script": "qc.mjs",
+      "args": [
+        "--stage=pre"
+      ],
+      "scenario": "MV の QC 対象外",
+      "script_exit_code": 0,
+      "stdout": [
+        "この版に MV の規則は無い。MV は AGENTS.md の MV 制作工程に従う"
+      ],
+      "stderr": []
+    },
+    {
+      "command": "node dist/cli/main.js qc \".agent-work/cli-evidence/jobs/CLI & 全角 空白\" --stage pre",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": "not_applicable",
+      "advisories": 0,
+      "run": {
+        "id": "r-20261114T114539Z-b98890bc",
+        "status": "completed",
+        "exit_code": 0,
+        "script_exit_code": 0
+      }
+    },
+    {
+      "script": "qc.mjs",
+      "args": [
+        "--stage=pre"
+      ],
+      "scenario": "検証専用の合成記録による QC pass",
+      "script_exit_code": 0,
+      "stdout": [
+        "QC pre: pass — reports/qc-pre.json"
+      ],
+      "stderr": []
+    },
+    {
+      "command": "node dist/cli/main.js qc .agent-work/cli-evidence/synthetic/smoke-video --stage pre",
+      "exit_code": 0,
+      "ok": true,
+      "verdict": "pass",
+      "advisories": 2,
+      "run": {
+        "id": "r-20261114T114545Z-b49695fb",
+        "status": "completed",
+        "exit_code": 0,
+        "script_exit_code": 0
+      }
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import os from "node:os";
 import type { TestContext } from "node:test";
 import { fileURLToPath } from "node:url";
 import { cancelRun, listRuns, type HostContext } from "../../src/host/index.ts";
+import { PACKAGE_VERSION, TEMPLATE_VERSION } from "../../src/core/data/version.ts";
 
 export async function workspace(t: TestContext): Promise<HostContext> {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), "smm-host-"));
@@ -21,7 +22,7 @@ export async function fakeJob(context: HostContext, fixture: Record<string, unkn
   await fs.mkdir(path.join(job, "runtime", "scripts"), { recursive: true });
   const script = await fs.readFile(new URL("../fixtures/host/job-script.mjs", import.meta.url));
   for (const name of ["qc", "validate", "sound-design", "aivis", "ghost-check", "run", "imagegen"]) await fs.writeFile(path.join(job, "runtime", "scripts", `${name}.mjs`), script);
-  await fs.writeFile(path.join(job, "project.json"), JSON.stringify({ schema_version: legacy ? "0.4" : "0.5", ...(legacy ? {} : { generator: { name: "shin-motionmaker", version: "0.1.0", template_version: "0.5.1" } }), title: "Fixture", mode: "explanation", scenes: [], voice: { engine: "none" }, fixture }));
+  await fs.writeFile(path.join(job, "project.json"), JSON.stringify({ schema_version: legacy ? "0.4" : "0.5", ...(legacy ? {} : { generator: { name: "shin-motionmaker", version: PACKAGE_VERSION, template_version: TEMPLATE_VERSION } }), title: "Fixture", mode: "explanation", scenes: [], voice: { engine: "none" }, fixture }));
   // Lightweight resolution stubs are exclusive to the fake job, never runtime dependencies.
   for (const [name, body] of [["@remotion/cli/package.json", "{}"], ["typescript/bin/tsc", ""]]) {
     const target = path.join(job, "runtime", "node_modules", name);

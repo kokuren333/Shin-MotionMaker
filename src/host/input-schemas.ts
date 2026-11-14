@@ -1,4 +1,4 @@
-import { defaults, type JsonObject } from "../core/index.ts";
+import { defaults, formChoices, type JsonObject, type JsonValue } from "../core/index.ts";
 import type { OperationId } from "./types.ts";
 
 const string: JsonObject = { type: "string" };
@@ -6,9 +6,14 @@ const boolean: JsonObject = { type: "boolean" };
 const integer = (minimum = 0, maximum = Number.MAX_SAFE_INTEGER): JsonObject => ({ type: "integer", minimum, maximum });
 const choice = (...values: string[]): JsonObject => ({ type: "string", enum: values });
 export const objectSchema = (properties: JsonObject, required: string[] = []): JsonObject => ({ type: "object", properties, required, additionalProperties: false });
-function fields(values: object): JsonObject {
-  return objectSchema(Object.fromEntries(Object.entries(values).map(([key, value]) => [key,
-    value === null ? { type: ["number", "null"] } : typeof value === "object" ? fields(value) : { type: typeof value }])));
+function fields(values: object, choices: object = formChoices): JsonObject {
+  return objectSchema(Object.fromEntries(Object.entries(values).map(([key, value]) => {
+    const field: JsonObject = value === null ? { type: ["number", "null"] }
+      : typeof value === "object" ? fields(value, (choices as Record<string, object>)[key]) : { type: typeof value };
+    if (Array.isArray((choices as Record<string, unknown>)[key]))
+      field.enum = [...(choices as Record<string, readonly JsonValue[]>)[key]];
+    return [key, field];
+  })));
 }
 // Request shape follows core defaults; complete validation remains validateRequest's job.
 export const requestSchema = objectSchema({ form: fields(defaults), assets: objectSchema({ sources: { type: "array", items: { type: "string", minLength: 1 } },

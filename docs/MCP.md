@@ -61,6 +61,7 @@ Shin-MotionMaker の MCP サーバーは、公式 TypeScript SDK 1.32.2 によ�
 | `schema_get` | name? | スキーマ一覧または本文 |
 
 - 外側の入力は `additionalProperties: false`。自由記述と任意の patch 本文を、候補の一覧に制限しない。正確な型と範囲は `tools/list` と [CONTRACT](CONTRACT.md) に従う。
+- request の既存の列挙値は core の `formChoices` を共有し、generate・台本統計と GUI の request 読込で同じ shape 検査を通る。範囲外の列挙値は `E_INPUT_INVALID` と JSON Pointer 付き `details` で返す。未完成の自由記述は shape 検査で拒否しない。
 - ツールのスナップショットは `tests/fixtures/mcp-tools.json` にある。共通の outputSchema を1回だけ格納し、各ツールから参照している。
 
 ### 封筒と isError
@@ -128,8 +129,10 @@ node tools/audit-mcp-licenses.mjs
 ```
 
 - 1行目は MCP のプロトコル往復・安全・setup のテスト、2行目は上の登録例での起動の確認である。
-- `tools/smoke-mcp.ts` は Tier B で、実際に生成したジョブに依存を導入する。通常のテスト（Tier A）には含めない。68ファイルの生成、setup の `completed`・終了0、validate の `completed`・`pass`・終了0、依存の導入済み、プロトコルエラー0を確認した。同じコマンドを ubuntu の CI ジョブに置き、ジョブの依存の npm キャッシュを設定している。
+- `tools/smoke-mcp.ts` は M3 の Tier B の記録で、実際に生成したジョブに依存を導入した。68ファイルの生成、setup の `completed`・終了0、validate の `completed`・`pass`・終了0、依存の導入済み、プロトコルエラー0を確認した。現在の共通入口は `npm run test:tier-b -- --commit <SHA>`（構文）で、CLI と MCP の生成→setup→validate を確認する。ubuntu の CI も共通の `tools/tier-b.mjs` を使い、ジョブの依存の npm キャッシュを設定している。通常のテスト（Tier A）には含めない。
 - `tools/audit-mcp-licenses.mjs` は、MCP SDK とその推移依存の LICENSE を `docs/work/M3/dependency-licenses.json` の記録と照合する。
 - この開発機の Windows では symlink の作成が EPERM になるため、junction の外向きの拒否を実測した。Linux・Node 22 での実測は、リモートの作成後の CI へ持ち越している。
 
 各回の結果は [M3 の REPORT](work/M3/REPORT.md) と [M6 の command-log](work/M6/command-log.md) にある。
+
+M7 では Windows の CLI/MCP 両経路で実レンダー（Tier C）も確認した。MCP は各操作を `wait_ms:0` で開始し、同じ job・run_id の `run_get` を `wait_ms:50000` で繰り返して完了結果を取得した。実行コマンド・証拠の保存先と削除範囲は [CLI の統合検証](CLI.md#統合検証のコマンド)、コミット・run ごとの終了値は [M7 REPORT](work/M7/REPORT.md) と [VERIFICATION](../VERIFICATION.md) にある。

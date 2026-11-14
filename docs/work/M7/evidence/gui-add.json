@@ -1,0 +1,25 @@
+{
+  "command": [
+    "npm",
+    "test",
+    "--workspaces",
+    "--if-present"
+  ],
+  "commit": "143732025ef64fef1f572658dca60695bcb80d7b",
+  "node": "v24.15.0",
+  "platform": "win32",
+  "started_at": "2026-11-14T11:48:19.622Z",
+  "ended_at": "2026-11-14T11:49:59.204Z",
+  "exit_code": 0,
+  "log_sha256": "999d73fa9e484d046643a5550a31da7dbc50939faede84afa9b8273b9a318f6e",
+  "summary": [
+    "ℹ tests 33",
+    "ℹ pass 32",
+    "ℹ fail 0",
+    "ℹ cancelled 0",
+    "ℹ skipped 1",
+    "ℹ todo 0",
+    "ℹ duration_ms 2064.4981",
+    "e2e: 42 件合格 / 42 件"
+  ]
+}

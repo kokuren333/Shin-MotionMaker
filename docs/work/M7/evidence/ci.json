@@ -1,0 +1,48 @@
+{
+  "command": "node tools/ci-local.mjs",
+  "commit": "c055d99d819752d67022a1b1033d20f47ac7ded4",
+  "started_at": "2026-11-14T11:28:28.634Z",
+  "ended_at": "2026-11-14T11:36:06.582Z",
+  "exit_code": 0,
+  "log_sha256": "bf7674444613902703b2d8c6351cb955a436c049aac12cd503755f01a770aa1d",
+  "summary": [
+    "✔ baseline metadata is complete and inventory counts match its named tests (23.1564ms)",
+    "✔ JT-12 legacy validate reconstructs pass and fail from completed stdout and exit (13588.4146ms)",
+    "✔ TS-01 ledger covers every baseline test once and points to existing active tests or explicit M2a M2b todos (905.6847ms)",
+    "✔ R4 JSON preserves original stdout stderr and exit codes for pass fail SKIP and GHOST (24218.239ms)",
+    "ℹ tests 212",
+    "ℹ pass 210",
+    "ℹ fail 0",
+    "ℹ skipped 2",
+    "ℹ todo 0",
+    "✔ advisories never change the verdict: a passing QC with many advisories stays pass (0.8722ms)",
+    "ℹ tests 33",
+    "ℹ pass 32",
+    "ℹ fail 0",
+    "ℹ skipped 1",
+    "ℹ todo 0",
+    "e2e: 42 件合格 / 42 件",
+    "CI と同じコマンドが完了しました: c055d99d819752d67022a1b1033d20f47ac7ded4"
+  ],
+  "test_runs": [
+    {
+      "tests": 212,
+      "pass": 210,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 2,
+      "todo": 0,
+      "duration_ms": 249659.3611
+    },
+    {
+      "tests": 33,
+      "pass": 32,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 1,
+      "todo": 0,
+      "duration_ms": 2420.4563
+    }
+  ],
+  "e2e": 42
+}

@@ -20,7 +20,6 @@ jobs:
       - run: npm test
       - run: npm test --workspaces --if-present
       - run: npm run build --workspaces --if-present
-      # M4 supplies gui/dist and version.json before any Pages execution.
       - uses: actions/upload-pages-artifact@v3
         with:
           path: gui/dist
@@ -48,5 +47,4 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      # M8 supplies this verifier and browser installation before publication.
       - run: node tools/verify-pages.mjs "${{ needs.deploy.outputs.page_url }}" --expect-commit "${{ github.sha }}"

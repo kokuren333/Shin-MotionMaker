@@ -4277,10 +4277,20 @@
                 "type": "object",
                 "properties": {
                   "videoMode": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "explanation",
+                      "mv"
+                    ]
                   },
                   "styleMode": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "biim",
+                      "anime",
+                      "motion",
+                      "mixed"
+                    ]
                   },
                   "takeaway": {
                     "type": "string"
@@ -4340,7 +4350,11 @@
                     "type": "string"
                   },
                   "characterMode": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "solo",
+                      "duo"
+                    ]
                   },
                   "characterName": {
                     "type": "string"
@@ -4358,7 +4372,11 @@
                     "type": "string"
                   },
                   "characterPosition": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "left",
+                      "right"
+                    ]
                   },
                   "subtitleColor": {
                     "type": "string"
@@ -4382,7 +4400,11 @@
                         "type": "string"
                       },
                       "position": {
-                        "type": "string"
+                        "type": "string",
+                        "enum": [
+                          "left",
+                          "right"
+                        ]
                       },
                       "notes": {
                         "type": "string"
@@ -4407,7 +4429,11 @@
                     "type": "boolean"
                   },
                   "voiceEngine": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "aivis",
+                      "none"
+                    ]
                   },
                   "engineUrl": {
                     "type": "string"
@@ -4434,22 +4460,53 @@
                     "type": "number"
                   },
                   "fps": {
-                    "type": "number"
+                    "type": "number",
+                    "enum": [
+                      24,
+                      25,
+                      30,
+                      60
+                    ]
                   },
                   "tempo": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "slow",
+                      "balanced",
+                      "fast"
+                    ]
                   },
                   "energy": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "restrained",
+                      "balanced",
+                      "bold"
+                    ]
                   },
                   "motionAmount": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "minimal",
+                      "balanced",
+                      "rich"
+                    ]
                   },
                   "biimUsage": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "never",
+                      "sometimes",
+                      "mostly"
+                    ]
                   },
                   "characterUsage": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "none",
+                      "occasional",
+                      "frequent"
+                    ]
                   },
                   "diagramPolicy": {
                     "type": "string"
@@ -4458,7 +4515,12 @@
                     "type": "boolean"
                   },
                   "evidencePolicy": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "primary",
+                      "supplied-only",
+                      "balanced"
+                    ]
                   }
                 },
                 "required": [],
@@ -4612,10 +4674,20 @@
                 "type": "object",
                 "properties": {
                   "videoMode": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "explanation",
+                      "mv"
+                    ]
                   },
                   "styleMode": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "biim",
+                      "anime",
+                      "motion",
+                      "mixed"
+                    ]
                   },
                   "takeaway": {
                     "type": "string"
@@ -4675,7 +4747,11 @@
                     "type": "string"
                   },
                   "characterMode": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "solo",
+                      "duo"
+                    ]
                   },
                   "characterName": {
                     "type": "string"
@@ -4693,7 +4769,11 @@
                     "type": "string"
                   },
                   "characterPosition": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "left",
+                      "right"
+                    ]
                   },
                   "subtitleColor": {
                     "type": "string"
@@ -4717,7 +4797,11 @@
                         "type": "string"
                       },
                       "position": {
-                        "type": "string"
+                        "type": "string",
+                        "enum": [
+                          "left",
+                          "right"
+                        ]
                       },
                       "notes": {
                         "type": "string"
@@ -4742,7 +4826,11 @@
                     "type": "boolean"
                   },
                   "voiceEngine": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "aivis",
+                      "none"
+                    ]
                   },
                   "engineUrl": {
                     "type": "string"
@@ -4769,22 +4857,53 @@
                     "type": "number"
                   },
                   "fps": {
-                    "type": "number"
+                    "type": "number",
+                    "enum": [
+                      24,
+                      25,
+                      30,
+                      60
+                    ]
                   },
                   "tempo": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "slow",
+                      "balanced",
+                      "fast"
+                    ]
                   },
                   "energy": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "restrained",
+                      "balanced",
+                      "bold"
+                    ]
                   },
                   "motionAmount": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "minimal",
+                      "balanced",
+                      "rich"
+                    ]
                   },
                   "biimUsage": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "never",
+                      "sometimes",
+                      "mostly"
+                    ]
                   },
                   "characterUsage": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "none",
+                      "occasional",
+                      "frequent"
+                    ]
                   },
                   "diagramPolicy": {
                     "type": "string"
@@ -4793,7 +4912,12 @@
                     "type": "boolean"
                   },
                   "evidencePolicy": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "primary",
+                      "supplied-only",
+                      "balanced"
+                    ]
                   }
                 },
                 "required": [],

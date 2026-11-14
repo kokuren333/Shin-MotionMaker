@@ -9,9 +9,9 @@ import type { TestContext } from "node:test";
 import { workspace } from "./host.ts";
 
 export const mcpEntry = fileURLToPath(new URL("../../dist/mcp/main.js", import.meta.url));
-export async function connectMcp(root: string, flags: string[] = [], entry = [mcpEntry]) {
+export async function connectMcp(root: string, flags: string[] = [], entry = [mcpEntry], env?: Record<string, string>) {
   const transport = new StdioClientTransport({ command: process.execPath,
-    args: [...entry, "--root", root, ...flags], stderr: "pipe" });
+    args: [...entry, "--root", root, ...flags], stderr: "pipe", ...(env ? { env } : {}) });
   let stderr = "";
   transport.stderr!.on("data", (chunk) => { stderr += chunk.toString(); });
   const client = new Client({ name: "smm-mcp-verifier", version: "1.0.0" });

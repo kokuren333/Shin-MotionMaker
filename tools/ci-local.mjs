@@ -26,6 +26,7 @@ try {
   for (const args of [["ci"], ["run", "build"], ["test"], ["test", "--workspaces", "--if-present"], ["run", "build", "--workspaces", "--if-present"]]) {
     const command = npmCommand(args);
     execute(`npm ${args.join(" ")}`, command.file, command.args, checkout);
+    if (args[0] === "ci") execute("依存ライセンスの照合", process.execPath, ["tools/check-licenses.mjs"], checkout);
   }
   failed = false;
   console.log(`CI と同じコマンドが完了しました: ${commit}`);

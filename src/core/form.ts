@@ -2,6 +2,23 @@ import type { StyleMode } from "../../job-template/runtime/scripts/caption-capac
 export type { StyleMode } from "../../job-template/runtime/scripts/caption-capacity.mjs";
 import type { Attachment } from "./types.ts";
 
+/** Existing fixed choices, shared by request shape checks and validateForm. */
+export const formChoices = {
+  videoMode: ["explanation", "mv"],
+  styleMode: ["biim", "anime", "motion", "mixed"],
+  characterMode: ["solo", "duo"],
+  voiceEngine: ["aivis", "none"],
+  characterPosition: ["left", "right"],
+  tempo: ["slow", "balanced", "fast"],
+  energy: ["restrained", "balanced", "bold"],
+  motionAmount: ["minimal", "balanced", "rich"],
+  biimUsage: ["never", "sometimes", "mostly"],
+  characterUsage: ["none", "occasional", "frequent"],
+  evidencePolicy: ["primary", "supplied-only", "balanced"],
+  fps: [24, 25, 30, 60],
+  secondCharacter: { position: ["left", "right"] },
+} as const;
+
 export interface CharacterForm {
   name: string;
   reading: string;

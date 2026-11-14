@@ -2,9 +2,9 @@
 // core validateRequest only.
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { defaults, explainerStyles, mimeTypeFor, validateForm, validateRequest, type MotionForm } from "../../src/core/index.ts";
+import { defaults, formChoices, mimeTypeFor, validateForm, validateRequest, type MotionForm } from "../../src/core/index.ts";
 import {
-  assetsFor, attachmentsToReselect, checkComplete, choiceIssues, choiceProbe, duplicateNames, errorLines, parseRequestText,
+  assetsFor, attachmentsToReselect, checkComplete, duplicateNames, errorLines, parseRequestText,
   requestFilename, requestFor, requestText,
 } from "../src/lib/request-io.ts";
 
@@ -89,9 +89,10 @@ test("parseRequestText rejects unknown values of fixed-choice keys with pointers
     assert.ok(parseRequestText(JSON.stringify({ form })).ok, JSON.stringify(form));
 });
 
-test("choiceIssues takes the accepted values from core, not from a GUI list", () => {
-  assert.deepEqual(validateForm(choiceProbe, { sources: [], music: { name: "p.wav", data: new Uint8Array(1), size: 1, type: "audio/wav" } }), []);
-  for (const mode of Object.keys(explainerStyles)) assert.deepEqual(choiceIssues({ ...defaults, styleMode: mode as MotionForm["styleMode"] }), []);
-  for (const videoMode of ["explanation", "mv"] as const) assert.deepEqual(choiceIssues({ ...defaults, videoMode }), []);
-  assert.equal(choiceIssues({ ...defaults, styleMode: "toString" as MotionForm["styleMode"] }).length, 1);
+test("imported fixed choices use the shared core shape result", () => {
+  for (const styleMode of formChoices.styleMode)
+    assert.ok(parseRequestText(JSON.stringify({ form: { styleMode } })).ok);
+  for (const value of ["toString", "unknown"])
+    assert.deepEqual(parseRequestText(JSON.stringify({ form: { styleMode: value } })),
+      validateRequest({ form: { styleMode: value } }, { phase: "shape" }));
 });

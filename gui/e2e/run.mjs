@@ -13,6 +13,7 @@ import {
   agentPromptFor, aivisStyleLabel, explainerStyles, mvDesign, switchStyleMode,
 } from "../../src/core/index.ts";
 import { loadAssets, loadTemplates } from "../../tests/helpers/templates.ts";
+import { compareEntrances } from "../../tests/helpers/entrances.ts";
 import { buildSite } from "../scripts/site.mjs";
 import { launchBrowser, openPage, serve, sleep } from "./browser.mjs";
 import { MV_INPUT, asset, baselineAssets, qcPre, writeReportFixtures } from "./fixtures.mjs";
@@ -755,6 +756,7 @@ async function compareZip(page, explanation) {
   assert.deepEqual(Object.keys(actual).sort(), Object.keys(built.files).sort(), "same paths");
   for (const [name, bytes] of Object.entries(built.files))
     assert.ok(Buffer.from(actual[name]).equals(Buffer.from(bytes)), `same bytes: ${name}`);
+  await compareEntrances(request, baselineAssets, actual);
   if (explanation) {
     for (const name of ["assets/character.glb", "assets/character2.glb", "sources/reference.pdf", "sources/reference.png", "assets/fonts/NotoSansJP-Variable.ttf"])
       assert.ok(name in actual, name);
