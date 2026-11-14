@@ -33,7 +33,7 @@ setup に限り元の cwd を渡し、他のジョブ内スクリプトは既存
 | --- | --- |
 | npm test / TS-04 Tier A・TS-05・候補 TS-06・snapshot | `npm test`: tests 193 / pass 182 / fail 0 / cancelled 0 / skip 2 / todo 9、終了0。M3追加16件は全件実行。skip 2とTODO 9は既存の対象OS限定・M2b待ち |
 | TS-04-3 Tier B をこの PC で実行 | `node --experimental-strip-types tools/smoke-mcp.ts`: 終了0。68ファイル生成、setup completed / exit 0、validate completed / pass / exit 0、deps_installed:true、protocol_errors:0 |
-| ci-local | 実装・文書コミット後に深さ1複製で実行し、コミット・件数・終了コードを追記する |
+| ci-local | `node tools/ci-local.mjs`: `408f68e3c10f7a1264ea9fc03d3ff894fd6612a2` の深さ1複製で終了0。npm ci・build・npm test（193 / pass 182 / fail 0 / skip 2 / todo 9）・workspace test / build を完了 |
 | Opus の交差レビュー | 未実施。L2 と別製品 Opus による安全検査・受け入れ判定を待つ |
 
 ### 安全の境界とテスト名
@@ -66,6 +66,9 @@ setup に限り元の cwd を渡し、他のジョブ内スクリプトは既存
 - `node --experimental-strip-types --test tests/mcp-docs.test.ts`: 1件、pass 1 / fail 0、終了0。
 - `node --experimental-strip-types tools/smoke-mcp.ts`: 終了0。実行結果は下記。
 - `node tools/audit-mcp-licenses.mjs`: 終了0、95配置の本文・SHA-256・許諾節が保存済み一覧と一致。
+- `node tools/ci-local.mjs`: 実装・文書を含む `408f68e3c10f7a1264ea9fc03d3ff894fd6612a2` の深さ1複製。npm ci（audit 0 vulnerabilities）、build、npm test（193 / pass 182 / fail 0 / cancelled 0 / skip 2 / todo 9、duration_ms 139158.2511）、workspace test / build を完了し、終了0。Node の spawnSync にログFDを直接渡し、呼出側も `{"ci_exit_code":0}` を確認。GUI は現時点で専用scriptsがないためif-presentの対象なし。
+- `git diff --check 0787aea47a0a6fe1a3d01ca59951bd4451d7a977...HEAD`: 出力なし、終了0。変更21ファイルのCRは0件。
+- 実装は `809cab5`、host最小修正とTier Bスクリプトは `149257e`、使用文書と最初の実行証拠は `408f68e`。ci-localの結果を確定する本追記は文書のみの別コミットである。
 
 ```json
 {"tier":"B","generated_files":68,"setup":"completed","setup_exit_code":0,"validate":"completed","verdict":"pass","validate_exit_code":0,"deps_installed":true,"protocol_errors":0}
