@@ -26,6 +26,7 @@ M0〜M7 はリモートが無く、ubuntu と GitHub の Windows runner で一�
 | P-2 POSIX のファイルが見つからない（ubuntu） | core の `safeName` は `?` を `-` に置き換える。テストが `source?.txt` を期待していた | `source-.txt` を期待する。ブラウザの ZIP との全バイト比較はそのまま | テスト |
 | MC-02 win32 の大小文字の比較が失敗（windows） | runner の TEMP は 8.3 形式の短いパスで、片側だけ realpath していた | 両側を realpath して比べる | テスト |
 | e2e GU-16 の smooth スクロールの表明が失敗（windows） | runner の OS はアニメーションが無効で、Chrome が `prefers-reduced-motion: reduce` を返す | e2e のページで reduce でないときも `no-preference` を明示して模擬する | テスト |
+| e2e GU-04 の読み込みエラーの表明がまれに失敗（PR #2 マージ後の main、ubuntu/22） | 2つ目のファイルを読み込んだ直後、`.errors` が残っているだけで待ち合わせが終わり、前のファイルのエラー文を読んでいた | 今回のファイルのエラー文が出るまで待つ | テスト |
 
 - 交差レビュー：修正一式を別コンテキストの Opus がレビューした（approve with notes）。「mtime に 50ms の猶予を足すのは CONTRACT と M2a P-9 に反する」との指摘で、猶予を撤回し、テスト側の修正に替えた。「識別値の互換の証拠が薄い」との指摘で、全プロセス走査の照合を足した（上の表）。
 - 未解決の参考指摘：`readJobBytes` の再試行が持続する食い違いを拒否することを直接確かめるテストが無い。
