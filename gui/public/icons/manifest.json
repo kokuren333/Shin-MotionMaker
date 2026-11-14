@@ -225,21 +225,21 @@
       "name": "gate",
       "origin": "shin-motionmaker-original",
       "source": "assets/ui/icons/gate.csprite",
-      "source_sha256": "06f8fe58ac59ebd823fbd2b7609dedfd44b7551083fd9fd66674d799e5cb8ecb",
+      "source_sha256": "ca341f99d0dec4f4a16c3bf4d6e8579f43729561ce68e8badc4f8479494c453f",
       "author": "Claude Opus 5.5",
       "cybersprite": {
         "version": "0.1.0",
         "commit": "a00433c"
       },
       "png": "gui/public/icons/gate.png",
-      "sha256": "91545d55093806d1916b09fc95d81fd38b36282e7b629da40f7eba2588f60379",
+      "sha256": "bec123258a90504d01a64a3abfd8a294e3643fbf0ac6e5b0432b99c475504302",
       "files": [
         {
           "path": "gui/public/icons/gate.png",
           "scale": 1,
           "width": 16,
           "height": 16,
-          "sha256": "91545d55093806d1916b09fc95d81fd38b36282e7b629da40f7eba2588f60379"
+          "sha256": "bec123258a90504d01a64a3abfd8a294e3643fbf0ac6e5b0432b99c475504302"
         }
       ]
     },
@@ -513,21 +513,21 @@
       "name": "style-anime",
       "origin": "shin-motionmaker-original",
       "source": "assets/ui/icons/style-anime.csprite",
-      "source_sha256": "9922f2c2dc8fe2bb8d30fd39001659280184ee9d06dfd18d7791af51389cd259",
+      "source_sha256": "5a44b011d1ab88e28897fef809ea90837b8e9f2fa56fd25b5d03c7b3e87fa57a",
       "author": "Claude Opus 5.5",
       "cybersprite": {
         "version": "0.1.0",
         "commit": "a00433c"
       },
       "png": "gui/public/icons/style-anime.png",
-      "sha256": "95c806571d3462a327b6824a8d1388cbdeb02458f9d8e85b9fab0f4947d4c67d",
+      "sha256": "6c0d3e8eb72b88e069f6cd8bfdcb1ef2c945bba02858d77fb4a2d0a501f2e96d",
       "files": [
         {
           "path": "gui/public/icons/style-anime.png",
           "scale": 1,
           "width": 16,
           "height": 16,
-          "sha256": "95c806571d3462a327b6824a8d1388cbdeb02458f9d8e85b9fab0f4947d4c67d"
+          "sha256": "6c0d3e8eb72b88e069f6cd8bfdcb1ef2c945bba02858d77fb4a2d0a501f2e96d"
         }
       ]
     },
@@ -535,21 +535,21 @@
       "name": "style-biim",
       "origin": "shin-motionmaker-original",
       "source": "assets/ui/icons/style-biim.csprite",
-      "source_sha256": "ca4f663224c2698fe0a395bf554548d80ee6da7c5616cab6d24434b9bb9a912f",
+      "source_sha256": "6730c7379a8459f181d41f8139ffbfb95016ee85e7cdfd44152366c79eb6477d",
       "author": "Claude Opus 5.5",
       "cybersprite": {
         "version": "0.1.0",
         "commit": "a00433c"
       },
       "png": "gui/public/icons/style-biim.png",
-      "sha256": "3cc94adadb7fba5f70f9a05fda1b55a4a36bc1d5cf89b6a1462b2b1ad1621444",
+      "sha256": "58c6fd6f6e11130a576ccfcbd7c36534159670f8ccfa278abc944c1f91e86c49",
       "files": [
         {
           "path": "gui/public/icons/style-biim.png",
           "scale": 1,
           "width": 16,
           "height": 16,
-          "sha256": "3cc94adadb7fba5f70f9a05fda1b55a4a36bc1d5cf89b6a1462b2b1ad1621444"
+          "sha256": "58c6fd6f6e11130a576ccfcbd7c36534159670f8ccfa278abc944c1f91e86c49"
         }
       ]
     },
@@ -557,21 +557,21 @@
       "name": "style-mixed",
       "origin": "shin-motionmaker-original",
       "source": "assets/ui/icons/style-mixed.csprite",
-      "source_sha256": "43660fba4d1f7ee8699dcb54bde6f72a0572379b1fa7d5ee805008f0430c8c47",
+      "source_sha256": "d80b74410a7e1d70ec0f3240a1ddb327844868fd7913ae5ff525506d84a025f7",
       "author": "Claude Opus 5.5",
       "cybersprite": {
         "version": "0.1.0",
         "commit": "a00433c"
       },
       "png": "gui/public/icons/style-mixed.png",
-      "sha256": "1250a9b538f0be46504f906b7f741dafef451f7d95be1ab5de8f0ad9254e7d2f",
+      "sha256": "a16aa910c978e7d13cb44e51fc1c4124b2235fb1ac2fce2abec90b2549f62b94",
       "files": [
         {
           "path": "gui/public/icons/style-mixed.png",
           "scale": 1,
           "width": 16,
           "height": 16,
-          "sha256": "1250a9b538f0be46504f906b7f741dafef451f7d95be1ab5de8f0ad9254e7d2f"
+          "sha256": "a16aa910c978e7d13cb44e51fc1c4124b2235fb1ac2fce2abec90b2549f62b94"
         }
       ]
     },
@@ -579,21 +579,21 @@
       "name": "style-motion",
       "origin": "shin-motionmaker-original",
       "source": "assets/ui/icons/style-motion.csprite",
-      "source_sha256": "464a67c65b13a72d483275b082f2444f2d3d7fb6eaae3f42376b7045bab8555a",
+      "source_sha256": "ca16d6d35d4afd80b0b33a72f985cdafe964f5777bb706799ec0e1cd7cecf8eb",
       "author": "Claude Opus 5.5",
       "cybersprite": {
         "version": "0.1.0",
         "commit": "a00433c"
       },
       "png": "gui/public/icons/style-motion.png",
-      "sha256": "600d2180fc686d02ef76ba89ddae2946fc91c1b2431e49c1d48a59c6651611db",
+      "sha256": "223ec21f807f61ac0ab9660f057990e78b07a1709d1d220ca57f1b27065dcc2e",
       "files": [
         {
           "path": "gui/public/icons/style-motion.png",
           "scale": 1,
           "width": 16,
           "height": 16,
-          "sha256": "600d2180fc686d02ef76ba89ddae2946fc91c1b2431e49c1d48a59c6651611db"
+          "sha256": "223ec21f807f61ac0ab9660f057990e78b07a1709d1d220ca57f1b27065dcc2e"
         }
       ]
     },

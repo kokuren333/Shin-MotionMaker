@@ -125,10 +125,15 @@ def _framed(glyph: list[str]) -> list[str]:
     return grid(rows)
 
 
-# biim: caption bars at the top and bottom around the picture.
+# The four glyphs are kept at a similar ink weight (about 45-56 non-white pixels),
+# use only trace-deep / trace / trace-soft (no ink inside the frame), and come from
+# different shape families, so no option reads as primary or highlighted (GU-07).
+# None of them uses a sparkle / star, which UIs use as a "new / recommended" badge.
+
+# biim: a caption bar above and below the picture (the Biim frame motif).
 STYLE_BIIM = _framed(
     [
-        "dddddddddd",
+        "..........",
         "dddddddddd",
         "..........",
         "..cccccc..",
@@ -141,72 +146,74 @@ STYLE_BIIM = _framed(
     ]
 )
 
-# anime: a four-point sparkle.
+# anime: a character face (hair with bangs, large eyes): the cast acts the explanation.
 STYLE_ANIME = _framed(
     [
-        "....dd....",
-        "....dd....",
-        "...dddd...",
         "..dddddd..",
-        "dddddddddd",
-        "dddddddddd",
-        "..dddddd..",
-        "...dddd...",
-        "....dd....",
-        "....dd....",
+        ".dddddddd.",
+        "ddd.dd.ddd",
+        "dd......dd",
+        "d.dd..dd.d",
+        "d.dd..dd.d",
+        "d.cc..cc.d",
+        "d........d",
+        "d...cc...d",
+        "dd......dd",
     ]
 )
 
-# motion: two keyframes joined by an eased curve.
+# motion: one square shown as onion-skin steps along a diagonal (faint -> solid):
+# shapes moving.
 STYLE_MOTION = _framed(
     [
-        "..........",
-        ".......d..",
-        "......ddd.",
-        "...##ddddd",
-        "..#...ddd.",
-        "..d....d..",
-        ".ddd......",
-        "ddddd.....",
-        ".ddd......",
-        "..d.......",
+        "......dddd",
+        "......dddd",
+        "......dddd",
+        "...cccdddd",
+        "...cccc...",
+        "...cccc...",
+        "ssscccc...",
+        "ssss......",
+        "ssss......",
+        "ssss......",
     ]
 )
 
-# mixed: two different shapes overlapping.
+# mixed: one picture split in two halves (Biim sections and other sections in one video).
 STYLE_MIXED = _framed(
     [
         "..........",
-        ".....####.",
-        "....#cccc#",
-        "....#cccc#",
-        "dddd#cccc#",
-        "dddd#cccc#",
-        "ddddd####.",
-        "dddddd....",
-        "dddddd....",
-        "dddddd....",
+        "..ddddddd.",
+        ".c.dddddd.",
+        ".cc.ddddd.",
+        ".ccc.dddd.",
+        ".cccc.ddd.",
+        ".ccccc.dd.",
+        ".cccccc.d.",
+        ".ccccccc..",
+        "..........",
     ]
 )
 
 # ------------------------------------------------------------ checks
-# Gate (pass / fail): a boom barrier.
+# Gate (pass / fail): a boom barrier. A squat cabinet, a striped arm leaving it at
+# mid height, and a rest post under the arm tip, so it does not read as a flag at x1.
 GATE = grid(
     [
         "................",
         "................",
         "................",
-        "..###...........",
-        "..#d###########.",
-        "..#d#wwddwwddw#.",
-        "..#d#wddwwddww#.",
-        "..#d###########.",
-        "..#d#...........",
-        "..#d#...........",
-        "..#d#...........",
-        "..#d#...........",
-        ".#ddd#..........",
-        ".#####..........",
+        "................",
+        "................",
+        "..####..........",
+        "..#dd#..........",
+        "..#dd##########.",
+        "..#dd#wwddwwdd#.",
+        "..#dd##########.",
+        "..#dd#.......#..",
+        "..#dd#.......#..",
+        ".#dddd#......#..",
+        ".######.....###.",
         "................",
         "................",
     ]
