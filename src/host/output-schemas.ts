@@ -1,5 +1,6 @@
 import type { JsonObject } from "../core/index.ts";
 import { inputSchemas, objectSchema as obj, requestSchema } from "./input-schemas.ts";
+import { seedanceOutputSchemas } from "./seedance/schemas.ts";
 
 const str: JsonObject = { type: "string" }, num: JsonObject = { type: "number" }, bool: JsonObject = { type: "boolean" };
 const nullable = (schema: JsonObject): JsonObject => ({ anyOf: [schema, { type: "null" }] });
@@ -53,6 +54,7 @@ const outputs: Record<string, JsonObject> = {
   "schema-list": { oneOf: [obj({ schemas: arr(obj({ name: str, file: str }, ["name", "file"])) }, ["schemas"]), obj({ name: str, schema: raw }, ["name", "schema"])] },
   "operation-inputs": { $defs: inputSchemas },
   version: obj({ version: str, commit: nullable(str), template_version: str }, ["version", "commit", "template_version"]),
+  ...seedanceOutputSchemas,
 };
 const checkFact = { type: "object", properties: { kind: { enum: ["validate", "qc-pre", "qc-post", "ghost-check", "ghost-check-preview"] }, available: bool, summary: raw, verdict, review_mode: str, has_waiver: bool, stale: bool }, required: ["kind", "available"], additionalProperties: false };
 outputs["job-status"] = obj({ job: obj({ title: str, mode: { enum: ["mv", "explanation"] }, style_mode: { enum: ["biim", "anime", "motion", "mixed", null] }, schema_version: str, generator: nullable(raw) }, ["title", "mode", "style_mode", "schema_version", "generator"]),
@@ -66,6 +68,7 @@ const results: Record<string, JsonObject> = {
   "runs list": obj({ runs: arr(displayedRun) }, ["runs"]), "runs cancel": { type: "null" },
   version: obj({ version: str, commit: nullable(str), template_version: str }, ["version", "commit", "template_version"]),
   studio: { type: "null" }, "mcp serve": { type: "null" },
+  "seedance create": ref("seedance-task"), "seedance status": ref("seedance-task"), "seedance list": ref("seedance-list"),
 };
 for (const kind of ["setup", "validate", "qc", "ghost-check", "render", "voice", "sound", "imagegen"]) results[kind] = nullable(ref("check"));
 results["runs wait"] = results["runs logs"] = results["runs get"];

@@ -32,6 +32,9 @@ CLI のコマンドは、host の共通の操作定義表にある名前と入�
 | `studio <job>` | 排他を取得して Remotion Studio を前面起動 |
 | `mcp serve --root <dir> [--allow-dir <dir>] [--read-only] [--enable-generation] [--allow-engine-host <host>]` | MCP stdio サーバーを起動する。allow-dir / allow-engine-host は繰返し指定可 |
 | `version` | パッケージ版・コミット・テンプレート版。現在 commit は null |
+| `seedance create <job> --shot-id <id> --prompt <text> [--model <別名\|ID>] [--mode text\|image\|reference] [--first-frame <path\|URL>] [--last-frame <path\|URL>] [--reference-images <path\|URL>] [--reference-videos <URL>] [--reference-audios <URL>] [--resolution 480p\|720p\|1080p\|4k] [--ratio <比率>] [--duration N] [--seed N] [--generate-audio] [--watermark] [--wait-ms N] [--force]` | Seedance の動画生成タスクを作り、完了すれば MP4・サイドカー・PNG をジョブ内に保存する。既定は DRY_RUN（モック）。reference-* は繰返し指定可。詳細は [SEEDANCE](SEEDANCE.md) |
+| `seedance status <job> (--task-id <id> \| --shot-id <id>) [--wait-ms N]` | Seedance タスクの状態。成功済みで未保存なら保存する（再開） |
+| `seedance list <job>` | ジョブ内の Seedance タスクと費用の集計 |
 
 ### 共通のオプション
 
@@ -63,6 +66,24 @@ MOTION_JOB_ENCODER=cpu node dist/cli/main.js render "jobs/<タイトル>" --targ
 - `--kind` は原典と同じ `background`・`transparent`・`character-sheet`・`motion`・`texture`・`prop`。
 - `--ref` は `assets/`・`sources/` の中、`--prompt-file` と `--style` は `plan/`・`sources/` の中に限る。
 - 任意の子プロセス引数を渡す口は無い。
+
+### Seedance
+
+`seedance create|status|list` は、BytePlus ModelArk の Seedance API を呼ぶ同期操作である。run の仕組みは使わず、`--wait-ms`（0〜50,000、create の既定は45,000、status は0）まで操作の中で待ち、途中の状態でもタスクの記録を残して返る。既存の画像生成・Three.js・Blender・Remotion を置き換える部品ではなく、ショットごとに必要なときだけ選ぶ。既定のモデル（`seedance-2-0-mini`）と見積りは助言である。
+
+- **既定は DRY_RUN（モック）で、ネットワークに出ない。** 有料の実生成はオーナーの承認後に `SEEDANCE_DRY_RUN=false` を設定したときだけ行い、さらに `ARK_API_KEY`・ジョブの `project.json` の `asset_generation.video_generation`・予算の3つが要る。欠けると `E_DISABLED`（`details.reason`）で拒否する。
+- 環境変数は CLI のプロセスから読む。
+
+| 変数 | 既定 | 意味 |
+| --- | --- | --- |
+| `ARK_API_KEY` | なし | API キー。値は出力しない |
+| `SEEDANCE_DRY_RUN` | 未設定＝true | `false` または `0` のときだけ実 API |
+| `SEEDANCE_BUDGET_USD` | 10 | ジョブ単位の費用の上限（USD） |
+| `SEEDANCE_POLL_INTERVAL_MS` | 5000 | 実 API のポーリング間隔（最小1000） |
+
+- 結果はジョブ内の `seedance/tasks.json` と `seedance/out/<shot_id>.mp4|.json|.png` に残る。
+- `doctor` の `seedance` チェックはキーの有無だけを表示し、値は出さない。
+- セットアップ、モデルと費用の表、キャッシュと再開、プレビューの読み方は [SEEDANCE](SEEDANCE.md) にある。
 
 ## 入力と出力先
 

@@ -21,7 +21,7 @@ export async function getReport(context: HostContext, relative: string, name: st
   const text = [".md", ".json", ".txt", ".csv"].includes(extension);
   const png = extension === ".png";
   const directory = name.startsWith("reports/") || name.startsWith("plan/");
-  if (!(directory && (text || png) || ["brief.md", "AGENTS.md", "README.md"].includes(name) || /^output\/[^/]+\.png$/i.test(name))) throw hostError("E_PATH_DENIED", "このファイルは report で取得できません。");
+  if (!(directory && (text || png) || ["brief.md", "AGENTS.md", "README.md"].includes(name) || /^output\/[^/]+\.png$/i.test(name) || /^seedance\/out\/[^/]+\.(png|json)$/i.test(name))) throw hostError("E_PATH_DENIED", "このファイルは report で取得できません。");
   const job = await resolveJob(context, relative);
   let handle;
   try { handle = await openVerified(await jobFile(job, name), () => jobFile(job, name), context.restrictToRoot); }

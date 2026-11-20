@@ -1,0 +1,452 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "smm.seedance-list/1",
+  "type": "object",
+  "properties": {
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "local_id": {
+            "type": "string",
+            "pattern": "^s-[0-9]{8}T[0-9]{6}Z-[a-f0-9]{8}$"
+          },
+          "shot_id": {
+            "type": "string"
+          },
+          "task_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dry_run": {
+            "type": "boolean"
+          },
+          "model": {
+            "type": "object",
+            "properties": {
+              "alias": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "alias",
+              "id"
+            ],
+            "additionalProperties": false
+          },
+          "mode": {
+            "enum": [
+              "text",
+              "image",
+              "reference"
+            ]
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "enum": [
+                    "first_frame",
+                    "last_frame",
+                    "reference_image",
+                    "reference_video",
+                    "reference_audio"
+                  ]
+                },
+                "path": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "url_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              },
+              "required": [
+                "role"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "params": {
+            "type": "object",
+            "properties": {
+              "resolution": {
+                "enum": [
+                  "480p",
+                  "720p",
+                  "1080p",
+                  "4k"
+                ]
+              },
+              "ratio": {
+                "enum": [
+                  "16:9",
+                  "4:3",
+                  "1:1",
+                  "3:4",
+                  "9:16",
+                  "21:9",
+                  "adaptive"
+                ]
+              },
+              "duration": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 15
+              },
+              "seed": {
+                "type": "integer",
+                "minimum": -1,
+                "maximum": 4294967295
+              },
+              "generate_audio": {
+                "type": "boolean"
+              },
+              "watermark": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "resolution",
+              "ratio",
+              "duration",
+              "generate_audio",
+              "watermark"
+            ],
+            "additionalProperties": false
+          },
+          "cache_key": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "cached": {
+            "type": "boolean"
+          },
+          "status": {
+            "enum": [
+              "creating",
+              "queued",
+              "running",
+              "succeeded",
+              "failed",
+              "cancelled",
+              "expired",
+              "unknown",
+              "error"
+            ]
+          },
+          "estimate_usd": {
+            "type": "number"
+          },
+          "estimate_tokens": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "estimate_basis": {
+            "type": "string"
+          },
+          "usage_tokens": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "actual_usd": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "output": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "output_sha256": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sidecar": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "thumbnail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "video": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "bytes": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "duration_seconds": {
+                    "type": "number"
+                  },
+                  "width": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "height": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "bytes",
+                  "duration_seconds",
+                  "width",
+                  "height"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "hint": {
+                    "type": "string"
+                  },
+                  "details": {}
+                },
+                "required": [
+                  "code",
+                  "message",
+                  "hint"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "owner_pid": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "local_id",
+          "shot_id",
+          "task_id",
+          "dry_run",
+          "model",
+          "mode",
+          "prompt",
+          "inputs",
+          "params",
+          "cache_key",
+          "cached",
+          "status",
+          "estimate_usd",
+          "estimate_tokens",
+          "estimate_basis",
+          "usage_tokens",
+          "actual_usd",
+          "output",
+          "output_sha256",
+          "sidecar",
+          "thumbnail",
+          "video",
+          "error",
+          "owner_pid",
+          "created_at",
+          "updated_at"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "by_status": {
+          "type": "object",
+          "properties": {
+            "creating": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "queued": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "running": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "succeeded": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "failed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "cancelled": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "expired": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unknown": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "error": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        },
+        "dry_run": {
+          "type": "boolean"
+        },
+        "api_key_present": {
+          "type": "boolean"
+        },
+        "budget_usd": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "budget_scope": {
+          "const": "job"
+        },
+        "real_spent_usd": {
+          "type": "number"
+        },
+        "reserved_usd": {
+          "type": "number"
+        },
+        "remaining_usd": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mock_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "count",
+        "by_status",
+        "dry_run",
+        "api_key_present",
+        "budget_usd",
+        "budget_scope",
+        "real_spent_usd",
+        "reserved_usd",
+        "remaining_usd",
+        "mock_count"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "tasks",
+    "summary"
+  ],
+  "additionalProperties": false
+}

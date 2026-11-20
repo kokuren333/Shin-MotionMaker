@@ -157,7 +157,7 @@ test("MC-09 report whitelist text limit UTF-8 boundary and PNG size limit", asyn
 
 test("operation table covers contract names flags closed schemas and exported files", async (t) => {
   const context = await workspace(t);
-  assert.equal(operations.length, 23); assert.equal(new Set(operations.map((operation) => operation.id)).size, 23);
+  assert.equal(operations.length, 26); assert.equal(new Set(operations.map((operation) => operation.id)).size, 26);
   assert.equal(exposedOperations({ ...context, readOnly: true }).some((operation) => operation.kind !== "read"), false);
   assert.equal(exposedOperations(context).some((operation) => operation.id === "imagegen"), false);
   assert.equal(exposedOperations({ ...context, enableGeneration: true }).some((operation) => operation.id === "imagegen"), true);

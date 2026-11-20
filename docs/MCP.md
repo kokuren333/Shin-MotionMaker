@@ -54,6 +54,20 @@ MCP サーバーが起動するジョブ内スクリプトは、MCP サーバー
 - 実測（[mcp-env.json](work/CPU/evidence/mcp-env.json)）：クライアント自身の環境に `MOTION_JOB_ENCODER=cpu` があっても、登録に `env` が無いとジョブ内スクリプトには届かなかった。`env` に書くと届いた。SDK は既定の変数に登録の `env` を重ねる。ほかのクライアントが引き継ぐ環境はクライアントごとに違うので、確実に渡すには `env` に書く。
 - `MOTION_JOB_ENCODER`（`auto`・`cpu`・`gpu`）は生成ジョブのレンダーのエンコーダを選ぶ（テンプレート 0.5.3 以降）。既定の `auto` は NVENC を実際に試し、使えなければ CPU（libx264）で符号化するので、通常は設定しなくてよい。値の意味は生成ジョブの README の「レンダーのエンコーダ（GPU・CPU）」節にある。
 - 選んだ経路は、run の `stderr.log` の `[encoder]` で始まる1行で確かめられる。
+
+### Seedance の環境変数
+
+Seedance のツール（`seedance_create`・`seedance_status`・`seedance_list`）は、MCP サーバーのプロセスの環境から次の変数を読む。上と同じく、確実に渡すには登録の `env` に書く。
+
+| 変数 | 既定 | 意味 |
+| --- | --- | --- |
+| `ARK_API_KEY` | なし | API キー。値は封筒・記録・ログに出さない |
+| `SEEDANCE_DRY_RUN` | 未設定＝true | `false` または `0` のときだけ実 API（有料）。オーナーの承認後だけ設定する |
+| `SEEDANCE_BUDGET_USD` | 10 | ジョブ単位の費用の上限（USD） |
+| `SEEDANCE_POLL_INTERVAL_MS` | 5000 | 実 API のポーリング間隔（最小1000） |
+
+- 登録ファイルにキーの値をそのまま書くと、そのファイルが秘密情報になる。Git で追跡する場所に置かない。クライアントが環境変数の参照に対応していればそれを使う。
+- 未設定のままなら DRY_RUN のモックで動き、ネットワークに出ない。セットアップと費用は [SEEDANCE](SEEDANCE.md) にある。
 - 不正な値では、ジョブ内のレンダーが始まらずに終わり、`run_get` は `ok: false`・`E_INTERNAL`・run は `failed`（`exit_code` 4、`script_exit_code` 1）を返す（CLI と同じ。[docs/CLI.md](CLI.md#ジョブ内スクリプトの終了コードとの対応)）。
 
 ## ツールと封筒
@@ -80,6 +94,9 @@ MCP サーバーが起動するジョブ内スクリプトは、MCP サーバー
 | `run_list` / `run_cancel` | job / job, run_id | 台帳取得・子孫を含む停止 |
 | `doctor` | job? | 環境を報告。自動導入しない |
 | `schema_get` | name? | スキーマ一覧または本文 |
+| `seedance_create` | job, shot_id, prompt, model?, mode?, first_frame?, last_frame?, reference_images?, reference_videos?, reference_audios?, resolution?, ratio?, duration?, seed?, generate_audio?, watermark?, wait_ms?, force? | Seedance の動画生成タスクを作り、完了すれば MP4・サイドカー・PNG を保存。enable-generation があるときだけ公開 |
+| `seedance_status` | job, task_id? / shot_id?, wait_ms? | Seedance タスクの状態。成功済みで未保存なら保存する |
+| `seedance_list` | job | Seedance タスクと費用の集計。read-only でも公開 |
 
 - 外側の入力は `additionalProperties: false`。自由記述と任意の patch 本文を、候補の一覧に制限しない。正確な型と範囲は `tools/list` と [CONTRACT](CONTRACT.md) に従う。
 - request の既存の列挙値は core の `formChoices` を共有し、generate・台本統計と GUI の request 読込で同じ shape 検査を通る。原典 `validateForm` と同じ条件で、MV では様式・配置を見ず、解説の2人目の配置は duo のときだけ確認する。対象の範囲外の列挙値は `E_INPUT_INVALID` と JSON Pointer 付き `details` で返す。未完成の自由記述は shape 検査で拒否しない。
@@ -129,8 +146,15 @@ MCP サーバーが起動するジョブ内スクリプトは、MCP サーバー
 - job_imagegen は enable-generation がある場合だけ公開する。画像生成は費用が発生する場合がある。
 - voice の非ループバック接続は allow-engine-host のホスト名の明示許可が必要。doctor の Aivis 疎通も同じ許可に従い、未許可なら接続せず未確認として報告する。host の疎通確認は URL のリダイレクト先へ許可を引き継がない。ジョブ内スクリプトの fetch はそのスクリプトの挙動に従う。
 - 任意のコマンドや任意 argv を実行するツールはない。操作表のジョブ内スクリプトだけを host が配列引数・shell:false で起動する。同じジョブの書込・run は排他的で、衝突は所有 run を示す `E_BUSY`。
-- report_get は reports/・plan/、brief.md・AGENTS.md・README.md、output/ 直下の PNG に限定する。テキストは256 KiBで切り詰め、PNG は6 MiBを超えると拒否する。
+- report_get は reports/・plan/、brief.md・AGENTS.md・README.md、output/ 直下の PNG、seedance/out/ 直下の PNG・JSON に限定する。テキストは256 KiBで切り詰め、PNG は6 MiBを超えると拒否する。
 - host の表示用変換で、MCP に返すログ・report の文字列に含まれるホームを `~`、ジョブ・root・導入先の絶対パスを相対表現へ置き換える。realpath、`/` 区切り、file URL、Windows の大文字小文字の違いも対象とする。保存済みのファイルは変更しない。
+
+### Seedance
+
+- `seedance_create` は、`--enable-generation` があるときだけ公開する。DRY_RUN（モック）でも同じで、モードによって公開の可否を変えない。read-only では公開しない。
+- `seedance_status` は成功済みの動画を保存する書き込みがあるので、read-only では公開しない。新しい課金は起こさないので enable-generation は要らない。`seedance_list` は read-only でも公開する。
+- 接続先は公式の固定ホスト（`ark.ap-southeast.bytepluses.com`）で、`--allow-engine-host`（音声エンジン用）の対象外である。MCP で実 API を呼べるのは `--enable-generation` を付けた場合だけで、さらに `SEEDANCE_DRY_RUN=false`（オーナーの承認後だけ）・`ARK_API_KEY`・ジョブの `project.json` の `asset_generation.video_generation`・予算の条件が要る。
+- 生成した MP4・PNG・サイドカーはジョブ内の `seedance/out/` に置かれる。サムネイルの PNG とサイドカーの JSON は `report_get`（`path` に `seedance/out/<出力名>.png` などを指定）で読める。PNG は画像ブロックで返り、6 MiB を超えると `E_INPUT_INVALID`。MP4 本体は MCP では返さず、結果のパスをローカルのファイルとして再生・確認する。
 
 **ジョブ内スクリプトの実行は `npm run` と同じ信頼の範囲であり、sandbox ではない。** 信頼できるジョブだけを実行する。スクリプト自身のファイル・ネットワークアクセスを隔離する仕組みではない。
 

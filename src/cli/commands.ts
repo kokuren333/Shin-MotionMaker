@@ -9,6 +9,7 @@ const positionalFields: Partial<Record<OperationId, readonly string[]>> = {
   validate: ["job"], qc: ["job"], ghost_check: ["job"], render: ["job"],
   voice: ["job"], sound: ["job"], imagegen: ["job"], run_get: ["job", "run_id"],
   run_list: ["job"], run_cancel: ["job", "run_id"], doctor: ["job"], schema: ["name"], studio: ["job"],
+  seedance_create: ["job"], seedance_status: ["job"], seedance_list: ["job"],
 };
 export const cliCommands = operations.flatMap((operation) => operation.cli.map((command) => ({ command, operation })));
 export const findCliCommand = (args: string[]) => cliCommands.find(({ command }) => command.split(" ").every((word, index) => args[index] === word));

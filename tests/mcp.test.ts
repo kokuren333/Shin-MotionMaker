@@ -21,7 +21,7 @@ test("TS-04 tools list matches the complete tool schema snapshot and operation t
   const snapshot = JSON.parse(await fs.readFile(fixture, "utf8"));
   assert.deepEqual(tools, snapshot.tools.map((tool: object) => ({ ...tool, outputSchema: snapshot.outputSchema })));
   assert.deepEqual(tools, toolDefinitions({ ...context, enableGeneration: true }));
-  assert.equal(tools.length, 20);
+  assert.equal(tools.length, 23);
   assert.deepEqual(tools.map((tool) => tool.name), exposedOperations({ ...context, enableGeneration: true }).map((operation) => operation.mcp));
   for (const tool of tools) { assert.equal(tool.inputSchema.additionalProperties, false); assert.equal(tool.outputSchema?.type, "object"); assert.match(tool.description!, /[ぁ-んァ-ヶ一-龠]/); }
   assert.deepEqual(operations.filter((operation) => !operation.mcp).map((operation) => operation.id), ["studio", "mcp_serve", "version"]);

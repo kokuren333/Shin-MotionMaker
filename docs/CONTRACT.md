@@ -2,6 +2,7 @@
 
 | 版 | 日付 | 改訂内容 |
 | --- | --- | --- |
+| SEEDANCE | 2026-11-20 | オーナー指示により操作 seedance_create・seedance_status・seedance_list を追加（§4 の3行と §12。既存の操作・既定値・エラーコードの列挙は変えない。SEEDANCE-Q1。report の許可に seedance/out/ 直下の PNG・JSON を追加。SEEDANCE-Q4） |
 | CPU | 2026-11-15 | 要件改訂1（CPU 環境対応）に合わせる：job-template の差分を R1〜R6 に、テンプレート 0.5.3、ジョブ内スクリプトへの環境変数は host が解釈せず渡す（L2 の確認を受ける） |
 | M7-fix | 2026-11-14 | M7-fix：G4 の R-2・R-6 を反映（L2 承認） |
 | M7 | 2026-11-14 | M7：formChoices と shape の列挙検査（M4-Q1、L2 承認） |
@@ -290,7 +291,7 @@ function getReport(context: HostContext, job: string, relative: string): Promise
 - ジョブ内スクリプトの環境変数は、起動元（CLI のプロセス、MCP サーバーのプロセス）の環境をそのまま継承する（spawn に env を渡さない）。host は `MOTION_JOB_ENCODER`（要件 JT-15）を含むジョブ内スクリプト向けの環境変数を解釈・追加・削除しない。エンコーダの選択と `[encoder]` 行はジョブ内の `runtime/scripts/encoder.mjs` だけが扱い、操作定義表・入力スキーマ・run・封筒に項目を足さない（要件 JT-14・JT-19）。MCP サーバーの環境はクライアントの登録で決まる（docs/MCP.md）。
 - run の全種別・project_patch・CLI の studio は同じジョブ排他を取る。排他予約は原子的に行い `E_BUSY` に所有 run ID（studio・patch は所有操作）を入れる。read 系は設定の写しを持たない。依存不足・E_BUSY・E_DISABLED 等の事前検査失敗では run を作らず、台帳も残さない。
 - project_get は実バイトの SHA-256 を内容と返す。pointer は RFC 6901。patch は JSON Merge Patch（RFC 7396）。現在 hash の不一致は E_CONFLICT。結果が object、schema_version・mode・generator の不変だけを検査する。一時ファイル＋rename で置換する。場面の質や構造を検査しない。
-- report は reports/・plan/ 配下、brief.md・AGENTS.md・README.md、および output/ 直下の PNG だけ。テキストの拡張子は .md・.json・.txt・.csv、画像は .png（reports/ghost-stills/ も含む）。それ以外は E_PATH_DENIED。text は UTF-8 を256 KiBまで読んで文字境界で切り詰め truncated を返す。PNG は CLI では8 MiBまで、超過は E_INPUT_INVALID（hint 付き）。MCP（restrictToRoot）は6 MiBまで、超過は E_INPUT_INVALID と CLI の smm report または縮小を案内する hint を返し、接続を継続する。PNG は bytes と MIME を host 内で返し、MCP の画像ブロックと CLI の base64 に変換する。設定・認証情報の任意読取口を作らない。
+- report は reports/・plan/ 配下、brief.md・AGENTS.md・README.md、output/ 直下の PNG、および seedance/out/ 直下の PNG・JSON（SEEDANCE-Q4、§12）だけ。テキストの拡張子は .md・.json・.txt・.csv、画像は .png（reports/ghost-stills/ も含む）。それ以外は E_PATH_DENIED。text は UTF-8 を256 KiBまで読んで文字境界で切り詰め truncated を返す。PNG は CLI では8 MiBまで、超過は E_INPUT_INVALID（hint 付き）。MCP（restrictToRoot）は6 MiBまで、超過は E_INPUT_INVALID と CLI の smm report または縮小を案内する hint を返し、接続を継続する。PNG は bytes と MIME を host 内で返し、MCP の画像ブロックと CLI の base64 に変換する。設定・認証情報の任意読取口を作らない。
 - doctor は Node・npm・依存・ffmpeg（FFMPEG_PATH→PATH→Remotion compositor）・ブラウザ・必要な Aivis 接続と Style ID・必要な Codex・空き容量を報告するだけ。自動導入しない。MCP の voice は非 loopback 接続を allowEngineHosts で明示許可された host に限る。MCP の doctor の Aivis 疎通も同じ許可に従い、未許可のホストへ接続せず「未確認」と報告する。CLI の voice・doctor は明示呼び出しを接続の許可とみなす。
 - readRunLog の offset・next_offset は UTF-8 ログのバイト位置（0開始）。不完全な末尾文字は次回へ残し、text と next_offset が対応するように読む。CLI の前面待ちはこれで stdout/stderr の差分を標準エラーへ欠落・重複なく流す。MCP の run_get は log_tail のままとし、log_offset は追加しない。
 
@@ -325,6 +326,9 @@ function getReport(context: HostContext, job: string, relative: string): Promise
 | studio | studio | — | CLI対話 | job（人が Remotion Studio を使う。stdio ツールにしない） | — | 不要 | — | — |
 | mcp_serve | mcp serve | — | CLI常駐 | root, allow-dir[], read-only, enable-generation, allow-engine-host[]（サーバー自身の起動） | — | 不要 | — | — |
 | version | version | — | CLI同期・読取 | なし（MCP では初期化応答の serverInfo が版を返す） | — | 不要 | — | — |
+| seedance_create | seedance create | seedance_create | 同期・書込 | job, shot_id:string, prompt:string, model?:string=seedance-2-0-mini, mode?:text/image/reference=text, first_frame?:string, last_frame?:string, reference_images?:string[], reference_videos?:string[], reference_audios?:string[], resolution?:480p/720p/1080p/4k=720p, ratio?:16:9/4:3/1:1/3:4/9:16/21:9/adaptive=16:9, duration?:integer 1〜15=5, seed?:integer -1〜4294967295, generate_audio?:boolean=false, watermark?:boolean=false, wait_ms?:integer 0〜50,000=45,000, force?:boolean=false（§12） | しない | 必要 | 45,000（操作内の待機。run ではない） | — |
+| seedance_status | seedance status | seedance_status | 同期・書込 | job, task_id?:string, shot_id?:string（どちらか一方が必須）, wait_ms?:integer 0〜50,000=0（成功済みで未保存なら保存する。§12） | しない | 不要 | 0（操作内の待機。run ではない） | — |
+| seedance_list | seedance list | seedance_list | 同期・読取 | job（§12） | する | 不要 | — | — |
 
 - CLI generate は request ファイルを読み込んで共通 request にする。--zip は format:zip、--dry-run は dry_run:true。stats の file も host が text に変換する。run 系は --detach がなければ共通 run_get を繰り返して完了まで待つ。runs wait は同じ操作を50秒以下ずつ繰り返し、前面待ちと同じく終端 run.exit_code（CL-07）で終了する。runs get/list/logs は取得成功なら0、logs は wait_ms:0。--detach は開始成功なら0。
 - read-only は結果として書かない run を推測せず、すべての run を非公開にする。generate の dry_run も同じ書込操作なので非公開。無効操作を直接呼ばれた場合は E_DISABLED。imagegen の enable-generation は MCP の公開条件であり、CLI の明示 imagegen 呼出を認可とする。
@@ -553,3 +557,101 @@ verdict は errors の有無だけから決める（なければ pass、あれ�
 ## 11. 後続の確認点
 
 M0R の指摘は M0b の L2 裁定に従い反映した。M0-Q1〜Q3 の回答は `docs/work/M0/QUESTIONS.md` に記録する。URL 行番号だけを正規化し、`${i + 1}人目` は1・2の具体文字列を列挙する。原典スクリプトの exit 1 は report の鮮度・終了コードの突き合わせと事前分類を前提に M2b で実測し、docs/CLI.md の対応表とテストで固定する。分類できない exit 1 だけを E_INTERNAL/4 とする。要件の黙示変更はしない。
+
+## 12. Seedance（SEEDANCE）
+
+§4 の seedance_create・seedance_status・seedance_list は、BytePlus ModelArk の Seedance API を独立した交換可能な動画生成バックエンドとして呼ぶ操作である（オーナー指示、SEEDANCE-Q1）。既存の操作・入力・既定値・エラーコードの列挙は変えない。実装は `src/host/seedance/`、設計の正本は `docs/work/SEEDANCE/DESIGN.md`（§11 が優先）、利用者向けの説明は [SEEDANCE](SEEDANCE.md)。モデル・既定値・見積りは助言であり、プロンプトは自由記述のまま候補に限定しない。生成物の主観的な質を合否にしない。
+
+### 入出力の要旨
+
+- CLI の位置引数はどれも `job`。run の仕組みは使わず、同期操作の中で上限時間（wait_ms）つきのポーリングを行い、途中の状態でもレコードを残して ok:true で返す。
+- create の mode と content の対応は固定で、混在は E_INPUT_INVALID：text は素材なし、image は first_frame（必須）と last_frame（任意）、reference は reference_images・reference_videos・reference_audios（少なくとも1つ、モデルの参照上限以内）。素材はジョブ相対パス（`/` 区切り）または `https://`・`asset://` の URL。画像のローカルファイル（png/jpg/jpeg/webp、30 MiB 以下）は data URI で送り、動画・音声のローカルファイルは v1 では E_INPUT_INVALID。
+- shot_id は `^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$` のうち、Windows の予約名（CON・PRN・AUX・NUL・COM0〜9・LPT0〜9、大小無視）を除いたもの。出力のファイル名に使うため、API を呼ぶ前に E_INPUT_INVALID で拒否する。
+- model は5つの別名またはモデル ID（seedance-2-5、seedance-2-5-flash、seedance-2-0、seedance-2-0-fast、seedance-2-0-mini）。表に無いもの、対応しない解像度、単価未登録の組み合わせ（seedance-2-5 の 4k）は E_INPUT_INVALID。
+- force:true はキャッシュを見ずに新しいレコードを作る（同じ cache_key の既存レコードは残す）。
+- create／status の result は `{ task: SeedanceTask, cached: boolean }`。助言は封筒の advisories（source:`seedance`）に入れる（DRY_RUN で opt-in が無いときの `seedance-opt-in-required-for-real` など）。
+- list の result は `{ tasks: SeedanceTask[], summary: { count, by_status, dry_run, api_key_present, budget_usd, budget_scope: "job", real_spent_usd, reserved_usd, remaining_usd, mock_count } }`。
+- doctor に `seedance` チェックを `disk` の直前に加える（既存チェックの順序・内容は変えない）。available は `ARK_API_KEY` の有無、details は `{ api_key_present, dry_run, models: 5, budget_usd, video_generation }`。キーの値は返さない。
+
+### 環境変数
+
+| 変数 | 既定 | 意味 |
+| --- | --- | --- |
+| `ARK_API_KEY` | なし | API キー。環境変数からだけ読み、レコード・サイドカー・封筒・エラー・ログ・advisory に値も断片も含めない |
+| `SEEDANCE_DRY_RUN` | 未設定＝true | `false` または `0`（大小無視、前後空白無視）のときだけ false。呼び出しごとに評価する。true のときはモックを使いネットワークに出ない |
+| `SEEDANCE_BUDGET_USD` | 10 | ジョブ単位の上限（USD）。0 以上の有限数でなければ作成を E_INPUT_INVALID で拒否する。ジョブをまたぐ上限は無い |
+| `SEEDANCE_POLL_INTERVAL_MS` | 5000 | 実 API のポーリング間隔。1000 未満は 1000 |
+
+### 接続先と公開
+
+- 接続先は公式の固定ホスト `https://ark.ap-southeast.bytepluses.com/api/v3` で、環境変数でも入力でも変えない。音声エンジン用の `allow-engine-host` の対象外である。
+- MCP の seedance_create は enable-generation があるときだけ公開する（DRY_RUN でも同じ。モードで公開の可否を変えない）。CLI の明示呼び出しは認可とみなす。seedance_status は書き込みがあるので read-only では公開しない。seedance_list は read-only でも公開する。
+- 実 API（DRY_RUN=false）の作成には、①`ARK_API_KEY` がある、②`project.json` の `asset_generation.video_generation === true`、③予算内、の3つすべてが要る。欠けたら E_DISABLED（details.reason は `api_key_missing`・`video_generation_off`・`budget_exceeded`）で拒否し、台帳に何も書かない。予算の判定は DRY_RUN でも同じ計算をする（モックの記録は費用0）。
+
+### エラー
+
+エラーコードの列挙は増やさない。実 API の失敗は既存のコードに写し、`details.kind` で分類する。details に要求・応答のヘッダーを入れず、応答本文からは `error.code` と `error.message`（512 文字まで）だけを取る。
+
+| details.kind | 条件 | code |
+| --- | --- | --- |
+| auth | 401、または認証系の 403 | E_DISABLED |
+| activation | モデル未有効化・残高不足・アカウント系の応答 | E_DISABLED |
+| rate_limit | 429 | E_BUSY |
+| invalid | その他の 4xx | E_INPUT_INVALID |
+| server | 5xx | E_ENGINE_UNREACHABLE |
+| network | 応答なし（接続失敗・タイムアウト） | E_ENGINE_UNREACHABLE |
+
+保存した MP4 が構造検査（ftyp・moov・mdat）に通らないときは、レコードの status を `error`、`details.kind` を `invalid_output` とする。安全の三重条件の拒否は `details.reason` で示す。作成（POST）のやり直しは 429・503 と送信前の接続エラーだけで、500・502・504 と送信後のタイムアウト・切断は status `unknown` で記録する（SEEDANCE-Q2）。
+
+### tasks.json とサイドカーの形
+
+`<job>/seedance/tasks.json`：
+
+```ts
+type SeedanceStatus = "creating" | "queued" | "running" | "succeeded" | "failed"
+  | "cancelled" | "expired" | "unknown" | "error";
+type SeedanceTask = {
+  local_id: string;            // s-<UTC time>-<hex8>
+  shot_id: string;
+  task_id: string | null;      // mock- prefix in DRY_RUN
+  dry_run: boolean;
+  model: { alias: string; id: string };
+  mode: "text" | "image" | "reference";
+  prompt: string;
+  inputs: { role: string; path?: JobPath; url?: string; url_sha256?: Sha256; sha256?: Sha256 }[];
+  params: { resolution: string; ratio: string; duration: number; seed?: number;
+    generate_audio: boolean; watermark: boolean };
+  cache_key: Sha256; cached: boolean; status: SeedanceStatus;
+  estimate_usd: number; estimate_tokens: number; estimate_basis: string;
+  usage_tokens: number | null; actual_usd: number | null;
+  output: JobPath | null; output_sha256: Sha256 | null;
+  sidecar: JobPath | null; thumbnail: JobPath | null;
+  error: SmmError | null; created_at: string; updated_at: string;
+};
+type SeedanceTasksFile = { schema: "smm.seedance-tasks/1"; tasks: SeedanceTask[] };
+```
+
+- 書き込みは `<job>/seedance/.lock`（排他作成、中身は `{pid}`、所有プロセスが存在しないロックだけを破棄）を取り、既存の原子的書き込みで置き換える。読取・予算集計・creating レコードの追記は同じロック区間で行う。
+- 入力 URL はクエリとフラグメントを落として保存し、完全な URL の SHA-256 を `url_sha256` に併記する。応答の署名付き `content.video_url` は保存しない。
+- 出力は `<job>/seedance/out/<出力名>.mp4`・`.json`（サイドカー）・`.png`（サムネイル、作れなければ null）。出力名は shot_id、同じ名前の MP4 が別の cache_key で既にあれば `<shot_id>-2`、`-3`… とし、既存の生成物を上書きしない。
+- cache_key は `{backend: "mock"|"ark", model_id, mode, prompt, params, inputs[{role, sha256|url_sha256}]}` の正規化 JSON の SHA-256。同じキーの succeeded レコードがあり、MP4 が実在して SHA-256 が一致すれば API を呼ばず、元レコードの複製を `cached: true` で返す（新しいレコードは足さない）。
+- reserved の計上は実 API の creating・queued・running・unknown の見積り。task_id の無い creating は所有プロセスが存在しないか10分を超えたら unknown に落とす。
+
+サイドカー `<job>/seedance/out/<出力名>.json`：
+
+```ts
+type SeedanceOutput = {
+  schema: "smm.seedance-output/1";
+  shot_id: string; local_id: string; task_id: string | null; dry_run: boolean;
+  model: { alias: string; id: string }; mode: string; prompt: string;
+  inputs: SeedanceTask["inputs"]; params: SeedanceTask["params"];
+  estimate_usd: number; usage_tokens: number | null; actual_usd: number | null;
+  video: { path: JobPath; bytes: number; sha256: Sha256;
+    duration_seconds: number | null; width: number | null; height: number | null };
+  thumbnail: JobPath | null; generated_at: string;
+};
+```
+
+video の値は保存した実ファイルを測ったもので、要求の解像度・長さとは限らない（モックは固定バイト）。プレビューの閲覧のため、report（MCP の report_get）の許可に `seedance/out/` 直下の `.png`・`.json` だけを加える（SEEDANCE-Q4 の決定。操作の追加・入力の変更はしない）。PNG は既存規則どおり画像ブロックで返し、MCP では6 MiB を超えると E_INPUT_INVALID。MP4 本体は report では返さず、パスだけを結果に含める。
+
+上の型は DESIGN.md §8・§11 の項目を書き起こしたもので、各項目の null 可否と数値の範囲は操作定義表から生成する `schemas/` と食い違えば L2 が揃える。

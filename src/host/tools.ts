@@ -5,6 +5,7 @@ import { spawn } from "node:child_process";
 import type { DoctorResult, HostContext } from "./types.ts";
 import { hostError } from "./errors.ts";
 import { jobFile, readProjectFile, resolveJob } from "./paths.ts";
+import { seedanceDoctorCheck } from "./seedance/service.ts";
 
 export async function probe(file: string, args: string[], timeout = 5000): Promise<{ code: number | null; stdout: string; stderr: string }> {
   return new Promise((resolve) => {
@@ -113,14 +114,17 @@ export async function doctor(context: HostContext, relative?: string): Promise<D
   for (const name of ["chromium", "chromium-browser", "google-chrome"]) if (await executableExists(name)) browser = true;
   if (job) { try { if ((await fs.readdir(await jobFile(job, "node_modules/.remotion"))).some((name) => name.includes("chrome"))) browser = true; } catch {} }
   checks.push({ id: "browser", available: browser, message: browser ? "レンダー用ブラウザの候補があります。" : "ブラウザは未確認です。レンダー実行時にも確認されます。" });
+  let jobProject: Record<string, unknown> | undefined;
   if (job) {
     const { project } = await readProjectFile(job);
+    jobProject = project as Record<string, unknown>;
     try { checks.push({ id: "aivis", ...await checkEngine(context, project) }); }
     catch (error) { checks.push({ id: "aivis", available: false, message: error && typeof error === "object" && "message" in error ? String(error.message) : "音声エンジンを確認できません。" }); }
     const generation = project.asset_generation as Record<string, unknown> | undefined;
     if (generation?.image && generation.image !== "off")
       checks.push({ id: "codex", available: await executableExists("codex"), message: "Codex CLI の所在確認です。" });
   }
+  checks.push(seedanceDoctorCheck(process.env, jobProject));
   try {
     const disk = await fs.statfs(job ?? context.root);
     checks.push({ id: "disk", available: disk.bavail > 0, message: "空き容量を確認しました。", details: { available_bytes: disk.bavail * disk.bsize } });

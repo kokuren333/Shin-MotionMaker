@@ -101,6 +101,7 @@ test("TS-05 every shared synchronous read operation returns equal CLI and MCP re
     { id: "doctor", args: ["doctor", job], input: { job } },
     { id: "schema", args: ["schema"], input: {} },
     { id: "schema", args: ["schema", "request"], input: { name: "request" } },
+    { id: "seedance_list", args: ["seedance", "list", job], input: { job } },
   ];
   assert.deepEqual([...new Set(cases.map(({ id }) => id))].sort(), operations.filter((op) => op.kind === "read" && op.mcp).map((op) => op.id).sort());
   for (const scenario of cases) {

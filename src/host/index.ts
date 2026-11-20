@@ -11,3 +11,4 @@ export * from "./tools.ts";
 export { acquireJobLock } from "./locks.ts";
 export { schemas, schemaRegistry } from "./output-schemas.ts";
 export { schemaIssues } from "./schema-validation.ts";
+export * from "./seedance/index.ts";
