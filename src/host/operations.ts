@@ -18,6 +18,7 @@ import { inputSchemas } from "./input-schemas.ts";
 import { schemaRegistry, schemas } from "./output-schemas.ts";
 import { schemaIssues } from "./schema-validation.ts";
 import { displayHostOutput } from "./display.ts";
+import { seedanceCreate, seedanceList, seedanceStatus } from "./seedance/index.ts";
 
 const metadata: Record<OperationId, { cli: string[]; mcp: string | null; description: string; cliOnlyReason?: string }> = {
   generate: { cli: ["generate"], mcp: "job_generate", description: "同じ request と添付からジョブを生成します。" },
@@ -43,12 +44,15 @@ const metadata: Record<OperationId, { cli: string[]; mcp: string | null; descrip
   studio: { cli: ["studio"], mcp: null, cliOnlyReason: "人が Remotion Studio を対話操作するためです。", description: "Remotion Studio を前面で起動します。" },
   mcp_serve: { cli: ["mcp serve"], mcp: null, cliOnlyReason: "stdio サーバー自身の起動操作だからです。", description: "MCP サーバーを起動します。" },
   version: { cli: ["version"], mcp: null, cliOnlyReason: "MCP では初期化の serverInfo で版を返すためです。", description: "版を返します。" },
+  seedance_create: { cli: ["seedance create"], mcp: "seedance_create", description: "Seedance の動画生成タスクを作り、完了すれば MP4・サイドカー・PNG をジョブ内に保存します。既定は DRY_RUN のモックで外部へ接続しません。実 API は費用が発生します。モデルと見積りは助言です。" },
+  seedance_status: { cli: ["seedance status"], mcp: "seedance_status", description: "Seedance タスクの状態を取得します。成功済みで未保存なら保存します。新しい課金は起こしません。" },
+  seedance_list: { cli: ["seedance list"], mcp: "seedance_list", description: "ジョブ内の Seedance タスクと費用の集計を返します。" },
 };
-const writing = new Set<OperationId>(["generate", "project_patch", "run_cancel", "studio", "mcp_serve"]);
+const writing = new Set<OperationId>(["generate", "project_patch", "run_cancel", "studio", "mcp_serve", "seedance_create", "seedance_status"]);
 export const operations: readonly OperationDefinition[] = (Object.keys(metadata) as OperationId[]).map((id) => {
   const run = runKinds.includes(id as RunKind);
   return { id, ...metadata[id], kind: run ? "run" : writing.has(id) ? "write" : "read", inputSchema: inputSchemas[id],
-    exposedInReadOnly: !run && !writing.has(id), enableGeneration: id === "imagegen",
+    exposedInReadOnly: !run && !writing.has(id), enableGeneration: id === "imagegen" || id === "seedance_create",
     defaultWaitMs: run ? defaultWait(id as RunKind, { job: "" }) : id === "run_get" ? 0 : null,
     timeoutMs: run ? (input) => runTimeout(id as RunKind, input as OperationInputs[RunKind]) : null,
     handle: (context, input) => dispatch(context, id, input),
@@ -123,6 +127,13 @@ async function dispatch<K extends OperationId>(context: HostContext, id: K, inpu
     case "version": result = { version: PACKAGE_VERSION, commit: null, template_version: TEMPLATE_VERSION }; break;
     case "studio": result = await studio(context, (input as OperationInputs["studio"]).job); break;
     case "mcp_serve": throw hostError("E_DISABLED", "サーバーの起動は CLI の入口で行ってください。");
+    case "seedance_create": case "seedance_status": case "seedance_list": {
+      const outcome = id === "seedance_create" ? await seedanceCreate(context, input as OperationInputs["seedance_create"])
+        : id === "seedance_status" ? await seedanceStatus(context, input as OperationInputs["seedance_status"])
+        : await seedanceList(context, input as OperationInputs["seedance_list"]);
+      const job = displayPath(context, await resolveJob(context, (input as { job: string }).job));
+      return { schema: "smm.envelope/1", command, job, ok: true, result: outcome.result as OperationResults[K], advisories: outcome.advisories, warnings: [] };
+    }
     default: throw hostError("E_USAGE", "操作が見つかりません。");
   }
   if (input && typeof input === "object" && "job" in input && typeof input.job === "string") job = displayPath(context, await resolveJob(context, input.job));

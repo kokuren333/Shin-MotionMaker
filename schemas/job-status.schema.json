@@ -226,7 +226,10 @@
               "schema",
               "studio",
               "mcp_serve",
-              "version"
+              "version",
+              "seedance_create",
+              "seedance_status",
+              "seedance_list"
             ]
           },
           "input": {

@@ -1,6 +1,7 @@
 import { defaults, formChoices, type JsonObject, type JsonValue } from "../core/index.ts";
 import type { OperationId } from "./types.ts";
 import { defaultWait } from "./run-options.ts";
+import { seedanceInputSchemas } from "./seedance/schemas.ts";
 
 const string: JsonObject = { type: "string" };
 const boolean: JsonObject = { type: "boolean" };
@@ -56,4 +57,5 @@ export const inputSchemas: Record<OperationId, JsonObject> = {
   run_list: objectSchema({ job: string }, ["job"]), run_cancel: objectSchema({ job: string, run_id: string }, ["job", "run_id"]),
   doctor: objectSchema({ job: string }), schema: objectSchema({ name: string }), studio: objectSchema({ job: string }, ["job"]),
   mcp_serve: objectSchema({ root: string, allow_dir: strings, read_only: boolean, enable_generation: boolean, allow_engine_host: strings }, ["root"]), version: objectSchema({}),
+  ...seedanceInputSchemas,
 };

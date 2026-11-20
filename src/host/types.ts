@@ -1,3 +1,4 @@
+import type { SeedanceCreateInput, SeedanceListInput, SeedanceListResult, SeedanceStatusInput, SeedanceTaskResult } from "./seedance/index.ts";
 import type { Advisory, BuiltJob, CandidatesResult, JsonObject, JsonValue, Project, Request, Sha256, SmmError, Verdict, Warning } from "../core/index.ts";
 
 export type HostContext = {
@@ -23,6 +24,7 @@ export type OperationInputs = {
   run_list: { job: string }; run_cancel: { job: string; run_id: string };
   doctor: { job?: string }; schema: { name?: string }; studio: { job: string };
   mcp_serve: { root: string; allow_dir?: string[]; read_only?: boolean; enable_generation?: boolean; allow_engine_host?: string[] }; version: Record<string, never>;
+  seedance_create: SeedanceCreateInput; seedance_status: SeedanceStatusInput; seedance_list: SeedanceListInput;
 };
 export type OperationId = keyof OperationInputs;
 export type RunKind = "setup" | "validate" | "qc" | "ghost_check" | "render" | "voice" | "sound" | "imagegen";
@@ -64,6 +66,7 @@ export type OperationResults = {
   run_get: RunGetResult; run_list: { runs: Run[] }; run_cancel: null; doctor: DoctorResult;
   schema: { name: string; schema: JsonObject } | { schemas: { name: string; file: string }[] };
   version: { version: string; commit: string | null; template_version: string }; studio: null; mcp_serve: null;
+  seedance_create: SeedanceTaskResult; seedance_status: SeedanceTaskResult; seedance_list: SeedanceListResult;
 };
 export type OperationDefinition<K extends OperationId = OperationId> = {
   id: K; cli: readonly string[]; mcp: string | null; cliOnlyReason?: string;
