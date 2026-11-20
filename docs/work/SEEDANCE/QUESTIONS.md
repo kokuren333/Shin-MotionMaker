@@ -27,7 +27,7 @@
 
 ## SEEDANCE-Q4 MCP だけの利用者がプレビュー画像を読む経路
 
-- 状態：**オーナー確認事項（未回答、依存しない範囲で進める）。**
-- 事実：既存の `report_get` は `reports/`・`plan/`・`output/*.png` などしか読めず、`seedance/out/` の PNG・JSON は E_PATH_DENIED になる（`src/host/report.ts`）。
+- 状態：**決定済み（2026-11-20 13:22 JST、オーナー委任「テキトーに考えといて」を受けて統括が決定。正本は追跡対象外の決定メモ）。** 選択肢 B を採用：新規ツールは作らず、`report_get` の許可に `seedance/out/` 直下の `.png`・`.json` を追加するだけ。PNG は既存規則どおり画像ブロック（MCP は 6 MiB まで）、JSON はテキスト。MP4 は MCP では返さずパスだけ。実装はコミット `15e75c8`。
+- 事実（決定前）：既存の `report_get` は `reports/`・`plan/`・`output/*.png` などしか読めず、`seedance/out/` の PNG・JSON は E_PATH_DENIED になる（`src/host/report.ts`）。
 - v1 の扱い：既存操作を変えない発注に従い `report_get` は変えない。制作エージェントはジョブフォルダ内のファイルを直接読む（`docs/SEEDANCE.md` に規約を明記）。create／status の結果にパスと寸法・長さを含める。
 - 選択肢：A（v1 のまま）／B `report_get` の許可に `seedance/out/*.png|*.json` を追加（追加のみの契約変更）。B はオーナーの承認があれば小さな差分で入る。

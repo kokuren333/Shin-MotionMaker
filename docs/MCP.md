@@ -146,7 +146,7 @@ Seedance のツール（`seedance_create`・`seedance_status`・`seedance_list`�
 - job_imagegen は enable-generation がある場合だけ公開する。画像生成は費用が発生する場合がある。
 - voice の非ループバック接続は allow-engine-host のホスト名の明示許可が必要。doctor の Aivis 疎通も同じ許可に従い、未許可なら接続せず未確認として報告する。host の疎通確認は URL のリダイレクト先へ許可を引き継がない。ジョブ内スクリプトの fetch はそのスクリプトの挙動に従う。
 - 任意のコマンドや任意 argv を実行するツールはない。操作表のジョブ内スクリプトだけを host が配列引数・shell:false で起動する。同じジョブの書込・run は排他的で、衝突は所有 run を示す `E_BUSY`。
-- report_get は reports/・plan/、brief.md・AGENTS.md・README.md、output/ 直下の PNG に限定する。テキストは256 KiBで切り詰め、PNG は6 MiBを超えると拒否する。
+- report_get は reports/・plan/、brief.md・AGENTS.md・README.md、output/ 直下の PNG、seedance/out/ 直下の PNG・JSON に限定する。テキストは256 KiBで切り詰め、PNG は6 MiBを超えると拒否する。
 - host の表示用変換で、MCP に返すログ・report の文字列に含まれるホームを `~`、ジョブ・root・導入先の絶対パスを相対表現へ置き換える。realpath、`/` 区切り、file URL、Windows の大文字小文字の違いも対象とする。保存済みのファイルは変更しない。
 
 ### Seedance
@@ -154,7 +154,7 @@ Seedance のツール（`seedance_create`・`seedance_status`・`seedance_list`�
 - `seedance_create` は、`--enable-generation` があるときだけ公開する。DRY_RUN（モック）でも同じで、モードによって公開の可否を変えない。read-only では公開しない。
 - `seedance_status` は成功済みの動画を保存する書き込みがあるので、read-only では公開しない。新しい課金は起こさないので enable-generation は要らない。`seedance_list` は read-only でも公開する。
 - 接続先は公式の固定ホスト（`ark.ap-southeast.bytepluses.com`）で、`--allow-engine-host`（音声エンジン用）の対象外である。MCP で実 API を呼べるのは `--enable-generation` を付けた場合だけで、さらに `SEEDANCE_DRY_RUN=false`（オーナーの承認後だけ）・`ARK_API_KEY`・ジョブの `project.json` の `asset_generation.video_generation`・予算の条件が要る。
-- 生成した MP4・PNG・サイドカーはジョブ内の `seedance/out/` に置かれる。`report_get` ではこのフォルダを読めない（`E_PATH_DENIED`）。制作エージェントはジョブフォルダのファイルを直接読む。
+- 生成した MP4・PNG・サイドカーはジョブ内の `seedance/out/` に置かれる。サムネイルの PNG とサイドカーの JSON は `report_get`（`path` に `seedance/out/<出力名>.png` などを指定）で読める。PNG は画像ブロックで返り、6 MiB を超えると `E_INPUT_INVALID`。MP4 本体は MCP では返さず、結果のパスをローカルのファイルとして再生・確認する。
 
 **ジョブ内スクリプトの実行は `npm run` と同じ信頼の範囲であり、sandbox ではない。** 信頼できるジョブだけを実行する。スクリプト自身のファイル・ネットワークアクセスを隔離する仕組みではない。
 

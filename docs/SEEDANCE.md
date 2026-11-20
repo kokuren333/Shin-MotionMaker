@@ -220,8 +220,8 @@ seedance-2-5 の 4k は単価が分からず見積もれないので、DRY_RUN �
 
 ### プレビューの読み方
 
-- 制作エージェントは、ジョブフォルダ内の `seedance/out/` の MP4・PNG・JSON を**ファイルとして直接読む**。
-- MCP の `report_get` では `seedance/out/` を読めない（`E_PATH_DENIED`）。`report_get` の許可範囲を広げるかはオーナーの確認事項である（[QUESTIONS](work/SEEDANCE/QUESTIONS.md) の Q4）。
+- サムネイル（`.png`）とサイドカー（`.json`）は、既存の `report`（CLI `smm report <job> seedance/out/<出力名>.png`、MCP `report_get`）で読める。PNG は MCP では画像ブロックで返り、6 MiB を超えると `E_INPUT_INVALID`。新しい閲覧用のツールは無い（[QUESTIONS](work/SEEDANCE/QUESTIONS.md) の Q4 の決定）。
+- MP4 本体は `report` では返さない。結果のパスを、ジョブフォルダ内のローカルファイルとして再生・確認する（Remotion や FFmpeg でもそのまま扱える）。ジョブフォルダを直接読める制作エージェントは、PNG・JSON もファイルとして読んでよい。
 - `seedance create`・`seedance status` の結果のレコードには、`output`・`thumbnail`・`sidecar` のパスと、動画の寸法・長さが入る。
 - 見た目がねらいに合うか、使うか、作り直すかは制作エージェントが判断する。ツールはこれを合否にしない。
 

@@ -159,7 +159,7 @@ mode と content の対応（混在は E_INPUT_INVALID）：
 
 以下は §1〜§10 より優先する（矛盾する箇所はここが正）。
 
-1. **プレビューの読み方**（重要1）：既存の `report_get` の許可パスは変えない（既存操作を変えない）。制作エージェントはジョブフォルダ内の `seedance/out/` をファイルとして直接読む前提とし、`docs/SEEDANCE.md` に明記する。create／status の結果のレコードにサイドカーの要点（output・thumbnail・sidecar のパス、video の寸法・長さ）を含める。MCP だけの利用者向けに `report_get` を `seedance/out/*.png|*.json` へ広げるかはオーナー確認事項（QUESTIONS Q4）。
+1. **プレビューの読み方**（重要1）：**（2026-11-20 13:22 JST のオーナー委任による Q4 決定で更新）`report_get` の許可に `seedance/out/` 直下の `.png`・`.json` を加えるだけとし、新規ツール・操作の変更はしない。MP4 は MCP では返さない。以下の当初案のうち「許可パスは変えない」は、この決定で置き換える。** 当初案：既存の `report_get` の許可パスは変えない（既存操作を変えない）。制作エージェントはジョブフォルダ内の `seedance/out/` をファイルとして直接読む前提とし、`docs/SEEDANCE.md` に明記する。create／status の結果のレコードにサイドカーの要点（output・thumbnail・sidecar のパス、video の寸法・長さ）を含める。MCP だけの利用者向けに `report_get` を `seedance/out/*.png|*.json` へ広げるかはオーナー確認事項（QUESTIONS Q4）。
 2. **ネットワークに出ない保証**（重要2）：
    - DRY_RUN の評価は呼び出しごとに環境変数から行う（モジュール読込時に固定しない）。transport の選択は service の1関数 `selectTransport` に集約し、DRY_RUN のときは `client.ts` を動的 import しない。
    - `src/host/seedance/` の中で `fetch` を参照してよいのは `client.ts` だけ。これを静的に検査するテストを足す。

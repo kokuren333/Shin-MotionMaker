@@ -2,7 +2,7 @@
 
 | 版 | 日付 | 改訂内容 |
 | --- | --- | --- |
-| SEEDANCE | 2026-11-20 | オーナー指示により操作 seedance_create・seedance_status・seedance_list を追加（§4 の3行と §12。既存の操作・既定値・エラーコードの列挙は変えない。SEEDANCE-Q1） |
+| SEEDANCE | 2026-11-20 | オーナー指示により操作 seedance_create・seedance_status・seedance_list を追加（§4 の3行と §12。既存の操作・既定値・エラーコードの列挙は変えない。SEEDANCE-Q1。report の許可に seedance/out/ 直下の PNG・JSON を追加。SEEDANCE-Q4） |
 | CPU | 2026-11-15 | 要件改訂1（CPU 環境対応）に合わせる：job-template の差分を R1〜R6 に、テンプレート 0.5.3、ジョブ内スクリプトへの環境変数は host が解釈せず渡す（L2 の確認を受ける） |
 | M7-fix | 2026-11-14 | M7-fix：G4 の R-2・R-6 を反映（L2 承認） |
 | M7 | 2026-11-14 | M7：formChoices と shape の列挙検査（M4-Q1、L2 承認） |
@@ -291,7 +291,7 @@ function getReport(context: HostContext, job: string, relative: string): Promise
 - ジョブ内スクリプトの環境変数は、起動元（CLI のプロセス、MCP サーバーのプロセス）の環境をそのまま継承する（spawn に env を渡さない）。host は `MOTION_JOB_ENCODER`（要件 JT-15）を含むジョブ内スクリプト向けの環境変数を解釈・追加・削除しない。エンコーダの選択と `[encoder]` 行はジョブ内の `runtime/scripts/encoder.mjs` だけが扱い、操作定義表・入力スキーマ・run・封筒に項目を足さない（要件 JT-14・JT-19）。MCP サーバーの環境はクライアントの登録で決まる（docs/MCP.md）。
 - run の全種別・project_patch・CLI の studio は同じジョブ排他を取る。排他予約は原子的に行い `E_BUSY` に所有 run ID（studio・patch は所有操作）を入れる。read 系は設定の写しを持たない。依存不足・E_BUSY・E_DISABLED 等の事前検査失敗では run を作らず、台帳も残さない。
 - project_get は実バイトの SHA-256 を内容と返す。pointer は RFC 6901。patch は JSON Merge Patch（RFC 7396）。現在 hash の不一致は E_CONFLICT。結果が object、schema_version・mode・generator の不変だけを検査する。一時ファイル＋rename で置換する。場面の質や構造を検査しない。
-- report は reports/・plan/ 配下、brief.md・AGENTS.md・README.md、および output/ 直下の PNG だけ。テキストの拡張子は .md・.json・.txt・.csv、画像は .png（reports/ghost-stills/ も含む）。それ以外は E_PATH_DENIED。text は UTF-8 を256 KiBまで読んで文字境界で切り詰め truncated を返す。PNG は CLI では8 MiBまで、超過は E_INPUT_INVALID（hint 付き）。MCP（restrictToRoot）は6 MiBまで、超過は E_INPUT_INVALID と CLI の smm report または縮小を案内する hint を返し、接続を継続する。PNG は bytes と MIME を host 内で返し、MCP の画像ブロックと CLI の base64 に変換する。設定・認証情報の任意読取口を作らない。
+- report は reports/・plan/ 配下、brief.md・AGENTS.md・README.md、output/ 直下の PNG、および seedance/out/ 直下の PNG・JSON（SEEDANCE-Q4、§12）だけ。テキストの拡張子は .md・.json・.txt・.csv、画像は .png（reports/ghost-stills/ も含む）。それ以外は E_PATH_DENIED。text は UTF-8 を256 KiBまで読んで文字境界で切り詰め truncated を返す。PNG は CLI では8 MiBまで、超過は E_INPUT_INVALID（hint 付き）。MCP（restrictToRoot）は6 MiBまで、超過は E_INPUT_INVALID と CLI の smm report または縮小を案内する hint を返し、接続を継続する。PNG は bytes と MIME を host 内で返し、MCP の画像ブロックと CLI の base64 に変換する。設定・認証情報の任意読取口を作らない。
 - doctor は Node・npm・依存・ffmpeg（FFMPEG_PATH→PATH→Remotion compositor）・ブラウザ・必要な Aivis 接続と Style ID・必要な Codex・空き容量を報告するだけ。自動導入しない。MCP の voice は非 loopback 接続を allowEngineHosts で明示許可された host に限る。MCP の doctor の Aivis 疎通も同じ許可に従い、未許可のホストへ接続せず「未確認」と報告する。CLI の voice・doctor は明示呼び出しを接続の許可とみなす。
 - readRunLog の offset・next_offset は UTF-8 ログのバイト位置（0開始）。不完全な末尾文字は次回へ残し、text と next_offset が対応するように読む。CLI の前面待ちはこれで stdout/stderr の差分を標準エラーへ欠落・重複なく流す。MCP の run_get は log_tail のままとし、log_offset は追加しない。
 
@@ -651,6 +651,6 @@ type SeedanceOutput = {
 };
 ```
 
-video の値は保存した実ファイルを測ったもので、要求の解像度・長さとは限らない（モックは固定バイト）。report_get の許可範囲は変えず、`seedance/out/` は読めない（SEEDANCE-Q4）。
+video の値は保存した実ファイルを測ったもので、要求の解像度・長さとは限らない（モックは固定バイト）。プレビューの閲覧のため、report（MCP の report_get）の許可に `seedance/out/` 直下の `.png`・`.json` だけを加える（SEEDANCE-Q4 の決定。操作の追加・入力の変更はしない）。PNG は既存規則どおり画像ブロックで返し、MCP では6 MiB を超えると E_INPUT_INVALID。MP4 本体は report では返さず、パスだけを結果に含める。
 
 上の型は DESIGN.md §8・§11 の項目を書き起こしたもので、各項目の null 可否と数値の範囲は操作定義表から生成する `schemas/` と食い違えば L2 が揃える。
