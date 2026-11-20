@@ -32,6 +32,7 @@ Shin-MotionMaker は、モーショングラフィックス動画（MV・解説�
 | ジョブの制作（レンダー・検査） | ジョブの依存（ジョブのルートで `npm install`。Remotion など。初回はネットワーク接続が必要で、容量も大きい）、ffmpeg、Remotion のレンダー用ブラウザ |
 | 音声合成（使う場合） | AivisSpeech などの Aivis エンジン（別途起動） |
 | 画像生成（使う場合） | Codex CLI |
+| 動画生成（Seedance、使う場合） | BytePlus ModelArk の API キー（環境変数 `ARK_API_KEY`）と、モデルを有効化した BytePlus アカウント |
 
 どれも自動ではインストールしません。手元の状態は `doctor` で確かめられます（[CLI](#cli)）。
 
@@ -82,6 +83,7 @@ smm qc "jobs/<タイトル>" --stage pre
 smm validate "jobs/<タイトル>"
 smm render "jobs/<タイトル>" --target preview
 smm runs list "jobs/<タイトル>"
+smm seedance list "jobs/<タイトル>"
 ```
 
 - 標準出力は JSON の封筒1個です。`ok` は「コマンドが実行でき、結果を得た」こと、`result.verdict` はゲートの合否（`pass`・`fail`・`not_applicable`）です。ゲートが不合格でも `ok` は `true` です。
@@ -94,7 +96,7 @@ smm runs list "jobs/<タイトル>"
 
 ## MCP
 
-CLI の `mcp serve` が stdio の MCP サーバーを起動します。ツールは既定で19個（`--enable-generation` で画像生成が加わり20個、`--read-only` では9個）で、ジョブの生成から検査・レンダー・run の管理までを扱います。`--root` で指定したフォルダの中だけを読み書きします。クライアントへの登録例（読み取り専用）は次のとおりで、作業ディレクトリを repo のルートにして起動します。
+CLI の `mcp serve` が stdio の MCP サーバーを起動します。ツールは既定で21個（`--enable-generation` で画像生成と `seedance_create` が加わり23個、`--read-only` では10個）で、ジョブの生成から検査・レンダー・run の管理までを扱います。`--root` で指定したフォルダの中だけを読み書きします。クライアントへの登録例（読み取り専用）は次のとおりで、作業ディレクトリを repo のルートにして起動します。
 
 ```json
 {
@@ -114,6 +116,15 @@ CLI の `mcp serve` が stdio の MCP サーバーを起動します。ツール
 - **ジョブ内スクリプトの実行は `npm run` と同じ信頼の範囲で、sandbox ではありません。** 信頼できるジョブだけを扱ってください。
 
 ツールの一覧、長い処理（run）の待ち方、安全の境界は [docs/MCP.md](docs/MCP.md) にあります。
+
+## Seedance（動画生成バックエンド）
+
+BytePlus ModelArk の Seedance API を、ジョブの素材作りに使う動画生成バックエンドとして呼べます。入口は CLI の `smm seedance create|status|list` と MCP の `seedance_create`・`seedance_status`・`seedance_list` で、生成した MP4 はジョブの `seedance/out/` に保存されます。
+
+- **既定は DRY_RUN（モック）で、ネットワークに出ません。** 実生成は `SEEDANCE_DRY_RUN=false` のときだけで、API キー（環境変数 `ARK_API_KEY`。値は表示しません）・ジョブの `project.json` の `asset_generation.video_generation=true`・ジョブ単位の予算上限（環境変数 `SEEDANCE_BUDGET_USD`、既定は 10 USD）の3つが揃ったときだけ動きます。
+- 費用は作成前に見積り、課金は成功した生成だけです。見積りと実績はジョブの台帳（`seedance/tasks.json`）に残ります。
+
+詳しくは [docs/SEEDANCE.md](docs/SEEDANCE.md) にあります。
 
 ## 生成したジョブで制作する
 
@@ -137,7 +148,8 @@ Shin-MotionMaker は、BiimMotion（`kokuren333/BiimMotionWebUI`、コミット 
 
 - **入口。** BiimMotion の入口は WebUI と、request の JSON からジョブを書き出すスクリプト（`tools/generate-job.ts`）です。Shin-MotionMaker は GUI・CLI・MCP の3つを正式な入口にしました。CLI と MCP は、生成のほかに、ジョブの状態の確認、`project.json` の読み書き、ジョブ内スクリプト（検査・レンダー・音声・画像生成）の起動、実行記録の管理を扱います。GUI は人が入力を書くための入口、CLI と MCP はエージェントと自動化のための入口です。
 - **CLI の出力の規約。** 標準出力は JSON の封筒1個で、実行できたか（`ok`）とゲートの合否（`verdict`）を分けます。終了コードは 0〜4、エラーコードは CLI と MCP で共通です。これらは Shin-MotionMaker で定めました。
-- **MCP サーバー（stdio）を足しました。** ツールは既定で19個（`--enable-generation` で20個、`--read-only` では9個）です。`--root` の中だけを読み書きし、シンボリックリンクとジャンクションは実体を解決して外を拒否します。任意のコマンドを実行するツールはありません。
+- **MCP サーバー（stdio）を足しました。** ツールは既定で21個（`--enable-generation` で23個、`--read-only` では10個）です。`--root` の中だけを読み書きし、シンボリックリンクとジャンクションは実体を解決して外を拒否します。任意のコマンドを実行するツールはありません。
+- **Seedance バックエンドを足しました。** BytePlus ModelArk の Seedance API を動画生成に使えます。既定は DRY_RUN（モック）で、実生成は API キー・ジョブの opt-in・予算上限の3条件が揃ったときだけです（[Seedance](#seedance動画生成バックエンド)）。
 - **長い処理（run）。** レンダーや検査は切り離した子プロセスで実行し、記録をジョブの中の `.smm/runs/` に置きます。CLI が始めた実行を MCP から、MCP が始めた実行を CLI から見られます。
 - **構造。** BiimMotion の生成コアの中心は `src/job.ts` の1ファイル（1,008行）です。Shin-MotionMaker は core（Node にも DOM にも依存しない）・host・cli・mcp・gui の層に分け、依存の向きをテストで検査しています。CLI と MCP は同じ操作定義表から作る薄い入口です。
 - **同じ入力から同じジョブ。** GUI の ZIP と CLI・MCP が書き出すフォルダは、同じ入力ならパスとバイトが一致します。BiimMotion が GUI と生成スクリプトの間で守っていた性質を、MCP まで広げました。
