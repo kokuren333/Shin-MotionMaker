@@ -16,7 +16,8 @@ export type SeedanceCreateInput = {
 export const RESOLUTIONS: readonly Resolution[] = ["480p", "720p", "1080p", "4k"];
 export const RATIOS: readonly Ratio[] = ["16:9", "4:3", "1:1", "3:4", "9:16", "21:9", "adaptive"];
 export const MODES: readonly SeedanceMode[] = ["text", "image", "reference"];
-export const SHOT_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/;
+// Windows device names (CON, NUL, COM1...) cannot be output file names; reject them before any request is sent.
+export const SHOT_ID_PATTERN = /^(?!(?:[Cc][Oo][Nn]|[Pp][Rr][Nn]|[Aa][Uu][Xx]|[Nn][Uu][Ll]|[Cc][Oo][Mm][0-9]|[Ll][Pp][Tt][0-9])$)[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/;
 export const DEFAULT_CREATE_WAIT_MS = 45000;
 export const MAX_WAIT_MS = 50000;
 export const MAX_IMAGE_BYTES = 30 * 1024 * 1024;
@@ -58,7 +59,7 @@ export function normalizeCreate(input: SeedanceCreateInput): NormalizedCreate {
   if (!input || typeof input !== "object" || Array.isArray(input)) throw invalid("入力はオブジェクトで指定してください。", "seedance_create の入力を確認してください。");
   const unknown = Object.keys(input).filter((key) => !createKeys.has(key));
   if (unknown.length) throw hostError("E_INPUT_INVALID", "seedance_create に未知の項目があります。", "入力スキーマにある項目だけを指定してください。", { fields: unknown });
-  if (typeof input.shot_id !== "string" || !SHOT_ID_PATTERN.test(input.shot_id)) throw invalid("shot_id が不正です。", "英数字で始まり、英数字・_・- だけからなる64文字以内にしてください。", "shot_id");
+  if (typeof input.shot_id !== "string" || !SHOT_ID_PATTERN.test(input.shot_id)) throw invalid("shot_id が不正です。", "英数字で始まり、英数字・_・- だけからなる64文字以内にしてください。CON・NUL・COM1 などの Windows の予約名は使えません。", "shot_id");
   if (typeof input.prompt !== "string" || !input.prompt.trim()) throw invalid("prompt が空です。", "生成したい映像を自由に記述してください。", "prompt");
   if (input.model !== undefined && typeof input.model !== "string") throw invalid("model は文字列で指定してください。", "モデルの別名または ID を指定してください。", "model");
   const model = resolveModel(input.model ?? DEFAULT_MODEL);

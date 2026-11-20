@@ -51,7 +51,7 @@ CLI の位置引数はどれも `job`。run の仕組みは使わない（同期
 | 項目 | 型 | 既定 | 備考 |
 | --- | --- | --- | --- |
 | job | string | 必須 | |
-| shot_id | string | 必須 | `^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$` |
+| shot_id | string | 必須 | `^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$`。Windows の予約名（CON・PRN・AUX・NUL・COM0〜9・LPT0〜9、大小無視）は除く（交差レビューの指摘で追加。POST 後の保存で失敗して課金済みの動画を失うため） |
 | prompt | string | 必須 | 1 文字以上 |
 | model | string | `seedance-2-0-mini` | 別名またはモデル ID。表に無ければ E_INPUT_INVALID |
 | mode | `text`/`image`/`reference` | `text` | |

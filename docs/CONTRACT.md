@@ -566,6 +566,7 @@ M0R の指摘は M0b の L2 裁定に従い反映した。M0-Q1〜Q3 の回答�
 
 - CLI の位置引数はどれも `job`。run の仕組みは使わず、同期操作の中で上限時間（wait_ms）つきのポーリングを行い、途中の状態でもレコードを残して ok:true で返す。
 - create の mode と content の対応は固定で、混在は E_INPUT_INVALID：text は素材なし、image は first_frame（必須）と last_frame（任意）、reference は reference_images・reference_videos・reference_audios（少なくとも1つ、モデルの参照上限以内）。素材はジョブ相対パス（`/` 区切り）または `https://`・`asset://` の URL。画像のローカルファイル（png/jpg/jpeg/webp、30 MiB 以下）は data URI で送り、動画・音声のローカルファイルは v1 では E_INPUT_INVALID。
+- shot_id は `^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$` のうち、Windows の予約名（CON・PRN・AUX・NUL・COM0〜9・LPT0〜9、大小無視）を除いたもの。出力のファイル名に使うため、API を呼ぶ前に E_INPUT_INVALID で拒否する。
 - model は5つの別名またはモデル ID（seedance-2-5、seedance-2-5-flash、seedance-2-0、seedance-2-0-fast、seedance-2-0-mini）。表に無いもの、対応しない解像度、単価未登録の組み合わせ（seedance-2-5 の 4k）は E_INPUT_INVALID。
 - force:true はキャッシュを見ずに新しいレコードを作る（同じ cache_key の既存レコードは残す）。
 - create／status の result は `{ task: SeedanceTask, cached: boolean }`。助言は封筒の advisories（source:`seedance`）に入れる（DRY_RUN で opt-in が無いときの `seedance-opt-in-required-for-real` など）。

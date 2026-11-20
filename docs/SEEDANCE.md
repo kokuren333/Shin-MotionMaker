@@ -78,7 +78,7 @@ smm doctor
 
 | オプション | 既定 | 内容 |
 | --- | --- | --- |
-| `--shot-id` | 必須 | `^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$`。出力名にも使う |
+| `--shot-id` | 必須 | `^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$`。出力名にも使う。Windows の予約名（`CON`・`PRN`・`AUX`・`NUL`・`COM0`〜`COM9`・`LPT0`〜`LPT9`、大小無視）は、ファイル名にできないので API を呼ぶ前に拒否する |
 | `--prompt` | 必須 | 自由記述のプロンプト（1文字以上） |
 | `--model` | `seedance-2-0-mini` | 別名またはモデル ID（下の表） |
 | `--mode` | `text` | `text`・`image`・`reference` |

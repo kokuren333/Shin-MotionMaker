@@ -422,6 +422,33 @@ test("SEEDANCE invalid output is recorded as error with kind invalid_output", as
   assert.equal(sentinelCalls, 0);
 });
 
+test("SEEDANCE review fixes: Windows device names refused before POST, lost create body stays unknown, failed output keeps its cost", async (t) => {
+  const { context, job } = await setup(t, true);
+  const never = fakeArk({ create: () => json({ id: "cgt-never" }) });
+  for (const shot_id of ["CON", "nul", "Com1", "LPT9", "aux", "prn"]) {
+    await rejects(seedanceCreate(context, base({ shot_id }), { env: realEnv(), fetch: never.impl, sleep: noSleep, findFfmpeg: noFfmpeg }), "E_INPUT_INVALID");
+    assert.notDeepEqual(schemaIssues(seedanceInputSchemas.seedance_create, { job: "j", shot_id, prompt: "p" }), []);
+  }
+  for (const shot_id of ["CON-2", "console", "com10", "nul_take"]) assert.deepEqual(schemaIssues(seedanceInputSchemas.seedance_create, { job: "j", shot_id, prompt: "p" }), []);
+  assert.equal(never.calls.length, 0);
+
+  const lost = fakeArk({ create: () => new Response(new ReadableStream({ start(controller) { controller.error(new Error("connection reset")); } }), { status: 200 }) });
+  await rejects(seedanceCreate(context, base({ shot_id: "lost" }), { env: realEnv(), fetch: lost.impl, sleep: noSleep, findFfmpeg: noFfmpeg }), "E_ENGINE_UNREACHABLE");
+  assert.equal(lost.calls.filter((call) => call.method === "POST").length, 1);
+  const [unknown] = await ledger(job);
+  assert.equal(unknown.status, "unknown"); assert.equal(unknown.task_id, null);
+  let summary = (await seedanceList(context, { job: JOB }, { env: realEnv() })).result.summary;
+  assert.equal(summary.reserved_usd, unknown.estimate_usd);
+
+  const bad = fakeArk({ create: () => json({ id: "cgt-bad2" }), get: () => succeeded("cgt-bad2", 108000, "dreamina-seedance-2-0-mini-260615"), download: () => new Response("not an mp4", { status: 200 }) });
+  await rejects(seedanceCreate(context, base({ shot_id: "bad" }), { env: realEnv(), fetch: bad.impl, sleep: noSleep, findFfmpeg: noFfmpeg }), "E_ENGINE_UNREACHABLE");
+  const failed = (await ledger(job)).find((task) => task.shot_id === "bad")!;
+  assert.equal(failed.status, "error"); assert.equal(failed.usage_tokens, 108000); assert.equal(failed.actual_usd, 0.378);
+  summary = (await seedanceList(context, { job: JOB }, { env: realEnv() })).result.summary;
+  assert.equal(summary.real_spent_usd, 0.378);
+  assert.equal(sentinelCalls, 0);
+});
+
 test("SEEDANCE doctor check and schemas", async () => {
   const none = seedanceDoctorCheck({});
   assert.equal(none.id, "seedance"); assert.equal(none.available, false); assert.match(none.message, /DRY_RUN/);

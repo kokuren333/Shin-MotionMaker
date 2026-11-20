@@ -128,6 +128,9 @@ async function saveOutput(job: string, localId: string, remote: RemoteTask, tran
   const url = remote.content?.video_url;
   const fail = async (reason: string) => {
     await updateTask(job, localId, (task) => {
+      // The remote task succeeded and is billed: keep its cost (actual, else the estimate) in the budget.
+      applyRemote(task, remote);
+      if (!task.dry_run) task.actual_usd ??= task.estimate_usd;
       task.status = "error"; task.output = null;
       task.error = { code: "E_ENGINE_UNREACHABLE", message: "Seedance の出力動画を検査できませんでした。", hint: "BytePlus コンソールで動画を確認してください。", details: { kind: "invalid_output", reason } };
     }, rt.now());
@@ -271,13 +274,19 @@ export async function seedanceCreate(context: HostContext, input: SeedanceCreate
 
 async function recoverUnknown(job: string, task: SeedanceTask, transport: Transport, rt: Runtime): Promise<SeedanceTask | null> {
   const remote = await transport.list({ model_id: task.model.id });
-  const { tasks } = await readTasks(job);
-  const claimed = new Set(tasks.filter((item) => item.local_id !== task.local_id && item.task_id).map((item) => item.task_id));
-  const created = Math.floor(Date.parse(task.created_at) / 1000);
-  const matches = remote.filter((item) => item.model === task.model.id && typeof item.created_at === "number" &&
-    item.created_at >= created - 60 && item.created_at <= created + 600 && !claimed.has(item.id));
-  if (matches.length !== 1) return null;
-  return updateTask(job, task.local_id, (item) => { item.task_id = matches[0].id; item.status = "queued"; item.error = null; }, rt.now());
+  return mutateTasks(job, (document) => {
+    const current = document.tasks.find((item) => item.local_id === task.local_id);
+    if (!current) return null;
+    if (current.task_id) return clone(current); // already claimed by a concurrent status call
+    if (current.status !== "unknown") return null;
+    const claimed = new Set(document.tasks.filter((item) => item.local_id !== task.local_id && item.task_id).map((item) => item.task_id));
+    const created = Math.floor(Date.parse(current.created_at) / 1000);
+    const matches = remote.filter((item) => item.model === current.model.id && typeof item.created_at === "number" &&
+      item.created_at >= created - 60 && item.created_at <= created + 600 && !claimed.has(item.id));
+    if (matches.length !== 1) return null;
+    current.task_id = matches[0].id; current.status = "queued"; current.error = null; current.updated_at = rt.now().toISOString();
+    return clone(current);
+  });
 }
 const statusKeys = new Set(["job", "task_id", "shot_id", "wait_ms"]);
 export async function seedanceStatus(context: HostContext, input: SeedanceStatusInput, deps?: SeedanceDeps): Promise<Outcome<SeedanceTaskResult>> {

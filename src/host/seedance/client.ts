@@ -108,7 +108,10 @@ export function createArkTransport(options: ArkTransportOptions): Transport {
         throw failure("network", operation, attempt, { timeout: isTimeout(error), ...(operation === "create" && !failedBeforeSending(error) ? { uncertain: true } : {}) });
       }
       if (response.ok) {
-        const text = await response.text();
+        let text: string;
+        // A body lost after a 2xx create means the task may exist: keep it uncertain (unknown, still reserved).
+        try { text = await response.text(); }
+        catch (error) { throw failure("network", operation, attempt, { timeout: isTimeout(error), reason: "body_lost", ...(operation === "create" ? { uncertain: true } : {}) }); }
         if (!text.trim()) return {};
         try { return JSON.parse(text); }
         catch { throw failure("server", operation, attempt, { status: response.status, reason: "invalid_json", ...(operation === "create" ? { uncertain: true } : {}) }); }

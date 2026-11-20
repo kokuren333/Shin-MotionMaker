@@ -30,6 +30,7 @@ export async function withTasksLock<T>(job: string, action: () => Promise<T>): P
     let handle;
     try { handle = await openWriteVerified(file, "wx"); }
     catch (error) {
+      if (errorCode(error) === "EPERM" && process.platform === "win32" && Date.now() - started < 10000) { await delay(10); continue; }
       if (errorCode(error) !== "EEXIST") throw error;
       let owner: number | null = null, identity: { ino: number; mtimeMs: number } | null = null;
       try {
